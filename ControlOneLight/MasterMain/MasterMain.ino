@@ -7,16 +7,9 @@ void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
 
   digitalWrite(LED_BUILTIN, HIGH);
-
-  randomSeed(6174);
 }
 
 void loop() {
-
-  // digitalWrite(LED_BUILTIN, HIGH);
-  // delay(100);
-  // digitalWrite(LED_BUILTIN, LOW);
-
   mystr[0] = '1';
   mystr[1] = '1';
   
