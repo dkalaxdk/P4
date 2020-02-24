@@ -1,0 +1,61 @@
+> designation master
+> [baud 9600]
+> [read 10 bytes]
+
+
+
+void start() {
+
+  Button button = new Button(digitalPin(2));
+
+}
+
+
+void listen() {
+  -> Serial {
+
+  }
+}
+
+
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+> designation slave 1
+> [baud 9600]
+> [read 10 bytes]
+
+void start() {
+
+  Light light = new Light(*Noget om lyset*);
+
+  Sensor sensor = new Sensor(*Noget om den sensor*);
+}
+
+void listen() {
+
+  // Checker om der ligger noget i bufferen, og checker om de 2 første bytes matcher denne arduino
+  -> Serial {
+
+  }
+
+  -> sensor {
+    * Gør noget *
+  }
+}
+
+
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+> designation slave 2
+> [baud 9600]
+> [read 10 bytes]
+
+void start() {
+
+}
+
+void listen() {
+  -> Serial {
+
+  }
+}
