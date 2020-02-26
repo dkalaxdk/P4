@@ -1,18 +1,21 @@
-char mystr[5] = "";
+const int commandSize = 32;
+
+char mystr[commandSize] = "";
+char instr[commandSize] = "";
 
 char sig1[5] = "11";
 char sig2[5] = "21";
 char sig3[5] = "31";
 
-int inPin1 = 2;
-int inPin2 = 3;
-int inPin3 = 4;
+const int inPin1 = 2;
+const int inPin2 = 3;
+const int inPin3 = 4;
 
-int previous1 = LOW;
-int previous2 = LOW; // the previous reading from the input pin
+int previous1 = LOW; // the previous reading from the input pin
+int previous2 = LOW; 
 int previous3 = LOW; 
 
-int reading1;           // the current reading from the input pin
+int reading1; // the current reading from the input pin
 int reading2;
 int reading3;
 
@@ -34,10 +37,17 @@ void setup()
   mystr[4] = '\n'; // So that there is a newline in the output
 
   Serial.begin(9600);
+  Serial1.begin(9600);
 }
 
 void loop()
 {
+  if (Serial1.available()) {
+    Serial1.readBytes(instr, commandSize);
+    Serial.println(instr);
+    
+  }
+
   reading1 = digitalRead(inPin1);
   reading2 = digitalRead(inPin2);
   reading3 = digitalRead(inPin3);
@@ -51,7 +61,7 @@ void loop()
     mystr[0] = sig1[0];
     mystr[1] = sig1[1];
     
-    Serial.write(mystr, 5);
+    Serial1.write(mystr, commandSize);
 
     if (sig1[1] == '1') {
       sig1[1] = '0';
@@ -65,14 +75,14 @@ void loop()
 
   previous1 = reading1;
 
-  
+    
 
   if (reading2 == HIGH && previous2 == LOW && millis() - time2 > debounce) {
 
     mystr[0] = sig2[0];
     mystr[1] = sig2[1];
     
-    Serial.write(mystr, 5);
+    Serial1.write(mystr, commandSize);
 
     if (sig2[1] == '1') {
       sig2[1] = '0';
@@ -93,7 +103,7 @@ void loop()
     mystr[0] = sig3[0];
     mystr[1] = sig3[1];
     
-    Serial.write(mystr, 5);
+    Serial1.write(mystr, commandSize);
 
     if (sig3[1] == '1') {
       sig3[1] = '0';
