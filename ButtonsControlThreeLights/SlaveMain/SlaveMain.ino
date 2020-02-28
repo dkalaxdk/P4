@@ -23,33 +23,33 @@ void WriteResponse(char input) {
 void loop() {
   if (Serial.available()) {
     Serial.readBytes(InputOutputString, commandSize); //Read the Serial1 data and store in var
-    
+
     if (InputOutputString[0]=='1'){
       if(InputOutputString[1]=='1'){
         digitalWrite(pin1, HIGH);
-      } 
+      }
       else {
         digitalWrite(pin1, LOW);
       }
-      
+
       WriteResponse('1');
 
     }
     else if (InputOutputString[0]=='2') {
       if (InputOutputString[1]=='1'){
         digitalWrite(pin2, HIGH);
-      } 
+      }
       else {
         digitalWrite(pin2, LOW);
       }
-      
+
       WriteResponse('2');
 
-    } 
+    }
     else if (InputOutputString[0]=='3') {
       if(InputOutputString[1]=='1'){
         digitalWrite(pin3, HIGH);
-      } 
+      }
       else {
         digitalWrite(pin3, LOW);
       }

@@ -12,8 +12,8 @@ const int inPin2 = 3;
 const int inPin3 = 4;
 
 int previous1 = LOW; // the previous reading from the input pin
-int previous2 = LOW; 
-int previous3 = LOW; 
+int previous2 = LOW;
+int previous3 = LOW;
 
 int reading1; // the current reading from the input pin
 int reading2;
@@ -45,7 +45,7 @@ void loop()
   if (Serial1.available()) {
     Serial1.readBytes(instr, commandSize);
     Serial.println(instr);
-    
+
   }
 
   reading1 = digitalRead(inPin1);
@@ -55,12 +55,12 @@ void loop()
   // if the input just went from LOW and HIGH and we've waited long enough
   // to ignore any noise on the circuit, toggle the output pin and remember
   // the time´
-  
+
   if (reading1 == HIGH && previous1 == LOW && millis() - time1 > debounce) {
 
     mystr[0] = sig1[0];
     mystr[1] = sig1[1];
-    
+
     Serial1.write(mystr, commandSize);
 
     if (sig1[1] == '1') {
@@ -70,18 +70,18 @@ void loop()
       sig1[1] = '1';
     }
 
-    time1 = millis();    
+    time1 = millis();
   }
 
   previous1 = reading1;
 
-    
+
 
   if (reading2 == HIGH && previous2 == LOW && millis() - time2 > debounce) {
 
     mystr[0] = sig2[0];
     mystr[1] = sig2[1];
-    
+
     Serial1.write(mystr, commandSize);
 
     if (sig2[1] == '1') {
@@ -91,7 +91,7 @@ void loop()
       sig2[1] = '1';
     }
 
-    time2 = millis();    
+    time2 = millis();
   }
 
   previous2 = reading2;
@@ -102,7 +102,7 @@ void loop()
 
     mystr[0] = sig3[0];
     mystr[1] = sig3[1];
-    
+
     Serial1.write(mystr, commandSize);
 
     if (sig3[1] == '1') {
@@ -112,7 +112,7 @@ void loop()
       sig3[1] = '1';
     }
 
-    time3 = millis();    
+    time3 = millis();
   }
 
   previous3 = reading3;
