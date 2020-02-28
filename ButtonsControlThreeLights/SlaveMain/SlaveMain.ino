@@ -1,4 +1,4 @@
-const int commandSize = 32;
+const int commandSize = 5;
 const int pin1 = 2;
 const int pin2 = 3;
 const int pin3 = 4;
