@@ -1,4 +1,4 @@
-const int commandSize = 32;
+const int commandSize = 5;
 
 char mystr[commandSize] = "";
 char instr[commandSize] = "";
