@@ -4,7 +4,18 @@ const int pin2 = 3;
 const int pin3 = 4;
 char InputString[commandSize]; //Initialized variable to store recieved data
 char OutputString[commandSize];
-
+/*
+  _________         .    .
+  (..       \_    ,  |\  /|
+  \       O  \  /|  \ \/ /
+   \______    \/ |   \  /
+      vvvv\    \ |   /  |
+      \^^^^  ==   \_/   |
+       `\_   ===    \.  |
+       / /\_   \ /      |
+       |/   \_  \|      /
+              \________/
+  */
 
 void setup() {
   // Begin the Serial1 at 9600 Baud
@@ -56,7 +67,7 @@ void loop() {
       }
 
       WriteResponse('3');
-      
+
     }
 }
 }
