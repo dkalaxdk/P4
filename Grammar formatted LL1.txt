@@ -1,0 +1,43 @@
+Start -> Master Slaves.
+Master -> begin master Initiation EventCreators end master.
+Slaves -> Slave Slaves | .
+Slave -> begin slave colon identifier Initiation EventHandlers end slave.
+
+Initiation -> initiate lbrace PinDcls rbrace.
+PinDcls -> PinDcl semi PinDcls | .
+PinDcl -> pinIdentifier assign PinType IOType lparen intLiteral rparen.
+PinType -> digital | analog | pwm.
+IOType -> input | output.
+
+EventCreators -> eventCreator lparen pinIdentifier rparen lbrace Stmts rbrace EventCreator | .
+
+EventHandlers -> eventHandler lparen pinIdentifier rparen lbrace Stmts rbrace EventHandlers| .
+
+Stmts -> Stmt Stmts | .
+
+Stmt -> Call semi | Assignment semi | IfStmt.
+
+Assignment -> identifier assign Expr | Dcl assign Expr.
+Expr -> Value AfterValue | lparen Expr rparen | minus Value | not Value.
+AfterValue -> Operator Expr | LogicOperator Expr | .
+Value -> intLiteral | floatLiteral | boolLiteral | identifier.
+Operator -> plus | minus | times | divide | modulo.
+LogicOperator -> lessThan | greaterThan | notEqual | greaterOrEqual | lessOrEqual | equals.
+
+IfStmt -> if lparen Expr rparen lbrace Stmts rbrace IfEnd.
+IfEnd -> else AfterElse| .
+AfterElse -> IfStmt | lbrace Stmts rbrace.
+
+DictItem -> pinIdentifier lbracket Key rbracket.
+
+Key -> value | previousValue.
+
+Call -> broadcast lparen identifier comma identifier rparen
+         | write lparen identifier comma CallParam  rparen
+         | filterNoise lparen identifier comma FilterType rparen.
+
+CallParam -> Expr | DictItem.
+
+FilterType -> flip | constant | range.
+
+Dcl -> float identifier | int identifier | bool identifier.
