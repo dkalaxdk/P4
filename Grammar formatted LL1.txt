@@ -32,9 +32,8 @@ DictItem -> pinIdentifier lbracket Key rbracket.
 
 Key -> value | previousValue.
 
-Call -> broadcast lparen identifier comma identifier rparen
-         | write lparen identifier comma CallParam  rparen
-         | filterNoise lparen identifier comma FilterType rparen.
+Call -> broadcast lparen identifier comma identifier rparen | write lparen identifier comma CallParam  rparen
+      | filterNoise lparen identifier comma FilterType rparen.
 
 CallParam -> Expr | DictItem.
 
