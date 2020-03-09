@@ -1,2 +1,6 @@
 # P4
-Wooooohooooouuuuuuu
+
+## Todo
+* Scanner
+* Parser
+* Type definition
