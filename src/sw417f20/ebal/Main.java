@@ -3,6 +3,15 @@ package sw417f20.ebal;
 public class Main {
 
     public static void main(String[] args) {
-	// write your code here
+	Scanner scanner = new Scanner("FilePath");
+
+	scanner.Peek();
+	scanner.Advance();
+
+	scanner.findKeyword();
+	scanner.IsIdentifier();
+	scanner.IsSingleCharacter();
+
+
     }
 }

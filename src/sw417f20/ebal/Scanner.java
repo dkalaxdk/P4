@@ -1,47 +1,60 @@
 package sw417f20.ebal;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 public class Scanner {
+    public Scanner(String inputFilePath) {
+        fileInput = inputFilePath;
+    }
+    private String fileInput;
+    Token currentToken;
+    Token nextToken;
 
-    char currentChar;
-    char nextChar;
+
     String whitespace = "\\t\\n\\s";
-
-    public boolean isWhiteSpace() {
-        return whitespace.indexOf(nextChar) != -1;
+    FileInputStream fileStream;
+    {
+        try {
+            fileStream = new FileInputStream(fileInput);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 
-    public char Peek() {
+    //Only for public use
+    public Token Peek() {
+        return nextToken;
+    }
+    //Only for public use
+    public char Advance() {
+        // Check whether the switch may find another case, ie isDigit, isText or the likes.
+        // Depending on the cases, it should be redirected to something in the likes of "Find keyword" or "Find literal"
+        nextToken = currentToken;
+        currentToken = getToken();
+        // Set currentChar to nextChar
         return ' ';
     }
 
-    public void pop() {
-        // Do code related to popping or finding potential popping errors
-    }
+    private Token getToken() {
+        String buffer;
+        char currentChar;
+        while (IsSingleCharacter((char)fileStream.read())){
 
-    public Token Advance() {
-
-        if (isWhiteSpace()) {
-            pop();
-            // Check if it is a white space, if white space, advance
         }
 
-        // Check whether the switch may find another case, ie isDigit, isText or the likes.
-        // Depending on the cases, it should be redirected to something in the likes of "Find keyword" or "Find literal"
-
-        // Set currentChar to nextChar
-        return new Token(Token.Type.EOF,"");
     }
 
-
-    public char findKeyword(String input) {
+    public char findKeyword() {
         char output = ' ';
-        Token token = new Token(Token.Type.EOF,"");
+        Token token = new Token(Token.Type.EOF, "");
         switch (input) {
             case "begin":
-                token.type = Token.Type.someKeyword;
+                token.type = Token.Type.KEYWORD;
                 break;
             case "master":
+                token.type = Token.Type.KEYWORD;
                 break;
             case "slave":
                 break;
@@ -53,6 +66,10 @@ public class Scanner {
         return output;
     }
 
+    public boolean isWhiteSpace() {
+        return whitespace.indexOf(nextToken) != -1;
+    }
+
     public char IsDigit() {
         return ' ';
     }
@@ -61,15 +78,26 @@ public class Scanner {
 
     }
 
-    public void IsBoolean() {
 
-    }
+    public Token IsSingleCharacter(char input) {
+        switch (input) {
+            case '+':
+                break;
 
-    public void IsOperator() {
+            default:
+                return false;
+                break;
+        }
 
+
+        return true;
     }
 
     public void IsIdentifier() {
+
+    }
+
+    public Token IdentifyToken() {
 
     }
 }

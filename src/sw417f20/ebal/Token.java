@@ -10,7 +10,7 @@ public class Token {
 
 
         //Keywords
-        someKeyword,
+        KEYWORD,
 
         //Identifiers
         Identifier,
