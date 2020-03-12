@@ -14,19 +14,6 @@ public class Scanner {
 
     private Reader reader = new Reader(filePath);
 
-    String whitespace = "\\t\\n\\s";
-    /*
-    FileInputStream fileStream;
-
-    {
-        try {
-            fileStream = new FileInputStream(fileInput);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-    */
-
 
     //Only for public use
     public Token Peek() {
@@ -46,18 +33,19 @@ public class Scanner {
     private Token getToken() throws IOException {
         Token token = new Token(Token.Type.NOTATOKEN, "");
         while (token.type == Token.Type.NOTATOKEN) {
-            IsSingleCharacter(token);
+            token  = IsSingleCharacter(token);
+
             token.content = reader.findWord();
-            findKeyword(token);
+            token  = findKeyword(token);
         }
         return token;
     }
 
-    public char findKeyword(Token token) {
-        char output = ' ';
+    public Token findKeyword(Token token) {
         switch (token.content) {
             case "begin":
                 token.type = Token.Type.KEYWORD;
+                token.content = "begin";
                 break;
             case "master":
                 token.type = Token.Type.KEYWORD;
@@ -67,9 +55,9 @@ public class Scanner {
 
 
             default:
-                output = ' ';
+                token.type = Token.Type.NOTATOKEN;
         }
-        return output;
+        return token;
     }
 
     public char IsDigit() {

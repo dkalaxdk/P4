@@ -8,7 +8,7 @@ public class Token {
         OP_PLUS_EQUALS, OP_MINUS_EQUALS, OP_TIMES_EQUALS, OP_DIVIDE_EQUALS,
         // Literals
 
-        LIT_Int,LIT_Float,LIT_char,
+        LIT_Int,LIT_Float,LIT_char
 
 
 
