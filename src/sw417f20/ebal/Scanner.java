@@ -126,9 +126,6 @@ public class Scanner {
 
 
     public Token IsSingleCharacter(Token token) throws IOException {
-        // Needs to be able to peek at next character
-        // Consider loading the whole goddamn file into one loooong array.
-        // If you think you got the RAM for it. (i'm tired, don't judge me)
         char input = readChar();
         switch (input) {
             case '+':
