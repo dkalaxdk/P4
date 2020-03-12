@@ -10,14 +10,12 @@ public class Reader {
 
     public Reader(BufferedReader reader) {
         inputStream = reader;
-        //fileInput = inputFilePath;
     }
 
     private FileReader fileReader;
     private BufferedReader inputStream;
 
     public Reader(String inputFilePath) {
-        System.out.println("Testing");
         this.fileInput = inputFilePath;
         {
             try {

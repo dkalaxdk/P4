@@ -11,7 +11,6 @@ public class Scanner {
     private BufferedReader bufferedReader;
     public Scanner(String fileInput) {
         filePath = fileInput;
-        System.out.println("Scanner:" + filePath);
         this.reader = new Reader(fileInput);
 
         {
