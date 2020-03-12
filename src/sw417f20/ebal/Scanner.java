@@ -1,5 +1,5 @@
 package sw417f20.ebal;
-import sw417f20.ebal.Reader.Reader;
+import sw417f20.ebal.reader.Reader;
 
 import java.io.*;
 
