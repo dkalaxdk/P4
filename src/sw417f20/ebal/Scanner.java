@@ -41,10 +41,12 @@ public class Scanner {
 
     private Token getToken() throws IOException {
         Token token = new Token(Token.Type.NOTATOKEN, "");
+        token.lineNumber = reader.currentLine;
+        token.offSet = reader.currentOffset;
 
         token = IsSingleCharacter(token);
         if (token.type == Token.Type.NOTATOKEN) {
-            token.content = reader.findWord();
+            token.content = findWord();
             token = findKeyword(token);
         }
         return token;
@@ -75,9 +77,6 @@ public class Scanner {
     }
 
     public Token IsSingleCharacter(Token token) throws IOException {
-        // Needs to be able to peek at next character
-        // Consider loading the whole goddamn file into one loooong array.
-        // If you think you got the RAM for it. (i'm tired, don't judge me)
         char input = reader.readChar();
         token.content += input;
         switch (input) {
@@ -107,6 +106,11 @@ public class Scanner {
                     token.type = Token.Type.OP_DIVIDE_EQUALS;
                 } else if (reader.nextChar == '*') {
                     //TODO: Handle start of comment
+                } else if (reader.nextChar == '/') {
+                    while(reader.currentChar != '\n') {
+                        reader.readChar();
+                    }
+                    return token;
                 } else {
                     token.type = Token.Type.OP_DIVIDE;
                 }
@@ -181,6 +185,17 @@ public class Scanner {
                 return token;
         }
 
+    }
+
+    public String findWord() throws IOException {
+        StringBuilder output = new StringBuilder();
+        Token token = new Token(Token.Type.NOTATOKEN, "");
+        while (!Character.isWhitespace(reader.currentChar) && token.type == Token.Type.NOTATOKEN) {
+            output.append(reader.currentChar);
+            reader.readChar();
+            token = IsSingleCharacter(token);
+        }
+        return output.toString();
     }
 
     public void IsIdentifier() {
