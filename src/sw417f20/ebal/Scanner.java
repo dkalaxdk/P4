@@ -6,6 +6,7 @@ public class Scanner {
     public Scanner(String inputFilePath) {
         fileInput = inputFilePath;
     }
+
     private String fileInput;
     Token currentToken;
     Token nextToken;
@@ -14,6 +15,7 @@ public class Scanner {
     String whitespace = "\\t\\n\\s";
     /*
     FileInputStream fileStream;
+
     {
         try {
             fileStream = new FileInputStream(fileInput);
@@ -59,6 +61,7 @@ public class Scanner {
     public Token Peek() {
         return nextToken;
     }
+
     //Only for public use
     public char Advance() {
         // Check whether the switch may find another case, ie isDigit, isText or the likes.
@@ -69,18 +72,19 @@ public class Scanner {
         return ' ';
     }
 
-    private Token getToken() {
+    private Token getToken() throws IOException {
         String buffer;
-        char currentChar;
-        while (IsSingleCharacter((char)fileStream.read())){
-
+        Token token = new Token(Token.Type.NOTATOKEN, "");
+        while (token.type == Token.Type.NOTATOKEN) {
+            IsSingleCharacter(token);
+            findKeyword(token);
         }
 
     }
 
-    public char findKeyword() {
+    public char findKeyword(Token token) throws IOException {
         char output = ' ';
-        Token token = new Token(Token.Type.EOF, "");
+        char input = readChar();
         switch (input) {
             case "begin":
                 token.type = Token.Type.KEYWORD;
@@ -111,65 +115,106 @@ public class Scanner {
     }
 
 
-    public Token IsSingleCharacter(char input) {
+    public Token IsSingleCharacter(Token token) throws IOException {
         // Needs to be able to peek at next character
         // Consider loading the whole goddamn file into one loooong array.
         // If you think you got the RAM for it. (i'm tired, don't judge me)
+        char input = readChar();
         switch (input) {
             case '+':
-                // if next char is '=' its another token
-                break;
+                token.type = Token.Type.OP_PLUS;
+                return token;
             case '-':
-                break;
+                token.type = Token.Type.OP_MINUS;
+                return token;
             case '*':
-                break;
+                token.type = Token.Type.OP_TIMES;
+                return token;
             case '/':   // Has some special cases when followed by other symbols
-                break;
+                token.type = Token.Type.OP_DIVIDE;
+                return token;
+
             case '=':
-                break;
+                token.type = Token.Type.OP_EQUALS;
+                return token;
+
             case '?':
-                break;
+                token.type = Token.Type.OP_QUESTION;
+                return token;
+
             case '!':
-                break;
+                token.type = Token.Type.OP_NOT;
+                return token;
+
             case '(':
-                break;
+                token.type = Token.Type.LPAREN;
+                return token;
+
             case ')':
-                break;
+                token.type = Token.Type.RPAREN;
+                return token;
+
             case '[':
-                break;
+                token.type = Token.Type.LSQBRACKET;
+                return token;
+
             case ']':
-                break;
+                token.type = Token.Type.RSQBRACKET;
+                return token;
+
             case '{':
-                break;
+                token.type = Token.Type.LBRACKET;
+                return token;
+
             case '}':
-                break;
+                token.type = Token.Type.RBRACKET;
+                return token;
+
             case ',':
-                break;
+                token.type = Token.Type.COMMA;
+                return token;
+
             case '.':
-                break;
+                token.type = Token.Type.DOT;
+                return token;
+
             case ';':
-                break;
+                token.type = Token.Type.SEMI;
+                return token;
+
             case ':':
-                break;
+                token.type = Token.Type.COLON;
+                return token;
+
+            case '\\':
+                token.type = Token.Type.BACKSLASH;
+                return token;
+
             case '"':
-                break;
+                token.type = Token.Type.DOUBLEQUOTE;
+                return token;
+
             case '\'':
-                break;
+                token.type = Token.Type.SINGLEQUOTE;
+                return token;
+
 
             default:
-                return false;
-                break;
+                return token;
         }
 
-
-        return true;
     }
 
     public void IsIdentifier() {
 
     }
 
-    public Token IdentifyToken() {
+    private String findWord() throws IOException {
+        String output = "";
 
+        while (whitespace.indexOf(readChar())!= -1) {
+
+        }
+        return output;
     }
 }
