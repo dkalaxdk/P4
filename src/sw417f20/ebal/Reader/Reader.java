@@ -49,7 +49,10 @@ public class Reader {
             firstRead = false;
             readChar();
         }
-        return currentChar;
+        currentChar = nextChar;
+        nextChar = c;
+        // Should return c if it is the first character read
+        return currentChar == 0 ? c : currentChar;
     }
 
     public String findWord() throws IOException {
