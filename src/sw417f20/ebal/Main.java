@@ -3,10 +3,11 @@ package sw417f20.ebal;
 public class Main {
 
     public static void main(String[] args) {
-	Scanner scanner = new Scanner("../../TestFiles/TestProgram.txt");
+        String fileInput = "../../TestFiles/TestProgram.txt";
+        Scanner scanner = new Scanner(fileInput);
 
-	scanner.Peek();
-	scanner.IsIdentifier();
+        scanner.Peek();
+        scanner.IsIdentifier();
 
 
     }

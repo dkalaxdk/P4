@@ -1,18 +1,19 @@
 package sw417f20.ebal;
-
-import sw417f20.ebal.reader.Reader;
+import sw417f20.ebal.Reader.Reader;
 
 import java.io.*;
 
 public class Scanner {
-    String filePath = "";
-    public Scanner(String fileInput) {
-        filePath = fileInput;
+    public Reader reader;
+    Scanner(String fileInput) {
+        this.reader = new Reader(fileInput);
+        System.out.println(fileInput);
     }
+
     Token currentToken;
     Token nextToken;
 
-    private Reader reader = new Reader(filePath);
+
 
 
     //Only for public use
@@ -33,10 +34,10 @@ public class Scanner {
     private Token getToken() throws IOException {
         Token token = new Token(Token.Type.NOTATOKEN, "");
         while (token.type == Token.Type.NOTATOKEN) {
-            token  = IsSingleCharacter(token);
+            token = IsSingleCharacter(token);
 
             token.content = reader.findWord();
-            token  = findKeyword(token);
+            token = findKeyword(token);
         }
         return token;
     }
@@ -76,37 +77,32 @@ public class Scanner {
         char input = reader.readChar();
         switch (input) {
             case '+':
-                if(reader.nextChar == '=') {
+                if (reader.nextChar == '=') {
                     token.type = Token.Type.OP_PLUS_EQUALS;
-                }
-                else {
+                } else {
                     token.type = Token.Type.OP_PLUS;
                 }
                 return token;
             case '-':
-                if(reader.nextChar == '=') {
+                if (reader.nextChar == '=') {
                     token.type = Token.Type.OP_MINUS_EQUALS;
-                }
-                else {
+                } else {
                     token.type = Token.Type.OP_MINUS;
                 }
                 return token;
             case '*':
-                if(reader.nextChar == '=') {
+                if (reader.nextChar == '=') {
                     token.type = Token.Type.OP_TIMES_EQUALS;
-                }
-                else {
+                } else {
                     token.type = Token.Type.OP_TIMES;
                 }
                 return token;
             case '/':   // Has some special cases when followed by other symbols
-                if(reader.nextChar == '=') {
+                if (reader.nextChar == '=') {
                     token.type = Token.Type.OP_DIVIDE_EQUALS;
-                }
-                else if(reader.nextChar == '*') {
+                } else if (reader.nextChar == '*') {
                     //TODO: Handle start of comment
-                }
-                else {
+                } else {
                     token.type = Token.Type.OP_DIVIDE;
                 }
                 return token;
