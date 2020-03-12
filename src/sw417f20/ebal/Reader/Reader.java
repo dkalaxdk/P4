@@ -6,8 +6,6 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class Reader {
-    private String fileInput = "";
-
     public Reader(BufferedReader reader) {
         inputStream = reader;
     }
@@ -15,21 +13,8 @@ public class Reader {
     private FileReader fileReader;
     private BufferedReader inputStream;
 
-    public Reader(String inputFilePath) {
-        this.fileInput = inputFilePath;
-        {
-            try {
-                fileReader = new FileReader(fileInput);
-            } catch (FileNotFoundException e) {
-                System.out.println("FilePath: "+fileInput);
-                e.printStackTrace();
-            }
-        }
-        assert fileReader != null;
-        inputStream = new BufferedReader(fileReader);
-    }
 
-    String whitespace = "\\t\\n\\s";
+    String whitespace = "\t\n\r";
 
     public char currentChar = 0;
     public char nextChar = 0;
@@ -51,13 +36,14 @@ public class Reader {
         if (c == '\n') {
             currentLine++;
         }
+        currentChar = c;
         return c;
     }
 
     public String findWord() throws IOException {
         StringBuilder output = new StringBuilder();
-        char currentChar = readChar();
-        while (whitespace.indexOf(currentChar) != -1) {
+        char currentChar = this.currentChar;
+        while (whitespace.indexOf(currentChar) == -1) {
             output.append(currentChar);
             currentChar = readChar();
         }

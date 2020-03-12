@@ -1,14 +1,19 @@
 package sw417f20.ebal;
+
 import sw417f20.ebal.Reader.Reader;
 
 import java.io.*;
 
 public class Scanner {
     public Reader reader;
+    Token currentToken;
+    Token nextToken;
 
     private BufferedReader bufferedReader;
+
     public Scanner(String fileInput) {
-        this.reader = new Reader(fileInput);
+        currentToken = new Token(Token.Type.NOTATOKEN, "");
+        nextToken = new Token(Token.Type.NOTATOKEN, "");
 
         {
             try {
@@ -18,13 +23,8 @@ public class Scanner {
                 e.printStackTrace();
             }
         }
+        this.reader = new Reader(bufferedReader);
     }
-
-    Token currentToken;
-    Token nextToken;
-
-
-
 
 
     //Only for public use
@@ -33,20 +33,18 @@ public class Scanner {
     }
 
     //Only for public use
-    public char Advance() throws IOException {
+    public void Advance() throws IOException {
         // Check whether the switch may find another case, ie isDigit, isText or the likes.
         // Depending on the cases, it should be redirected to something in the likes of "Find keyword" or "Find literal"
         nextToken = currentToken;
         currentToken = getToken();
-        // Set currentChar to nextChar
-        return ' ';
     }
 
     private Token getToken() throws IOException {
         Token token = new Token(Token.Type.NOTATOKEN, "");
-        while (token.type == Token.Type.NOTATOKEN) {
-            token = IsSingleCharacter(token);
 
+        token = IsSingleCharacter(token);
+        if (token.type == Token.Type.NOTATOKEN) {
             token.content = reader.findWord();
             token = findKeyword(token);
         }
@@ -55,14 +53,19 @@ public class Scanner {
 
     public Token findKeyword(Token token) {
         switch (token.content) {
+            case "MASTER":
+            case "SLAVE":
+            case "END":
             case "begin":
+            case "digital":
+            case "input":
+            case "EventCreator":
+            case "output":
+            case "write":
+            case "EventHandler":
+            case "Initiate":
+            case "if":
                 token.type = Token.Type.KEYWORD;
-                token.content = "begin";
-                break;
-            case "master":
-                token.type = Token.Type.KEYWORD;
-                break;
-            case "slave":
                 break;
 
 
@@ -72,20 +75,12 @@ public class Scanner {
         return token;
     }
 
-    public char IsDigit() {
-        return ' ';
-    }
-
-    public void IsChar() {
-
-    }
-
-
     public Token IsSingleCharacter(Token token) throws IOException {
         // Needs to be able to peek at next character
         // Consider loading the whole goddamn file into one loooong array.
         // If you think you got the RAM for it. (i'm tired, don't judge me)
         char input = reader.readChar();
+        token.content += input;
         switch (input) {
             case '+':
                 if (reader.nextChar == '=') {
