@@ -7,10 +7,22 @@ import java.io.IOException;
 
 public class Reader {
     public String fileInput = "";
-
+    private FileReader fileReader;
+    private BufferedReader inputStream;
 
     public Reader(String inputFilePath) {
+        System.out.println("Testing");
         this.fileInput = inputFilePath;
+        {
+            try {
+                fileReader = new FileReader(fileInput);
+            } catch (FileNotFoundException e) {
+                System.out.println("FilePath: "+fileInput);
+                e.printStackTrace();
+            }
+        }
+        assert fileReader != null;
+        inputStream = new BufferedReader(fileReader);
     }
 
     String whitespace = "\\t\\n\\s";
@@ -18,19 +30,6 @@ public class Reader {
     public char nextChar = 0;
     private int currentLine = 1;
     private int currentOffset = 0;
-    private FileReader fileReader;
-
-    {
-        try {
-            assert fileInput != null;
-            fileReader = new FileReader(fileInput);
-        } catch (FileNotFoundException e) {
-            System.out.println("FilePath: "+fileInput);
-            e.printStackTrace();
-        }
-    }
-
-    private BufferedReader inputStream = new BufferedReader(fileReader);
 
 
     // Reads and returns the next char in the input

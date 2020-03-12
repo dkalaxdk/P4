@@ -5,9 +5,11 @@ import java.io.*;
 
 public class Scanner {
     public Reader reader;
-    Scanner(String fileInput) {
+    private String filePath;
+    public Scanner(String fileInput) {
+        filePath = fileInput;
+        System.out.println("Scanner:" + filePath);
         this.reader = new Reader(fileInput);
-        System.out.println(fileInput);
     }
 
     Token currentToken;
