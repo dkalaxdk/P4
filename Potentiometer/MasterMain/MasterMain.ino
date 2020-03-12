@@ -1,129 +1,55 @@
+#include <Wire.h>
+
 const int commandSize = 5;
-
-char mystr[commandSize] = "";
-char instr[commandSize] = "";
-
-char sig1[5] = "11";
-char sig2[5] = "21";
-char sig3[5] = "31";
+byte outbytes[commandSize] = "";
 
 const int inPin1 = 2;
-const int inPin2 = 3;
-const int inPin3 = 4;
 
-int previous1 = LOW; // the previous reading from the input pin
-int previous2 = LOW; 
-int previous3 = LOW; 
-
-int reading1; // the current reading from the input pin
-int reading2;
-int reading3;
-
-// the follow variables are long's because the time, measured in miliseconds,
-// will quickly become a bigger number than can be stored in an int.
-long time1 = 0; // the last time the output pin was toggled
-long time2 = 0;
-long time3 = 0;
-
-
-const long debounce = 300; // the debounce time, increase if the output flickers
+int reading1;
+int previous1 = 0;
 
 void setup()
 {
   pinMode(inPin1, INPUT);
-  pinMode(inPin2, INPUT);
-  pinMode(inPin3, INPUT);
 
-  mystr[4] = '\n'; // So that there is a newline in the output
+  for (int i = 0; i < commandSize - 1; i++) {
+    outbytes[i] = 'q';
+  }
+  Wire.begin(0); // join i2c bus (address optional for master)
+  Wire.onReceive(receiveEvent);
 
   Serial.begin(9600);
-  Serial1.begin(9600);
+}
+
+void receiveEvent(int howMany) {
+
+  char c[100] = "";
+
+  for (int i = 0; i < howMany; i++) {
+    c[i] = Wire.read();
+  }
+
+  Serial.println(c);
 }
 
 void loop()
-{
-  if (Serial1.available()) {
-    Serial1.readBytes(instr, commandSize);
-    Serial.println(instr);
-    
-  }
+{ 
+  reading1 = analogRead(inPin1);
 
+  reading1 = map(reading1, 0, 1023, 0, 255);
   
-
-
-
+  if (isDifferent(reading1, previous1, 5)) {
+    outbytes[0] = '1';
+    outbytes[1] = reading1;
   
+    Wire.beginTransmission(1);
+    Wire.write(outbytes, commandSize);
+    Wire.endTransmission();
 
+    previous1 = reading1;    
+  }  
+}
 
-
-  
-
-  reading1 = digitalRead(inPin1);
-  reading2 = digitalRead(inPin2);
-  reading3 = digitalRead(inPin3);
-
-  // if the input just went from LOW and HIGH and we've waited long enough
-  // to ignore any noise on the circuit, toggle the output pin and remember
-  // the time´
-  
-  if (reading1 == HIGH && previous1 == LOW && millis() - time1 > debounce) {
-
-    mystr[0] = sig1[0];
-    mystr[1] = sig1[1];
-    
-    Serial1.write(mystr, commandSize);
-
-    if (sig1[1] == '1') {
-      sig1[1] = '0';
-    }
-    else {
-      sig1[1] = '1';
-    }
-
-    time1 = millis();    
-  }
-
-  previous1 = reading1;
-
-    
-
-  if (reading2 == HIGH && previous2 == LOW && millis() - time2 > debounce) {
-
-    mystr[0] = sig2[0];
-    mystr[1] = sig2[1];
-    
-    Serial1.write(mystr, commandSize);
-
-    if (sig2[1] == '1') {
-      sig2[1] = '0';
-    }
-    else {
-      sig2[1] = '1';
-    }
-
-    time2 = millis();    
-  }
-
-  previous2 = reading2;
-
-
-
-  if (reading3 == HIGH && previous3 == LOW && millis() - time3 > debounce) {
-
-    mystr[0] = sig3[0];
-    mystr[1] = sig3[1];
-    
-    Serial1.write(mystr, commandSize);
-
-    if (sig3[1] == '1') {
-      sig3[1] = '0';
-    }
-    else {
-      sig3[1] = '1';
-    }
-
-    time3 = millis();    
-  }
-
-  previous3 = reading3;
+bool isDifferent(int a, int b, int value) {
+  return a - b >= value || b - a >= value;
 }

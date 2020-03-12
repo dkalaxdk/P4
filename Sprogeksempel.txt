@@ -1,0 +1,77 @@
+BEGIN MASTER
+
+Initiate
+{
+	// Gøres til global variable af compileren/preprocessor, 
+// så vi ikke har tonsvis af dem.
+
+	button1 = digital input(4);
+	button2 = digital input(5);
+}
+
+// Create event listener, this listens on button 1
+EventCreator(button1)
+{
+	// filterNoise: Baseret på FILTER_TYPE, sørger for at 
+	// value er fri for støj (Knapper der tænder og slukker uden
+// at det er meningen.
+
+	// FILTER_TYPE: flip a switch, constant input, variable
+	filterNoise(button1, FILTER_TYPE); 
+	
+
+	if (button1[value] == HIGH)
+{
+		broadcast(LightSlave, button1);
+	}
+}
+
+EventCreator(button2)
+{
+	filterNoise(button2, FILTER_TYPE);
+	
+	if (button2[value] == HIGH) 
+	{
+		broadcast(LightSlave, button2);
+	}
+}
+
+END MASTER
+
+
+BEGIN SLAVE : LightSlave
+
+Initiate
+{
+	light1 = digital output(4);
+light2 = digital output(5);
+light3 = digital output(6);
+}
+
+EventHandler(button1)
+{
+	write(light1, !light1[value]); // 0 -> 1, 1 -> 0, 87 -> 0
+
+	if (button1[value] == HIGH) 
+{
+	if (light1[value] == HIGH) 
+{
+		write(light1, LOW);
+	}
+	else if (light1[value] == LOW) 
+{
+		write(light1, HIGH);
+	}
+}
+}
+
+EventHandler(button2)
+{
+	write(light1, !light1[value]);
+	write(light2, !light2[value]);
+	write(light3, !light3[value]);
+}
+
+END SLAVE
+
+(EOF)
