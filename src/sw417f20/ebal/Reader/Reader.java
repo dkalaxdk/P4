@@ -1,4 +1,4 @@
-package sw417f20.ebal.reader;
+package sw417f20.ebal.Reader;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -14,13 +14,21 @@ public class Reader {
     }
 
     private FileReader fileReader;
+    private BufferedReader inputStream;
 
-    {
-        try {
-            fileReader = new FileReader(fileInput);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+    public Reader(String inputFilePath) {
+        System.out.println("Testing");
+        this.fileInput = inputFilePath;
+        {
+            try {
+                fileReader = new FileReader(fileInput);
+            } catch (FileNotFoundException e) {
+                System.out.println("FilePath: "+fileInput);
+                e.printStackTrace();
+            }
         }
+        assert fileReader != null;
+        inputStream = new BufferedReader(fileReader);
     }
 
     String whitespace = "\\t\\n\\s";
