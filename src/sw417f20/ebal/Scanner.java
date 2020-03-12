@@ -80,8 +80,43 @@ public class Scanner {
 
 
     public Token IsSingleCharacter(char input) {
+        // Needs to be able to peek at next character
+        // Consider loading the whole goddamn file into one loooong array.
+        // If you think you got the RAM for it. (i'm tired, don't judge me)
         switch (input) {
             case '+':
+                break;
+            case '-':
+                break;
+            case '*':
+                break;
+            case '/':   // Has some special cases when followed by other symbols
+                break;
+            case '=':
+                break;
+            case '?':
+                break;
+            case '!':
+                break;
+            case '(':
+                break;
+            case ')':
+                break;
+            case '[':
+                break;
+            case ']':
+                break;
+            case '{':
+                break;
+            case '}':
+                break;
+            case ',':
+                break;
+            case '.':
+                break;
+            case ';':
+                break;
+            case ':':
                 break;
 
             default:
