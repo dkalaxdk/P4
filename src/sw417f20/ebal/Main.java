@@ -8,7 +8,6 @@ public class Main {
     public static void main(String[] args) {
         String filePath = new File("").getAbsolutePath();
         String fileInput = filePath + "/TestFiles/TestProgram.txt";
-        System.out.println("Main:" + fileInput);
         Scanner scanner = new Scanner(fileInput);
 
         scanner.Peek();
