@@ -36,15 +36,22 @@ public class Scanner {
 
     private BufferedReader inputStream = new BufferedReader(fileReader);
     private char currentChar = 0;
-    private char nextChar = 0;
+    private char nextChar = readChar();
     private int currentLine = 1;
     private int currentOffset = 0;
 
     // Reads and returns the next char in the input
     // Keeps track of line and offset
-    private char readChar() throws IOException {
+    private char readChar()  {
         // This cast might cause problems
-        int res = inputStream.read();
+        int res = 0;
+
+        try {
+            res = inputStream.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         if(res == -1) {
             //TODO: Handle end of file
             return (char)-1;
@@ -54,7 +61,9 @@ public class Scanner {
         if(c == '\n') {
             currentLine++;
         }
-        return c;
+        currentChar = nextChar;
+        nextChar = c;
+        return currentChar;
     }
 
     //Only for public use
@@ -103,7 +112,8 @@ public class Scanner {
     }
 
     public boolean isWhiteSpace() {
-        return whitespace.indexOf(nextToken) != -1;
+        return Character.isWhitespace(currentChar);
+        //return whitespace.indexOf(nextToken) != -1;
     }
 
     public char IsDigit() {
@@ -122,16 +132,39 @@ public class Scanner {
         char input = readChar();
         switch (input) {
             case '+':
-                token.type = Token.Type.OP_PLUS;
+                if(nextChar == '=') {
+                    token.type = Token.Type.OP_PLUS_EQUALS;
+                }
+                else {
+                    token.type = Token.Type.OP_PLUS;
+                }
                 return token;
             case '-':
-                token.type = Token.Type.OP_MINUS;
+                if(nextChar == '=') {
+                    token.type = Token.Type.OP_MINUS_EQUALS;
+                }
+                else {
+                    token.type = Token.Type.OP_MINUS;
+                }
                 return token;
             case '*':
-                token.type = Token.Type.OP_TIMES;
+                if(nextChar == '=') {
+                    token.type = Token.Type.OP_TIMES_EQUALS;
+                }
+                else {
+                    token.type = Token.Type.OP_TIMES;
+                }
                 return token;
             case '/':   // Has some special cases when followed by other symbols
-                token.type = Token.Type.OP_DIVIDE;
+                if(nextChar == '=') {
+                    token.type = Token.Type.OP_DIVIDE_EQUALS;
+                }
+                else if(nextChar == '*') {
+                    //TODO: Handle start of comment
+                }
+                else {
+                    token.type = Token.Type.OP_DIVIDE;
+                }
                 return token;
 
             case '=':
