@@ -1,4 +1,4 @@
-package sw417f20.ebal.reader;
+package sw417f20.ebal.Reader;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -8,26 +8,35 @@ import java.io.IOException;
 public class Reader {
     private String fileInput = "";
 
-    public Reader(String inputFilePath) {
-        fileInput = inputFilePath;
+    public Reader(BufferedReader reader) {
+        inputStream = reader;
+        //fileInput = inputFilePath;
     }
 
     private FileReader fileReader;
+    private BufferedReader inputStream;
 
-    {
-        try {
-            fileReader = new FileReader(fileInput);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+    public Reader(String inputFilePath) {
+        System.out.println("Testing");
+        this.fileInput = inputFilePath;
+        {
+            try {
+                fileReader = new FileReader(fileInput);
+            } catch (FileNotFoundException e) {
+                System.out.println("FilePath: "+fileInput);
+                e.printStackTrace();
+            }
         }
+        assert fileReader != null;
+        inputStream = new BufferedReader(fileReader);
     }
 
     String whitespace = "\\t\\n\\s";
-    private BufferedReader inputStream = new BufferedReader(fileReader);
-    private char currentChar = 0;
+
+    public char currentChar = 0;
     public char nextChar = 0;
-    private int currentLine = 1;
-    private int currentOffset = 0;
+    public int currentLine = 1;
+    public int currentOffset = 0;
 
 
     // Reads and returns the next char in the input
