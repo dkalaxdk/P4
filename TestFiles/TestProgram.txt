@@ -9,18 +9,6 @@ Initiate
 	button2 = digital input(5);
 }
 
-EventCreator(button1, if (value == HIGH)) {}
-EventCreator(button1, if (button[value] == HIGH)) {}
-EventCreator(button1 is HIGH) {}
-EventCreator(button1, HIGH)
-EventCreator(button1 == HIGH)
-
-EventCreator(button1, if (filterNoise(button1, flip) == HIGH)) {}
-EventCreator(button1, filterNoise(button1, flip) == HIGH) {}
-EventCreator(button1, filterNoise(button1, flip) is HIGH) {}
-
-
-
 // Create event listener, this listens on button 1
 EventCreator(button1)
 {
