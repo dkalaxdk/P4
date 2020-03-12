@@ -28,7 +28,6 @@ public class Scanner {
     */
 
 
-
     //Only for public use
     public Token Peek() {
         return nextToken;
@@ -89,16 +88,39 @@ public class Scanner {
         char input = reader.readChar();
         switch (input) {
             case '+':
-                token.type = Token.Type.OP_PLUS;
+                if(nextChar == '=') {
+                    token.type = Token.Type.OP_PLUS_EQUALS;
+                }
+                else {
+                    token.type = Token.Type.OP_PLUS;
+                }
                 return token;
             case '-':
-                token.type = Token.Type.OP_MINUS;
+                if(nextChar == '=') {
+                    token.type = Token.Type.OP_MINUS_EQUALS;
+                }
+                else {
+                    token.type = Token.Type.OP_MINUS;
+                }
                 return token;
             case '*':
-                token.type = Token.Type.OP_TIMES;
+                if(nextChar == '=') {
+                    token.type = Token.Type.OP_TIMES_EQUALS;
+                }
+                else {
+                    token.type = Token.Type.OP_TIMES;
+                }
                 return token;
             case '/':   // Has some special cases when followed by other symbols
-                token.type = Token.Type.OP_DIVIDE;
+                if(nextChar == '=') {
+                    token.type = Token.Type.OP_DIVIDE_EQUALS;
+                }
+                else if(nextChar == '*') {
+                    //TODO: Handle start of comment
+                }
+                else {
+                    token.type = Token.Type.OP_DIVIDE;
+                }
                 return token;
 
             case '=':
