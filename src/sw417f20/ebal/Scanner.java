@@ -1,12 +1,7 @@
 package sw417f20.ebal;
-<<<<<<< HEAD
-
-import sw417f20.ebal.Reader.Reader;
-=======
-import sw417f20.ebal.reader.Reader;
->>>>>>> 8ca848a61bf785e06d0a20261a63882319b4539e
 
 import java.io.*;
+import sw417f20.ebal.Reader.Reader;
 
 public class Scanner {
     public Reader reader;

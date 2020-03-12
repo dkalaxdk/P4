@@ -1,4 +1,4 @@
-package sw417f20.ebal.reader;
+package sw417f20.ebal.Reader;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
