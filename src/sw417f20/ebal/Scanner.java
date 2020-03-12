@@ -1,7 +1,6 @@
 package sw417f20.ebal;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.*;
 
 public class Scanner {
     public Scanner(String inputFilePath) {
@@ -13,6 +12,7 @@ public class Scanner {
 
 
     String whitespace = "\\t\\n\\s";
+    /*
     FileInputStream fileStream;
     {
         try {
@@ -21,7 +21,39 @@ public class Scanner {
             e.printStackTrace();
         }
     }
+    */
+    private FileReader fileReader;
 
+    {
+        try {
+            fileReader = new FileReader(fileInput);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private BufferedReader inputStream = new BufferedReader(fileReader);
+    private char currentChar = 0;
+    private char nextChar = 0;
+    private int currentLine = 1;
+    private int currentOffset = 0;
+
+    // Reads and returns the next char in the input
+    // Keeps track of line and offset
+    private char readChar() throws IOException {
+        // This cast might cause problems
+        int res = inputStream.read();
+        if(res == -1) {
+            //TODO: Handle end of file
+            return (char)-1;
+        }
+        char c = (char)res;
+        currentOffset++;
+        if(c == '\n') {
+            currentLine++;
+        }
+        return c;
+    }
 
     //Only for public use
     public Token Peek() {
@@ -85,6 +117,7 @@ public class Scanner {
         // If you think you got the RAM for it. (i'm tired, don't judge me)
         switch (input) {
             case '+':
+                // if next char is '=' its another token
                 break;
             case '-':
                 break;
@@ -117,6 +150,10 @@ public class Scanner {
             case ';':
                 break;
             case ':':
+                break;
+            case '"':
+                break;
+            case '\'':
                 break;
 
             default:
