@@ -6,28 +6,29 @@ import java.io.*;
 public class Scanner {
     public Reader reader;
     private String filePath;
+
+    private FileReader fileReader;
+    private BufferedReader bufferedReader;
     public Scanner(String fileInput) {
         filePath = fileInput;
         System.out.println("Scanner:" + filePath);
         this.reader = new Reader(fileInput);
+
+        {
+            try {
+                fileReader = new FileReader(filePath);
+                bufferedReader = new BufferedReader(fileReader);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     Token currentToken;
     Token nextToken;
 
-    private FileReader fileReader;
-    private BufferedReader bufferedReader;
 
-    {
-        try {
-            fileReader = new FileReader(filePath);
-            bufferedReader = new BufferedReader(fileReader);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
 
-    private Reader reader = new Reader(bufferedReader);
 
 
     //Only for public use

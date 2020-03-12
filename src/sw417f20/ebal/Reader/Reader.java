@@ -32,7 +32,7 @@ public class Reader {
     }
 
     String whitespace = "\\t\\n\\s";
-    private BufferedReader inputStream;
+
     public char currentChar = 0;
     public char nextChar = 0;
     public int currentLine = 1;
