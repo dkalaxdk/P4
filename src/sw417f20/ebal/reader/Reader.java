@@ -8,8 +8,9 @@ import java.io.IOException;
 public class Reader {
     private String fileInput = "";
 
-    public Reader(String inputFilePath) {
-        fileInput = inputFilePath;
+    public Reader(BufferedReader reader) {
+        inputStream = reader;
+        //fileInput = inputFilePath;
     }
 
     private FileReader fileReader;
@@ -23,11 +24,11 @@ public class Reader {
     }
 
     String whitespace = "\\t\\n\\s";
-    private BufferedReader inputStream = new BufferedReader(fileReader);
-    private char currentChar = 0;
+    private BufferedReader inputStream;
+    public char currentChar = 0;
     public char nextChar = 0;
-    private int currentLine = 1;
-    private int currentOffset = 0;
+    public int currentLine = 1;
+    public int currentOffset = 0;
 
 
     // Reads and returns the next char in the input

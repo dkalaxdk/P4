@@ -12,7 +12,19 @@ public class Scanner {
     Token currentToken;
     Token nextToken;
 
-    private Reader reader = new Reader(filePath);
+    private FileReader fileReader;
+    private BufferedReader bufferedReader;
+
+    {
+        try {
+            fileReader = new FileReader(filePath);
+            bufferedReader = new BufferedReader(fileReader);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Reader reader = new Reader(bufferedReader);
 
 
     //Only for public use
