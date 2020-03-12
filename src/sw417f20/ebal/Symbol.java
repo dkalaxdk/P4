@@ -1,7 +1,7 @@
 package sw417f20.ebal;
 
 public enum Symbol {
-    NOTATOKEN(0),
+    NOTATOKEN,
     PLUS, MINUS,EQUALS,TIMES,DIVIDE,COLON,SEMI
 
     ,COMMA,DOT
