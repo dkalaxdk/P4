@@ -25,7 +25,7 @@ public class Reader {
     String whitespace = "\\t\\n\\s";
     private BufferedReader inputStream = new BufferedReader(fileReader);
     private char currentChar = 0;
-    private char nextChar = 0;
+    public char nextChar = 0;
     private int currentLine = 1;
     private int currentOffset = 0;
 

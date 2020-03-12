@@ -88,7 +88,7 @@ public class Scanner {
         char input = reader.readChar();
         switch (input) {
             case '+':
-                if(nextChar == '=') {
+                if(reader.nextChar == '=') {
                     token.type = Token.Type.OP_PLUS_EQUALS;
                 }
                 else {
@@ -96,7 +96,7 @@ public class Scanner {
                 }
                 return token;
             case '-':
-                if(nextChar == '=') {
+                if(reader.nextChar == '=') {
                     token.type = Token.Type.OP_MINUS_EQUALS;
                 }
                 else {
@@ -104,7 +104,7 @@ public class Scanner {
                 }
                 return token;
             case '*':
-                if(nextChar == '=') {
+                if(reader.nextChar == '=') {
                     token.type = Token.Type.OP_TIMES_EQUALS;
                 }
                 else {
@@ -112,10 +112,10 @@ public class Scanner {
                 }
                 return token;
             case '/':   // Has some special cases when followed by other symbols
-                if(nextChar == '=') {
+                if(reader.nextChar == '=') {
                     token.type = Token.Type.OP_DIVIDE_EQUALS;
                 }
-                else if(nextChar == '*') {
+                else if(reader.nextChar == '*') {
                     //TODO: Handle start of comment
                 }
                 else {
