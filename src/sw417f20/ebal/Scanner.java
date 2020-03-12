@@ -5,17 +5,14 @@ import java.io.*;
 
 public class Scanner {
     public Reader reader;
-    private String filePath;
 
-    private FileReader fileReader;
     private BufferedReader bufferedReader;
     public Scanner(String fileInput) {
-        filePath = fileInput;
         this.reader = new Reader(fileInput);
 
         {
             try {
-                fileReader = new FileReader(filePath);
+                FileReader fileReader = new FileReader(fileInput);
                 bufferedReader = new BufferedReader(fileReader);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
