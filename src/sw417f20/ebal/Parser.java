@@ -45,14 +45,14 @@ public class Parser extends RecursiveDescent{
             Expect(Token.Type.BEGIN);
             Expect(Token.Type.SLAVE);
 
-            Expect(Token.Type.COLON);
-            Expect(Token.Type.IDENTIFIER);
-
             Initiate();
             EventHandlers();
 
             Expect(Token.Type.END);
             Expect(Token.Type.SLAVE);
+        }
+        else {
+            MakeError("Expected BEGIN");
         }
     }
 
@@ -64,12 +64,15 @@ public class Parser extends RecursiveDescent{
             PinDcls();
             Expect(Token.Type.RBRACKET);
         }
+        else {
+            MakeError("Expected Initiate");
+        }
     }
 
     // PinDcls 	-> 	PinDcl semi PinDcls
     //	         | 	.
     private void PinDcls() {
-
+//        if (Peek().type == Token.Type.PIN)
     }
 
     // PinDcl 	-> 	pin identifier assign PinType IOType lparen intLiteral rparen.
@@ -90,15 +93,25 @@ public class Parser extends RecursiveDescent{
 
     }
 
-    // Listeners 	-> 	listener lparen identifier rparen Block Listeners
+    // Listeners 	-> 	Listener Listeners
     //	             | 	.
     private void Listeners() {
 
     }
 
-    // EventHandlers -> 	eventHandler lparen identifier rparen Block EventHandlers
+    // Listener	-> listener lparen identifier rparen Block.
+    private void Listener() {
+
+    }
+
+    // EventHandlers -> 	EventHandler EventHandlers
     //	              | 	.
     private void EventHandlers() {
+
+    }
+
+    // EventHandler -> eventHandler lparen identifier rparen Block.
+    private void EventHandler() {
 
     }
 
