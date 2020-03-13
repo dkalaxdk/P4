@@ -47,7 +47,7 @@ public class Scanner {
 
         token = IsSingleCharacter(token);
         if (token.type == Token.Type.NOTATOKEN) {
-            token.content = findWord();
+            token.content = reader.findWord();
             token = findKeyword(token);
         }
         return token;
@@ -189,16 +189,6 @@ public class Scanner {
 
     }
 
-    public String findWord() throws IOException {
-        StringBuilder output = new StringBuilder();
-        Token token = new Token(Token.Type.NOTATOKEN, "");
-        while (!Character.isWhitespace(reader.currentChar) && token.type == Token.Type.NOTATOKEN) {
-            output.append(reader.currentChar);
-            reader.readChar();
-            token = IsSingleCharacter(token);
-        }
-        return output.toString();
-    }
 
     public void IsIdentifier() {
 
