@@ -319,47 +319,83 @@ public class Parser extends RecursiveDescent{
     // AfterDcl  	-> Expr
     //	             | 	ReturnsCall.
     private void AfterDcl() {
-//        if (Peek().type == Token.Type.IDENTIFIER ||
-//            Peek().type == Token.Type.LPAREN ||
-//            Peek().type == Token.Type.LIT_Int ||
-//            Peek().type == Token.Type.LIT_Float ||
-//            Peek().type == Token.Type.)
+        if (Peek().type == Token.Type.IDENTIFIER    ||
+            Peek().type == Token.Type.LIT_Int       ||
+            Peek().type == Token.Type.LIT_Float     ||
+            Peek().type == Token.Type.LIT_Bool      ||
+            Peek().type == Token.Type.OP_MINUS      ||
+            Peek().type == Token.Type.OP_NOT        ||
+            Peek().type == Token.Type.LPAREN)
+        {
+            Expr();
+        }
+        else if (Peek().type == Token.Type.FILTERNOISE ||
+                 Peek().type == Token.Type.GETVALUE)
+        {
+            ReturnsCall();
+        }
     }
 
-    // Operator 	-> 	plus
-    //	             | 	minus
-    //	             | 	times
-    //	             | 	divide
-    //	             | 	modulo.
-    private void Operator() {
-
+    // Expr 	-> 	Value AfterValue
+    //	         | 	lparen Expr rparen
+    //	         | 	minus Value AfterValue
+    //	         | 	not boolLiteral AfterValue.
+    private void Expr() {
+        if (Peek().type == Token.Type.IDENTIFIER    ||
+            Peek().type == Token.Type.LIT_Int       ||
+            Peek().type == Token.Type.LIT_Float     ||
+            Peek().type == Token.Type.LIT_Bool)
+        {
+            Value();
+            AfterValue();
+        }
+        else if (Peek().type == Token.Type.LPAREN) {
+            Expect(Token.Type.LPAREN);
+            Expr();
+            Expect(Token.Type.RPAREN);
+        }
+        else if (Peek().type == Token.Type.OP_MINUS) {
+            Expect(Token.Type.OP_MINUS);
+            Value();
+            AfterValue();
+        }
+        else if (Peek().type == Token.Type.OP_NOT) {
+            Expect(Token.Type.OP_NOT);
+            Expect(Token.Type.LIT_Bool);
+            AfterValue();
+        }
+        else {
+            MakeError("Expected expression");
+        }
     }
 
-    // LogicOp 	-> lessThan
-    //	         | 	greaterThan
-    //	         | 	notEqual
-    //	         | 	greaterOrEqual
-    //	         | 	lessOrEqual
-    //	         | 	equals.
-    private void LogicOperator() {
-
+    // Value 	-> 	intLiteral
+    //	         | 	floatLiteral
+    //	         | 	boolLiteral
+    //	         | 	identifier.
+    private void Value() {
+        if (Peek().type == Token.Type.LIT_Int) {
+            Expect(Token.Type.LIT_Int);
+        }
+        else if (Peek().type == Token.Type.LIT_Float) {
+            Expect(Token.Type.LIT_Float);
+        }
+        else if (Peek().type == Token.Type.LIT_Bool) {
+            Expect(Token.Type.LIT_Bool);
+        }
+        else if (Peek().type == Token.Type.IDENTIFIER) {
+            Expect(Token.Type.IDENTIFIER);
+        }
+        else {
+            MakeError("Expected literal int, float, or bool or an identifier");
+        }
     }
 
-    // IfStmt 	-> 	if lparen Expr rparen Block IfEnd.
-    private void IfStmt() {
-
-    }
-
-    // IfEnd 	-> 	else AfterElse
-    //	         | 	.
-    private void IfEnd() {
-
-    }
-
-    // AfterElse 	-> 	IfStmt
-    //	             | 	Block.
-    private void AfterElse() {
-
+    // AfterValue 	-> 	Operator Expr
+    //	             | 	LogicOp Expr
+    //	             | 	.
+    private void AfterValue() {
+//        if (Peek().type == Token.Type.)
     }
 
     // Call 	-> 	VoidCall
@@ -380,32 +416,26 @@ public class Parser extends RecursiveDescent{
 
     }
 
-    // Expr 	-> 	Value AfterValue
-    //	         | 	lparen Expr rparen
-    //	         | 	minus Value
-    //	         | 	not Value.
-    private void Expr() {
-
-    }
-
     // CallParam 	-> 	Expr
     //	             | 	ReturnsCall.
     private void CallParam() {
 
     }
 
-    // Value 	-> 	intLiteral
-    //	         | 	floatLiteral
-    //	         | 	boolLiteral
-    //	         | 	identifier.
-    private void Value() {
+    // IfStmt 	-> 	if lparen Expr rparen Block IfEnd.
+    private void IfStmt() {
 
     }
 
-    // AfterValue 	-> 	Operator Expr
-    //	             | 	LogicOp Expr
-    //	             | 	.
-    private void AfterValue() {
+    // IfEnd 	-> 	else AfterElse
+    //	         | 	.
+    private void IfEnd() {
+
+    }
+
+    // AfterElse 	-> 	IfStmt
+    //	             | 	Block.
+    private void AfterElse() {
 
     }
 
@@ -413,6 +443,25 @@ public class Parser extends RecursiveDescent{
     //	           | 	constant
     //	           | 	range.
     private void FilterType() {
+
+    }
+
+    // Operator 	-> 	plus
+    //	             | 	minus
+    //	             | 	times
+    //	             | 	divide
+    //	             | 	modulo.
+    private void Operator() {
+
+    }
+
+    // LogicOp 	-> lessThan
+    //	         | 	greaterThan
+    //	         | 	notEqual
+    //	         | 	greaterOrEqual
+    //	         | 	lessOrEqual
+    //	         | 	equals.
+    private void LogicOperator() {
 
     }
 }
