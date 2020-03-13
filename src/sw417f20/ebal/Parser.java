@@ -2,21 +2,22 @@ package sw417f20.ebal;
 
 public class Parser extends RecursiveDescent{
 
-    // Start 	-> 	Master Slaves.
+    // Start 	-> 	Master Slave Slaves.
     @Override
     public void Start() {
         Master();
+        Slave();
         Slaves();
     }
 
-    // Master 	-> 	begin master Initiate EventCreators end master.
+    // Master 	-> 	begin master Initiate Listeners end master.
     private void Master() {
         if (Peek().type == Token.Type.BEGIN) {
             Expect(Token.Type.BEGIN);
             Expect(Token.Type.MASTER);
 
             Initiate();
-            EventCreators();
+            Listeners();
 
             Expect(Token.Type.END);
             Expect(Token.Type.MASTER);
@@ -38,7 +39,7 @@ public class Parser extends RecursiveDescent{
         }
     }
 
-    // Slave 	-> 	begin slave colon identifier Initiate EventHandlers end slave.
+    // Slave 	-> 	begin slave Initiate EventHandlers end slave.
     private void Slave() {
         if (Peek().type == Token.Type.BEGIN) {
             Expect(Token.Type.BEGIN);
@@ -68,10 +69,10 @@ public class Parser extends RecursiveDescent{
     // PinDcls 	-> 	PinDcl semi PinDcls
     //	         | 	.
     private void PinDcls() {
-        if (Peek().type == Token.Type.)
+
     }
 
-    // PinDcl 	-> 	identifier assign PinType IOType lparen intLiteral rparen.
+    // PinDcl 	-> 	pin identifier assign PinType IOType lparen intLiteral rparen.
     private void PinDcl() {
 
     }
@@ -89,15 +90,20 @@ public class Parser extends RecursiveDescent{
 
     }
 
-    // EventCreators -> 	eventCreator lparen identifier rparen lbrace Stmts rbrace EventCreators
-    //	              | 	.
-    private void EventCreators() {
+    // Listeners 	-> 	listener lparen identifier rparen Block Listeners
+    //	             | 	.
+    private void Listeners() {
 
     }
 
-    // EventHandlers -> 	eventHandler lparen identifier rparen lbrace Stmts rbrace EventHandlers
+    // EventHandlers -> 	eventHandler lparen identifier rparen Block EventHandlers
     //	              | 	.
     private void EventHandlers() {
+
+    }
+
+    // Block 	-> lbrace Stmts rbrace.
+    private void Block() {
 
     }
 
@@ -115,20 +121,21 @@ public class Parser extends RecursiveDescent{
     }
 
     // Assignment 	-> 	identifier assign Expr
-    //	             | 	Dcl AfterDcl .
+    //	             | 	Dcl assign AfterDcl .
     private void Assignment() {
 
     }
 
     // Dcl 	-> 	float identifier
     //	     | 	int identifier
-    //	     | 	bool identifier.
+    //	     | 	bool identifier
+    //	     | 	event identifier.
     private void Dcl() {
 
     }
 
-    // AfterDcl  	-> assign Expr
-    //               | .
+    // AfterDcl  	-> Expr
+    //	             | 	Call.
     private void AfterDcl() {
 
     }
@@ -169,18 +176,57 @@ public class Parser extends RecursiveDescent{
 
     }
 
-    // Key 	-> 	value
-    //	     | 	previousValue.
-    private void Key() {
-
-    }
-
-    // Call 	-> 	broadcast lparen identifier comma identifier rparen
-    //         	 | 	write lparen identifier comma CallParam  rparen
-    //         	 | 	filterNoise lparen identifier comma FilterType rparen.
+    // Call 	-> 	VoidCall
+    //         	 | 	ReturnsCall.
     private void Call() {
 
     }
 
+    // ReturnsCall	-> filterNoise lparen identifier comma FilterType rparen
+    //	             | 	getValue lparen Value rparen.
+    private void ReturnsCall() {
 
+    }
+
+    // VoidCall	->	broadcast lparen identifier rparen
+    //	         |	write lparen identifier comma CallParam rparen.
+    private void VoidCall() {
+
+    }
+
+    // Expr 	-> 	Value AfterValue
+    //	         | 	lparen Expr rparen
+    //	         | 	minus Value
+    //	         | 	not Value.
+    private void Expr() {
+
+    }
+
+    // CallParam 	-> 	Expr
+    //	             | 	ReturnsCall.
+    private void CallParam() {
+
+    }
+
+    // Value 	-> 	intLiteral
+    //	         | 	floatLiteral
+    //	         | 	boolLiteral
+    //	         | 	identifier.
+    private void Value() {
+
+    }
+
+    // AfterValue 	-> 	Operator Expr
+    //	             | 	LogicOp Expr
+    //	             | 	.
+    private void AfterValue() {
+
+    }
+
+    // FilterType -> 	flip
+    //	           | 	constant
+    //	           | 	range.
+    private void FilterType() {
+
+    }
 }
