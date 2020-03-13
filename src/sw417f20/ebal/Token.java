@@ -25,9 +25,9 @@ public class Token {
         IF,
 
         //Identifiers
-        IDENTIFIER, PINIDENTIFIER,
+        IDENTIFIER,
 
-
+        ERROR,
 
 
         EOF
