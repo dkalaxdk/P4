@@ -13,28 +13,40 @@ public class Reader {
     private BufferedReader inputStream;
 
 
-    String whitespace = "\t\n\r";
+    String whitespace = "\t\n\r ";
 
     public char currentChar = 0;
     public char nextChar = 0;
     public int currentLine = 1;
     public int currentOffset = 0;
+    boolean firstRead = true;
 
 
     // Reads and returns the next char in the input
     // Keeps track of line and offset
     public char readChar() throws IOException {
-        // This cast might cause problems
-        int res = inputStream.read();
-        if (res == -1) {
-            //TODO: Handle end of file
-            return (char) -1;
-        }
-        char c = (char) res;
-        currentOffset++;
-        if (c == '\n') {
-            currentOffset = 0;
-            currentLine++;
+        if (!firstRead) {
+            // This cast might cause problems
+            currentChar = nextChar;
+            int res = inputStream.read();
+
+            char c = (char) res;
+            currentOffset++;
+            if (c == '\n') {
+                currentLine++;
+            }
+            nextChar = c;
+        } else {
+            int res = inputStream.read();
+
+            char c = (char) res;
+            currentOffset++;
+            if (c == '\n') {
+                currentLine++;
+            }
+            currentChar = c;
+            firstRead = false;
+            readChar();
         }
         currentChar = nextChar;
         nextChar = c;
@@ -46,6 +58,9 @@ public class Reader {
         StringBuilder output = new StringBuilder();
         char currentChar = this.currentChar;
         while (whitespace.indexOf(currentChar) == -1) {
+            if (output.indexOf("\uFFFF") != -1) {
+                break;
+            }
             output.append(currentChar);
             currentChar = readChar();
         }

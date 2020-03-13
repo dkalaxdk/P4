@@ -1,6 +1,7 @@
 package sw417f20.ebal;
 
 import java.io.*;
+
 import sw417f20.ebal.Reader.Reader;
 
 public class Scanner {
@@ -68,8 +69,6 @@ public class Scanner {
             case "if":
                 token.type = Token.Type.KEYWORD;
                 break;
-
-
             default:
                 token.type = Token.Type.NOTATOKEN;
         }
@@ -89,6 +88,7 @@ public class Scanner {
                 return token;
             case '-':
                 if (reader.nextChar == '=') {
+                    token.content += reader.nextChar;
                     token.type = Token.Type.OP_MINUS_EQUALS;
                 } else {
                     token.type = Token.Type.OP_MINUS;
@@ -179,7 +179,9 @@ public class Scanner {
             case '\'':
                 token.type = Token.Type.SINGLEQUOTE;
                 return token;
-
+            case '\uFFFF':
+                token.type = Token.Type.EOF;
+                return token;
 
             default:
                 return token;
