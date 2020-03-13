@@ -1,7 +1,6 @@
 package sw417f20.ebal.Reader;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 
 public class Reader {
@@ -9,7 +8,6 @@ public class Reader {
         inputStream = reader;
     }
 
-    private FileReader fileReader;
     private BufferedReader inputStream;
 
 
@@ -38,7 +36,7 @@ public class Reader {
 
         if (firstRead) {
             currentChar = c;
-            nextChar = (char)inputStream.read();
+            nextChar = (char) inputStream.read();
             firstRead = false;
         } else {
             currentChar = nextChar;
@@ -53,13 +51,21 @@ public class Reader {
     public String findWord() throws IOException {
         StringBuilder output = new StringBuilder();
         char currentChar = this.currentChar;
-        while (whitespace.indexOf(currentChar) == -1) {
+        while (whitespace.indexOf(nextChar) == -1) {
             if (output.indexOf("\uFFFF") != -1) {
                 break;
             }
-            output.append(currentChar);
-            currentChar = readChar();
+            if ((output.length() >= 1) && String.valueOf(currentChar).matches("[A-Za-z_0-9]")) {
+                    output.append(currentChar);
+            } else if (String.valueOf(currentChar).matches("[A-Za-z_]")) {
+                output.append(currentChar);
+            } else break;
+            if (String.valueOf(nextChar).matches(("[A-Za-z_0-9]"))) {
+                currentChar = readChar();
+            } else break;
         }
+
+
         return output.toString();
     }
 

@@ -14,7 +14,7 @@ public class Main {
         while (scanner.currentToken.type != Token.Type.EOF) {
             scanner.Advance();
             if (scanner.currentToken.type != Token.Type.NOTATOKEN)
-            System.out.println("Token found: " + scanner.currentToken.type + " on line: " + scanner.currentToken.lineNumber + " : " + scanner.currentToken.offSet);
+            System.out.println("Token found: " + scanner.currentToken.type + " on line: " + scanner.currentToken.lineNumber + " : " + scanner.currentToken.offSet+ " with content: " + scanner.currentToken.content);
         }
 
 
