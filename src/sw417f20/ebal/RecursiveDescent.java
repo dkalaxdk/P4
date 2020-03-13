@@ -30,7 +30,6 @@ public abstract class RecursiveDescent {
     protected void Expect(Token.Type t, String message) {
         if (Peek().type != t) {
             MakeError(message);
-            System.exit(0);
         }
         else {
             try {
@@ -44,5 +43,6 @@ public abstract class RecursiveDescent {
 
     protected void MakeError(String message) {
         System.err.println(message + " on line: " + PScanner.nextToken.lineNumber + " : " + PScanner.nextToken.offSet + ", got " + PScanner.nextToken.type + ". Current token is " + PScanner.currentToken.content + ", type " + PScanner.currentToken.type);
+        System.exit(0);
     }
 }
