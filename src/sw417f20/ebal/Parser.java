@@ -1,5 +1,7 @@
 package sw417f20.ebal;
 
+import org.junit.jupiter.params.shadow.com.univocity.parsers.common.TextParsingException;
+
 public class Parser extends RecursiveDescent{
 
     // Start 	-> 	Master Slave Slaves.
@@ -37,6 +39,9 @@ public class Parser extends RecursiveDescent{
         else if (Peek().type == Token.Type.EOF) {
             return;
         }
+        else {
+            MakeError("Expected BEGIN or EOF");
+        }
     }
 
     // Slave 	-> 	begin slave Initiate EventHandlers end slave.
@@ -56,7 +61,7 @@ public class Parser extends RecursiveDescent{
         }
     }
 
-    // Initiate 	-> 	initiate lbrace PinDcls rbrace.
+    // Initiate 	-> 	initiate lbracket PinDcls rbracket.
     private void Initiate() {
         if (Peek().type == Token.Type.INITIATE) {
             Expect(Token.Type.INITIATE);
@@ -72,12 +77,26 @@ public class Parser extends RecursiveDescent{
     // PinDcls 	-> 	PinDcl semi PinDcls
     //	         | 	.
     private void PinDcls() {
-//        if (Peek().type == Token.Type.PIN)
+        if (Peek().type == Token.Type.PIN) {
+            PinDcl();
+            Expect(Token.Type.SEMI);
+            PinDcls();
+        }
+        else if (Peek().type == Token.Type.RBRACKET) {
+            return;
+        }
+        else {
+            MakeError("Expected pin initialization or }");
+        }
     }
 
     // PinDcl 	-> 	pin identifier assign PinType IOType lparen intLiteral rparen.
     private void PinDcl() {
-
+        if (Peek().type == Token.Type.PIN) {
+            Expect(Token.Type.PIN);
+            Expect(Token.Type.IDENTIFIER);
+            Expect(Token.Type.ASSIGN);
+        }
     }
 
     // PinType 	-> 	digital
@@ -115,7 +134,7 @@ public class Parser extends RecursiveDescent{
 
     }
 
-    // Block 	-> lbrace Stmts rbrace.
+    // Block 	-> lbracket Stmts rbracket.
     private void Block() {
 
     }
@@ -172,7 +191,7 @@ public class Parser extends RecursiveDescent{
 
     }
 
-    // IfStmt 	-> 	if lparen Expr rparen lbrace Stmts rbrace IfEnd.
+    // IfStmt 	-> 	if lparen Expr rparen Block IfEnd.
     private void IfStmt() {
 
     }
@@ -184,7 +203,7 @@ public class Parser extends RecursiveDescent{
     }
 
     // AfterElse 	-> 	IfStmt
-    //	             | 	lbrace Stmts rbrace.
+    //	             | 	Block.
     private void AfterElse() {
 
     }
