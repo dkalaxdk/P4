@@ -25,12 +25,13 @@ public class Reader {
     // Reads and returns the next char in the input
     // Keeps track of line and offset
     public char readChar() throws IOException {
+        char c;
         if (!firstRead) {
             // This cast might cause problems
             currentChar = nextChar;
             int res = inputStream.read();
 
-            char c = (char) res;
+            c = (char) res;
             currentOffset++;
             if (c == '\n') {
                 currentLine++;
@@ -39,7 +40,7 @@ public class Reader {
         } else {
             int res = inputStream.read();
 
-            char c = (char) res;
+            c = (char) res;
             currentOffset++;
             if (c == '\n') {
                 currentLine++;
