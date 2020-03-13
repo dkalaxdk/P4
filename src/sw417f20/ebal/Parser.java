@@ -230,7 +230,7 @@ public class Parser extends RecursiveDescent{
             Stmt();
             Stmts();
         }
-        else if (Peek().type == Token.Type.LBRACKET) {
+        else if (Peek().type == Token.Type.RBRACKET) {
             return;
         }
         else {

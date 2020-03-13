@@ -46,12 +46,14 @@ public class Scanner {
     public void Advance() throws IOException {
         // Check whether the switch may find another case, ie isDigit, isText or the likes.
         // Depending on the cases, it should be redirected to something in the likes of "Find keyword" or "Find literal"
+        Token temp = nextToken;
 
         do {
-            nextToken = currentToken;
-            currentToken = getToken();
+            nextToken = getToken();
         }
         while (nextToken.type == Token.Type.NOTATOKEN);
+
+        currentToken = temp;
     }
 
     private Token getToken() throws IOException {

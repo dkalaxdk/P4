@@ -16,7 +16,7 @@ public class Main {
 
     public static void ParserStuff() {
         String filePath = new File("").getAbsolutePath();
-        String fileInput = filePath + "/TestFiles/TestProgram.txt";
+        String fileInput = filePath + "/TestFiles/SmallTestProgram.txt";
 
         Parser parser = new Parser();
         parser.Parse(fileInput);

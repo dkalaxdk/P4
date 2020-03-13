@@ -1,0 +1,23 @@
+BEGIN MASTER
+
+Initiate {
+
+}
+
+Listener (noget) {
+    int n = 3;
+}
+
+END MASTER
+
+BEGIN SLAVE
+
+Initiate {
+
+}
+
+EventHandler (noget) {
+
+}
+
+END SLAVE
