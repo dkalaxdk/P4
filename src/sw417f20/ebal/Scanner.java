@@ -47,6 +47,9 @@ public class Scanner {
 
         token = IsSingleCharacter(token);
         if (token.type == Token.Type.NOTATOKEN) {
+            findNumberTokenType(token);
+        }
+        if (token.type == Token.Type.NOTATOKEN) {
             token.content = reader.findWord();
             token = findKeyword(token);
         }
@@ -215,8 +218,15 @@ public class Scanner {
 
     }
 
+    public Token findNumberTokenType(Token token) throws IOException {
+        token.content = reader.findNumber();
+        if (!token.content.contains(".") && token.content.length() > 0) {
+            token.type = Token.Type.LIT_Int;
+        } else if(token.content.length() > 0){
+            token.type = Token.Type.LIT_Float;
+        }
 
-    public void IsIdentifier() {
+        return token;
 
     }
 

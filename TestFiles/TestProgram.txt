@@ -50,15 +50,15 @@ Initiate
 
 EventHandler(button1)
 {
-	write(light1, !light1[value]); // 0 -> 1, 1 -> 0, 87 -> 0
+	write(light1, !light1[value]); // 0 -> 1.98, 1 -> 0, 87 -> 0
 
-	if (button1[value] == HIGH) 
+	if (button1[value] == 5)
 {
-	if (light1[value] == HIGH) 
+	if (light1[value] == 2)
 {
 		write(light1, LOW);
 	}
-	else if (light1[value] == LOW) 
+	else if (light1[1] == LOW)
 {
 		write(light1, HIGH);
 	}
