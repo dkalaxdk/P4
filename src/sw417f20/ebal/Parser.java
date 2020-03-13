@@ -153,6 +153,9 @@ public class Parser extends RecursiveDescent{
         else if (Peek().type == Token.Type.END) {
             return;
         }
+        else if (Peek().type == Token.Type.EVENTHANDLER) {
+            MakeError("EventHandlers can only be declared in slaves");
+        }
         else {
             MakeError("Expected Listener or end of master");
         }
@@ -181,6 +184,9 @@ public class Parser extends RecursiveDescent{
         }
         else if (Peek().type == Token.Type.END) {
             return;
+        }
+        else if (Peek().type == Token.Type.LISTENER) {
+            MakeError("Listeners can only be declared in master");
         }
         else {
             MakeError("Expected EventHandler or end of slave");
