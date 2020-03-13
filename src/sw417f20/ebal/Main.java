@@ -10,8 +10,8 @@ import java.util.Currency;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-//        ScannerStuff();
-        ParserStuff();
+        ScannerStuff();
+//        ParserStuff();
     }
 
     public static void ParserStuff() {
@@ -32,19 +32,21 @@ public class Main {
 
         while (scanner.currentToken.type != Token.Type.EOF) {
 
-            if (scanner.nextToken.type != Token.Type.NOTATOKEN) {
-                System.out.println("Token found: " + scanner.nextToken.type + " on line: " + scanner.nextToken.lineNumber + " : " + scanner.nextToken.offSet + " with content: " + scanner.nextToken.content);
-                tokenCount++;
-            } else if (scanner.currentToken.content.length() > 0){
-                System.out.println("Unable to find token matching: " + scanner.currentToken.type + " on line: " + scanner.currentToken.lineNumber + " : " + scanner.currentToken.offSet + " with content: " + scanner.currentToken.content);
-            }
-
             try {
                 scanner.Advance();
             }
             catch (IOException e) {
                 System.err.println(e);
             }
+
+            if (scanner.currentToken.type != Token.Type.NOTATOKEN) {
+                System.out.println("Token found: " + scanner.currentToken.type + " on line: " + scanner.currentToken.lineNumber + " : " + scanner.currentToken.offSet + " with content: " + scanner.currentToken.content);
+                tokenCount++;
+            } else if (scanner.currentToken.content.length() > 0){
+                System.out.println("Unable to find token matching: " + scanner.currentToken.type + " on line: " + scanner.currentToken.lineNumber + " : " + scanner.currentToken.offSet + " with content: " + scanner.currentToken.content);
+            }
+
+
         }
         System.out.println("Tokens found in file: " + tokenCount);
         System.out.println("Runtime:");
