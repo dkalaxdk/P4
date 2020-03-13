@@ -50,6 +50,10 @@ public class Scanner {
             token.content = reader.findWord();
             token = findKeyword(token);
         }
+
+        if (token.type == Token.Type.NOTATOKEN && token.content.length() >= 1) {
+            token.type = Token.Type.IDENTIFIER;
+        }
         return token;
     }
 
