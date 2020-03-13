@@ -144,34 +144,78 @@ public class Parser extends RecursiveDescent{
     // Listeners 	-> 	Listener Listeners
     //	             | 	.
     private void Listeners() {
-//        if (Peek().type == Token.Type.LI)
+        if (Peek().type == Token.Type.LISTENER) {
+            Listener();
+            Listeners();
+        }
+        else if (Peek().type == Token.Type.END) {
+            return;
+        }
+        else {
+            MakeError("Expected Listener or end of master");
+        }
     }
 
     // Listener	-> listener lparen identifier rparen Block.
     private void Listener() {
-
+        if (Peek().type == Token.Type.LISTENER) {
+            Expect(Token.Type.LISTENER);
+            Expect(Token.Type.LPAREN);
+            Expect(Token.Type.IDENTIFIER);
+            Expect(Token.Type.RPAREN);
+            Block();
+        }
+        else {
+            MakeError("Expected Listener");
+        }
     }
 
     // EventHandlers -> 	EventHandler EventHandlers
     //	              | 	.
     private void EventHandlers() {
-
+        if (Peek().type == Token.Type.EVENTHANDLER) {
+            EventHandler();
+            EventHandlers();
+        }
+        else if (Peek().type == Token.Type.END) {
+            return;
+        }
+        else {
+            MakeError("Expected EventHandler or end of slave");
+        }
     }
 
     // EventHandler -> eventHandler lparen identifier rparen Block.
     private void EventHandler() {
-
+        if (Peek().type == Token.Type.EVENTHANDLER) {
+            Expect(Token.Type.EVENTHANDLER);
+            Expect(Token.Type.LPAREN);
+            Expect(Token.Type.IDENTIFIER);
+            Expect(Token.Type.RPAREN);
+            Block();
+        }
+        else {
+            MakeError("Expected EventHandler");
+        }
     }
 
     // Block 	-> lbracket Stmts rbracket.
     private void Block() {
-
+        if (Peek().type == Token.Type.LBRACKET) {
+            Expect(Token.Type.LBRACKET);
+            Stmts();
+            Expect(Token.Type.RBRACKET);
+        }
+        else {
+            MakeError("Expected {");
+        }
     }
 
     // Stmts 	-> 	Stmt Stmts
     //	         | 	.
     private void Stmts() {
-
+        if (Peek().type == Token.Type.IDENTIFIER ||
+            Peek().type == Token.Type.LIT_Float)
     }
 
     // Stmt 	-> 	Call semi
