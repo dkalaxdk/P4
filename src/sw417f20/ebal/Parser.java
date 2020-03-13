@@ -4,6 +4,7 @@ import org.junit.jupiter.params.shadow.com.univocity.parsers.common.TextParsingE
 import org.mockito.verification.After;
 
 import java.awt.image.TileObserver;
+import java.security.spec.ECParameterSpec;
 
 public class Parser extends RecursiveDescent{
 
@@ -526,20 +527,48 @@ public class Parser extends RecursiveDescent{
     // IfEnd 	-> 	else AfterElse
     //	         | 	.
     private void IfEnd() {
-//        if (Peek().type == Token.Type.)
+        if (Peek().type == Token.Type.ELSE) {
+            Expect(Token.Type.ELSE);
+            AfterElse();
+        }
+        else if (Peek().type == Token.Type.RBRACKET ||
+                 Peek().type == Token.Type.IDENTIFIER ||
+                 Peek().type == Token.Type.FLOAT ||
+                 Peek().type == Token.Type.INT ||
+                 Peek().type == Token.Type.BOOL ||
+                 Peek().type == Token.Type.EVENT ||
+                 Peek().type == Token.Type.IF ||
+                 Peek().type == Token.Type.FILTERNOISE ||
+                 Peek().type == Token.Type.GETVALUE ||
+                 Peek().type == Token.Type.BROADCAST ||
+                 Peek().type == Token.Type.WRITE)
+        {
+            return;
+        }
+        else {
+            MakeError("Expected else or end of if statement");
+        }
     }
 
     // AfterElse 	-> 	IfStmt
     //	             | 	Block.
     private void AfterElse() {
-
+        if (Peek().type == Token.Type.IF) {
+            IfStmt();
+        }
+        else if (Peek().type == Token.Type.LBRACKET) {
+            Block();
+        }
+        else {
+            MakeError("Expected if statemt or a block");
+        }
     }
 
     // FilterType -> 	flip
     //	           | 	constant
     //	           | 	range.
     private void FilterType() {
-
+//        if (Peek().type == )
     }
 
     // Operator 	-> 	plus
