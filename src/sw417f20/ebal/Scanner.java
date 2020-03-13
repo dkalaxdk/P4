@@ -145,9 +145,17 @@ public class Scanner {
                 }
                 return token;
 
-                // TODO: Skal rettes til at være ASSIGN, det her er LOP_EQUALS
             case '=':
-                token.type = Token.Type.OP_EQUALS;
+                if (reader.nextChar == '=') {
+                    token.type = Token.Type.LOP_EQUALS;
+                }
+                else {
+                    token.type = Token.Type.ASSIGN;
+                }
+                return token;
+
+            case '%':
+                token.type = Token.Type.OP_MODULO;
                 return token;
 
             case '?':
