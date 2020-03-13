@@ -4,7 +4,7 @@ public class Token {
     public enum Type {
         NOTATOKEN,
         //Operators
-        OP_PLUS, OP_MINUS, OP_EQUALS, OP_TIMES, OP_DIVIDE, OP_NOT, OP_QUESTION, OP_MODULO,
+        OP_PLUS, OP_MINUS, OP_TIMES, OP_DIVIDE, OP_NOT, OP_QUESTION, OP_MODULO,
         OP_PLUS_EQUALS, OP_MINUS_EQUALS, OP_TIMES_EQUALS, OP_DIVIDE_EQUALS,
 
         ASSIGN,
