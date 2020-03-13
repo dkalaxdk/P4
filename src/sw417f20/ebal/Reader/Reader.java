@@ -52,19 +52,20 @@ public class Reader {
         StringBuilder output = new StringBuilder();
         char currentChar = this.currentChar;
         while (whitespace.indexOf(nextChar) == -1) {
-            if (output.indexOf("\uFFFF") != -1) {
-                break;
-            }
+            // Fixing potential infinite loop \uFFFF is EOF.
+            if (output.indexOf("\uFFFF") != -1) break;
+
             if ((output.length() >= 1) && String.valueOf(currentChar).matches("[A-Za-z_0-9]")) {
-                    output.append(currentChar);
+                output.append(currentChar);
             } else if (String.valueOf(currentChar).matches("[A-Za-z_]")) {
                 output.append(currentChar);
             } else break;
+
+
             if (String.valueOf(nextChar).matches(("[A-Za-z_0-9]"))) {
                 currentChar = readChar();
             } else break;
         }
-
 
         return output.toString();
     }
