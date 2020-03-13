@@ -51,16 +51,43 @@ public class Reader {
     public String findWord() throws IOException {
         StringBuilder output = new StringBuilder();
         char currentChar = this.currentChar;
-        while (whitespace.indexOf(nextChar) == -1) {
-            if (output.indexOf("\uFFFF") != -1) {
-                break;
-            }
+        while (whitespace.indexOf(currentChar) == -1) {
+            // Fixing potential infinite loop \uFFFF is EOF.
+            if (output.indexOf("\uFFFF") != -1) break;
+
             if ((output.length() >= 1) && String.valueOf(currentChar).matches("[A-Za-z_0-9]")) {
-                    output.append(currentChar);
+                output.append(currentChar);
             } else if (String.valueOf(currentChar).matches("[A-Za-z_]")) {
                 output.append(currentChar);
             } else break;
+
+
             if (String.valueOf(nextChar).matches(("[A-Za-z_0-9]"))) {
+                currentChar = readChar();
+            } else break;
+        }
+
+        return output.toString();
+    }
+
+    public String findNumber() throws IOException {
+        StringBuilder output = new StringBuilder();
+        char currentChar = this.currentChar;
+        while (whitespace.indexOf(currentChar) == -1) {
+            // Fixing potential infinite loop \uFFFF is EOF.
+            if (output.indexOf("\uFFFF") != -1) break;
+
+            if (output.length() >= 1 && String.valueOf(currentChar).matches("[0-9.]") && output.indexOf(".") == -1) {
+                output.append(currentChar);
+            } else if (output.length() >= 1 && String.valueOf(currentChar).matches("[0-9]") && output.indexOf(".") != -1) {
+                output.append(currentChar);
+            } else if (String.valueOf(currentChar).matches("[0-9]")) {
+                output.append(currentChar);
+            } else if (String.valueOf(nextChar).matches("[A-Za-z0-9]") && output.toString().matches("[0-9A-Za-z.]+")) {
+                output.append(currentChar);
+            } else break;
+
+            if (String.valueOf(nextChar).matches("[0-9A-Za-z.]")) {
                 currentChar = readChar();
             } else break;
         }

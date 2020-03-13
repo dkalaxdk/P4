@@ -27,7 +27,7 @@ public class Token {
         //Identifiers
         IDENTIFIER,
 
-
+        ERROR,
 
 
         EOF
