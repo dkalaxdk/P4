@@ -26,28 +26,21 @@ public class Reader {
     // Keeps track of line and offset
     public char readChar() throws IOException {
         char c;
-        if (!firstRead) {
-            // This cast might cause problems
-            currentChar = nextChar;
-            int res = inputStream.read();
+        int res = inputStream.read();
 
-            c = (char) res;
-            currentOffset++;
-            if (c == '\n') {
-                currentLine++;
-            }
-            nextChar = c;
-        } else {
-            int res = inputStream.read();
-
-            c = (char) res;
-            currentOffset++;
-            if (c == '\n') {
-                currentLine++;
-            }
+        c = (char) res;
+        if (firstRead) {
             currentChar = c;
             firstRead = false;
             readChar();
+        } else {
+            currentOffset++;
+            if (c == '\n') {
+                currentLine++;
+                currentOffset = 0;
+            }
+            currentChar = nextChar;
+            nextChar = c;
         }
         currentChar = nextChar;
         nextChar = c;
