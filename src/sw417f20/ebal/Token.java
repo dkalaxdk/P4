@@ -13,7 +13,7 @@ public class Token {
         LOP_LESSTHAN, LOP_GREATERTHAN, LOP_NOTEQUAL, LOP_GREATEROREQUAL, LOP_LESSOREQUAL, LOP_EQUALS,
 
         // Literals
-        LIT_Int, LIT_Float, LIT_char, LIT_Bool, 
+        LIT_Int, LIT_Float, LIT_Bool,
 
         EVENT, PIN, FLOAT, INT, BOOL,
 
@@ -22,7 +22,6 @@ public class Token {
         LPAREN, RPAREN, RBRACKET, LBRACKET, RSQBRACKET, LSQBRACKET,
 
         //Keywords
-        KEYWORD,
         BEGIN, END, MASTER, SLAVE,
         DIGITAL, ANALOG, PWM, INPUT, OUTPUT, FLIP, CONSTANT, RANGE,
         BROADCAST, WRITE, FILTERNOISE, GETVALUE,
