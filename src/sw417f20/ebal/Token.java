@@ -27,7 +27,7 @@ public class Token {
         DIGITAL, ANALOG, PWM, INPUT, OUTPUT,
         BROADCAST, WRITE, FILTERNOISE, GETVALUE,
         LISTENER, EVENTHANDLER, INITIATE,
-        IF,
+        IF, ELSE,
 
         //Identifiers
         IDENTIFIER,
