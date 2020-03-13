@@ -215,7 +215,12 @@ public class Parser extends RecursiveDescent{
     //	         | 	.
     private void Stmts() {
         if (Peek().type == Token.Type.IDENTIFIER ||
-            Peek().type == Token.Type.LIT_Float)
+            Peek().type == Token.Type.FLOAT ||
+            Peek().type == Token.Type.INT ||
+            Peek().type == Token.Type.BOOL ||
+            Peek().type == Token.Type.EVENT ||
+            Peek().type == Token.Type.IF ||
+//            Peek().type == Token.Type.)
     }
 
     // Stmt 	-> 	Call semi
