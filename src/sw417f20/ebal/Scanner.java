@@ -80,8 +80,8 @@ public class Scanner {
             case "input":
                 token.type = Token.Type.INPUT;
                 break;
-            case "EventCreator":
-                token.type = Token.Type.EVENTCREATOR;
+            case "Listener":
+                token.type = Token.Type.LISTENER;
                 break;
             case "output":
                 token.type = Token.Type.OUTPUT;
