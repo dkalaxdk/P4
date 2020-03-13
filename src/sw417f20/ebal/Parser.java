@@ -90,7 +90,7 @@ public class Parser extends RecursiveDescent{
             return;
         }
         else {
-            MakeError("Expected pin initialization or }");
+            MakeError("Expected pin or }");
         }
     }
 
@@ -107,7 +107,7 @@ public class Parser extends RecursiveDescent{
             Expect(Token.Type.RPAREN);
         }
         else {
-            MakeError("Expected pin initialization");
+            MakeError("Expected pin");
         }
     }
 

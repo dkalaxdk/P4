@@ -29,8 +29,8 @@ BEGIN SLAVE
 Initiate
 {
 	pin light1 = digital output(4);
-pin light2 = digital output(5);
-pin light3 = digital output(6);
+    pin light2 = digital output(5);
+    pin light3 = digital output(6);
 }
 
 EventHandler(button1Pressed)
