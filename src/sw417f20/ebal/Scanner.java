@@ -24,8 +24,18 @@ public class Scanner {
             }
         }
         this.reader = new Reader(bufferedReader);
+
+        Init();
     }
 
+    public void Init() {
+        try {
+            nextToken = getToken();
+        }
+        catch (IOException e) {
+            System.err.println(e);
+        }
+    }
 
     //Only for public use
     public Token Peek() {
@@ -36,8 +46,14 @@ public class Scanner {
     public void Advance() throws IOException {
         // Check whether the switch may find another case, ie isDigit, isText or the likes.
         // Depending on the cases, it should be redirected to something in the likes of "Find keyword" or "Find literal"
-        nextToken = currentToken;
-        currentToken = getToken();
+        Token temp = nextToken;
+
+        do {
+            nextToken = getToken();
+        }
+        while (nextToken.type == Token.Type.NOTATOKEN);
+
+        currentToken = temp;
     }
 
     private Token getToken() throws IOException {
