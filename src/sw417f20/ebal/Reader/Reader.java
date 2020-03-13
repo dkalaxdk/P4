@@ -29,23 +29,25 @@ public class Reader {
         int res = inputStream.read();
 
         c = (char) res;
+
+        currentOffset++;
+        if (c == '\n') {
+            currentLine++;
+            currentOffset = 0;
+        }
+
         if (firstRead) {
             currentChar = c;
+            nextChar = (char)inputStream.read();
             firstRead = false;
-            readChar();
         } else {
-            currentOffset++;
-            if (c == '\n') {
-                currentLine++;
-                currentOffset = 0;
-            }
             currentChar = nextChar;
             nextChar = c;
         }
-        currentChar = nextChar;
-        nextChar = c;
+        //currentChar = nextChar;
+        //nextChar = c;
         // Should return c if it is the first character read
-        return currentChar == 0 ? c : currentChar;
+        return currentChar;
     }
 
     public String findWord() throws IOException {
