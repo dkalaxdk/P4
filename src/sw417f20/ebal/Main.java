@@ -15,19 +15,22 @@ public class Main {
     }
 
     public static void ParserStuff() {
-        String filePath = new File("").getAbsolutePath();
-        String fileInput = filePath + "/TestFiles/SmallTestProgram.txt";
-
         Parser parser = new Parser();
-        parser.Parse(fileInput);
+
+        long start = System.currentTimeMillis();
+        parser.Parse(GetFullPath("/TestFiles/SmallTestProgram.txt"));
+        System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms");
+
+        start = System.currentTimeMillis();
+        parser.Parse(GetFullPath("/TestFiles/TestProgram.txt"));
+        System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms");
     }
 
     public static void ScannerStuff() throws IOException {
         long start = System.currentTimeMillis();
+
         System.out.println();
-        String filePath = new File("").getAbsolutePath();
-        String fileInput = filePath + "/TestFiles/TestProgram.txt";
-        Scanner scanner = new Scanner(fileInput);
+        Scanner scanner = new Scanner(GetFullPath("/TestFiles/TestProgram.txt"));
         int tokenCount = 0;
 
         while (scanner.currentToken.type != Token.Type.EOF) {
@@ -42,8 +45,13 @@ public class Main {
 
 
         }
+        System.out.println();
         System.out.println("Tokens found in file: " + tokenCount);
-        System.out.println("Runtime:");
-        System.out.println(System.currentTimeMillis()-start);
+        System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms");
+    }
+
+    public static String GetFullPath(String file) {
+        String filePath = new File("").getAbsolutePath();
+        return filePath + file;
     }
 }

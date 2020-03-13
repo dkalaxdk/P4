@@ -1,5 +1,8 @@
 package sw417f20.ebal;
 
+import org.junit.jupiter.params.shadow.com.univocity.parsers.conversions.RegexConversion;
+
+import java.awt.*;
 import java.io.IOException;
 
 public abstract class RecursiveDescent {
@@ -10,6 +13,13 @@ public abstract class RecursiveDescent {
     public AST Parse(String filePath) {
         PScanner = new Scanner(filePath);
         Tree = new AST();
+
+        System.out.println();
+        System.out.println("Parsing " + filePath);
+
+//        String[] splt = filePath.split("P4");
+//
+//        System.out.println(splt[splt.length - 1]);
 
         Start();
         Expect(Token.Type.EOF);
