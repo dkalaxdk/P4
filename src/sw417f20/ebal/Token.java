@@ -22,7 +22,7 @@ public class Token {
         BEGIN, END, MASTER, SLAVE,
         DIGITAL, ANALOG, PWM, INPUT, OUTPUT,
         BROADCAST, WRITE,
-        EVENTCREATOR, EVENTHANDLER, INITIATE,
+        LISTENER, EVENTHANDLER, INITIATE,
         IF,
 
         //Identifiers
