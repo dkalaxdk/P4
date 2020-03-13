@@ -145,6 +145,7 @@ public class Scanner {
                 }
                 return token;
 
+                // TODO: Skal rettes til at være ASSIGN, det her er LOP_EQUALS
             case '=':
                 token.type = Token.Type.OP_EQUALS;
                 return token;
