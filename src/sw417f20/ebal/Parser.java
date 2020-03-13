@@ -395,7 +395,10 @@ public class Parser extends RecursiveDescent{
     //	             | 	LogicOp Expr
     //	             | 	.
     private void AfterValue() {
-//        if (Peek().type == Token.Type.)
+//        if (Peek().type == Token.Type.OP_PLUS ||
+//            Peek().type == Token.Type.OP_MINUS ||
+//            Peek().type == Token.Type.OP_TIMES ||
+//            Peek().type == Token.Type.)
     }
 
     // Call 	-> 	VoidCall
