@@ -10,7 +10,7 @@ public class Token {
         ASSIGN,
         
         // Logic Operators
-        LOP_LESSTHAN, LOP_GREATERTHAN, LOP_NOTEQUAL, LOP_GREATEROREQUAL, LOP_LESSOREQUAL,
+        LOP_LESSTHAN, LOP_GREATERTHAN, LOP_NOTEQUAL, LOP_GREATEROREQUAL, LOP_LESSOREQUAL, LOP_EQUALS,
 
         // Literals
         LIT_Int, LIT_Float, LIT_char, LIT_Bool, 
