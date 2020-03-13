@@ -14,6 +14,8 @@ public abstract class RecursiveDescent {
         Start();
         Expect(Token.Type.EOF);
 
+        System.out.println("======== Parse successful ========");
+
         return Tree;
     }
 
