@@ -1,7 +1,6 @@
 package sw417f20.ebal.Reader;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -34,6 +33,7 @@ public class Reader {
         char c = (char) res;
         currentOffset++;
         if (c == '\n') {
+            currentOffset = 0;
             currentLine++;
         }
         currentChar = nextChar;
