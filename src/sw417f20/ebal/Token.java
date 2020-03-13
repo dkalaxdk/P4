@@ -21,7 +21,7 @@ public class Token {
         KEYWORD,
         BEGIN, END, MASTER, SLAVE,
         DIGITAL, ANALOG, PWM, INPUT, OUTPUT,
-        BROADCAST, WRITE,
+        BROADCAST, WRITE, FILTERNOISE, GETVALUE,
         LISTENER, EVENTHANDLER, INITIATE,
         IF,
 
