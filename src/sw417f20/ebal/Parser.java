@@ -1,6 +1,7 @@
 package sw417f20.ebal;
 
 import org.junit.jupiter.params.shadow.com.univocity.parsers.common.TextParsingException;
+import org.mockito.verification.After;
 
 import java.awt.image.TileObserver;
 
@@ -220,20 +221,70 @@ public class Parser extends RecursiveDescent{
             Peek().type == Token.Type.BOOL ||
             Peek().type == Token.Type.EVENT ||
             Peek().type == Token.Type.IF ||
-//            Peek().type == Token.Type.)
+            Peek().type == Token.Type.FILTERNOISE ||
+            Peek().type == Token.Type.GETVALUE ||
+            Peek().type == Token.Type.BROADCAST ||
+            Peek().type == Token.Type.WRITE) {
+
+            Stmt();
+            Stmts();
+        }
+        else if (Peek().type == Token.Type.LBRACKET) {
+            return;
+        }
+        else {
+            MakeError("Expected statement");
+        }
     }
 
     // Stmt 	-> 	Call semi
     //	         | 	Assignment semi
     //	         | 	IfStmt.
     private void Stmt() {
+        if (Peek().type == Token.Type.FILTERNOISE ||
+            Peek().type == Token.Type.GETVALUE ||
+            Peek().type == Token.Type.BROADCAST ||
+            Peek().type == Token.Type.WRITE) {
 
+            Call();
+            Expect(Token.Type.SEMI);
+        }
+        else if (Peek().type == Token.Type.IDENTIFIER ||
+                 Peek().type == Token.Type.FLOAT ||
+                 Peek().type == Token.Type.INT ||
+                 Peek().type == Token.Type.BOOL ||
+                 Peek().type == Token.Type.EVENT) {
+
+            Assignment();
+            Expect(Token.Type.SEMI);
+        }
+        else if (Peek().type == Token.Type.IF) {
+            IfStmt();
+        }
+        else {
+            MakeError("Expected a call, an assignment, or an if-statement");
+        }
     }
 
     // Assignment 	-> 	identifier assign Expr
     //	             | 	Dcl assign AfterDcl .
     private void Assignment() {
-
+        if (Peek().type == Token.Type.IDENTIFIER) {
+            Expect(Token.Type.IDENTIFIER);
+            Expect(Token.Type.ASSIGN);
+            Expr();
+        }
+        else if (Peek().type == Token.Type.FLOAT ||
+                 Peek().type == Token.Type.INT ||
+                 Peek().type == Token.Type.BOOL ||
+                 Peek().type == Token.Type.EVENT) {
+            Dcl();
+            Expect(Token.Type.ASSIGN);
+            AfterDcl();
+        }
+        else {
+            MakeError("Expected assignment or declaration");
+        }
     }
 
     // Dcl 	-> 	float identifier
@@ -241,13 +292,38 @@ public class Parser extends RecursiveDescent{
     //	     | 	bool identifier
     //	     | 	event identifier.
     private void Dcl() {
-
+        if (Peek().type == Token.Type.FLOAT) {
+            Expect(Token.Type.FLOAT);
+            Expect(Token.Type.IDENTIFIER);
+        }
+        else if (Peek().type == Token.Type.INT) {
+            Expect(Token.Type.INT);
+            Expect(Token.Type.IDENTIFIER);
+        }
+        else if (Peek().type == Token.Type.BOOL) {
+            Expect(Token.Type.BOOL);
+            Expect(Token.Type.IDENTIFIER);
+        }
+        else if (Peek().type == Token.Type.EVENT) {
+            Expect(Token.Type.EVENT);
+            Expect(Token.Type.IDENTIFIER);
+        }
+        else if (Peek().type == Token.Type.PIN) {
+            MakeError("Pins can only be declared in Initiate");
+        }
+        else {
+            MakeError("Expected float, int, bool, or event declaration");
+        }
     }
 
     // AfterDcl  	-> Expr
-    //	             | 	Call.
+    //	             | 	ReturnsCall.
     private void AfterDcl() {
-
+//        if (Peek().type == Token.Type.IDENTIFIER ||
+//            Peek().type == Token.Type.LPAREN ||
+//            Peek().type == Token.Type.LIT_Int ||
+//            Peek().type == Token.Type.LIT_Float ||
+//            Peek().type == Token.Type.)
     }
 
     // Operator 	-> 	plus
