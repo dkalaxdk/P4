@@ -9,7 +9,7 @@ public class Token {
         ASSIGN,
 
         // Literals
-        LIT_Int, LIT_Float, LIT_char,
+        LIT_Int, LIT_Float, LIT_char, LIT_Bool, 
 
         EVENT, PIN, FLOAT, INT, BOOL,
 
