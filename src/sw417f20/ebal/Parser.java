@@ -217,15 +217,9 @@ public class Parser extends RecursiveDescent{
     //	         | 	.
     private void Stmts() {
         if (Peek().type == Token.Type.IDENTIFIER ||
-            Peek().type == Token.Type.FLOAT ||
-            Peek().type == Token.Type.INT ||
-            Peek().type == Token.Type.BOOL ||
-            Peek().type == Token.Type.EVENT ||
             Peek().type == Token.Type.IF ||
-            Peek().type == Token.Type.FILTERNOISE ||
-            Peek().type == Token.Type.GETVALUE ||
-            Peek().type == Token.Type.BROADCAST ||
-            Peek().type == Token.Type.WRITE) {
+            CheckForType() ||
+            CheckForCall()) {
 
             Stmt();
             Stmts();
@@ -238,24 +232,16 @@ public class Parser extends RecursiveDescent{
         }
     }
 
+
     // Stmt 	-> 	Call semi
     //	         | 	Assignment semi
     //	         | 	IfStmt.
     private void Stmt() {
-        if (Peek().type == Token.Type.FILTERNOISE ||
-            Peek().type == Token.Type.GETVALUE ||
-            Peek().type == Token.Type.BROADCAST ||
-            Peek().type == Token.Type.WRITE) {
-
+        if (CheckForCall()) {
             Call();
             Expect(Token.Type.SEMI);
         }
-        else if (Peek().type == Token.Type.IDENTIFIER ||
-                 Peek().type == Token.Type.FLOAT ||
-                 Peek().type == Token.Type.INT ||
-                 Peek().type == Token.Type.BOOL ||
-                 Peek().type == Token.Type.EVENT) {
-
+        else if (Peek().type == Token.Type.IDENTIFIER || CheckForType()) {
             Assignment();
             Expect(Token.Type.SEMI);
         }
@@ -275,10 +261,7 @@ public class Parser extends RecursiveDescent{
             Expect(Token.Type.ASSIGN);
             Expr();
         }
-        else if (Peek().type == Token.Type.FLOAT ||
-                 Peek().type == Token.Type.INT ||
-                 Peek().type == Token.Type.BOOL ||
-                 Peek().type == Token.Type.EVENT) {
+        else if (CheckForType()) {
             Dcl();
             Expect(Token.Type.ASSIGN);
             AfterDcl();
@@ -320,25 +303,13 @@ public class Parser extends RecursiveDescent{
     // AfterDcl  	-> Expr
     //	             | 	ReturnsCall.
     private void AfterDcl() {
-        if (CheckForExpr())
-        {
+        if (CheckForExpr()) {
             Expr();
         }
         else if (Peek().type == Token.Type.FILTERNOISE ||
-                 Peek().type == Token.Type.GETVALUE)
-        {
+                 Peek().type == Token.Type.GETVALUE) {
             ReturnsCall();
         }
-    }
-
-    private boolean CheckForExpr() {
-        return  Peek().type == Token.Type.IDENTIFIER    ||
-                Peek().type == Token.Type.LIT_Int       ||
-                Peek().type == Token.Type.LIT_Float     ||
-                Peek().type == Token.Type.LIT_Bool      ||
-                Peek().type == Token.Type.OP_MINUS      ||
-                Peek().type == Token.Type.OP_NOT        ||
-                Peek().type == Token.Type.LPAREN
     }
 
     // Expr 	-> 	Value AfterValue
@@ -346,11 +317,7 @@ public class Parser extends RecursiveDescent{
     //	         | 	minus Value AfterValue
     //	         | 	not boolLiteral AfterValue.
     private void Expr() {
-        if (Peek().type == Token.Type.IDENTIFIER    ||
-            Peek().type == Token.Type.LIT_Int       ||
-            Peek().type == Token.Type.LIT_Float     ||
-            Peek().type == Token.Type.LIT_Bool)
-        {
+        if (Peek().type == Token.Type.IDENTIFIER || CheckForLiteral()) {
             Value();
             AfterValue();
         }
@@ -400,29 +367,17 @@ public class Parser extends RecursiveDescent{
     //	             | 	LogicOp Expr
     //	             | 	.
     private void AfterValue() {
-        if (Peek().type == Token.Type.OP_PLUS ||
-            Peek().type == Token.Type.OP_MINUS ||
-            Peek().type == Token.Type.OP_TIMES ||
-            Peek().type == Token.Type.OP_DIVIDE ||
-            Peek().type == Token.Type.OP_MODULO)
-        {
+        if (CheckForOperator()) {
             Operator();
             Expr();
         }
 
-        else if (Peek().type == Token.Type.LOP_LESSTHAN ||
-                 Peek().type == Token.Type.LOP_GREATERTHAN ||
-                 Peek().type == Token.Type.LOP_NOTEQUAL ||
-                 Peek().type == Token.Type.LOP_GREATEROREQUAL ||
-                 Peek().type == Token.Type.LOP_LESSOREQUAL ||
-                 Peek().type == Token.Type.LOP_EQUALS)
-        {
+        else if (CheckForLogicOperator()) {
             LogicOperator();
             Expr();
         }
         else if (Peek().type == Token.Type.SEMI ||
-                 Peek().type == Token.Type.RPAREN)
-        {
+                 Peek().type == Token.Type.RPAREN) {
             return;
         }
         else {
@@ -434,13 +389,11 @@ public class Parser extends RecursiveDescent{
     //         	 | 	ReturnsCall.
     private void Call() {
         if (Peek().type == Token.Type.BROADCAST ||
-            Peek().type == Token.Type.WRITE)
-        {
+            Peek().type == Token.Type.WRITE) {
             VoidCall();
         }
         else if (Peek().type == Token.Type.FILTERNOISE ||
-                 Peek().type == Token.Type.GETVALUE)
-        {
+                 Peek().type == Token.Type.GETVALUE) {
             ReturnsCall();
         }
         else {
@@ -495,13 +448,11 @@ public class Parser extends RecursiveDescent{
     // CallParam 	-> 	Expr
     //	             | 	ReturnsCall.
     private void CallParam() {
-        if (CheckForExpr())
-        {
+        if (CheckForExpr()) {
             Expr();
         }
         else if (Peek().type == Token.Type.FILTERNOISE ||
-                 Peek().type == Token.Type.GETVALUE)
-        {
+                 Peek().type == Token.Type.GETVALUE) {
             ReturnsCall();
         }
         else {
@@ -533,16 +484,9 @@ public class Parser extends RecursiveDescent{
         }
         else if (Peek().type == Token.Type.RBRACKET ||
                  Peek().type == Token.Type.IDENTIFIER ||
-                 Peek().type == Token.Type.FLOAT ||
-                 Peek().type == Token.Type.INT ||
-                 Peek().type == Token.Type.BOOL ||
-                 Peek().type == Token.Type.EVENT ||
                  Peek().type == Token.Type.IF ||
-                 Peek().type == Token.Type.FILTERNOISE ||
-                 Peek().type == Token.Type.GETVALUE ||
-                 Peek().type == Token.Type.BROADCAST ||
-                 Peek().type == Token.Type.WRITE)
-        {
+                 CheckForType() ||
+                 CheckForCall()) {
             return;
         }
         else {
@@ -560,7 +504,7 @@ public class Parser extends RecursiveDescent{
             Block();
         }
         else {
-            MakeError("Expected if statemt or a block");
+            MakeError("Expected if statement or a block");
         }
     }
 
@@ -568,7 +512,18 @@ public class Parser extends RecursiveDescent{
     //	           | 	constant
     //	           | 	range.
     private void FilterType() {
-//        if (Peek().type == )
+        if (Peek().type == Token.Type.FLIP) {
+            Expect(Token.Type.FLIP);
+        }
+        else if (Peek().type == Token.Type.CONSTANT) {
+            Expect(Token.Type.CONSTANT);
+        }
+        else if (Peek().type == Token.Type.RANGE) {
+            Expect(Token.Type.RANGE);
+        }
+        else {
+            MakeError("Expected FLIP, CONSTANT, or RANGE");
+        }
     }
 
     // Operator 	-> 	plus
@@ -577,7 +532,24 @@ public class Parser extends RecursiveDescent{
     //	             | 	divide
     //	             | 	modulo.
     private void Operator() {
-
+        if (Peek().type == Token.Type.OP_PLUS) {
+            Expect(Token.Type.OP_PLUS);
+        }
+        else if (Peek().type == Token.Type.OP_MINUS) {
+            Expect(Token.Type.OP_MINUS);
+        }
+        else if (Peek().type == Token.Type.OP_TIMES) {
+            Expect(Token.Type.OP_TIMES);
+        }
+        else if (Peek().type == Token.Type.OP_DIVIDE) {
+            Expect(Token.Type.OP_DIVIDE);
+        }
+        else if (Peek().type == Token.Type.OP_MODULO) {
+            Expect(Token.Type.OP_MODULO);
+        }
+        else {
+            MakeError("Expected +, -, *, /, or %");
+        }
     }
 
     // LogicOp 	-> lessThan
@@ -587,6 +559,71 @@ public class Parser extends RecursiveDescent{
     //	         | 	lessOrEqual
     //	         | 	equals.
     private void LogicOperator() {
+        if (Peek().type == Token.Type.LOP_LESSTHAN) {
+            Expect(Token.Type.LOP_LESSTHAN);
+        }
+        else if (Peek().type == Token.Type.LOP_GREATERTHAN) {
+            Expect(Token.Type.LOP_GREATERTHAN);
+        }
+        else if (Peek().type == Token.Type.LOP_NOTEQUAL) {
+            Expect(Token.Type.LOP_NOTEQUAL);
+        }
+        else if (Peek().type == Token.Type.LOP_GREATEROREQUAL) {
+            Expect(Token.Type.LOP_GREATEROREQUAL);
+        }
+        else if (Peek().type == Token.Type.LOP_LESSOREQUAL) {
+            Expect(Token.Type.LOP_LESSOREQUAL);
+        }
+        else if (Peek().type == Token.Type.LOP_EQUALS) {
+            Expect(Token.Type.LOP_EQUALS);
+        }
+        else {
+            MakeError("Expected <, >, !=, >=, <=, or ==");
+        }
+    }
 
+    private boolean CheckForType() {
+        return  Peek().type == Token.Type.FLOAT                 ||
+                Peek().type == Token.Type.INT                   ||
+                Peek().type == Token.Type.BOOL                  ||
+                Peek().type == Token.Type.EVENT;
+    }
+
+    private boolean CheckForCall() {
+        return  Peek().type == Token.Type.FILTERNOISE           ||
+                Peek().type == Token.Type.GETVALUE              ||
+                Peek().type == Token.Type.BROADCAST             ||
+                Peek().type == Token.Type.WRITE;
+    }
+
+    private boolean CheckForExpr() {
+        return  Peek().type == Token.Type.IDENTIFIER            ||
+                CheckForLiteral()                               ||
+                Peek().type == Token.Type.OP_MINUS              ||
+                Peek().type == Token.Type.OP_NOT                ||
+                Peek().type == Token.Type.LPAREN;
+    }
+
+    private boolean CheckForLiteral() {
+        return  Peek().type == Token.Type.LIT_Int               ||
+                Peek().type == Token.Type.LIT_Float             ||
+                Peek().type == Token.Type.LIT_Bool;
+    }
+
+    private boolean CheckForOperator() {
+        return  Peek().type == Token.Type.OP_PLUS               ||
+                Peek().type == Token.Type.OP_MINUS              ||
+                Peek().type == Token.Type.OP_TIMES              ||
+                Peek().type == Token.Type.OP_DIVIDE             ||
+                Peek().type == Token.Type.OP_MODULO;
+    }
+
+    private boolean CheckForLogicOperator() {
+        return  Peek().type == Token.Type.LOP_LESSTHAN          ||
+                Peek().type == Token.Type.LOP_GREATERTHAN       ||
+                Peek().type == Token.Type.LOP_NOTEQUAL          ||
+                Peek().type == Token.Type.LOP_GREATEROREQUAL    ||
+                Peek().type == Token.Type.LOP_LESSOREQUAL       ||
+                Peek().type == Token.Type.LOP_EQUALS;
     }
 }
