@@ -3,7 +3,7 @@ BEGIN MASTER
 Initiate
 {
 	// Gøres til globale variable af compileren/preprocessor,
-// så vi ikke har tonsvis af dem.
+    // så vi ikke har tonsvis af dem.
 
 	pin button1 = digital input(4);
 	pin button2 = digital input(5);

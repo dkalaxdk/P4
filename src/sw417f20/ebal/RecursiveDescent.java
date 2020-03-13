@@ -24,12 +24,13 @@ public abstract class RecursiveDescent {
     }
 
     protected void Expect(Token.Type t) {
-        Expect(t, "Expected ' " + t + " '");
+        Expect(t, "Expected [" + t + "]");
     }
 
     protected void Expect(Token.Type t, String message) {
         if (Peek().type != t) {
             MakeError(message);
+            System.exit(0);
         }
         else {
             try {
@@ -42,6 +43,6 @@ public abstract class RecursiveDescent {
     }
 
     protected void MakeError(String message) {
-        System.err.println(message);
+        System.err.println(message + " on line: " + PScanner.nextToken.lineNumber + " : " + PScanner.nextToken.offSet);
     }
 }
