@@ -42,8 +42,8 @@ public abstract class RecursiveDescent {
     }
 
     protected void MakeError(String message) {
-        System.err.println(message + " on line: " + PScanner.nextToken.lineNumber + " : " + PScanner.nextToken.offSet + ", got " + PScanner.nextToken.type + " with content " + PScanner.nextToken.content +
-                           ". Current token is " + PScanner.currentToken.content + ", type " + PScanner.currentToken.type);
+        System.err.println(message + " on line: " + PScanner.nextToken.lineNumber + " : " + PScanner.nextToken.offSet + ", got " + PScanner.nextToken.type + " with content <" + PScanner.nextToken.content + "> " +
+                           "(Current token is " + PScanner.currentToken.type + " with content <" + PScanner.currentToken.content + ">)");
         System.exit(0);
     }
 }

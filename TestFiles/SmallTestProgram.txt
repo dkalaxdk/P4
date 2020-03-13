@@ -5,7 +5,7 @@ Initiate {
 }
 
 Listener (noget) {
-    
+    int a = 0;
 }
 
 END MASTER
