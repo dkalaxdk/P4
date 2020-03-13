@@ -83,9 +83,11 @@ public class Reader {
                 output.append(currentChar);
             } else if (String.valueOf(currentChar).matches("[0-9]")) {
                 output.append(currentChar);
+            } else if (String.valueOf(nextChar).matches("[A-Za-z0-9]") && output.toString().matches("[0-9A-Za-z.]+")) {
+                output.append(currentChar);
             } else break;
 
-            if (String.valueOf(nextChar).matches("[0-9.]")) {
+            if (String.valueOf(nextChar).matches("[0-9A-Za-z.]")) {
                 currentChar = readChar();
             } else break;
         }

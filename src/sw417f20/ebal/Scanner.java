@@ -47,7 +47,7 @@ public class Scanner {
 
         token = IsSingleCharacter(token);
         if (token.type == Token.Type.NOTATOKEN) {
-            findNumberTokenType(token);
+            token = findNumberTokenType(token);
         }
         if (token.type == Token.Type.NOTATOKEN) {
             token.content = reader.findWord();
@@ -224,6 +224,8 @@ public class Scanner {
             token.type = Token.Type.LIT_Int;
         } else if(token.content.length() > 0){
             token.type = Token.Type.LIT_Float;
+        } if (token.content.matches("[0-9A-Za-z.]+")) {
+            token.type = Token.Type.ERROR;
         }
 
         return token;

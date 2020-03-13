@@ -44,7 +44,7 @@ BEGIN SLAVE : LightSlave
 Initiate
 {
 	light1 = digital output(4);
-    light2 = digital output(5);
+    1light2 = digital output(5);
     light3 = digital output(6);
 }
 
