@@ -7,11 +7,11 @@ public class Token {
         OP_PLUS, OP_MINUS, OP_EQUALS, OP_TIMES, OP_DIVIDE, OP_NOT,OP_QUESTION,
         OP_PLUS_EQUALS, OP_MINUS_EQUALS, OP_TIMES_EQUALS, OP_DIVIDE_EQUALS,
         ASSIGN,
-        // Literals
 
+        // Literals
         LIT_Int, LIT_Float, LIT_char,
 
-        EVENT, PIN,
+        EVENT, PIN, FLOAT, INT, BOOL,
 
         COMMA, DOT, BACKSLASH, COLON, SEMI, SINGLEQUOTE, DOUBLEQUOTE,
 
