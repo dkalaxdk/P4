@@ -319,13 +319,7 @@ public class Parser extends RecursiveDescent{
     // AfterDcl  	-> Expr
     //	             | 	ReturnsCall.
     private void AfterDcl() {
-        if (Peek().type == Token.Type.IDENTIFIER    ||
-            Peek().type == Token.Type.LIT_Int       ||
-            Peek().type == Token.Type.LIT_Float     ||
-            Peek().type == Token.Type.LIT_Bool      ||
-            Peek().type == Token.Type.OP_MINUS      ||
-            Peek().type == Token.Type.OP_NOT        ||
-            Peek().type == Token.Type.LPAREN)
+        if (CheckForExpr())
         {
             Expr();
         }
@@ -334,6 +328,16 @@ public class Parser extends RecursiveDescent{
         {
             ReturnsCall();
         }
+    }
+
+    private boolean CheckForExpr() {
+        return  Peek().type == Token.Type.IDENTIFIER    ||
+                Peek().type == Token.Type.LIT_Int       ||
+                Peek().type == Token.Type.LIT_Float     ||
+                Peek().type == Token.Type.LIT_Bool      ||
+                Peek().type == Token.Type.OP_MINUS      ||
+                Peek().type == Token.Type.OP_NOT        ||
+                Peek().type == Token.Type.LPAREN
     }
 
     // Expr 	-> 	Value AfterValue
@@ -395,45 +399,134 @@ public class Parser extends RecursiveDescent{
     //	             | 	LogicOp Expr
     //	             | 	.
     private void AfterValue() {
-//        if (Peek().type == Token.Type.OP_PLUS ||
-//            Peek().type == Token.Type.OP_MINUS ||
-//            Peek().type == Token.Type.OP_TIMES ||
-//            Peek().type == Token.Type.)
+        if (Peek().type == Token.Type.OP_PLUS ||
+            Peek().type == Token.Type.OP_MINUS ||
+            Peek().type == Token.Type.OP_TIMES ||
+            Peek().type == Token.Type.OP_DIVIDE ||
+            Peek().type == Token.Type.OP_MODULO)
+        {
+            Operator();
+            Expr();
+        }
+
+        else if (Peek().type == Token.Type.LOP_LESSTHAN ||
+                 Peek().type == Token.Type.LOP_GREATERTHAN ||
+                 Peek().type == Token.Type.LOP_NOTEQUAL ||
+                 Peek().type == Token.Type.LOP_GREATEROREQUAL ||
+                 Peek().type == Token.Type.LOP_LESSOREQUAL ||
+                 Peek().type == Token.Type.LOP_EQUALS)
+        {
+            LogicOperator();
+            Expr();
+        }
+        else if (Peek().type == Token.Type.SEMI ||
+                 Peek().type == Token.Type.RPAREN)
+        {
+            return;
+        }
+        else {
+            MakeError("Expected operator or end of statement");
+        }
     }
 
     // Call 	-> 	VoidCall
     //         	 | 	ReturnsCall.
     private void Call() {
-
-    }
-
-    // ReturnsCall	-> filterNoise lparen identifier comma FilterType rparen
-    //	             | 	getValue lparen Value rparen.
-    private void ReturnsCall() {
-
+        if (Peek().type == Token.Type.BROADCAST ||
+            Peek().type == Token.Type.WRITE)
+        {
+            VoidCall();
+        }
+        else if (Peek().type == Token.Type.FILTERNOISE ||
+                 Peek().type == Token.Type.GETVALUE)
+        {
+            ReturnsCall();
+        }
+        else {
+            MakeError("Expected function call");
+        }
     }
 
     // VoidCall	->	broadcast lparen identifier rparen
     //	         |	write lparen identifier comma CallParam rparen.
     private void VoidCall() {
+        if (Peek().type == Token.Type.BROADCAST) {
+            Expect(Token.Type.BROADCAST);
+            Expect(Token.Type.LPAREN);
+            Expect(Token.Type.IDENTIFIER);
+            Expect(Token.Type.RPAREN);
+        }
+        else if (Peek().type == Token.Type.WRITE) {
+            Expect(Token.Type.WRITE);
+            Expect(Token.Type.LPAREN);
+            Expect(Token.Type.IDENTIFIER);
+            Expect(Token.Type.COMMA);
+            CallParam();
+            Expect(Token.Type.RPAREN);
+        }
+        else {
+            MakeError("Expected write or broadcast");
+        }
+    }
 
+    // ReturnsCall	-> filterNoise lparen identifier comma FilterType rparen
+    //	             | 	getValue lparen Value rparen.
+    private void ReturnsCall() {
+        if (Peek().type == Token.Type.FILTERNOISE) {
+            Expect(Token.Type.FILTERNOISE);
+            Expect(Token.Type.LPAREN);
+            Expect(Token.Type.IDENTIFIER);
+            Expect(Token.Type.COMMA);
+            FilterType();
+            Expect(Token.Type.RPAREN);
+        }
+        else if (Peek().type == Token.Type.GETVALUE) {
+            Expect(Token.Type.GETVALUE);
+            Expect(Token.Type.LPAREN);
+            Value();
+            Expect(Token.Type.RPAREN);
+        }
+        else {
+            MakeError("Expected filterNoise or getValue");
+        }
     }
 
     // CallParam 	-> 	Expr
     //	             | 	ReturnsCall.
     private void CallParam() {
-
+        if (CheckForExpr())
+        {
+            Expr();
+        }
+        else if (Peek().type == Token.Type.FILTERNOISE ||
+                 Peek().type == Token.Type.GETVALUE)
+        {
+            ReturnsCall();
+        }
+        else {
+            MakeError("Expected expression, filterNoise or getValue");
+        }
     }
 
     // IfStmt 	-> 	if lparen Expr rparen Block IfEnd.
     private void IfStmt() {
-
+        if (Peek().type == Token.Type.IF) {
+            Expect(Token.Type.IF);
+            Expect(Token.Type.LPAREN);
+            Expr();
+            Expect(Token.Type.RPAREN);
+            Block();
+            IfEnd();
+        }
+        else {
+            MakeError("Expected if");
+        }
     }
 
     // IfEnd 	-> 	else AfterElse
     //	         | 	.
     private void IfEnd() {
-
+//        if (Peek().type == Token.Type.)
     }
 
     // AfterElse 	-> 	IfStmt
