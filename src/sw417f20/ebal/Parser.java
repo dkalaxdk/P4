@@ -2,6 +2,8 @@ package sw417f20.ebal;
 
 import org.junit.jupiter.params.shadow.com.univocity.parsers.common.TextParsingException;
 
+import java.awt.image.TileObserver;
+
 public class Parser extends RecursiveDescent{
 
     // Start 	-> 	Master Slave Slaves.
@@ -96,6 +98,14 @@ public class Parser extends RecursiveDescent{
             Expect(Token.Type.PIN);
             Expect(Token.Type.IDENTIFIER);
             Expect(Token.Type.ASSIGN);
+            PinType();
+            IOType();
+            Expect(Token.Type.LPAREN);
+            Expect(Token.Type.LIT_Int);
+            Expect(Token.Type.RPAREN);
+        }
+        else {
+            MakeError("Expected pin initialization");
         }
     }
 
@@ -103,19 +113,38 @@ public class Parser extends RecursiveDescent{
     //	         | 	analog
     //	         | 	pwm.
     private void PinType() {
-
+        if (Peek().type == Token.Type.DIGITAL) {
+            Expect(Token.Type.DIGITAL);
+        }
+        else if (Peek().type == Token.Type.ANALOG) {
+            Expect(Token.Type.ANALOG);
+        }
+        else if (Peek().type == Token.Type.PWM) {
+            Expect(Token.Type.PWM);
+        }
+        else {
+            MakeError("Expected digital, analog, or pwm");
+        }
     }
 
     // IOType 	-> 	input
     //	         | 	output.
     private void IOType() {
-
+        if (Peek().type == Token.Type.INPUT) {
+            Expect(Token.Type.INPUT);
+        }
+        else if (Peek().type == Token.Type.OUTPUT) {
+            Expect(Token.Type.OUTPUT);
+        }
+        else {
+            MakeError("Expected input or output");
+        }
     }
 
     // Listeners 	-> 	Listener Listeners
     //	             | 	.
     private void Listeners() {
-
+//        if (Peek().type == Token.Type.LI)
     }
 
     // Listener	-> listener lparen identifier rparen Block.
