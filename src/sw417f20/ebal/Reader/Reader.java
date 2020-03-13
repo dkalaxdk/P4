@@ -1,13 +1,10 @@
 package sw417f20.ebal.Reader;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
 public class Reader {
-    private String fileInput = "";
-
     public Reader(BufferedReader reader) {
         inputStream = reader;
     }
@@ -15,49 +12,51 @@ public class Reader {
     private FileReader fileReader;
     private BufferedReader inputStream;
 
-    public Reader(String inputFilePath) {
-        this.fileInput = inputFilePath;
-        {
-            try {
-                fileReader = new FileReader(fileInput);
-            } catch (FileNotFoundException e) {
-                System.out.println("FilePath: "+fileInput);
-                e.printStackTrace();
-            }
-        }
-        assert fileReader != null;
-        inputStream = new BufferedReader(fileReader);
-    }
 
-    String whitespace = "\\t\\n\\s";
+    String whitespace = "\t\n\r ";
 
     public char currentChar = 0;
     public char nextChar = 0;
     public int currentLine = 1;
     public int currentOffset = 0;
+    boolean firstRead = true;
 
 
     // Reads and returns the next char in the input
     // Keeps track of line and offset
     public char readChar() throws IOException {
-        // This cast might cause problems
+        char c;
         int res = inputStream.read();
-        if (res == -1) {
-            //TODO: Handle end of file
-            return (char) -1;
-        }
-        char c = (char) res;
+
+        c = (char) res;
+
         currentOffset++;
         if (c == '\n') {
             currentLine++;
+            currentOffset = 0;
         }
-        return c;
+
+        if (firstRead) {
+            currentChar = c;
+            nextChar = (char)inputStream.read();
+            firstRead = false;
+        } else {
+            currentChar = nextChar;
+            nextChar = c;
+        }
+        //currentChar = nextChar;
+        //nextChar = c;
+        // Should return c if it is the first character read
+        return currentChar;
     }
 
     public String findWord() throws IOException {
         StringBuilder output = new StringBuilder();
-        char currentChar = readChar();
-        while (whitespace.indexOf(currentChar) != -1) {
+        char currentChar = this.currentChar;
+        while (whitespace.indexOf(currentChar) == -1) {
+            if (output.indexOf("\uFFFF") != -1) {
+                break;
+            }
             output.append(currentChar);
             currentChar = readChar();
         }
