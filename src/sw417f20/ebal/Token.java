@@ -18,6 +18,11 @@ public class Token {
 
         //Keywords
         KEYWORD,
+        BEGIN, END, MASTER, SLAVE,
+        DIGITAL, ANALOG, PWM, INPUT, OUTPUT,
+        BROADCAST, WRITE,
+        EVENTCREATOR, EVENTHANDLER, INITIATE,
+        IF,
 
         //Identifiers
         Identifier,

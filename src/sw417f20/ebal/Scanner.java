@@ -56,18 +56,40 @@ public class Scanner {
     public Token findKeyword(Token token) {
         switch (token.content) {
             case "MASTER":
+                token.type = Token.Type.MASTER;
+                break;
             case "SLAVE":
+                token.type = Token.Type.SLAVE;
+                break;
             case "END":
-            case "begin":
+                token.type = Token.Type.END;
+                break;
+            case "BEGIN":
+                token.type = Token.Type.BEGIN;
+                break;
             case "digital":
+                token.type = Token.Type.DIGITAL;
+                break;
             case "input":
+                token.type = Token.Type.INPUT;
+                break;
             case "EventCreator":
+                token.type = Token.Type.EVENTCREATOR;
+                break;
             case "output":
+                token.type = Token.Type.OUTPUT;
+                break;
             case "write":
+                token.type = Token.Type.WRITE;
+                break;
             case "EventHandler":
+                token.type = Token.Type.EVENTHANDLER;
+                break;
             case "Initiate":
+                token.type = Token.Type.INITIATE;
+                break;
             case "if":
-                token.type = Token.Type.KEYWORD;
+                token.type = Token.Type.IF;
                 break;
             default:
                 token.type = Token.Type.NOTATOKEN;
