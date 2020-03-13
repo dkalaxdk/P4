@@ -10,8 +10,8 @@ import java.util.Currency;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        ScannerStuff();
-//        ParserStuff();
+//        ScannerStuff();
+        ParserStuff();
     }
 
     public static void ParserStuff() {
@@ -22,7 +22,7 @@ public class Main {
         parser.Parse(fileInput);
     }
 
-    public static void ScannerStuff() {
+    public static void ScannerStuff() throws IOException {
         long start = System.currentTimeMillis();
         System.out.println();
         String filePath = new File("").getAbsolutePath();
@@ -31,13 +31,7 @@ public class Main {
         int tokenCount = 0;
 
         while (scanner.currentToken.type != Token.Type.EOF) {
-
-            try {
-                scanner.Advance();
-            }
-            catch (IOException e) {
-                System.err.println(e);
-            }
+            scanner.Advance();
 
             if (scanner.currentToken.type != Token.Type.NOTATOKEN) {
                 System.out.println("Token found: " + scanner.currentToken.type + " on line: " + scanner.currentToken.lineNumber + " : " + scanner.currentToken.offSet + " with content: " + scanner.currentToken.content);
