@@ -1,8 +1,11 @@
 package sw417f20.ebal;
 
-import java.io.*;
-
 import sw417f20.ebal.Reader.Reader;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Scanner {
     public Reader reader;
@@ -199,7 +202,7 @@ public class Scanner {
                     token.type = Token.Type.OP_DIVIDE_EQUALS;
                     token.content += reader.readChar();
                 } else if (reader.nextChar == '*') {
-                    //TODO: Handle start of comment
+                    reader.readToEndOfComment();
                 } else if (reader.nextChar == '/') {
                     while(reader.currentChar != '\n') {
                         reader.readChar();
