@@ -8,6 +8,7 @@ import java.io.IOException;
 public abstract class RecursiveDescent {
     private Scanner PScanner;
     private AST Tree;
+    private PrintVisitor PrintVisitor;
     public RecursiveDescent() {}
 
     public AST Parse(String filePath) {
@@ -23,6 +24,10 @@ public abstract class RecursiveDescent {
 
         Tree.Root = Start();
         Expect(Token.Type.EOF);
+
+        PrintVisitor = new PrintVisitor();
+
+        PrintVisitor.Visit(Tree.Root);
 
         System.out.println("======== Parse successful ========");
 
