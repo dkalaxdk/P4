@@ -195,13 +195,55 @@ class ReaderTest {
     void findNumber_ReadsNumber_AcceptsNumberOne() throws IOException {
         String expected = "1";
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
-        // Mock to return the characters of a word followed by whitespace
-        Mockito.when(mockReader.read()).thenReturn((int)'1');
+        Mockito.when(mockReader.read()).thenReturn((int)'1', (int)'\t');
         Reader reader = new Reader(mockReader);
 
         reader.readChar();
-        String actual = reader.findWord();
+        String actual = reader.findNumber();
 
         assertEquals(expected, actual);
     }
+
+
+
+    @Test
+    void findNumber_ReadsNumber_DecimalNumber() throws IOException {
+        String expected = "1.2";
+        BufferedReader mockReader = Mockito.mock(BufferedReader.class);
+        Mockito.when(mockReader.read()).thenReturn((int)'1', (int)'.', (int)'2', (int)'\t');
+        Reader reader = new Reader(mockReader);
+
+        reader.readChar();
+        String actual = reader.findNumber();
+
+        assertEquals(expected, actual);
+    }
+
+    //jeg er ikke helt sikker på om den her test skal virke.
+    @Test
+    void findNumber_ReadsNumber_NumberThatStartsWithDot() throws IOException {
+        String expected = ".2";
+        BufferedReader mockReader = Mockito.mock(BufferedReader.class);
+        Mockito.when(mockReader.read()).thenReturn((int)'.', (int)'2', (int)'\t');
+        Reader reader = new Reader(mockReader);
+
+        reader.readChar();
+        String actual = reader.findNumber();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void findNumber_ReadsNumber_NumberThatHasACharacter() throws IOException {
+        String expected = "1a";
+        BufferedReader mockReader = Mockito.mock(BufferedReader.class);
+        Mockito.when(mockReader.read()).thenReturn((int)'1', (int)'a', (int)'\t');
+        Reader reader = new Reader(mockReader);
+
+        reader.readChar();
+        String actual = reader.findNumber();
+
+        assertEquals(expected, actual);
+    }
+
 }
