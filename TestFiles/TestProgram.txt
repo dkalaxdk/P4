@@ -2,79 +2,64 @@ BEGIN MASTER
 
 Initiate
 {
-// Gøres til global variable af compileren/preprocessor, 
+	// Gøres til globale variable af compileren/preprocessor,
 // så vi ikke har tonsvis af dem.
 
-	button1 = digital input(4);
-	button2 = digital input(5);
+	pin button1 = createPin(digital, input, 4);
+	pin button2 = createPin(digital, input, 5);
+
+	// pin button3 = digital input(6);
+
+	// pin button3 = createPin(digital, input, 6);
+
+
 }
 
-// Create event listener, this listens on button 1
-EventCreator(button1)
+Listener (button1)
 {
-	// filterNoise: Baseret på FILTER_TYPE, sørger for at 
-	// value er fri for støj (Knapper der tænder og slukker uden
-// at det er meningen.
+	int filteredInput = filterNoise(button1, flip);
 
-	// FILTER_TYPE: flip a switch, constant input, variable
-	filterNoise(button1, FILTER_TYPE); 
-	
-
-	if (button1[value] == HIGH)
-{
-		broadcast(LightSlave, button1);
-	}
-}
-
-EventCreator(button2)
-{
-	filterNoise(button2, FILTER_TYPE);
-	
-	if (button2[value] == HIGH) 
+	if (filteredInput == HIGH)
 	{
-		broadcast(LightSlave, button2);
+		event button1Pressed = createEvent(filteredInput);
+		broadcast(button1Pressed);
 	}
 }
 
 END MASTER
 
 
-BEGIN SLAVE : LightSlave
+
+BEGIN SLAVE
 
 Initiate
 {
-	light1 = digital output(4);
-    1light2 = digital output(5);
-    light3 = digital output(6);
+	pin light1 = createPin(digital, output, 4);
+pin light2 = createPin(digital, output, 5);
+pin light3 = createPin(digital, output, 6);
 }
 
-EventHandler(button1)
+EventHandler(button1Pressed)
 {
-	write(light1, !light1[value]); // 0 -> 1.98, 1 -> 0, 87 -> 0
+	int value = getValue(light1);
 
-	if (button1[value] == 5)
+	if (value == HIGH)
 {
-	if (light1[value] == 2)
+	write(light1, LOW);
+}
+else if (value == LOW)
 {
-		write(light1, LOW);
-	}
-	else if (light1[1] == LOW)
-{
-		write(light1, HIGH);
-	}
+	write(light1, HIGH);
 }
 }
 
-EventHandler(button2)
+EventHandler(button2Pressed)
 {
-	write(light1, !light1[value]);
-	write(light2, !light2[value]);
-	write(light3, !light3[value]);
+	write(light1, HIGH);
+	write(light2, HIGH);
+	write(light3, HIGH);
 }
- >= <=
+
 END SLAVE
 
-
-11111111111111111111111111111111111111111111
-
-1.1257654
+(EOF)
