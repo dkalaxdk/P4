@@ -114,6 +114,53 @@ public class Scanner {
             case "if":
                 token.type = Token.Type.IF;
                 break;
+            case "else":
+                token.type = Token.Type.ELSE;
+                break;
+            case "analog":
+                token.type = Token.Type.ANALOG;
+            case "pwm":
+                token.type = Token.Type.PWM;
+                break;
+            case "flip":
+                token.type = Token.Type.FLIP;
+                break;
+            case "constant":
+                token.type = Token.Type.CONSTANT;
+                break;
+            case "range":
+                token.type = Token.Type.RANGE;
+                break;
+            case "broadcast":
+                token.type = Token.Type.BROADCAST;
+                break;
+            case "filterNoise":
+                token.type = Token.Type.FILTERNOISE;
+                break;
+            case "getValue":
+                token.type = Token.Type.GETVALUE;
+                break;
+            case "pin":
+                token.type = Token.Type.PIN;
+                break;
+            case "float":
+                token.type = Token.Type.FLOAT;
+                break;
+            case "int":
+                token.type = Token.Type.INT;
+                break;
+            case "bool":
+                token.type = Token.Type.BOOL;
+                break;
+            case "event":
+                token.type = Token.Type.EVENT;
+                break;
+            case "TRUE":
+            case "true":
+            case "false":
+            case "FALSE":
+                token.type = Token.Type.LIT_Bool;
+                break;
             default:
                 token.type = Token.Type.NOTATOKEN;
         }
@@ -133,7 +180,7 @@ public class Scanner {
                 return token;
             case '-':
                 if (reader.nextChar == '=') {
-                    token.content += reader.nextChar;
+                    token.content += reader.readChar();
                     token.type = Token.Type.OP_MINUS_EQUALS;
                 } else {
                     token.type = Token.Type.OP_MINUS;
@@ -141,6 +188,7 @@ public class Scanner {
                 return token;
             case '*':
                 if (reader.nextChar == '=') {
+                    token.content += reader.readChar();
                     token.type = Token.Type.OP_TIMES_EQUALS;
                 } else {
                     token.type = Token.Type.OP_TIMES;
@@ -149,6 +197,7 @@ public class Scanner {
             case '/':   // Has some special cases when followed by other symbols
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.OP_DIVIDE_EQUALS;
+                    token.content += reader.readChar();
                 } else if (reader.nextChar == '*') {
                     //TODO: Handle start of comment
                 } else if (reader.nextChar == '/') {
@@ -164,6 +213,7 @@ public class Scanner {
             case '=':
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.LOP_EQUALS;
+                    token.content += reader.readChar();
                 }
                 else {
                     token.type = Token.Type.ASSIGN;
@@ -179,6 +229,10 @@ public class Scanner {
                 return token;
 
             case '!':
+                if (reader.nextChar == '=') {
+                    token.type = Token.Type.LOP_NOTEQUAL;
+
+                } else
                 token.type = Token.Type.OP_NOT;
                 return token;
 
@@ -237,6 +291,22 @@ public class Scanner {
                 token.type = Token.Type.EOF;
                 return token;
 
+            case '>':
+                if (reader.nextChar == '=') {
+                    token.type = Token.Type.LOP_GREATEROREQUAL;
+                    token.content += reader.readChar();
+                } else {
+                    token.type = Token.Type.LOP_GREATERTHAN;
+                }
+                return token;
+            case '<':
+                if (reader.nextChar == '=') {
+                    token.type = Token.Type.LOP_LESSOREQUAL;
+                    token.content += reader.readChar();
+                } else {
+                    token.type = Token.Type.LOP_LESSTHAN;
+                }
+                return token;
             default:
                 return token;
         }

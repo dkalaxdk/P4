@@ -71,5 +71,5 @@ EventHandler(button2)
 	write(light2, !light2[value]);
 	write(light3, !light3[value]);
 }
-
+ >= <=
 END SLAVE
