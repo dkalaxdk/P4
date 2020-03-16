@@ -61,13 +61,13 @@ public class Scanner {
         token.lineNumber = reader.currentLine;
         token.offSet = reader.currentOffset;
 
-        token = IsSingleCharacter(token);
+        IsSingleCharacter(token);
         if (token.type == Token.Type.NOTATOKEN) {
-            token = findNumberTokenType(token);
+            findNumberTokenType(token);
         }
         if (token.type == Token.Type.NOTATOKEN) {
             token.content = reader.findWord();
-            token = findKeyword(token);
+            findKeyword(token);
         }
 
         if (token.type == Token.Type.NOTATOKEN && token.content.length() >= 1) {
@@ -76,7 +76,7 @@ public class Scanner {
         return token;
     }
 
-    public Token findKeyword(Token token) {
+    public void findKeyword(Token token) {
         switch (token.content) {
             case "MASTER":
                 token.type = Token.Type.MASTER;
@@ -164,10 +164,10 @@ public class Scanner {
             default:
                 token.type = Token.Type.NOTATOKEN;
         }
-        return token;
+
     }
 
-    public Token IsSingleCharacter(Token token) throws IOException {
+    public void IsSingleCharacter(Token token) throws IOException {
         char input = reader.readChar();
         token.content += input;
         switch (input) {
@@ -177,7 +177,7 @@ public class Scanner {
                 } else {
                     token.type = Token.Type.OP_PLUS;
                 }
-                return token;
+                break;
             case '-':
                 if (reader.nextChar == '=') {
                     token.content += reader.readChar();
@@ -185,7 +185,7 @@ public class Scanner {
                 } else {
                     token.type = Token.Type.OP_MINUS;
                 }
-                return token;
+                break;
             case '*':
                 if (reader.nextChar == '=') {
                     token.content += reader.readChar();
@@ -193,7 +193,7 @@ public class Scanner {
                 } else {
                     token.type = Token.Type.OP_TIMES;
                 }
-                return token;
+                break;
             case '/':   // Has some special cases when followed by other symbols
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.OP_DIVIDE_EQUALS;
@@ -204,11 +204,11 @@ public class Scanner {
                     while(reader.currentChar != '\n') {
                         reader.readChar();
                     }
-                    return token;
+                    break;
                 } else {
                     token.type = Token.Type.OP_DIVIDE;
                 }
-                return token;
+                break;
 
             case '=':
                 if (reader.nextChar == '=') {
@@ -218,15 +218,15 @@ public class Scanner {
                 else {
                     token.type = Token.Type.ASSIGN;
                 }
-                return token;
+                break;
 
             case '%':
                 token.type = Token.Type.OP_MODULO;
-                return token;
+                break;
 
             case '?':
                 token.type = Token.Type.OP_QUESTION;
-                return token;
+                break;
 
             case '!':
                 if (reader.nextChar == '=') {
@@ -234,63 +234,58 @@ public class Scanner {
 
                 } else
                 token.type = Token.Type.OP_NOT;
-                return token;
+                break;
 
             case '(':
                 token.type = Token.Type.LPAREN;
-                return token;
+                break;
 
             case ')':
                 token.type = Token.Type.RPAREN;
-                return token;
+                break;
 
             case '[':
                 token.type = Token.Type.LSQBRACKET;
-                return token;
+                break;
 
             case ']':
                 token.type = Token.Type.RSQBRACKET;
-                return token;
+                break;
 
             case '{':
                 token.type = Token.Type.LBRACKET;
-                return token;
+                break;
 
             case '}':
                 token.type = Token.Type.RBRACKET;
-                return token;
+                break;
 
             case ',':
                 token.type = Token.Type.COMMA;
-                return token;
+                break;
 
             case '.':
                 token.type = Token.Type.DOT;
-                return token;
+                break;
 
             case ';':
                 token.type = Token.Type.SEMI;
-                return token;
-
+                break;
             case ':':
                 token.type = Token.Type.COLON;
-                return token;
-
+                break;
             case '\\':
                 token.type = Token.Type.BACKSLASH;
-                return token;
-
+                break;
             case '"':
                 token.type = Token.Type.DOUBLEQUOTE;
-                return token;
-
+                break;
             case '\'':
                 token.type = Token.Type.SINGLEQUOTE;
-                return token;
+                break;
             case '\uFFFF':
                 token.type = Token.Type.EOF;
-                return token;
-
+                break;
             case '>':
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.LOP_GREATEROREQUAL;
@@ -298,7 +293,7 @@ public class Scanner {
                 } else {
                     token.type = Token.Type.LOP_GREATERTHAN;
                 }
-                return token;
+                break;
             case '<':
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.LOP_LESSOREQUAL;
@@ -306,14 +301,15 @@ public class Scanner {
                 } else {
                     token.type = Token.Type.LOP_LESSTHAN;
                 }
-                return token;
+                break;
             default:
-                return token;
+                token.type = Token.Type.NOTATOKEN;
+                break;
         }
 
     }
 
-    public Token findNumberTokenType(Token token) throws IOException {
+    public void findNumberTokenType(Token token) throws IOException {
         token.content = reader.findNumber();
         if (token.content.matches("[0-9]+") && token.content.length() > 0) {
             token.type = Token.Type.LIT_Int;
@@ -322,8 +318,6 @@ public class Scanner {
         }else if (token.content.matches("[0-9A-Za-z.]+")) {
             token.type = Token.Type.ERROR;
         }
-
-        return token;
 
     }
 
