@@ -53,7 +53,7 @@ EventHandler(button2Pressed)
 	write(light2, HIGH);
 	write(light3, HIGH);
 }
-
+ >= <=
 END SLAVE
 
 (EOF)
