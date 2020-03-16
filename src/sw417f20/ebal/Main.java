@@ -1,6 +1,5 @@
 package sw417f20.ebal;
 
-import javax.sound.midi.Soundbank;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
@@ -39,7 +38,7 @@ public class Main {
             if (scanner.currentToken.type != Token.Type.NOTATOKEN) {
                 System.out.println("Token found: " + scanner.currentToken.type + " on line: " + scanner.currentToken.lineNumber + " : " + scanner.currentToken.offSet + " with content: " + scanner.currentToken.content);
                 tokenCount++;
-            } else if (scanner.currentToken.content.length() > 0){
+            } else if (scanner.currentToken.type == Token.Type.ERROR){
                 System.out.println("Unable to find token matching: " + scanner.currentToken.type + " on line: " + scanner.currentToken.lineNumber + " : " + scanner.currentToken.offSet + " with content: " + scanner.currentToken.content);
             }
 

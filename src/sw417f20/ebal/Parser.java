@@ -117,7 +117,7 @@ public class Parser extends RecursiveDescent{
         return PinDcls;
     }
 
-    // PinDcl	-> pin createPin lparen PinType comma IOType comma intLiteral rparen.
+    // PinDcl	-> pin identifier assign createPin lparen PinType comma IOType comma intLiteral rparen.
     private Node PinDcl() {
         Node PinDcl = AST.MakeNode();
 
@@ -125,9 +125,12 @@ public class Parser extends RecursiveDescent{
             Expect(Token.Type.PIN);
             Expect(Token.Type.IDENTIFIER);
             Expect(Token.Type.ASSIGN);
-            PinType();
-            IOType();
+            Expect(Token.Type.CREATEPIN);
             Expect(Token.Type.LPAREN);
+            PinType();
+            Expect(Token.Type.COMMA);
+            IOType();
+            Expect(Token.Type.COMMA);
             Expect(Token.Type.LIT_Int);
             Expect(Token.Type.RPAREN);
         }
@@ -391,7 +394,8 @@ public class Parser extends RecursiveDescent{
             Expr();
         }
         else if (Peek().type == Token.Type.FILTERNOISE ||
-                 Peek().type == Token.Type.GETVALUE) {
+                 Peek().type == Token.Type.GETVALUE    ||
+                 Peek().type == Token.Type.CREATEEVENT) {
             ReturnsCall();
         }
 
@@ -493,7 +497,8 @@ public class Parser extends RecursiveDescent{
             VoidCall();
         }
         else if (Peek().type == Token.Type.FILTERNOISE ||
-                 Peek().type == Token.Type.GETVALUE) {
+                 Peek().type == Token.Type.GETVALUE    ||
+                 Peek().type == Token.Type.CREATEEVENT) {
             ReturnsCall();
         }
         else {
@@ -549,8 +554,14 @@ public class Parser extends RecursiveDescent{
             Value();
             Expect(Token.Type.RPAREN);
         }
+        else if (Peek().type == Token.Type.CREATEEVENT) {
+            Expect(Token.Type.CREATEEVENT);
+            Expect(Token.Type.LPAREN);
+            Value();
+            Expect(Token.Type.RPAREN);
+        }
         else {
-            MakeError("Expected filterNoise or getValue");
+            MakeError("Expected filterNoise, getValue, or createEvent");
         }
 
         return ReturnsCall;
@@ -565,11 +576,12 @@ public class Parser extends RecursiveDescent{
             Expr();
         }
         else if (Peek().type == Token.Type.FILTERNOISE ||
-                 Peek().type == Token.Type.GETVALUE) {
+                 Peek().type == Token.Type.GETVALUE    ||
+                 Peek().type == Token.Type.CREATEEVENT) {
             ReturnsCall();
         }
         else {
-            MakeError("Expected expression, filterNoise or getValue");
+            MakeError("Expected expression, filterNoise, getValue or createEvent");
         }
 
         return CallParam;
@@ -732,7 +744,8 @@ public class Parser extends RecursiveDescent{
         return  Peek().type == Token.Type.FILTERNOISE           ||
                 Peek().type == Token.Type.GETVALUE              ||
                 Peek().type == Token.Type.BROADCAST             ||
-                Peek().type == Token.Type.WRITE;
+                Peek().type == Token.Type.WRITE                 ||
+                Peek().type == Token.Type.CREATEEVENT;
     }
 
     private boolean CheckForExpr() {
