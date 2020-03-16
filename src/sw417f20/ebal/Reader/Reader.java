@@ -103,4 +103,11 @@ public class Reader {
         return output.toString();
     }
 
+    public void readToEndOfComment() throws IOException {
+        System.out.println("Comment found");
+        while (!(currentChar == '*' && nextChar == '/')) {
+            readChar();
+        }
+        readChar();
+    }
 }

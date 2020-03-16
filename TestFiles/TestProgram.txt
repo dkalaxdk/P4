@@ -14,7 +14,12 @@ EventCreator(button1)
 {
 	// filterNoise: Baseret på FILTER_TYPE, sørger for at 
 	// value er fri for støj (Knapper der tænder og slukker uden
-// at det er meningen.
+    // at det er meningen.
+
+    /* This should
+    not
+    be
+    read */
 
 	// FILTER_TYPE: flip a switch, constant input, variable
 	filterNoise(button1, FILTER_TYPE); 
@@ -48,6 +53,11 @@ Initiate
     light3 = digital output(6);
 }
 
+/* This should
+not
+be
+read */
+
 EventHandler(button1)
 {
 	write(light1, !light1[value]); // 0 -> 1.98, 1 -> 0, 87 -> 0
@@ -65,6 +75,11 @@ EventHandler(button1)
 }
 }
 
+/* This should
+not
+be
+read */
+
 EventHandler(button2)
 {
 	write(light1, !light1[value]);
@@ -78,3 +93,8 @@ END SLAVE
 11111111111111111111111111111111111111111111
 
 1.1257654
+
+/* This should
+not
+be
+read */
