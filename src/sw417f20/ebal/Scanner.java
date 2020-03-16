@@ -315,11 +315,11 @@ public class Scanner {
 
     public Token findNumberTokenType(Token token) throws IOException {
         token.content = reader.findNumber();
-        if (!token.content.contains(".") && token.content.length() > 0) {
+        if (token.content.matches("[0-9]+") && token.content.length() > 0) {
             token.type = Token.Type.LIT_Int;
-        } else if(token.content.length() > 0){
+        } else if(token.content.length() > 0 && token.content.matches("[0-9]+.?[0-9]*")){
             token.type = Token.Type.LIT_Float;
-        } if (token.content.matches("[0-9A-Za-z.]+")) {
+        }else if (token.content.matches("[0-9A-Za-z.]+")) {
             token.type = Token.Type.ERROR;
         }
 
