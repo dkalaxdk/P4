@@ -148,4 +148,60 @@ class ReaderTest {
 
         assertEquals(expected, actual);
     }
+
+    @Test
+    void findWord_ReadsWord_AccecptsWordWithUnderscoreInBeginning() throws IOException {
+        String expected = "_word";
+        BufferedReader mockReader = Mockito.mock(BufferedReader.class);
+        // Mock to return the characters of a word followed by whitespace
+        Mockito.when(mockReader.read()).thenReturn((int)'_',(int)'w', (int)'o', (int)'r', (int)'d', (int)'\t');
+        Reader reader = new Reader(mockReader);
+
+        reader.readChar();
+        String actual = reader.findWord();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void findWord_ReadsWord_AccecptsWordWithUnderscoreInMiddle() throws IOException {
+        String expected = "wo_rd";
+        BufferedReader mockReader = Mockito.mock(BufferedReader.class);
+        // Mock to return the characters of a word followed by whitespace
+        Mockito.when(mockReader.read()).thenReturn((int)'w', (int)'o', (int)'_', (int)'r', (int)'d', (int)'\t');
+        Reader reader = new Reader(mockReader);
+
+        reader.readChar();
+        String actual = reader.findWord();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void findWord_ReadsWord_AccecptsWordWithUnderscoreATEnd() throws IOException {
+        String expected = "word_";
+        BufferedReader mockReader = Mockito.mock(BufferedReader.class);
+        // Mock to return the characters of a word followed by whitespace
+        Mockito.when(mockReader.read()).thenReturn((int)'w', (int)'o', (int)'r', (int)'d', (int)'_', (int)'\t');
+        Reader reader = new Reader(mockReader);
+
+        reader.readChar();
+        String actual = reader.findWord();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void findNumber_ReadsNumber_AcceptsNumberOne() throws IOException {
+        String expected = "1";
+        BufferedReader mockReader = Mockito.mock(BufferedReader.class);
+        // Mock to return the characters of a word followed by whitespace
+        Mockito.when(mockReader.read()).thenReturn((int)'1');
+        Reader reader = new Reader(mockReader);
+
+        reader.readChar();
+        String actual = reader.findWord();
+
+        assertEquals(expected, actual);
+    }
 }
