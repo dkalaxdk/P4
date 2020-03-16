@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public abstract class RecursiveDescent {
     private Scanner PScanner;
-    private AST Tree;
+    protected AST Tree;
     public RecursiveDescent() {}
 
     public AST Parse(String filePath) {
