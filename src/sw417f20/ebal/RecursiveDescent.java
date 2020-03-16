@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public abstract class RecursiveDescent {
     private Scanner PScanner;
-    protected AST Tree;
+    private AST Tree;
     public RecursiveDescent() {}
 
     public AST Parse(String filePath) {
@@ -21,7 +21,7 @@ public abstract class RecursiveDescent {
 //
 //        System.out.println(splt[splt.length - 1]);
 
-        Start();
+        Tree.Root = Start();
         Expect(Token.Type.EOF);
 
         System.out.println("======== Parse successful ========");
@@ -29,7 +29,7 @@ public abstract class RecursiveDescent {
         return Tree;
     }
 
-    public abstract void Start();
+    public abstract Node Start();
 
     protected Token Peek() {
         return PScanner.Peek();

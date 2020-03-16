@@ -2,7 +2,7 @@ package sw417f20.ebal;
 
 public class Node {
 
-    public Token.Type Type;
+//    public Token.Type Type;
     public String Content;
 
     public Node Next;
@@ -10,41 +10,59 @@ public class Node {
     public Node FirstChild;
     public Node Parent;
 
-    public Node MakeSiblings(Node otherNode) {
+    public void AddChild(Node child) {
 
-        Node mySiblings = this;
-
-        while (mySiblings.Next != null) {
-            mySiblings = mySiblings.Next;
+        if (FirstChild == null) {
+            FirstChild = child;
         }
 
-        Node otherSiblings = otherNode.FirstSibling;
-        mySiblings.Next = otherSiblings;
-
-        otherSiblings.FirstSibling = mySiblings.FirstSibling;
-        otherSiblings.Parent = mySiblings.Parent;
-
-        while (otherSiblings.Next != null) {
-            otherSiblings = otherSiblings.Next;
-            otherSiblings.FirstSibling = mySiblings.FirstSibling;
-            otherSiblings.Parent = mySiblings.Parent;
-        }
-
-        return otherSiblings;
-    }
-
-    public void AdoptChildren(Node otherNode) {
-        if (this.FirstSibling != null) {
-            this.FirstSibling.MakeSiblings(otherNode);
-        }
         else {
-            Node otherSiblings = otherNode.FirstSibling;
-            this.FirstChild = otherSiblings;
+            Node myChildren = FirstChild;
 
-            while (otherSiblings != null) {
-                otherSiblings.Parent = this;
-                otherSiblings = otherSiblings.Next;
+            while (myChildren.Next != null) {
+                myChildren = myChildren.Next;
             }
+
+            myChildren.Next = child;
         }
     }
+
+//
+//    public Node MakeSiblings(Node otherNode) {
+//
+//        Node mySiblings = this;
+//
+//        while (mySiblings.Next != null) {
+//            mySiblings = mySiblings.Next;
+//        }
+//
+//        Node otherSiblings = otherNode.FirstSibling;
+//        mySiblings.Next = otherSiblings;
+//
+//        otherSiblings.FirstSibling = mySiblings.FirstSibling;
+//        otherSiblings.Parent = mySiblings.Parent;
+//
+//        while (otherSiblings.Next != null) {
+//            otherSiblings = otherSiblings.Next;
+//            otherSiblings.FirstSibling = mySiblings.FirstSibling;
+//            otherSiblings.Parent = mySiblings.Parent;
+//        }
+//
+//        return otherSiblings;
+//    }
+//
+//    public void AdoptChildren(Node otherNode) {
+//        if (this.FirstSibling != null) {
+//            this.FirstSibling.MakeSiblings(otherNode);
+//        }
+//        else {
+//            Node otherSiblings = otherNode.FirstSibling;
+//            this.FirstChild = otherSiblings;
+//
+//            while (otherSiblings != null) {
+//                otherSiblings.Parent = this;
+//                otherSiblings = otherSiblings.Next;
+//            }
+//        }
+//    }
 }
