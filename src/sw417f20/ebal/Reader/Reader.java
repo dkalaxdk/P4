@@ -52,9 +52,6 @@ public class Reader {
         StringBuilder output = new StringBuilder();
         char currentChar = this.currentChar;
         while (whitespace.indexOf(currentChar) == -1) {
-            // Fixing potential infinite loop \uFFFF is EOF.
-            if (output.indexOf("\uFFFF") != -1) break;
-
             if ((output.length() >= 1) && String.valueOf(currentChar).matches("[A-Za-z_0-9]")) {
                 output.append(currentChar);
             } else if (String.valueOf(currentChar).matches("[A-Za-z_]")) {
@@ -73,9 +70,6 @@ public class Reader {
     public String findNumber() throws IOException {
         StringBuilder output = new StringBuilder();
         while (whitespace.indexOf(currentChar) == -1) {
-            // Fixing potential infinite loop \uFFFF is EOF.
-            if (output.indexOf("\uFFFF") != -1) break;
-
             // Adds the number, or a dot, if the output string does not contain a dot and the length of the string is longer than 1
             // It needs to be longer than one, as we cant start the float with a dot.
             if (output.length() >= 1) {
