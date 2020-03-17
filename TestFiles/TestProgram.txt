@@ -3,10 +3,16 @@ BEGIN MASTER
 Initiate
 {
 	// Gøres til globale variable af compileren/preprocessor,
-    // så vi ikke har tonsvis af dem.
+// så vi ikke har tonsvis af dem.
 
-	pin button1 = digital input(4);
-	pin button2 = digital input(5);
+	pin button1 = createPin(digital, input, 4);
+	pin button2 = createPin(digital, input, 5);
+
+	// pin button3 = digital input(6);
+
+	// pin button3 = createPin(digital, input, 6);
+
+
 }
 
 Listener (button1)
@@ -28,9 +34,9 @@ BEGIN SLAVE
 
 Initiate
 {
-	pin light1 = digital output(4);
-    pin light2 = digital output(5);
-    pin light3 = digital output(6);
+	pin light1 = createPin(digital, output, 4);
+pin light2 = createPin(digital, output, 5);
+pin light3 = createPin(digital, output, 6);
 }
 
 EventHandler(button1Pressed)
@@ -38,13 +44,16 @@ EventHandler(button1Pressed)
 	int value = getValue(light1);
 
 	if (value == HIGH)
-{
-	write(light1, LOW);
-}
-else if (value == LOW)
-{
-	write(light1, HIGH);
-}
+    {
+	    write(light1, LOW);
+    }
+        else if (value == LOW)
+    {
+	    write(light1, HIGH);
+    }
+    else {
+        int b = 4;
+    }
 }
 
 EventHandler(button2Pressed)
@@ -56,4 +65,8 @@ EventHandler(button2Pressed)
 
 END SLAVE
 
-(EOF)
+/* This should
+not
+be
+read */
+

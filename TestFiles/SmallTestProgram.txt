@@ -5,7 +5,9 @@ Initiate {
 }
 
 Listener (noget) {
+    int a = 3;
 
+    if (true) { }
 }
 
 END MASTER

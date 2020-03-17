@@ -1,13 +1,11 @@
 package sw417f20.ebal;
 
-import org.junit.jupiter.params.shadow.com.univocity.parsers.conversions.RegexConversion;
-
-import java.awt.*;
 import java.io.IOException;
 
 public abstract class RecursiveDescent {
     private Scanner PScanner;
     private AST Tree;
+    private PrintVisitor PrintVisitor;
     public RecursiveDescent() {}
 
     public AST Parse(String filePath) {
@@ -17,30 +15,32 @@ public abstract class RecursiveDescent {
         System.out.println();
         System.out.println("Parsing " + filePath);
 
-//        String[] splt = filePath.split("P4");
-//
-//        System.out.println(splt[splt.length - 1]);
-
-        Start();
+        Tree.Root = Start();
         Expect(Token.Type.EOF);
+
+        PrintVisitor = new PrintVisitor();
+
+        PrintVisitor.Visit(Tree.Root);
 
         System.out.println("======== Parse successful ========");
 
         return Tree;
     }
 
-    public abstract void Start();
+    public abstract Node Start();
 
     protected Token Peek() {
         return PScanner.Peek();
     }
 
-    protected void Expect(Token.Type t) {
-        Expect(t, "Expected [" + t + "]");
+    protected Token Expect(Token.Type t) {
+        return Expect(t, "Expected [" + t + "]");
     }
 
-    protected void Expect(Token.Type t, String message) {
-        if (Peek().type != t) {
+    protected Token Expect(Token.Type t, String message) {
+        Token token = Peek();
+
+        if (token.type != t) {
             MakeError(message);
         }
         else {
@@ -51,6 +51,8 @@ public abstract class RecursiveDescent {
                 System.err.println(e);
             }
         }
+
+        return token;
     }
 
     protected void MakeError(String message) {

@@ -9,7 +9,7 @@ import sw417f20.ebal.Reader.Reader;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ReaderTest {
 
