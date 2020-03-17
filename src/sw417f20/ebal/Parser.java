@@ -5,8 +5,7 @@ public class Parser extends RecursiveDescent{
     // Start 	-> 	Master Slave Slaves.
     @Override
     public Node Start() {
-        Node Start = AST.MakeNode();
-        Start.NodeName = "Start";
+        Node Start = AST.MakeNode("Start");
 
         Start.AddChild(Master());
         Start.AddChild(Slave());
@@ -17,8 +16,7 @@ public class Parser extends RecursiveDescent{
 
     // Master 	-> 	begin master Initiate Listeners end master.
     private Node Master() {
-        Node Master = AST.MakeNode();
-        Master.NodeName = "Master";
+        Node Master = AST.MakeNode("Master");
 
         if (Peek().type == Token.Type.BEGIN) {
             Expect(Token.Type.BEGIN);
@@ -40,8 +38,7 @@ public class Parser extends RecursiveDescent{
     // Slaves 	-> 	Slave Slaves
     //	         | 	.
     private Node Slaves() {
-        Node Slaves = AST.MakeNode();
-        Slaves.NodeName = "Slaves";
+        Node Slaves = AST.MakeNode("Slaves");
 
         if (Peek().type == Token.Type.BEGIN) {
             Slaves.AddChild(Slave());
@@ -59,8 +56,7 @@ public class Parser extends RecursiveDescent{
 
     // Slave 	-> 	begin slave Initiate EventHandlers end slave.
     private Node Slave() {
-        Node Slave = AST.MakeNode();
-        Slave.NodeName = "Slave";
+        Node Slave = AST.MakeNode("Slave");
 
         if (Peek().type == Token.Type.BEGIN) {
             Expect(Token.Type.BEGIN);
@@ -81,8 +77,7 @@ public class Parser extends RecursiveDescent{
 
     // Initiate 	-> 	initiate lbracket PinDcls rbracket.
     private Node Initiate() {
-        Node Initiate = AST.MakeNode();
-        Initiate.NodeName = "Initiate";
+        Node Initiate = AST.MakeNode("Initiate");
 
         if (Peek().type == Token.Type.INITIATE) {
             Expect(Token.Type.INITIATE);
@@ -100,8 +95,7 @@ public class Parser extends RecursiveDescent{
     // PinDcls 	-> 	PinDcl semi PinDcls
     //	         | 	.
     private Node PinDcls() {
-        Node PinDcls = AST.MakeNode();
-        PinDcls.NodeName = "PinDcls";
+        Node PinDcls = AST.MakeNode("PinDcls");
 
         if (Peek().type == Token.Type.PIN) {
             PinDcls.AddChild(PinDcl());
@@ -120,12 +114,13 @@ public class Parser extends RecursiveDescent{
 
     // PinDcl	-> pin identifier assign createPin lparen PinType comma IOType comma intLiteral rparen.
     private Node PinDcl() {
-        Node PinDcl = AST.MakeNode();
-        PinDcl.NodeName = "PinDcl";
+        Node PinDcl = AST.MakeNode("PinDcl");
 
         if (Peek().type == Token.Type.PIN) {
             Expect(Token.Type.PIN);
-            Expect(Token.Type.IDENTIFIER);
+
+            PinDcl.AddChild(AST.MakeNode(Expect(Token.Type.IDENTIFIER)));
+
             Expect(Token.Type.ASSIGN);
             Expect(Token.Type.CREATEPIN);
             Expect(Token.Type.LPAREN);
@@ -133,7 +128,9 @@ public class Parser extends RecursiveDescent{
             Expect(Token.Type.COMMA);
             PinDcl.AddChild(IOType());
             Expect(Token.Type.COMMA);
-            Expect(Token.Type.LIT_Int);
+
+            PinDcl.AddChild(AST.MakeNode(Expect(Token.Type.LIT_Int)));
+
             Expect(Token.Type.RPAREN);
         }
         else {
@@ -147,8 +144,7 @@ public class Parser extends RecursiveDescent{
     //	         | 	analog
     //	         | 	pwm.
     private Node PinType() {
-        Node PinType = AST.MakeNode();
-        PinType.NodeName = "PinType";
+        Node PinType = AST.MakeNode("PinType");
 
         if (Peek().type == Token.Type.DIGITAL) {
             PinType.NodeToken = Expect(Token.Type.DIGITAL);
@@ -169,8 +165,7 @@ public class Parser extends RecursiveDescent{
     // IOType 	-> 	input
     //	         | 	output.
     private Node IOType() {
-        Node IOType = AST.MakeNode();
-        IOType.NodeName = "IOType";
+        Node IOType = AST.MakeNode("IOType");
 
         if (Peek().type == Token.Type.INPUT) {
             IOType.NodeToken = Expect(Token.Type.INPUT);
@@ -188,8 +183,7 @@ public class Parser extends RecursiveDescent{
     // Listeners 	-> 	Listener Listeners
     //	             | 	.
     private Node Listeners() {
-        Node Listeners = AST.MakeNode();
-        Listeners.NodeName = "Listeners";
+        Node Listeners = AST.MakeNode("Listeners");
 
         if (Peek().type == Token.Type.LISTENER) {
             Listeners.AddChild(Listener());
@@ -210,13 +204,12 @@ public class Parser extends RecursiveDescent{
 
     // Listener	-> listener lparen identifier rparen Block.
     private Node Listener() {
-        Node Listener = AST.MakeNode();
-        Listener.NodeName = "Listener";
+        Node Listener = AST.MakeNode("Listener");
 
         if (Peek().type == Token.Type.LISTENER) {
             Expect(Token.Type.LISTENER);
             Expect(Token.Type.LPAREN);
-            Listener.NodeToken = Expect(Token.Type.IDENTIFIER);
+            Listener.AddChild(AST.MakeNode(Expect(Token.Type.IDENTIFIER)));
             Expect(Token.Type.RPAREN);
             Listener.AddChild(Block());
         }
@@ -230,8 +223,7 @@ public class Parser extends RecursiveDescent{
     // EventHandlers -> 	EventHandler EventHandlers
     //	              | 	.
     private Node EventHandlers() {
-        Node EventHandlers = AST.MakeNode();
-        EventHandlers.NodeName = "EventHandlers";
+        Node EventHandlers = AST.MakeNode("EventHandlers");
 
         if (Peek().type == Token.Type.EVENTHANDLER) {
             EventHandlers.AddChild(EventHandler());
@@ -258,7 +250,7 @@ public class Parser extends RecursiveDescent{
         if (Peek().type == Token.Type.EVENTHANDLER) {
             Expect(Token.Type.EVENTHANDLER);
             Expect(Token.Type.LPAREN);
-            EventHandler.NodeToken = Expect(Token.Type.IDENTIFIER);
+            EventHandler.AddChild(AST.MakeNode(Expect(Token.Type.IDENTIFIER)));
             Expect(Token.Type.RPAREN);
             EventHandler.AddChild(Block());
         }
@@ -271,8 +263,7 @@ public class Parser extends RecursiveDescent{
 
     // Block 	-> lbracket Stmts rbracket.
     private Node Block() {
-        Node Block = AST.MakeNode();
-        Block.NodeName = "Block";
+        Node Block = AST.MakeNode("Block");
 
         if (Peek().type == Token.Type.LBRACKET) {
             Expect(Token.Type.LBRACKET);
@@ -289,18 +280,18 @@ public class Parser extends RecursiveDescent{
     // Stmts 	-> 	Stmt Stmts
     //	         | 	.
     private Node Stmts() {
-        Node Stmts = AST.MakeNode();
+        Node Stmts = AST.MakeNode("Stmts");
 
         if (Peek().type == Token.Type.IDENTIFIER ||
             Peek().type == Token.Type.IF ||
             CheckForType() ||
             CheckForCall()) {
 
-            Stmt();
-            Stmts();
+            Stmts.AddChild(Stmt());
+            Stmts.AddChild(Stmts());
         }
         else if (Peek().type == Token.Type.RBRACKET) {
-            return Stmts;
+            return AST.MakeNode();
         }
         else {
             MakeError("Expected statement");
@@ -314,18 +305,18 @@ public class Parser extends RecursiveDescent{
     //	         | 	Assignment semi
     //	         | 	IfStmt.
     private Node Stmt() {
-        Node Stmt = AST.MakeNode();
+        Node Stmt = AST.MakeNode("Stmt");
 
         if (CheckForCall()) {
-            Call();
+            Stmt.AddChild(Call());
             Expect(Token.Type.SEMI);
         }
         else if (Peek().type == Token.Type.IDENTIFIER || CheckForType()) {
-            Assignment();
+            Stmt.AddChild(Assignment());
             Expect(Token.Type.SEMI);
         }
         else if (Peek().type == Token.Type.IF) {
-            IfStmt();
+            Stmt.AddChild(IfStmt());
         }
         else {
             MakeError("Expected a call, an assignment, or an if-statement");
@@ -334,20 +325,20 @@ public class Parser extends RecursiveDescent{
         return Stmt;
     }
 
-    // Assignment 	-> 	identifier assign Expr
-    //	             | 	Dcl assign AfterDcl .
+    // Assignment 	-> 	identifier assign AfterAssign
+    //	             | 	Dcl assign AfterAssign .
     private Node Assignment() {
-        Node Assignment = AST.MakeNode();
+        Node Assignment = AST.MakeNode("Assignment");
 
         if (Peek().type == Token.Type.IDENTIFIER) {
             Expect(Token.Type.IDENTIFIER);
             Expect(Token.Type.ASSIGN);
-            Expr();
+            AfterAssign();
         }
         else if (CheckForType()) {
             Dcl();
             Expect(Token.Type.ASSIGN);
-            AfterDcl();
+            AfterAssign();
         }
         else {
             MakeError("Expected assignment or declaration");
@@ -361,15 +352,17 @@ public class Parser extends RecursiveDescent{
     //	     | 	bool identifier
     //	     | 	event identifier.
     private Node Dcl() {
-        Node Dcl = AST.MakeNode();
+        Node Dcl = AST.MakeNode("Dcl");
+        Node type = AST.MakeNode("Type");
+        Node id = AST.MakeNode("Identifier");
 
         if (Peek().type == Token.Type.FLOAT) {
-            Expect(Token.Type.FLOAT);
-            Expect(Token.Type.IDENTIFIER);
+            type.NodeToken = Expect(Token.Type.FLOAT);
+            id.NodeToken = Expect(Token.Type.IDENTIFIER);
         }
         else if (Peek().type == Token.Type.INT) {
-            Expect(Token.Type.INT);
-            Expect(Token.Type.IDENTIFIER);
+            type.NodeToken = Expect(Token.Type.INT);
+            id.NodeToken = Expect(Token.Type.IDENTIFIER);
         }
         else if (Peek().type == Token.Type.BOOL) {
             Expect(Token.Type.BOOL);
@@ -386,12 +379,17 @@ public class Parser extends RecursiveDescent{
             MakeError("Expected float, int, bool, or event declaration");
         }
 
+        Dcl.AddChild(type);
+        Dcl.AddChild(id);
+
         return Dcl;
     }
 
-    // AfterDcl  	-> Expr
-    //	             | 	ReturnsCall.
-    private Node AfterDcl() {
+    // TODO: Implementer min grammar (lambda)
+    // AfterAssign      ->  Expr
+    //	                 | 	ReturnsCall
+    //	                 | .
+    private Node AfterAssign() {
         Node AfterDcl = AST.MakeNode();
 
         if (CheckForExpr()) {

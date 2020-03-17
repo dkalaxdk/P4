@@ -10,6 +10,23 @@ public class Node {
     public Node FirstChild;
     public Node Parent;
 
+    public Node() {
+
+    }
+
+    public Node(String name) {
+        this.NodeName = name;
+    }
+
+    public Node(Token token) {
+        this.NodeToken = token;
+    }
+
+    public Node(String name, Token token) {
+        this.NodeName = name;
+        this.NodeToken = token;
+    }
+
     public void AddChild(Node child) {
 
         if (FirstChild == null) {

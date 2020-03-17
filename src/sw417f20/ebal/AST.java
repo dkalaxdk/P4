@@ -55,6 +55,26 @@ public class AST {
         return new Node();
     }
 
+    public static Node MakeNode(String name) {
+        return new Node(name);
+    }
+
+    public static Node MakeNode(Token token) {
+
+        switch (token.type) {
+            case IDENTIFIER:
+                return new Node("id", token);
+            case FLOAT: case INT: case EVENT: case BOOL: case PIN:
+                return new Node("type", token);
+            default:
+                return new Node("Unidentified token");
+        }
+    }
+
+//    public static Node MakeNode(String name, Token token) {
+//        return new Node(name, token);
+//    }
+
 //    public Node MakeFamiliy(Node parent, Node child1, Node child2) {
 //        parent.AdoptChildren(child1.MakeSiblings(child2));
 //
