@@ -142,6 +142,12 @@ public class Scanner {
             case "getValue":
                 token.type = Token.Type.GETVALUE;
                 break;
+            case "createEvent":
+                token.type = Token.Type.CREATEEVENT;
+                break;
+            case "createPin":
+                token.type = Token.Type.CREATEPIN;
+                break;
             case "pin":
                 token.type = Token.Type.PIN;
                 break;
