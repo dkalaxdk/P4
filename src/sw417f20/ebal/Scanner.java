@@ -34,8 +34,7 @@ public class Scanner {
     public void Init() {
         try {
             nextToken = getToken();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.err.println(e);
         }
     }
@@ -183,25 +182,19 @@ public class Scanner {
             case '+':
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.OP_PLUS_EQUALS;
-                } else {
-                    token.type = Token.Type.OP_PLUS;
-                }
+                } else token.type = Token.Type.OP_PLUS;
                 break;
             case '-':
                 if (reader.nextChar == '=') {
                     token.content += reader.readChar();
                     token.type = Token.Type.OP_MINUS_EQUALS;
-                } else {
-                    token.type = Token.Type.OP_MINUS;
-                }
+                } else token.type = Token.Type.OP_MINUS;
                 break;
             case '*':
                 if (reader.nextChar == '=') {
                     token.content += reader.readChar();
                     token.type = Token.Type.OP_TIMES_EQUALS;
-                } else {
-                    token.type = Token.Type.OP_TIMES;
-                }
+                } else token.type = Token.Type.OP_TIMES;
                 break;
             case '/':   // Has some special cases when followed by other symbols
                 if (reader.nextChar == '=') {
@@ -210,23 +203,18 @@ public class Scanner {
                 } else if (reader.nextChar == '*') {
                     reader.readToEndOfComment();
                 } else if (reader.nextChar == '/') {
-                    while(reader.currentChar != '\n') {
+                    while (reader.currentChar != '\n') {
                         reader.readChar();
                     }
                     break;
-                } else {
-                    token.type = Token.Type.OP_DIVIDE;
-                }
+                } else token.type = Token.Type.OP_DIVIDE;
                 break;
 
             case '=':
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.LOP_EQUALS;
                     token.content += reader.readChar();
-                }
-                else {
-                    token.type = Token.Type.ASSIGN;
-                }
+                } else token.type = Token.Type.ASSIGN;
                 break;
 
             case '%':
@@ -240,9 +228,7 @@ public class Scanner {
             case '!':
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.LOP_NOTEQUAL;
-
-                } else
-                token.type = Token.Type.OP_NOT;
+                } else token.type = Token.Type.OP_NOT;
                 break;
 
             case '(':
@@ -280,7 +266,6 @@ public class Scanner {
                     token.type = Token.Type.ERROR;
                 } else token.type = Token.Type.DOT;
                 break;
-
             case ';':
                 token.type = Token.Type.SEMI;
                 break;
@@ -303,17 +288,13 @@ public class Scanner {
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.LOP_GREATEROREQUAL;
                     token.content += reader.readChar();
-                } else {
-                    token.type = Token.Type.LOP_GREATERTHAN;
-                }
+                } else token.type = Token.Type.LOP_GREATERTHAN;
                 break;
             case '<':
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.LOP_LESSOREQUAL;
                     token.content += reader.readChar();
-                } else {
-                    token.type = Token.Type.LOP_LESSTHAN;
-                }
+                } else token.type = Token.Type.LOP_LESSTHAN;
                 break;
             default:
                 token.type = Token.Type.NOTATOKEN;
@@ -324,11 +305,11 @@ public class Scanner {
 
     public void findNumberTokenType(Token token) throws IOException {
         token.content = reader.findNumber();
-        if (token.content.matches("[0-9]+") && token.content.length() > 0) {
+        if (token.content.matches("[0-9]+")) {
             token.type = Token.Type.LIT_Int;
-        } else if(token.content.length() > 0 && token.content.matches("[0-9]+\\.?[0-9]*")){
+        } else if (token.content.matches("[0-9]+\\.[0-9]*")) {
             token.type = Token.Type.LIT_Float;
-        }else if (token.content.matches("[0-9A-Za-z.]+")) {
+        } else if (token.content.matches("[0-9A-Za-z.]+")) {
             token.type = Token.Type.ERROR;
         }
 
