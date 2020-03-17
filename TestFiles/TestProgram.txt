@@ -45,11 +45,14 @@ EventHandler(button1Pressed)
 
 	if (value == HIGH)
     {
-	write(light1, LOW);
+	    write(light1, LOW);
     }
-    else if (value == LOW)
+        else if (value == LOW)
     {
-	write(light1, HIGH);
+	    write(light1, HIGH);
+    }
+    else {
+        int b = 4;
     }
 }
 

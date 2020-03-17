@@ -1,7 +1,5 @@
 package sw417f20.ebal;
 
-import sw417f20.ebal.Nodes.Node;
-
 import java.io.IOException;
 
 public abstract class RecursiveDescent {

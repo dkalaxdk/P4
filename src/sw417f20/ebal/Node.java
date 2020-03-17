@@ -1,31 +1,27 @@
-package sw417f20.ebal.Nodes;
-
-import sw417f20.ebal.AST;
+package sw417f20.ebal;
 
 public class Node {
-    // public String Title;
     public AST.NodeType Type;
+    public String Value;
 
     public Node Next;
     public Node FirstSibling;
     public Node FirstChild;
     public Node Parent;
 
-    public Node() {
-
-    }
-
     public Node(AST.NodeType type) {
         this.Type = type;
+        this.Value = "";
+    }
+
+    public Node(AST.NodeType type, String value) {
+        this.Type = type;
+        this.Value = value;
     }
 
     @Override
     public String toString() {
-        if (Type == null) {
-            return "null";
-        }
-
-        return Type.toString();
+        return Type.toString() + (!Value.isEmpty() ? " : " + Value : "");
     }
 
     // Adds the input child to this node's list of children.

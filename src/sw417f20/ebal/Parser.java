@@ -1,9 +1,5 @@
 package sw417f20.ebal;
 
-import sw417f20.ebal.Nodes.LeafNodes.PrefixNode;
-import sw417f20.ebal.Nodes.LeafNodes.ReturnsNode;
-import sw417f20.ebal.Nodes.Node;
-
 public class Parser extends RecursiveDescent{
 
     // Start 	-> 	Master Slave Slaves.
@@ -54,7 +50,7 @@ public class Parser extends RecursiveDescent{
             return slave;
         }
         else if (Peek().type == Token.Type.EOF) {
-            return AST.MakeNode(AST.NodeType.Null);
+            return AST.MakeNode(AST.NodeType.Empty);
         }
         else {
             MakeError("Expected BEGIN or EOF");
@@ -119,7 +115,7 @@ public class Parser extends RecursiveDescent{
             return pinDcl;
         }
         else if (Peek().type == Token.Type.RBRACKET) {
-            return AST.MakeNode(AST.NodeType.Null);
+            return AST.MakeNode(AST.NodeType.Empty);
         }
         else {
             MakeError("Expected pin or }");
@@ -206,7 +202,7 @@ public class Parser extends RecursiveDescent{
             return listener;
         }
         else if (Peek().type == Token.Type.END) {
-            return AST.MakeNode(AST.NodeType.Null);
+            return AST.MakeNode(AST.NodeType.Empty);
         }
         else if (Peek().type == Token.Type.EVENTHANDLER) {
             MakeError("EventHandlers can only be declared in slaves");
@@ -251,7 +247,7 @@ public class Parser extends RecursiveDescent{
             return eventHandler;
         }
         else if (Peek().type == Token.Type.END) {
-            return AST.MakeNode(AST.NodeType.Null);
+            return AST.MakeNode(AST.NodeType.Empty);
         }
         else if (Peek().type == Token.Type.LISTENER) {
             MakeError("Listeners can only be declared in master");
@@ -318,7 +314,7 @@ public class Parser extends RecursiveDescent{
             return statement;
         }
         else if (Peek().type == Token.Type.RBRACKET) {
-            return AST.MakeNode(AST.NodeType.Null);
+            return AST.MakeNode(AST.NodeType.Empty);
         }
         else {
             MakeError("Expected statement");
@@ -422,7 +418,7 @@ public class Parser extends RecursiveDescent{
             return Expr();
         }
         else if (Peek().type == Token.Type.SEMI) {
-            return AST.MakeNode(AST.NodeType.Null);
+            return AST.MakeNode(AST.NodeType.Empty);
         }
         else {
             MakeError("Expected assignment or ;");
@@ -442,7 +438,7 @@ public class Parser extends RecursiveDescent{
             Node value = Value();
             Node afterValue = AfterValue();
 
-            if (afterValue.Type == AST.NodeType.Null) {
+            if (afterValue.Type == AST.NodeType.Empty) {
                 return value;
             }
 
@@ -460,12 +456,12 @@ public class Parser extends RecursiveDescent{
             Expect(Token.Type.OP_MINUS);
 
             // TODO: Hotfix, bør være med MakeNode!
-            Node prefix = new PrefixNode(AST.NodeType.Prefix, "-");
+            Node prefix = new Node(AST.NodeType.Prefix, "-");
 
             Node value = Value();
             Node afterValue = AfterValue();
 
-            if (afterValue.Type == AST.NodeType.Null) {
+            if (afterValue.Type == AST.NodeType.Empty) {
                 return value;
             }
 
@@ -477,7 +473,7 @@ public class Parser extends RecursiveDescent{
             Node identifier = AST.MakeNode(Expect(Token.Type.IDENTIFIER));
             Node afterValue = AfterValue();
 
-            if (afterValue.Type == AST.NodeType.Null) {
+            if (afterValue.Type == AST.NodeType.Empty) {
                 return identifier;
             }
 
@@ -545,7 +541,7 @@ public class Parser extends RecursiveDescent{
         }
         else if (Peek().type == Token.Type.SEMI ||
                  Peek().type == Token.Type.RPAREN) {
-            return AST.MakeNode(AST.NodeType.Null);
+            return AST.MakeNode(AST.NodeType.Empty);
         }
         else {
             MakeError("Expected operator or end of statement");
@@ -553,7 +549,6 @@ public class Parser extends RecursiveDescent{
         }
     }
 
-    // TODO: Implementer Call med børn
 
     // Call 	-> 	VoidCall
     //         	 | 	ReturnsCall.
@@ -681,7 +676,7 @@ public class Parser extends RecursiveDescent{
                  Peek().type == Token.Type.IF ||
                  CheckForType() ||
                  CheckForCall()) {
-            return AST.MakeNode(AST.NodeType.Null);
+            return AST.MakeNode(AST.NodeType.Empty);
         }
         else {
             MakeError("Expected else or end of if statement");

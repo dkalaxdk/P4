@@ -1,15 +1,12 @@
 package sw417f20.ebal;
 
-import sw417f20.ebal.Nodes.Node;
-import sw417f20.ebal.Nodes.NonLeafNodes.CallNode;
-
 public class PrintVisitor extends Visitor {
 
     private int indent = 0;
 
     @Override
     public void Visit(Node node) {
-        if (node.Type != AST.NodeType.Null) {
+        if (node.Type != AST.NodeType.Empty) {
             for (int i = 0; i <= indent; i++) {
                 System.out.print("\t");
             }
