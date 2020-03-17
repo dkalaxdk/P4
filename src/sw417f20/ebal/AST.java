@@ -1,6 +1,8 @@
 package sw417f20.ebal;
 
-import java.lang.invoke.SwitchPoint;
+import sw417f20.ebal.Nodes.LeafNodes.*;
+import sw417f20.ebal.Nodes.Node;
+import sw417f20.ebal.Nodes.NonLeafNodes.*;
 
 public class AST {
 
@@ -10,70 +12,99 @@ public class AST {
 
     }
 
-//    public Node MakeNode(Token token) {
-//        Node result = new Node();
-//
-//        switch (token.type) {
-//            case BEGIN:
-//                result.Type = Token.Type.BEGIN;
-//                break;
-//            case END:
-//                result.Type = Token.Type.END;
-//                break;
-//            case MASTER:
-//                result.Type = Token.Type.MASTER;
-//                break;
-//            case INITIATE:
-//                result.Type = Token.Type.INITIATE;
-//                break;
-//            case LISTENER:
-//                result.Type = Token.Type.LISTENER;
-//                break;
-//            case SLAVE:
-//                result.Type = Token.Type.SLAVE;
-//                break;
-//        }
-//
-//        return result;
-//    }
-//
-//    public enum Type {
-//        Listeners, EventHandlers, Slaves, Start
-//    }
+    public enum NodeType {
+        Prog, Master, Slave, Initiate, Listener, EventHandler, Block,
 
-//    public Node MakeNode(Type type) {
-//        Node result = new Node();
-//        switch (type) {
-//            case Start:
-//                break;
-//        }
-//
-//        return result;
-//    }
+        PinDeclaration,
 
-    public static Node MakeNode() {
-        return new Node();
-    }
+        Declaration, Assignment, If,
 
-    public static Node MakeNode(String name) {
-        return new Node(name);
+        Call, Function,
+
+        Expression,
+
+        Identifier, Type, Literal, Operator, Prefix, Func, Returns,
+        PinType, IOType,
+
+
+        Error, Null
+
     }
 
     public static Node MakeNode(Token token) {
 
         switch (token.type) {
             case IDENTIFIER:
-                return new Node("id", token);
-            case FLOAT: case INT: case EVENT: case BOOL: case PIN:
-                return new Node("type", token);
+                return new IdentifierNode(NodeType.Identifier, token.content);
+
+            case LIT_Int: case LIT_Bool: case LIT_Float:
+                return new LiteralNode(NodeType.Literal, token.content);
+
+            case INPUT: case OUTPUT:
+                return new IOTypeNode(NodeType.IOType, token.content);
+
+            case DIGITAL: case ANALOG: case PWM:
+                return new PinTypeNode(NodeType.PinType, token.content);
+
+            case FLOAT: case INT: case BOOL: case EVENT: case PIN:
+                return new TypeNode(NodeType.Type, token.content);
+
+            case OP_PLUS: case OP_MINUS: case OP_TIMES: case OP_DIVIDE:
+            case LOP_EQUALS: case LOP_NOTEQUAL: case LOP_LESSTHAN: case LOP_GREATERTHAN: case LOP_LESSOREQUAL: case LOP_GREATEROREQUAL:
+                return new OperatorNode(NodeType.Operator, token.content);
+
+            // TODO: Her burde der også være en for minus somehow. Måske noget der skal fixes på en senere stadie?
+            case OP_NOT:
+                return new PrefixNode(NodeType.Prefix, token.content);
+
+            case CREATEEVENT: case GETVALUE: case BROADCAST: case WRITE: case FILTERNOISE:
+                return new FuncNode(NodeType.Func, token.content);
+
+            // TODO: Lav en Returns node
+
             default:
-                return new Node("Unidentified token");
+                return new Node(NodeType.Error);
         }
     }
 
-//    public static Node MakeNode(String name, Token token) {
-//        return new Node(name, token);
-//    }
+    public static Node MakeNode(NodeType nodeType) {
+        switch (nodeType) {
+            case Prog:
+                return new ProgNode(nodeType);
+            case Master:
+                return new MasterNode(nodeType);
+            case Slave:
+                return new SlaveNode(nodeType);
+            case Initiate:
+                return new InitiateNode(nodeType);
+            case Listener:
+                return new ListenerNode(nodeType);
+            case EventHandler:
+                return new EventHandlerNode(nodeType);
+            case Block:
+                return new BlockNode(nodeType);
+            case PinDeclaration:
+                return new PinDeclarationNode(nodeType);
+            case Declaration:
+                return new DeclarationNode(nodeType);
+            case Assignment:
+                return new AssignmentNode(nodeType);
+            case If:
+                return new IfNode(nodeType);
+            case Call:
+                return new CallNode(nodeType);
+            case Function:
+                return new FunctionNode(nodeType);
+            case Expression:
+                return new ExpressionNode(nodeType);
+
+            case Null:
+                return new Node(nodeType);
+            default:
+                return new Node(NodeType.Error);
+        }
+    }
+
 
 //    public Node MakeFamiliy(Node parent, Node child1, Node child2) {
 //        parent.AdoptChildren(child1.MakeSiblings(child2));

@@ -1,8 +1,7 @@
 package sw417f20.ebal;
 
-import org.junit.jupiter.params.shadow.com.univocity.parsers.conversions.RegexConversion;
+import sw417f20.ebal.Nodes.Node;
 
-import java.awt.*;
 import java.io.IOException;
 
 public abstract class RecursiveDescent {
@@ -17,10 +16,6 @@ public abstract class RecursiveDescent {
 
         System.out.println();
         System.out.println("Parsing " + filePath);
-
-//        String[] splt = filePath.split("P4");
-//
-//        System.out.println(splt[splt.length - 1]);
 
         Tree.Root = Start();
         Expect(Token.Type.EOF);
