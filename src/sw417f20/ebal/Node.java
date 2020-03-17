@@ -2,8 +2,8 @@ package sw417f20.ebal;
 
 public class Node {
 
-//    public Token.Type Type;
-    public String Content;
+    public Token NodeToken;
+    public String NodeName;
 
     public Node Next;
     public Node FirstSibling;

@@ -40,12 +40,14 @@ public abstract class RecursiveDescent {
         return PScanner.Peek();
     }
 
-    protected void Expect(Token.Type t) {
-        Expect(t, "Expected [" + t + "]");
+    protected Token Expect(Token.Type t) {
+        return Expect(t, "Expected [" + t + "]");
     }
 
-    protected void Expect(Token.Type t, String message) {
-        if (Peek().type != t) {
+    protected Token Expect(Token.Type t, String message) {
+        Token token = Peek();
+
+        if (token.type != t) {
             MakeError(message);
         }
         else {
@@ -56,6 +58,8 @@ public abstract class RecursiveDescent {
                 System.err.println(e);
             }
         }
+
+        return token;
     }
 
     protected void MakeError(String message) {

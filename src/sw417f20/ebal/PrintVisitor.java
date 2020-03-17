@@ -4,7 +4,12 @@ public class PrintVisitor extends Visitor {
 
     @Override
     public void Visit(Node node) {
-        System.out.println(node.Content);
+        System.out.print(node.NodeName);
+
+        if (node.NodeToken != null) {
+            System.out.print(": " + node.NodeToken.content);
+        }
+        System.out.println();
 
         if (node.FirstChild != null) {
             Visit(node.FirstChild);
