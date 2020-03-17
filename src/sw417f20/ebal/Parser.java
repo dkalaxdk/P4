@@ -427,7 +427,7 @@ public class Parser extends RecursiveDescent{
     }
 
     // Expr 	-> 	Value AfterValue
-    //	         | 	lparen Expr rparen
+    //	         | 	lparen Expr rparen AfterValue
     //	         | 	minus Value AfterValue
     //	         | 	not identifier AfterValue
     //	         | 	ReturnsCall.
@@ -450,15 +450,24 @@ public class Parser extends RecursiveDescent{
             Expect(Token.Type.LPAREN);
             Node expr = Expr();
             Expect(Token.Type.RPAREN);
-            return expr;
+            Node afterValue = AfterValue();
+
+            if (afterValue.Type == AST.NodeType.Empty) {
+                return expr;
+            }
+
+            Expr.AddChild(expr);
+            Expr.AddChild(afterValue);
         }
         else if (Peek().type == Token.Type.OP_MINUS) {
             Expect(Token.Type.OP_MINUS);
 
             // TODO: Hotfix, bør være med MakeNode!
             Node prefix = new Node(AST.NodeType.Prefix, "-");
-
             Node value = Value();
+
+            value.AddChild(prefix);
+
             Node afterValue = AfterValue();
 
             if (afterValue.Type == AST.NodeType.Empty) {
@@ -469,8 +478,11 @@ public class Parser extends RecursiveDescent{
             Expr.AddChild(afterValue);
         }
         else if (Peek().type == Token.Type.OP_NOT) {
-            Expect(Token.Type.OP_NOT);
+            Node prefix = AST.MakeNode(Expect(Token.Type.OP_NOT));
             Node identifier = AST.MakeNode(Expect(Token.Type.IDENTIFIER));
+
+            identifier.AddChild(prefix);
+
             Node afterValue = AfterValue();
 
             if (afterValue.Type == AST.NodeType.Empty) {
@@ -480,9 +492,7 @@ public class Parser extends RecursiveDescent{
             Expr.AddChild(identifier);
             Expr.AddChild(afterValue);
         }
-        else if (Peek().type == Token.Type.FILTERNOISE ||
-                 Peek().type == Token.Type.GETVALUE ||
-                 Peek().type == Token.Type.CREATEEVENT) {
+        else if (CheckForReturnsCall()) {
             return ReturnsCall();
         }
         else {
@@ -554,13 +564,10 @@ public class Parser extends RecursiveDescent{
     //         	 | 	ReturnsCall.
     private Node Call() {
 
-        if (Peek().type == Token.Type.BROADCAST ||
-            Peek().type == Token.Type.WRITE) {
+        if (CheckForVoidCall()) {
             return VoidCall();
         }
-        else if (Peek().type == Token.Type.FILTERNOISE ||
-                 Peek().type == Token.Type.GETVALUE    ||
-                 Peek().type == Token.Type.CREATEEVENT) {
+        else if (CheckForReturnsCall()) {
             return ReturnsCall();
         }
         else {
@@ -748,7 +755,7 @@ public class Parser extends RecursiveDescent{
         }
     }
 
-    // LogicOp 	-> lessThan
+    // LogicOp 	->  lessThan
     //	         | 	greaterThan
     //	         | 	notEqual
     //	         | 	greaterOrEqual
@@ -789,11 +796,18 @@ public class Parser extends RecursiveDescent{
     }
 
     private boolean CheckForCall() {
+        return  CheckForReturnsCall() || CheckForVoidCall();
+    }
+
+    private boolean CheckForReturnsCall() {
         return  Peek().type == Token.Type.FILTERNOISE           ||
                 Peek().type == Token.Type.GETVALUE              ||
-                Peek().type == Token.Type.BROADCAST             ||
-                Peek().type == Token.Type.WRITE                 ||
                 Peek().type == Token.Type.CREATEEVENT;
+    }
+
+    private boolean CheckForVoidCall() {
+        return  Peek().type == Token.Type.BROADCAST             ||
+                Peek().type == Token.Type.WRITE;
     }
 
     private boolean CheckForExpr() {
