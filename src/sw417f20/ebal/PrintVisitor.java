@@ -1,6 +1,7 @@
 package sw417f20.ebal;
 
 import sw417f20.ebal.Nodes.Node;
+import sw417f20.ebal.Nodes.NonLeafNodes.CallNode;
 
 public class PrintVisitor extends Visitor {
 
@@ -8,12 +9,14 @@ public class PrintVisitor extends Visitor {
 
     @Override
     public void Visit(Node node) {
-        for (int i = 0; i <= indent; i++) {
-            System.out.print("\t");
-        }
-        System.out.print(node);
+        if (node.Type != AST.NodeType.Null) {
+            for (int i = 0; i <= indent; i++) {
+                System.out.print("\t");
+            }
+            System.out.print(node);
 
-        System.out.println();
+            System.out.println();
+        }
 
         indent++;
         if (node.FirstChild != null) {
@@ -38,4 +41,5 @@ public class PrintVisitor extends Visitor {
         }
         indent--;
     }
+
 }
