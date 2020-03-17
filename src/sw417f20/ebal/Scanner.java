@@ -268,7 +268,11 @@ public class Scanner {
                 break;
 
             case '.':
-                token.type = Token.Type.DOT;
+                if (String.valueOf(reader.nextChar).matches("[0-9A-Za-z]")) {
+                    reader.readChar();
+                    token.content += reader.findNumber();
+                    token.type = Token.Type.ERROR;
+                } else token.type = Token.Type.DOT;
                 break;
 
             case ';':
@@ -316,7 +320,7 @@ public class Scanner {
         token.content = reader.findNumber();
         if (token.content.matches("[0-9]+") && token.content.length() > 0) {
             token.type = Token.Type.LIT_Int;
-        } else if(token.content.length() > 0 && token.content.matches("[0-9]+.?[0-9]*")){
+        } else if(token.content.length() > 0 && token.content.matches("[0-9]+\\.?[0-9]*")){
             token.type = Token.Type.LIT_Float;
         }else if (token.content.matches("[0-9A-Za-z.]+")) {
             token.type = Token.Type.ERROR;

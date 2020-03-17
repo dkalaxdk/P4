@@ -72,7 +72,6 @@ public class Reader {
 
     public String findNumber() throws IOException {
         StringBuilder output = new StringBuilder();
-        char currentChar = this.currentChar;
         while (whitespace.indexOf(currentChar) == -1) {
             // Fixing potential infinite loop \uFFFF is EOF.
             if (output.indexOf("\uFFFF") != -1) break;
