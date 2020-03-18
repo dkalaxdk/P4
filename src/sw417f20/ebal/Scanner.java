@@ -1,8 +1,11 @@
 package sw417f20.ebal;
 
-import java.io.*;
-
 import sw417f20.ebal.Reader.Reader;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Scanner {
     public Reader reader;

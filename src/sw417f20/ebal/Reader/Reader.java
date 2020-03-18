@@ -52,9 +52,6 @@ public class Reader {
         StringBuilder output = new StringBuilder();
         char currentChar = this.currentChar;
         while (whitespace.indexOf(currentChar) == -1) {
-            // Fixing potential infinite loop \uFFFF is EOF.
-            if (output.indexOf("\uFFFF") != -1) break;
-
             if ((output.length() >= 1) && String.valueOf(currentChar).matches("[A-Za-z_0-9]")) {
                 output.append(currentChar);
             } else if (String.valueOf(currentChar).matches("[A-Za-z_]")) {
@@ -72,21 +69,24 @@ public class Reader {
 
     public String findNumber() throws IOException {
         StringBuilder output = new StringBuilder();
-        char currentChar = this.currentChar;
         while (whitespace.indexOf(currentChar) == -1) {
-            // Fixing potential infinite loop \uFFFF is EOF.
-            if (output.indexOf("\uFFFF") != -1) break;
-
-            if (output.length() >= 1 && String.valueOf(currentChar).matches("[0-9.]") && output.indexOf(".") == -1) {
-                output.append(currentChar);
-            } else if (output.length() >= 1 && String.valueOf(currentChar).matches("[0-9]") && output.indexOf(".") != -1) {
-                output.append(currentChar);
+            // Adds the number, or a dot, if the output string does not contain a dot and the length of the string is longer than 1
+            // It needs to be longer than one, as we cant start the float with a dot.
+            if (output.length() >= 1) {
+                if (String.valueOf(currentChar).matches("[0-9.]") && output.indexOf(".") == -1) {
+                    output.append(currentChar);
+                } else if (String.valueOf(currentChar).matches("[0-9]") && output.indexOf(".") != -1) {
+                    output.append(currentChar);
+                }
+                // This line includes any characters that might be included, so we can catch faulty identifiers, IE: 1Identifier.
+                else if (output.toString().matches("[0-9A-Za-z.]+")) {
+                    output.append(currentChar);
+                }
+            // If the output string is not longer than one, it must be 0-9.
             } else if (String.valueOf(currentChar).matches("[0-9]")) {
                 output.append(currentChar);
-            } else if (String.valueOf(nextChar).matches("[A-Za-z0-9]") && output.toString().matches("[0-9A-Za-z.]+")) {
-                output.append(currentChar);
             } else break;
-
+            // If the next char is not a white space, continue reading.
             if (String.valueOf(nextChar).matches("[0-9A-Za-z.]")) {
                 currentChar = readChar();
             } else break;
@@ -96,4 +96,11 @@ public class Reader {
         return output.toString();
     }
 
+    public void readToEndOfComment() throws IOException {
+        System.out.println("Comment found");
+        while (!(currentChar == '*' && nextChar == '/')) {
+            readChar();
+        }
+        readChar();
+    }
 }

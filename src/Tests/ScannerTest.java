@@ -12,8 +12,6 @@ import java.io.BufferedReader;
 import java.lang.reflect.Type;
 import java.net.Proxy;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class ScannerTest {
 
     @BeforeEach

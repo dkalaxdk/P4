@@ -1,75 +1,67 @@
 BEGIN MASTER
 
-Initiate
-{
-// Gøres til global variable af compileren/preprocessor, 
-// så vi ikke har tonsvis af dem.
+    Initiate
+    {
+        // Gøres til globale variable af compileren/preprocessor,
+        // så vi ikke har tonsvis af dem.
 
-	button1 = digital input(4);
-	button2 = digital input(5);
-}
+        pin button1 = createPin(digital, input, 4);
+        pin button2 = createPin(digital, input, 5);
+    }
 
-// Create event listener, this listens on button 1
-EventCreator(button1)
-{
-	// filterNoise: Baseret på FILTER_TYPE, sørger for at 
-	// value er fri for støj (Knapper der tænder og slukker uden
-// at det er meningen.
+    Listener (button1)
+    {
+        int filteredInput = filterNoise(button1, flip);
 
-	// FILTER_TYPE: flip a switch, constant input, variable
-	filterNoise(button1, FILTER_TYPE); 
-	
-
-	if (button1[value] == HIGH)
-{
-		broadcast(LightSlave, button1);
-	}
-}
-
-EventCreator(button2)
-{
-	filterNoise(button2, FILTER_TYPE);
-	
-	if (button2[value] == HIGH) 
-	{
-		broadcast(LightSlave, button2);
-	}
-}
+        if (filteredInput == HIGH)
+        {
+            event button1Pressed = createEvent(filteredInput);
+            broadcast(button1Pressed);
+        }
+    }
 
 END MASTER
 
 
-BEGIN SLAVE : LightSlave
 
-Initiate
-{
-	light1 = digital output(4);
-    1light2 = digital output(5);
-    light3 = digital output(6);
-}
+BEGIN SLAVE
 
-EventHandler(button1)
-{
-	write(light1, !light1[value]); // 0 -> 1.98, 1 -> 0, 87 -> 0
+    Initiate
+    {
+        pin light1 = createPin(digital, output, 4);
+        pin light2 = createPin(digital, output, 5);
+        pin light3 = createPin(digital, output, 6);
+    }
 
-	if (button1[value] == 5)
-{
-	if (light1[value] == 2)
-{
-		write(light1, LOW);
-	}
-	else if (light1[1] == LOW)
-{
-		write(light1, HIGH);
-	}
-}
-}
+    EventHandler(button1Pressed)
+    {
+        int value = getValue(light1);
 
-EventHandler(button2)
-{
-	write(light1, !light1[value]);
-	write(light2, !light2[value]);
-	write(light3, !light3[value]);
-}
+        if (value == HIGH)
+        {
+            write(light1, LOW);
+        }
+            else if (value == LOW)
+        {
+            write(light1, HIGH);
+        }
+        else
+        {
+            int b = 4;
+        }
+    }
+
+    EventHandler(button2Pressed)
+    {
+        write(light1, HIGH);
+        write(light2, HIGH);
+        write(light3, HIGH);
+    }
 
 END SLAVE
+
+/* This should
+not
+be
+read */
+
