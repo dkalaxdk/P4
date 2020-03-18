@@ -72,6 +72,59 @@ public class Tokenizer {
             case "if":
                 token.type = Token.Type.IF;
                 break;
+            case "else":
+                token.type = Token.Type.ELSE;
+                break;
+            case "analog":
+                token.type = Token.Type.ANALOG;
+            case "pwm":
+                token.type = Token.Type.PWM;
+                break;
+            case "flip":
+                token.type = Token.Type.FLIP;
+                break;
+            case "constant":
+                token.type = Token.Type.CONSTANT;
+                break;
+            case "range":
+                token.type = Token.Type.RANGE;
+                break;
+            case "broadcast":
+                token.type = Token.Type.BROADCAST;
+                break;
+            case "filterNoise":
+                token.type = Token.Type.FILTERNOISE;
+                break;
+            case "getValue":
+                token.type = Token.Type.GETVALUE;
+                break;
+            case "createEvent":
+                token.type = Token.Type.CREATEEVENT;
+                break;
+            case "createPin":
+                token.type = Token.Type.CREATEPIN;
+                break;
+            case "pin":
+                token.type = Token.Type.PIN;
+                break;
+            case "float":
+                token.type = Token.Type.FLOAT;
+                break;
+            case "int":
+                token.type = Token.Type.INT;
+                break;
+            case "bool":
+                token.type = Token.Type.BOOL;
+                break;
+            case "event":
+                token.type = Token.Type.EVENT;
+                break;
+            case "TRUE":
+            case "true":
+            case "false":
+            case "FALSE":
+                token.type = Token.Type.LIT_Bool;
+                break;
             default:
                 token.type = Token.Type.NOTATOKEN;
         }
@@ -86,133 +139,138 @@ public class Tokenizer {
             case '+':
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.OP_PLUS_EQUALS;
-                } else {
-                    token.type = Token.Type.OP_PLUS;
-                }
-                return token;
+                } else token.type = Token.Type.OP_PLUS;
+                break;
             case '-':
                 if (reader.nextChar == '=') {
-                    token.content += reader.nextChar;
+                    token.content += reader.readChar();
                     token.type = Token.Type.OP_MINUS_EQUALS;
-                } else {
-                    token.type = Token.Type.OP_MINUS;
-                }
-                return token;
+                } else token.type = Token.Type.OP_MINUS;
+                break;
             case '*':
                 if (reader.nextChar == '=') {
+                    token.content += reader.readChar();
                     token.type = Token.Type.OP_TIMES_EQUALS;
-                } else {
-                    token.type = Token.Type.OP_TIMES;
-                }
-                return token;
+                } else token.type = Token.Type.OP_TIMES;
+                break;
             case '/':   // Has some special cases when followed by other symbols
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.OP_DIVIDE_EQUALS;
+                    token.content += reader.readChar();
                 } else if (reader.nextChar == '*') {
-                    //TODO: Handle start of comment
+                    reader.readToEndOfComment();
                 } else if (reader.nextChar == '/') {
-                    while(reader.currentChar != '\n') {
+                    while (reader.currentChar != '\n') {
                         reader.readChar();
                     }
-                    return token;
-                } else {
-                    token.type = Token.Type.OP_DIVIDE;
-                }
-                return token;
+                    break;
+                } else token.type = Token.Type.OP_DIVIDE;
+                break;
 
             case '=':
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.LOP_EQUALS;
-                }
-                else {
-                    token.type = Token.Type.ASSIGN;
-                }
-                return token;
+                    token.content += reader.readChar();
+                } else token.type = Token.Type.ASSIGN;
+                break;
 
             case '%':
                 token.type = Token.Type.OP_MODULO;
-                return token;
+                break;
 
             case '?':
                 token.type = Token.Type.OP_QUESTION;
-                return token;
+                break;
 
             case '!':
-                token.type = Token.Type.OP_NOT;
-                return token;
+                if (reader.nextChar == '=') {
+                    token.type = Token.Type.LOP_NOTEQUAL;
+                } else token.type = Token.Type.OP_NOT;
+                break;
 
             case '(':
                 token.type = Token.Type.LPAREN;
-                return token;
+                break;
 
             case ')':
                 token.type = Token.Type.RPAREN;
-                return token;
+                break;
 
             case '[':
                 token.type = Token.Type.LSQBRACKET;
-                return token;
+                break;
 
             case ']':
                 token.type = Token.Type.RSQBRACKET;
-                return token;
+                break;
 
             case '{':
                 token.type = Token.Type.LBRACKET;
-                return token;
+                break;
 
             case '}':
                 token.type = Token.Type.RBRACKET;
-                return token;
+                break;
 
             case ',':
                 token.type = Token.Type.COMMA;
-                return token;
+                break;
 
             case '.':
-                token.type = Token.Type.DOT;
-                return token;
-
+                if (String.valueOf(reader.nextChar).matches("[0-9A-Za-z]")) {
+                    reader.readChar();
+                    token.content += reader.findNumber();
+                    token.type = Token.Type.ERROR;
+                } else token.type = Token.Type.DOT;
+                break;
             case ';':
                 token.type = Token.Type.SEMI;
-                return token;
-
+                break;
             case ':':
                 token.type = Token.Type.COLON;
-                return token;
-
+                break;
             case '\\':
                 token.type = Token.Type.BACKSLASH;
-                return token;
-
+                break;
             case '"':
                 token.type = Token.Type.DOUBLEQUOTE;
-                return token;
-
+                break;
             case '\'':
                 token.type = Token.Type.SINGLEQUOTE;
-                return token;
+                break;
             case '\uFFFF':
                 token.type = Token.Type.EOF;
-                return token;
-
+                break;
+            case '>':
+                if (reader.nextChar == '=') {
+                    token.type = Token.Type.LOP_GREATEROREQUAL;
+                    token.content += reader.readChar();
+                } else token.type = Token.Type.LOP_GREATERTHAN;
+                break;
+            case '<':
+                if (reader.nextChar == '=') {
+                    token.type = Token.Type.LOP_LESSOREQUAL;
+                    token.content += reader.readChar();
+                } else token.type = Token.Type.LOP_LESSTHAN;
+                break;
             default:
-                return token;
+                token.type = Token.Type.NOTATOKEN;
+                break;
         }
-
+        return token;
     }
 
     public Token findNumberTokenType(Token token) throws IOException {
         token.content = reader.findNumber();
-        if (!token.content.contains(".") && token.content.length() > 0) {
+        if (token.content.matches("[0-9]+")) {
             token.type = Token.Type.LIT_Int;
-        } else if(token.content.length() > 0){
+        } else if (token.content.matches("[0-9]+\\.[0-9]*")) {
             token.type = Token.Type.LIT_Float;
-        } if (token.content.matches("[0-9A-Za-z.]+")) {
+        } else if (token.content.matches("[0-9A-Za-z.]+")) {
             token.type = Token.Type.ERROR;
         }
 
         return token;
-
     }
+
 }

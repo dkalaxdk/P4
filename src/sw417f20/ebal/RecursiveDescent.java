@@ -8,12 +8,9 @@ public abstract class RecursiveDescent {
     private PrintVisitor PrintVisitor;
     public RecursiveDescent() {}
 
-    public AST Parse(String filePath) {
-        PScanner = new Scanner(filePath);
+    public AST Parse(Scanner scanner) {
+        PScanner = scanner;
         Tree = new AST();
-
-        System.out.println();
-        System.out.println("Parsing " + filePath);
 
         Tree.Root = Start();
         Expect(Token.Type.EOF);
