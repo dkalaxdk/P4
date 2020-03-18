@@ -1,10 +1,10 @@
 package sw417f20.ebal;
 
 import javax.sound.midi.Soundbank;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.time.Instant;
 import java.util.Currency;
+import sw417f20.ebal.Reader.Reader;
 
 public class Main {
 
@@ -13,7 +13,11 @@ public class Main {
         System.out.println();
         String filePath = new File("").getAbsolutePath();
         String fileInput = filePath + "/TestFiles/TestProgram.txt";
-        Scanner scanner = new Scanner(fileInput);
+
+        FileReader fileReader = new FileReader(fileInput);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        Reader reader = new Reader(bufferedReader);
+        Scanner scanner = new Scanner(reader);
         int tokenCount = 0;
 
         while (scanner.currentToken.type != Token.Type.EOF) {
