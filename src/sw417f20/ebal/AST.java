@@ -24,7 +24,6 @@ public class AST {
 
 
         Error, Empty
-
     }
 
     public static Node MakeNode(Token token) {

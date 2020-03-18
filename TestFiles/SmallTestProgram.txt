@@ -1,25 +1,27 @@
 BEGIN MASTER
 
-Initiate {
+    Initiate {
 
-}
+    }
 
-Listener (noget) {
-    int a = 3;
-
-    if (true) { }
-}
+    Listener (noget) {
+        int a = 1 + (2 + 3);
+        int b = (1 + 2) + 3;
+        int c = (1 + (2 + (3 + 4)));
+        int d = (((1 + 2) + 3) + 4);
+        int e = 1 + (2 + 3) + 4;
+    }
 
 END MASTER
 
 BEGIN SLAVE
 
-Initiate {
+    Initiate {
 
-}
+    }
 
-EventHandler (noget) {
+    EventHandler (noget) {
 
-}
+    }
 
 END SLAVE
