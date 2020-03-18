@@ -312,7 +312,6 @@ public class Scanner {
         } else if (token.content.matches("[0-9A-Za-z.]+")) {
             token.type = Token.Type.ERROR;
         }
-
     }
 
 
