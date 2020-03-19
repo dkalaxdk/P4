@@ -13,27 +13,6 @@ public class Scanner {
     Token currentToken;
     Token nextToken;
 
-    //private BufferedReader bufferedReader;
-
-    /*
-    public Scanner(String fileInput) {
-        currentToken = new Token(Token.Type.NOTATOKEN, "");
-        nextToken = new Token(Token.Type.NOTATOKEN, "");
-
-        {
-            try {
-                FileReader fileReader = new FileReader(fileInput);
-                bufferedReader = new BufferedReader(fileReader);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-        this.reader = new Reader(bufferedReader);
-
-        Init();
-    }
-    */
-
     public Scanner(Reader reader) {
         currentToken = new Token(Token.Type.NOTATOKEN, "");
         nextToken = new Token(Token.Type.NOTATOKEN, "");

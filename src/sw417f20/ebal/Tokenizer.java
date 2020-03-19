@@ -21,6 +21,7 @@ public class Tokenizer {
 
         token = IsSingleCharacter(token);
         if (token.type == Token.Type.NOTATOKEN) {
+            token.content = reader.findNumber();
             token = findNumberTokenType(token);
         }
         if (token.type == Token.Type.NOTATOKEN) {
@@ -260,8 +261,7 @@ public class Tokenizer {
         return token;
     }
 
-    public Token findNumberTokenType(Token token) throws IOException {
-        token.content = reader.findNumber();
+    public Token findNumberTokenType(Token token) {
         if (token.content.matches("[0-9]+")) {
             token.type = Token.Type.LIT_Int;
         } else if (token.content.matches("[0-9]+\\.[0-9]*")) {
