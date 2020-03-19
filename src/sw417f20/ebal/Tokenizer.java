@@ -164,7 +164,6 @@ public class Tokenizer {
                     while (reader.currentChar != '\n') {
                         reader.readChar();
                     }
-                    break;
                 } else token.type = Token.Type.OP_DIVIDE;
                 break;
 
@@ -178,7 +177,7 @@ public class Tokenizer {
             case '%':
                 token.type = Token.Type.OP_MODULO;
                 break;
-
+            //TODO slet mig '?' måske
             case '?':
                 token.type = Token.Type.OP_QUESTION;
                 break;
@@ -227,9 +226,11 @@ public class Tokenizer {
             case ';':
                 token.type = Token.Type.SEMI;
                 break;
+            //TODO slet mig ':' måske
             case ':':
                 token.type = Token.Type.COLON;
                 break;
+            //TODO hvad gør '\' i vores sprog
             case '\\':
                 token.type = Token.Type.BACKSLASH;
                 break;
