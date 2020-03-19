@@ -1,17 +1,13 @@
 package sw417f20.ebal;
 
 import sw417f20.ebal.Reader.Reader;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 
 public class Scanner {
     public Reader reader;
     private Tokenizer tokenizer;
-    Token currentToken;
-    Token nextToken;
+    public Token currentToken;
+    public Token nextToken;
 
     public Scanner(Reader reader) {
         currentToken = new Token(Token.Type.NOTATOKEN, "");
