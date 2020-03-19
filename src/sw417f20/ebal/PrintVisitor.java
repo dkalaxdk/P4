@@ -7,36 +7,27 @@ public class PrintVisitor extends Visitor {
     @Override
     public void Visit(Node node) {
         if (node.Type != AST.NodeType.Empty) {
-            for (int i = 0; i <= indent; i++) {
-                System.out.print("\t");
-            }
-            System.out.print(node);
-
-            System.out.println();
+            PrintNode(node);
         }
 
         indent++;
         if (node.FirstChild != null) {
-            Visit(node.FirstChild);
-
-            Node children = node.FirstChild;
-
-            while (children.Next != null) {
-                Visit(children.Next);
-                children = children.Next;
-            }
+            VisitChildren(node);
         }
         if (node.FirstSibling != null) {
-            Visit(node.FirstSibling);
-
-            Node siblings = node.FirstSibling;
-
-            while (siblings.Next != null) {
-                Visit(siblings.Next);
-                siblings = siblings.Next;
-            }
+            VisitSiblings(node);
         }
         indent--;
+
     }
 
+    // Prints the input node with the correct amount of indent
+    private void PrintNode(Node node) {
+        for (int i = 0; i <= indent; i++) {
+            System.out.print("\t");
+        }
+        System.out.print(node);
+
+        System.out.println();
+    }
 }

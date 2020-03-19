@@ -13,6 +13,8 @@ public class Token {
         LOP_LESSTHAN, LOP_GREATERTHAN, LOP_NOTEQUAL,
         LOP_GREATEROREQUAL, LOP_LESSOREQUAL, LOP_EQUALS,
 
+        LOP_AND, LOP_OR,
+
         // Literals
         LIT_Int, LIT_Float, LIT_Bool,
 

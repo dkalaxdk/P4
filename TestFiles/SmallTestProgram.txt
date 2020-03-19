@@ -21,7 +21,22 @@ BEGIN SLAVE
     }
 
     EventHandler (noget) {
+        //int a = filterNoise(noget, flip) + 3;
 
+        if (a == 3) {
+            if (b == 3) {
+                c = 4;
+            }
+            else {
+                c = 5;
+            }
+        }
+        else if (a == 5) {
+            c = 6;
+        }
+        else {
+            c = 7;
+        }
     }
 
 END SLAVE
