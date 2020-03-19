@@ -78,6 +78,7 @@ public class Tokenizer {
                 break;
             case "analog":
                 token.type = Token.Type.ANALOG;
+                break;
             case "pwm":
                 token.type = Token.Type.PWM;
                 break;
