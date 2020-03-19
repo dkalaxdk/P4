@@ -43,13 +43,27 @@ public class Node {
         }
         // Otherwise, it is the first child of this node
         else {
-            Node otherSiblings = child.FirstSibling;
+            child.Parent = this;
             this.FirstChild = child;
 
-            // The child's siblings are also connected to this node, the parent node
-            while (otherSiblings != null) {
-                otherSiblings.Parent = this;
-                otherSiblings = otherSiblings.Next;
+            // If the input child has siblings, but is not the FirstSibling, connect them to this node.
+            if (child.FirstSibling != null) {
+                this.FirstChild = child.FirstSibling;
+                Node otherSiblings = child.FirstSibling;
+
+                while (otherSiblings != null) {
+                    otherSiblings.Parent = this;
+                    otherSiblings = otherSiblings.Next;
+                }
+            }
+            // If the input child is the first sibling, go from the input child's Next
+            else if (child.Next != null) {
+                Node otherSiblings = child.Next;
+
+                while (otherSiblings != null) {
+                    otherSiblings.Parent = this;
+                    otherSiblings = otherSiblings.Next;
+                }
             }
         }
     }
