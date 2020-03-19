@@ -1,4 +1,6 @@
-package sw417f20.ebal;
+package sw417f20.ebal.Visitors;
+
+import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public abstract class Visitor {
 

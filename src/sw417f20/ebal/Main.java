@@ -1,10 +1,11 @@
 package sw417f20.ebal;
 
+import sw417f20.ebal.SyntaxAnalysis.Parser;
+import sw417f20.ebal.SyntaxAnalysis.Scanner;
+import sw417f20.ebal.SyntaxAnalysis.Token;
+
 import java.io.File;
 import java.io.IOException;
-import java.time.Instant;
-import java.util.Calendar;
-import java.util.Currency;
 
 public class Main {
 
