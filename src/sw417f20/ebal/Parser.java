@@ -1,5 +1,7 @@
 package sw417f20.ebal;
 
+import java.awt.image.TileObserver;
+
 public class Parser extends RecursiveDescent{
 
     // Start 	-> 	Master Slave Slaves.
@@ -348,7 +350,7 @@ public class Parser extends RecursiveDescent{
             return IfStmt();
         }
         else {
-            MakeError("Expected a call, an assignment, or an if-statement");
+            MakeError("Expected a call, an assignment, a declaration, or an if statement");
             return AST.MakeNode(AST.NodeType.Error);
         }
     }
@@ -426,38 +428,38 @@ public class Parser extends RecursiveDescent{
         }
     }
 
-    // Expr 	-> 	Value AfterValue
-    //	         | 	lparen Expr rparen AfterValue
-    //	         | 	minus Value AfterValue
-    //	         | 	not identifier AfterValue
-    //	         | 	ReturnsCall.
+    // Expr 	-> 	Value AfterExpr
+    //	         | 	lparen Expr rparen AfterExpr
+    //	         | 	minus Value AfterExpr
+    //	         | 	not identifier AfterExpr
+    //	         | 	ReturnsCall AfterExpr.
     public Node Expr() {
         Node Expr = AST.MakeNode(AST.NodeType.Expression);
 
         if (Peek().type == Token.Type.IDENTIFIER || CheckForLiteral()) {
             Node value = Value();
-            Node afterValue = AfterValue();
+            Node afterExpr = AfterExpr();
 
-            if (afterValue.Type == AST.NodeType.Empty) {
+            if (afterExpr.Type == AST.NodeType.Empty) {
                 return value;
             }
 
             Expr.AddChild(value);
-            Expr.AddChild(afterValue);
+            Expr.AddChild(afterExpr);
         }
         // TODO: Er ikke sikker på den her
         else if (Peek().type == Token.Type.LPAREN) {
             Expect(Token.Type.LPAREN);
             Node expr = Expr();
             Expect(Token.Type.RPAREN);
-            Node afterValue = AfterValue();
+            Node afterExpr = AfterExpr();
 
-            if (afterValue.Type == AST.NodeType.Empty) {
+            if (afterExpr.Type == AST.NodeType.Empty) {
                 return expr;
             }
 
             Expr.AddChild(expr);
-            Expr.AddChild(afterValue);
+            Expr.AddChild(afterExpr);
         }
         else if (Peek().type == Token.Type.OP_MINUS) {
             Expect(Token.Type.OP_MINUS);
@@ -468,14 +470,14 @@ public class Parser extends RecursiveDescent{
 
             value.AddChild(prefix);
 
-            Node afterValue = AfterValue();
+            Node afterExpr = AfterExpr();
 
-            if (afterValue.Type == AST.NodeType.Empty) {
+            if (afterExpr.Type == AST.NodeType.Empty) {
                 return value;
             }
 
             Expr.AddChild(value);
-            Expr.AddChild(afterValue);
+            Expr.AddChild(afterExpr);
         }
         else if (Peek().type == Token.Type.OP_NOT) {
             Node prefix = AST.MakeNode(Expect(Token.Type.OP_NOT));
@@ -483,17 +485,25 @@ public class Parser extends RecursiveDescent{
 
             identifier.AddChild(prefix);
 
-            Node afterValue = AfterValue();
+            Node afterExpr = AfterExpr();
 
-            if (afterValue.Type == AST.NodeType.Empty) {
+            if (afterExpr.Type == AST.NodeType.Empty) {
                 return identifier;
             }
 
             Expr.AddChild(identifier);
-            Expr.AddChild(afterValue);
+            Expr.AddChild(afterExpr);
         }
         else if (CheckForReturnsCall()) {
-            return ReturnsCall();
+            Node call = ReturnsCall();
+            Node afterExpr = AfterExpr();
+
+            if (afterExpr.Type == AST.NodeType.Empty) {
+                return call;
+            }
+
+            Expr.AddChild(call);
+            Expr.AddChild(afterExpr);
         }
         else {
             MakeError("Expected expression");
@@ -527,10 +537,10 @@ public class Parser extends RecursiveDescent{
         }
     }
 
-    // AfterValue 	-> 	Operator Expr
+    // AfterExpr 	-> 	Operator Expr
     //	             | 	LogicOp Expr
     //	             | 	.
-    public Node AfterValue() {
+    public Node AfterExpr() {
 
         if (CheckForOperator()) {
             Node operator = Operator();
@@ -549,8 +559,7 @@ public class Parser extends RecursiveDescent{
 
             return operator;
         }
-        else if (Peek().type == Token.Type.SEMI ||
-                 Peek().type == Token.Type.RPAREN) {
+        else if (Peek().type == Token.Type.SEMI || Peek().type == Token.Type.RPAREN) {
             return AST.MakeNode(AST.NodeType.Empty);
         }
         else {
@@ -608,6 +617,7 @@ public class Parser extends RecursiveDescent{
         return VoidCall;
     }
 
+    // TODO: Måske skal getValue kun tage en identifier?
     // ReturnsCall	-> filterNoise lparen identifier comma FilterType rparen
     //	             | 	getValue lparen Value rparen
     //	             |  createEvent lparen Value rparen.
@@ -760,7 +770,9 @@ public class Parser extends RecursiveDescent{
     //	         | 	notEqual
     //	         | 	greaterOrEqual
     //	         | 	lessOrEqual
-    //	         | 	equals.
+    //	         | 	equals
+    //	         |  and
+    //	         |  or.
     public Node LogicOperator() {
 
         if (Peek().type == Token.Type.LOP_LESSTHAN) {
@@ -781,8 +793,14 @@ public class Parser extends RecursiveDescent{
         else if (Peek().type == Token.Type.LOP_EQUALS) {
             return AST.MakeNode(Expect(Token.Type.LOP_EQUALS));
         }
+        else if (Peek().type == Token.Type.LOP_AND) {
+            return AST.MakeNode(Expect(Token.Type.LOP_AND));
+        }
+        else if (Peek().type == Token.Type.LOP_OR) {
+            return AST.MakeNode(Expect(Token.Type.LOP_OR));
+        }
         else {
-            MakeError("Expected <, >, !=, >=, <=, or ==");
+            MakeError("Expected <, >, !=, >=, <=, ==, ||, or &&");
             return AST.MakeNode(AST.NodeType.Error);
         }
 
@@ -796,7 +814,8 @@ public class Parser extends RecursiveDescent{
     }
 
     public boolean CheckForCall() {
-        return  CheckForReturnsCall() || CheckForVoidCall();
+        return  CheckForReturnsCall()                           ||
+                CheckForVoidCall();
     }
 
     public boolean CheckForReturnsCall() {
@@ -808,14 +827,6 @@ public class Parser extends RecursiveDescent{
     public boolean CheckForVoidCall() {
         return  Peek().type == Token.Type.BROADCAST             ||
                 Peek().type == Token.Type.WRITE;
-    }
-
-    public boolean CheckForExpr() {
-        return  Peek().type == Token.Type.IDENTIFIER            ||
-                CheckForLiteral()                               ||
-                Peek().type == Token.Type.OP_MINUS              ||
-                Peek().type == Token.Type.OP_NOT                ||
-                Peek().type == Token.Type.LPAREN;
     }
 
     public boolean CheckForLiteral() {
@@ -838,6 +849,8 @@ public class Parser extends RecursiveDescent{
                 Peek().type == Token.Type.LOP_NOTEQUAL          ||
                 Peek().type == Token.Type.LOP_GREATEROREQUAL    ||
                 Peek().type == Token.Type.LOP_LESSOREQUAL       ||
-                Peek().type == Token.Type.LOP_EQUALS;
+                Peek().type == Token.Type.LOP_EQUALS            ||
+                Peek().type == Token.Type.LOP_AND               ||
+                Peek().type == Token.Type.LOP_OR;
     }
 }
