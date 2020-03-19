@@ -56,6 +56,12 @@ public class Token {
     }
 
     @Override
+    public String toString() {
+
+        return type.toString();
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if(obj.getClass() != Token.class) {
             return false;
@@ -63,10 +69,7 @@ public class Token {
         if(((Token) obj).type != this.type) {
             return false;
         }
-        if(((Token)obj).content != this.content) {
-            return false;
-        }
-        return true;
+        return ((Token) obj).content.equals(this.content);
     }
 
 }
