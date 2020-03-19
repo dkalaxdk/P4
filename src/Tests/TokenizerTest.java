@@ -20,7 +20,7 @@ class TokenizerTest {
         // Mock the reader class needed as parameter for tokenizer
         mockReader = Mockito.mock(Reader.class);
         tokenizer = new Tokenizer(mockReader);
-        //Mockito.when(mockReader.read()).thenReturn((int)expected);
+        //Mockito.when(mockReader.get("nextchar")).thenReturn((int)expected);
     }
 
     @AfterEach
@@ -87,7 +87,6 @@ class TokenizerTest {
     @Test
     void findNumberTokenType_TokenContentIsNumberFollowedByLetters_ReturnsTokenWithTypeERROR() {
         Token.Type expected = Token.Type.ERROR;
-        Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, "1A");
         actual = tokenizer.findNumberTokenType(actual);
@@ -101,7 +100,6 @@ class TokenizerTest {
     @Test
     void findKeyword_TokenIsNotKeyword_ReturnsTokenWithTypeNOTATOKEN() {
         Token.Type expected = Token.Type.NOTATOKEN;
-        Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, "NotAKeyWord");
         actual = tokenizer.findKeyword(actual);
@@ -112,7 +110,6 @@ class TokenizerTest {
     @Test
     void findKeyword_TokenContentMatchesMASTERKeyword_ReturnsTokenWithTypeMASTER() {
         Token.Type expected = Token.Type.MASTER;
-        Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, "MASTER");
         actual = tokenizer.findKeyword(actual);
@@ -123,7 +120,6 @@ class TokenizerTest {
     @Test
     void findKeyword_TokenContentMatchesSLAVEKeyword_ReturnsTokenWithTypeSLAVE() {
         Token.Type expected = Token.Type.SLAVE;
-        Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, "SLAVE");
         actual = tokenizer.findKeyword(actual);
@@ -131,6 +127,305 @@ class TokenizerTest {
         assertEquals(expected, actual.type);
     }
 
+    @Test
+    void findKeyword_TokenContentMatchesENDKeyword_ReturnsTokenWithTypeEND() {
+        Token.Type expected = Token.Type.END;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "END");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesBEGINKeyword_ReturnsTokenWithTypeBEGIN() {
+        Token.Type expected = Token.Type.BEGIN;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "BEGIN");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesDigitalKeyword_ReturnsTokenWithTypeDigital() {
+        Token.Type expected = Token.Type.DIGITAL;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "digital");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesInputKeyword_ReturnsTokenWithTypeInput() {
+        Token.Type expected = Token.Type.INPUT;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "input");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesListenerKeyword_ReturnsTokenWithTypeListener() {
+        Token.Type expected = Token.Type.LISTENER;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "Listener");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesOutputKeyword_ReturnsTokenWithTypeOutput() {
+        Token.Type expected = Token.Type.OUTPUT;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "output");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesWriteKeyword_ReturnsTokenWithTypeWrite() {
+        Token.Type expected = Token.Type.WRITE;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "write");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesEventHandlerKeyword_ReturnsTokenWithTypeEventHandler() {
+        Token.Type expected = Token.Type.EVENTHANDLER;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "EventHandler");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesInitiateKeyword_ReturnsTokenWithTypeInitiate() {
+        Token.Type expected = Token.Type.INITIATE;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "Initiate");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesIfKeyword_ReturnsTokenWithTypeIf() {
+        Token.Type expected = Token.Type.IF;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "if");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesElseKeyword_ReturnsTokenWithTypeElse() {
+        Token.Type expected = Token.Type.ELSE;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "else");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesAnalogKeyword_ReturnsTokenWithTypeAnalog() {
+        Token.Type expected = Token.Type.ANALOG;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "analog");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesPwmKeyword_ReturnsTokenWithTypePwm() {
+        Token.Type expected = Token.Type.PWM;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "pwm");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesFlipKeyword_ReturnsTokenWithTypeFlip() {
+        Token.Type expected = Token.Type.FLIP;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "flip");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesConstantKeyword_ReturnsTokenWithTypeConstant() {
+        Token.Type expected = Token.Type.CONSTANT;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "constant");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesRangeKeyword_ReturnsTokenWithTypeRange() {
+        Token.Type expected = Token.Type.RANGE;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "range");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesBroadcastKeyword_ReturnsTokenWithTypeBroadCast() {
+        Token.Type expected = Token.Type.BROADCAST;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "broadcast");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesFilterNoiseKeyword_ReturnsTokenWithTypeFilterNoise() {
+        Token.Type expected = Token.Type.FILTERNOISE;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "filterNoise");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesGetValueKeyword_ReturnsTokenWithTypeGetValue() {
+        Token.Type expected = Token.Type.GETVALUE;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "getValue");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesCreateEventKeyword_ReturnsTokenWithTypeCreateEvent() {
+        Token.Type expected = Token.Type.CREATEEVENT;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "createEvent");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesCreatePinKeyword_ReturnsTokenWithTypeCreatePin() {
+        Token.Type expected = Token.Type.CREATEPIN;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "createPin");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesPinKeyword_ReturnsTokenWithTypePin() {
+        Token.Type expected = Token.Type.PIN;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "pin");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesFloatKeyword_ReturnsTokenWithTypeFloat() {
+        Token.Type expected = Token.Type.FLOAT;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "float");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesIntKeyword_ReturnsTokenWithTypeInt() {
+        Token.Type expected = Token.Type.INT;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "int");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesBoolKeyword_ReturnsTokenWithTypeBool() {
+        Token.Type expected = Token.Type.BOOL;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "bool");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesEventKeyword_ReturnsTokenWithTypeEvent() {
+        Token.Type expected = Token.Type.EVENT;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "event");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesTRUEKeyword_ReturnsTokenWithTypeLIT_Bool() {
+        Token.Type expected = Token.Type.LIT_Bool;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "TRUE");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesTrueKeyword_ReturnsTokenWithTypeLIT_Bool() {
+        Token.Type expected = Token.Type.LIT_Bool;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "true");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesFALSEKeyword_ReturnsTokenWithTypeLIT_Bool() {
+        Token.Type expected = Token.Type.LIT_Bool;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "FALSE");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
+
+    @Test
+    void findKeyword_TokenContentMatchesFalseKeyword_ReturnsTokenWithTypeLIT_Bool() {
+        Token.Type expected = Token.Type.LIT_Bool;
+
+        Token actual = new Token(Token.Type.NOTATOKEN, "false");
+        actual = tokenizer.findKeyword(actual);
+
+        assertEquals(expected, actual.type);
+    }
 
     /**
      * Tests for the isSingleCharacter method
@@ -138,7 +433,6 @@ class TokenizerTest {
     @Test
     void isSingleCharacter_TokenIsNotSingleCharacter_ReturnsTokenWithTypeNOTATOKEN() throws IOException {
         Token.Type expected = Token.Type.NOTATOKEN;
-        Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, "NotASingleCharacter");
         actual = tokenizer.IsSingleCharacter(actual);
