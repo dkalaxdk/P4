@@ -1,4 +1,4 @@
-package sw417f20.ebal;
+package sw417f20.ebal.SyntaxAnalysis;
 
 // This class is inspired by the data structure
 // outlined in Crafting a Compiler by Fischer et. al.
