@@ -1,4 +1,4 @@
-package sw417f20.ebal.Reader;
+package sw417f20.ebal.SyntaxAnalysis;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package sw417f20.ebal;
+package sw417f20.ebal.SyntaxAnalysis;
 
 public class AST {
 

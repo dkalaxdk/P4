@@ -1,6 +1,4 @@
-package sw417f20.ebal;
-
-import sw417f20.ebal.Reader.Reader;
+package sw417f20.ebal.SyntaxAnalysis;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -9,8 +7,8 @@ import java.io.IOException;
 
 public class Scanner {
     public Reader reader;
-    Token currentToken;
-    Token nextToken;
+    public Token currentToken;
+    public Token nextToken;
 
     private BufferedReader bufferedReader;
 

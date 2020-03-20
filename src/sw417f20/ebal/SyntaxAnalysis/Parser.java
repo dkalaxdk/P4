@@ -1,6 +1,4 @@
-package sw417f20.ebal;
-
-import java.awt.image.TileObserver;
+package sw417f20.ebal.SyntaxAnalysis;
 
 public class Parser extends RecursiveDescent{
 
