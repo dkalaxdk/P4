@@ -39,7 +39,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.NOTATOKEN;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "NotANumber");
-        actual = tokenizer.findNumberTokenType(actual);
+        tokenizer.findNumberTokenType(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -49,7 +49,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.NOTATOKEN;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "");
-        actual = tokenizer.findNumberTokenType(actual);
+        tokenizer.findNumberTokenType(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -59,7 +59,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.LIT_Float;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "1.2");
-        actual = tokenizer.findNumberTokenType(actual);
+        tokenizer.findNumberTokenType(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -69,7 +69,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.LIT_Int;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "123");
-        actual = tokenizer.findNumberTokenType(actual);
+        tokenizer.findNumberTokenType(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -79,7 +79,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.LIT_Int;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "0");
-        actual = tokenizer.findNumberTokenType(actual);
+        tokenizer.findNumberTokenType(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -89,7 +89,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.ERROR;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "1A");
-        actual = tokenizer.findNumberTokenType(actual);
+        tokenizer.findNumberTokenType(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -98,7 +98,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.ERROR;
 
         Token actual = new Token(Token.Type.NOTATOKEN, ".3");
-        actual = tokenizer.findNumberTokenType(actual);
+        tokenizer.findNumberTokenType(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -111,7 +111,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.NOTATOKEN;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "NotAKeyWord");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -121,7 +121,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.MASTER;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "MASTER");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -131,7 +131,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.SLAVE;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "SLAVE");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -141,7 +141,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.END;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "END");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -151,7 +151,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.BEGIN;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "BEGIN");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -161,7 +161,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.DIGITAL;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "digital");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -171,7 +171,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.INPUT;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "input");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -181,7 +181,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.LISTENER;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "Listener");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -191,7 +191,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.OUTPUT;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "output");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -201,7 +201,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.WRITE;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "write");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -211,7 +211,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.EVENTHANDLER;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "EventHandler");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -221,7 +221,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.INITIATE;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "Initiate");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -231,7 +231,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.IF;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "if");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -241,7 +241,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.ELSE;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "else");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -251,7 +251,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.ANALOG;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "analog");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -261,7 +261,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.PWM;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "pwm");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -271,7 +271,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.FLIP;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "flip");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -281,7 +281,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.CONSTANT;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "constant");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -291,7 +291,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.RANGE;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "range");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -301,7 +301,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.BROADCAST;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "broadcast");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -311,7 +311,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.FILTERNOISE;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "filterNoise");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -321,7 +321,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.GETVALUE;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "getValue");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -331,7 +331,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.CREATEEVENT;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "createEvent");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -341,7 +341,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.CREATEPIN;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "createPin");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -351,7 +351,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.PIN;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "pin");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -361,7 +361,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.FLOAT;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "float");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -371,7 +371,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.INT;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "int");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -381,7 +381,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.BOOL;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "bool");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -391,7 +391,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.EVENT;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "event");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -401,7 +401,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.LIT_Bool;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "TRUE");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -411,7 +411,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.LIT_Bool;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "true");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -421,7 +421,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.LIT_Bool;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "FALSE");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -431,7 +431,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.LIT_Bool;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "false");
-        actual = tokenizer.findKeyword(actual);
+        tokenizer.findKeyword(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -444,7 +444,7 @@ class TokenizerTest {
         Token.Type expected = Token.Type.NOTATOKEN;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "NotASingleCharacter");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -455,7 +455,7 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, "+");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -467,7 +467,7 @@ class TokenizerTest {
 
         mockReader.nextChar = '=';
         Token actual = new Token(Token.Type.NOTATOKEN, "+");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -478,7 +478,7 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, "-");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -490,7 +490,7 @@ class TokenizerTest {
 
         mockReader.nextChar = '=';
         Token actual = new Token(Token.Type.NOTATOKEN, "-");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -500,7 +500,7 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, "*");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -511,7 +511,7 @@ class TokenizerTest {
 
         mockReader.nextChar = '=';
         Token actual = new Token(Token.Type.NOTATOKEN, "*");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -521,7 +521,7 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, "/");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -532,7 +532,7 @@ class TokenizerTest {
 
         mockReader.nextChar = '=';
         Token actual = new Token(Token.Type.NOTATOKEN, "/");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -540,7 +540,7 @@ class TokenizerTest {
     void isSingleCharacter_TokenContentMatchesDivideTimes_CallsReadToEndOfComment() throws IOException {
         mockReader.nextChar = '*';
         Token actual = new Token(Token.Type.NOTATOKEN, "/");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         Mockito.verify(mockReader).readToEndOfComment();
     }
@@ -563,7 +563,7 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, "=");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -574,7 +574,7 @@ class TokenizerTest {
 
         mockReader.nextChar = '=';
         Token actual = new Token(Token.Type.NOTATOKEN, "=");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -584,7 +584,7 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, "%");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -594,7 +594,7 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, "?");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -604,7 +604,7 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, "!");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -615,7 +615,7 @@ class TokenizerTest {
 
         mockReader.nextChar = '=';
         Token actual = new Token(Token.Type.NOTATOKEN, "!");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -625,7 +625,7 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, "(");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -635,7 +635,7 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, ")");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -645,7 +645,7 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, "[");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -655,7 +655,7 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, "]");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -665,7 +665,7 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, "{");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -675,7 +675,7 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, "}");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -685,7 +685,7 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, ",");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -695,7 +695,7 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, ";");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -705,7 +705,7 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, ":");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -715,7 +715,7 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, "\\");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -725,7 +725,7 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, "\"");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -735,7 +735,7 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, "\'");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -745,7 +745,7 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, "\uFFFF");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -755,7 +755,7 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, ">");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -765,7 +765,7 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, "<");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -776,7 +776,7 @@ class TokenizerTest {
 
         mockReader.nextChar = '=';
         Token actual = new Token(Token.Type.NOTATOKEN, ">");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -787,7 +787,7 @@ class TokenizerTest {
 
         mockReader.nextChar = '=';
         Token actual = new Token(Token.Type.NOTATOKEN, "<");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }
@@ -797,7 +797,7 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, "3");
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);
     }

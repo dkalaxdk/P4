@@ -215,14 +215,6 @@ public class Tokenizer {
             case ',':
                 token.type = Token.Type.COMMA;
                 break;
-
-            /*case '.':
-                if (String.valueOf(reader.nextChar).matches("[0-9A-Za-z]")) {
-                    reader.readChar();
-                    token.content += reader.findNumber();
-                    token.type = Token.Type.ERROR;
-                } else token.type = Token.Type.DOT;
-                break;*/
             case ';':
                 token.type = Token.Type.SEMI;
                 break;
