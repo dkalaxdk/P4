@@ -1,16 +1,13 @@
 package sw417f20.ebal;
 
 import java.io.*;
-import java.time.Instant;
-import java.util.Calendar;
-import java.util.Currency;
 import sw417f20.ebal.Reader.Reader;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
-       ScannerStuff();
-//        ParserStuff();
+       //ScannerStuff();
+       ParserStuff();
     }
 
     public static void ParserStuff() throws FileNotFoundException {
@@ -49,7 +46,7 @@ public class Main {
         while (scanner.currentToken.type != Token.Type.EOF) {
             scanner.Advance();
 
-            if (scanner.currentToken.type != Token.Type.NOTATOKEN) {
+            if (scanner.currentToken.type != Token.Type.NOTATOKEN && scanner.currentToken.type != Token.Type.ERROR) {
                 System.out.println("Token found: " + scanner.currentToken.type + " on line: " + scanner.currentToken.lineNumber + " : " + scanner.currentToken.offSet + " with content: " + scanner.currentToken.content);
                 tokenCount++;
             } else if (scanner.currentToken.type == Token.Type.ERROR){

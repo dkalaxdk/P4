@@ -19,14 +19,14 @@ public class Tokenizer {
 
         token.content += reader.readChar();
 
-        token = IsSingleCharacter(token);
+        IsSingleCharacter(token);
         if (token.type == Token.Type.NOTATOKEN) {
             token.content = reader.findNumber();
-            token = findNumberTokenType(token);
+            findNumberTokenType(token);
         }
         if (token.type == Token.Type.NOTATOKEN) {
             token.content = reader.findWord();
-            token = findKeyword(token);
+            findKeyword(token);
         }
 
         if (token.type == Token.Type.NOTATOKEN && token.content.length() >= 1) {
@@ -35,7 +35,7 @@ public class Tokenizer {
         return token;
     }
 
-    public Token findKeyword(Token token) {
+    public void findKeyword(Token token) {
         switch (token.content) {
             case "MASTER":
                 token.type = Token.Type.MASTER;
@@ -130,12 +130,11 @@ public class Tokenizer {
             default:
                 token.type = Token.Type.NOTATOKEN;
         }
-        return token;
     }
 
-    public Token IsSingleCharacter(Token token) throws IOException {
+    public void IsSingleCharacter(Token token) throws IOException {
         if(token.content.length() > 1) {
-            return token;
+            return;
         }
         switch (token.content.charAt(0)) {
             case '+':
@@ -260,10 +259,9 @@ public class Tokenizer {
                 token.type = Token.Type.NOTATOKEN;
                 break;
         }
-        return token;
     }
 
-    public Token findNumberTokenType(Token token) {
+    public void findNumberTokenType(Token token) {
         if (token.content.matches("[0-9]+")) {
             token.type = Token.Type.LIT_Int;
         } else if (token.content.matches("[0-9]+\\.[0-9]*")) {
@@ -271,8 +269,6 @@ public class Tokenizer {
         } else if (token.content.matches("[0-9A-Za-z.]+")) {
             token.type = Token.Type.ERROR;
         }
-
-        return token;
     }
 
 }
