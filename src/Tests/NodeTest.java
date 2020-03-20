@@ -233,7 +233,6 @@ class NodeTest {
     void MakeSiblings_ThisIsFirstSibling_OtherIsFirstSibling() {
         // Arrange
 
-
         // Act
         Child1.MakeSiblings(Child2);
 
@@ -251,35 +250,14 @@ class NodeTest {
         // Assert
     }
 
-    @Test
-    void MakeSiblings_ThisIsFirstSibling_OtherIsFirstChild() {
-        // Arrange
-
-        // Act
-
-        // Assert
-    }
-
-    @Test
-    void MakeSiblings_ThisIsFirstSibling_OtherIsMiddleChild() {
-        // Arrange
-        Node node1 = new Node(AST.NodeType.Empty);
-        Node node2 = new Node(AST.NodeType.Master);
-
-        // Act
-
-        // Assert
-    }
-
     // This is middle sibling
 
     @Test
     void MakeSiblings_ThisIsMiddleSibling_OtherIsFirstSibling() {
         // Arrange
-        Node node1 = new Node(AST.NodeType.Empty);
-        Node node2 = new Node(AST.NodeType.Master);
 
         // Act
+        Sibling1_1.MakeSiblings(Child2);
 
         // Assert
     }
@@ -287,124 +265,9 @@ class NodeTest {
     @Test
     void MakeSiblings_ThisIsMiddleSibling_OtherIsMiddleSibling() {
         // Arrange
-        Node node1 = new Node(AST.NodeType.Empty);
-        Node node2 = new Node(AST.NodeType.Master);
 
         // Act
-
-        // Assert
-    }
-
-    @Test
-    void MakeSiblings_ThisIsMiddleSibling_OtherIsFirstChild() {
-        // Arrange
-        Node node1 = new Node(AST.NodeType.Empty);
-        Node node2 = new Node(AST.NodeType.Master);
-
-        // Act
-
-        // Assert
-    }
-
-    @Test
-    void MakeSiblings_ThisIsMiddleSibling_OtherIsMiddleChild() {
-        // Arrange
-        Node node1 = new Node(AST.NodeType.Empty);
-        Node node2 = new Node(AST.NodeType.Master);
-
-        // Act
-
-        // Assert
-    }
-
-    // This is first child
-
-    @Test
-    void MakeSiblings_ThisIsFirstChild_OtherIsFirstSibling() {
-        // Arrange
-        Node node1 = new Node(AST.NodeType.Empty);
-        Node node2 = new Node(AST.NodeType.Master);
-
-        // Act
-
-        // Assert
-    }
-
-    @Test
-    void MakeSiblings_ThisIsFirstChild_OtherIsMiddleSibling() {
-        // Arrange
-        Node node1 = new Node(AST.NodeType.Empty);
-        Node node2 = new Node(AST.NodeType.Master);
-
-        // Act
-
-        // Assert
-    }
-
-    @Test
-    void MakeSiblings_ThisIsFirstChild_OtherIsFirstChild() {
-        // Arrange
-        Node node1 = new Node(AST.NodeType.Empty);
-        Node node2 = new Node(AST.NodeType.Master);
-
-        // Act
-
-        // Assert
-    }
-
-    @Test
-    void MakeSiblings_ThisIsFirstChild_OtherIsMiddleChild() {
-        // Arrange
-        Node node1 = new Node(AST.NodeType.Empty);
-        Node node2 = new Node(AST.NodeType.Master);
-
-        // Act
-
-        // Assert
-    }
-
-    // This is middle child
-
-    @Test
-    void MakeSiblings_ThisIsMiddleChild_OtherIsFirstSibling() {
-        // Arrange
-        Node node1 = new Node(AST.NodeType.Empty);
-        Node node2 = new Node(AST.NodeType.Master);
-
-        // Act
-
-        // Assert
-    }
-
-    @Test
-    void MakeSiblings_ThisIsMiddleChild_OtherIsMiddleSibling() {
-        // Arrange
-        Node node1 = new Node(AST.NodeType.Empty);
-        Node node2 = new Node(AST.NodeType.Master);
-
-        // Act
-
-        // Assert
-    }
-
-    @Test
-    void MakeSiblings_ThisIsMiddleChild_OtherIsFirstChild() {
-        // Arrange
-        Node node1 = new Node(AST.NodeType.Empty);
-        Node node2 = new Node(AST.NodeType.Master);
-
-        // Act
-
-        // Assert
-    }
-
-    @Test
-    void MakeSiblings_ThisIsMiddleChild_OtherIsMiddleChild() {
-        // Arrange
-        Node node1 = new Node(AST.NodeType.Empty);
-        Node node2 = new Node(AST.NodeType.Master);
-
-        // Act
+        Sibling1_1.MakeSiblings(Sibling2_1);
 
         // Assert
     }
@@ -412,107 +275,9 @@ class NodeTest {
     @Test
     void MakeSiblings_ThisIsParentNode_OtherIsParentNode() {
         // Arrange
-        Node node1 = new Node(AST.NodeType.Empty);
-        Node node2 = new Node(AST.NodeType.Master);
 
         // Act
-
-        // Assert
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // Don't update FirstChild
-    // Don't update FirstSibling
-    @Test
-    void MakeSiblings_InputIsFirstSibling() {
-        // Arrange
-        Node node1 = new Node(AST.NodeType.Empty);
-        Node node2 = new Node(AST.NodeType.Master);
-
-        // Act
-
-        // Assert
-    }
-
-    // Update FirstChild
-    // Update FirstSibling
-    @Test
-    void MakeSiblings_InputIsNotFirstSibling() {
-        // Arrange
-        Node node1 = new Node(AST.NodeType.Empty);
-        Node node2 = new Node(AST.NodeType.Master);
-
-        // Act
-
-        // Assert
-    }
-
-    // Don't update FirstChild
-    @Test
-    void MakeSiblings_InputIsFirstChild() {
-        // Arrange
-        Node node1 = new Node(AST.NodeType.Empty);
-        Node node2 = new Node(AST.NodeType.Master);
-
-        // Act
-
-        // Assert
-    }
-
-    // Update FirstChild
-    @Test
-    void MakeSiblings_InputIsNotFirstChild() {
-        // Arrange
-        Node node1 = new Node(AST.NodeType.Empty);
-        Node node2 = new Node(AST.NodeType.Master);
-
-        // Act
+        ParentNode1.MakeSiblings(ParentNode2);
 
         // Assert
     }
