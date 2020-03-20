@@ -61,7 +61,7 @@ public class Reader {
 
             if (String.valueOf(nextChar).matches(("[A-Za-z_0-9]"))) {
                 currentChar = readChar();
-            } else break;/**/
+            } else break;
         }
 
         return output.toString();
