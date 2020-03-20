@@ -5,14 +5,55 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import sw417f20.ebal.SyntaxAnalysis.AST;
 import sw417f20.ebal.SyntaxAnalysis.Node;
-import sw417f20.ebal.SyntaxAnalysis.Token;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class NodeTest {
+    private Node ParentNode1;
+    private Node ParentNode2;
+
+    private Node Child1;
+    private Node Child2;
+
+    private Node Sibling1_1;
+    private Node Sibling1_2;
+    private Node Sibling2_1;
+    private Node Sibling2_2;
+
 
     @BeforeEach
     void setUp() {
+        ParentNode1 = new Node(AST.NodeType.Master);
+        ParentNode2 = new Node(AST.NodeType.Slave);
+
+        Child1 = new Node(AST.NodeType.Listener);
+        Child2 = new Node(AST.NodeType.EventHandler);
+
+        Sibling1_1 = new Node(AST.NodeType.Declaration);
+        Sibling1_2 = new Node(AST.NodeType.Declaration);
+        Sibling2_1 = new Node(AST.NodeType.Assignment);
+        Sibling2_2 = new Node(AST.NodeType.Assignment);
+
+        ParentNode1.FirstChild = Child1;
+        Child1.Parent = ParentNode1;
+
+        Child1.Next = Sibling1_1;
+        Sibling1_1.FirstSibling = Child1;
+        Sibling1_1.Parent = ParentNode1;
+        Sibling1_1.Next = Sibling1_2;
+        Sibling1_2.FirstSibling = Child1;
+        Sibling1_2.Parent = ParentNode1;
+
+
+        ParentNode2.FirstChild = Child2;
+        Child2.Parent = ParentNode2;
+
+        Child2.Next = Sibling2_1;
+        Sibling2_1.FirstSibling = Child2;
+        Sibling2_1.Parent = ParentNode2;
+        Sibling2_1.Next = Sibling2_2;
+        Sibling2_2.FirstSibling = Child2;
+        Sibling2_2.Parent = ParentNode2;
     }
 
     @AfterEach
@@ -186,9 +227,41 @@ class NodeTest {
         assertNull(node1.Next);
     }
 
+    // This is first sibling
 
     @Test
-    void MakeSiblings_ThisIsFirstSibling_Other() {
+    void MakeSiblings_ThisIsFirstSibling_OtherIsFirstSibling() {
+        // Arrange
+
+
+        // Act
+        Child1.MakeSiblings(Child2);
+
+        // Assert
+
+    }
+
+    @Test
+    void MakeSiblings_ThisIsFirstSibling_OtherIsMiddleSibling() {
+        // Arrange
+
+        // Act
+        Child1.MakeSiblings(Sibling2_1);
+
+        // Assert
+    }
+
+    @Test
+    void MakeSiblings_ThisIsFirstSibling_OtherIsFirstChild() {
+        // Arrange
+
+        // Act
+
+        // Assert
+    }
+
+    @Test
+    void MakeSiblings_ThisIsFirstSibling_OtherIsMiddleChild() {
         // Arrange
         Node node1 = new Node(AST.NodeType.Empty);
         Node node2 = new Node(AST.NodeType.Master);
@@ -197,6 +270,197 @@ class NodeTest {
 
         // Assert
     }
+
+    // This is middle sibling
+
+    @Test
+    void MakeSiblings_ThisIsMiddleSibling_OtherIsFirstSibling() {
+        // Arrange
+        Node node1 = new Node(AST.NodeType.Empty);
+        Node node2 = new Node(AST.NodeType.Master);
+
+        // Act
+
+        // Assert
+    }
+
+    @Test
+    void MakeSiblings_ThisIsMiddleSibling_OtherIsMiddleSibling() {
+        // Arrange
+        Node node1 = new Node(AST.NodeType.Empty);
+        Node node2 = new Node(AST.NodeType.Master);
+
+        // Act
+
+        // Assert
+    }
+
+    @Test
+    void MakeSiblings_ThisIsMiddleSibling_OtherIsFirstChild() {
+        // Arrange
+        Node node1 = new Node(AST.NodeType.Empty);
+        Node node2 = new Node(AST.NodeType.Master);
+
+        // Act
+
+        // Assert
+    }
+
+    @Test
+    void MakeSiblings_ThisIsMiddleSibling_OtherIsMiddleChild() {
+        // Arrange
+        Node node1 = new Node(AST.NodeType.Empty);
+        Node node2 = new Node(AST.NodeType.Master);
+
+        // Act
+
+        // Assert
+    }
+
+    // This is first child
+
+    @Test
+    void MakeSiblings_ThisIsFirstChild_OtherIsFirstSibling() {
+        // Arrange
+        Node node1 = new Node(AST.NodeType.Empty);
+        Node node2 = new Node(AST.NodeType.Master);
+
+        // Act
+
+        // Assert
+    }
+
+    @Test
+    void MakeSiblings_ThisIsFirstChild_OtherIsMiddleSibling() {
+        // Arrange
+        Node node1 = new Node(AST.NodeType.Empty);
+        Node node2 = new Node(AST.NodeType.Master);
+
+        // Act
+
+        // Assert
+    }
+
+    @Test
+    void MakeSiblings_ThisIsFirstChild_OtherIsFirstChild() {
+        // Arrange
+        Node node1 = new Node(AST.NodeType.Empty);
+        Node node2 = new Node(AST.NodeType.Master);
+
+        // Act
+
+        // Assert
+    }
+
+    @Test
+    void MakeSiblings_ThisIsFirstChild_OtherIsMiddleChild() {
+        // Arrange
+        Node node1 = new Node(AST.NodeType.Empty);
+        Node node2 = new Node(AST.NodeType.Master);
+
+        // Act
+
+        // Assert
+    }
+
+    // This is middle child
+
+    @Test
+    void MakeSiblings_ThisIsMiddleChild_OtherIsFirstSibling() {
+        // Arrange
+        Node node1 = new Node(AST.NodeType.Empty);
+        Node node2 = new Node(AST.NodeType.Master);
+
+        // Act
+
+        // Assert
+    }
+
+    @Test
+    void MakeSiblings_ThisIsMiddleChild_OtherIsMiddleSibling() {
+        // Arrange
+        Node node1 = new Node(AST.NodeType.Empty);
+        Node node2 = new Node(AST.NodeType.Master);
+
+        // Act
+
+        // Assert
+    }
+
+    @Test
+    void MakeSiblings_ThisIsMiddleChild_OtherIsFirstChild() {
+        // Arrange
+        Node node1 = new Node(AST.NodeType.Empty);
+        Node node2 = new Node(AST.NodeType.Master);
+
+        // Act
+
+        // Assert
+    }
+
+    @Test
+    void MakeSiblings_ThisIsMiddleChild_OtherIsMiddleChild() {
+        // Arrange
+        Node node1 = new Node(AST.NodeType.Empty);
+        Node node2 = new Node(AST.NodeType.Master);
+
+        // Act
+
+        // Assert
+    }
+
+    @Test
+    void MakeSiblings_ThisIsParentNode_OtherIsParentNode() {
+        // Arrange
+        Node node1 = new Node(AST.NodeType.Empty);
+        Node node2 = new Node(AST.NodeType.Master);
+
+        // Act
+
+        // Assert
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
