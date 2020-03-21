@@ -1,6 +1,7 @@
 package sw417f20.ebal;
 
-import sw417f20.ebal.Reader.Reader;
+import sw417f20.ebal.SyntaxAnalysis.Reader;
+import sw417f20.ebal.SyntaxAnalysis.Token;
 
 import java.io.IOException;
 
