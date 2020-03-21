@@ -56,4 +56,22 @@ public class Token {
         type = inputType;
         content = inputContent;
     }
+
+    @Override
+    public String toString() {
+
+        return type.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj.getClass() != Token.class) {
+            return false;
+        }
+        if(((Token) obj).type != this.type) {
+            return false;
+        }
+        return ((Token) obj).content.equals(this.content);
+    }
+
 }
