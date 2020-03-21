@@ -1,4 +1,4 @@
-package sw417f20.ebal;
+package sw417f20.ebal.SyntaxAnalysis;
 
 import sw417f20.ebal.SyntaxAnalysis.Reader;
 import sw417f20.ebal.SyntaxAnalysis.Token;

@@ -4,13 +4,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import sw417f20.ebal.Reader.Reader;
-import sw417f20.ebal.Token;
-import sw417f20.ebal.Tokenizer;
+import sw417f20.ebal.SyntaxAnalysis.Reader;
+import sw417f20.ebal.SyntaxAnalysis.Token;
+import sw417f20.ebal.SyntaxAnalysis.Tokenizer;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TokenizerTest {
     private Reader mockReader;
