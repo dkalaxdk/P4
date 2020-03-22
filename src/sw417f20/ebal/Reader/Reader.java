@@ -100,4 +100,10 @@ public class Reader {
         }
         readChar();
     }
+
+    public void skipWhitespace() throws IOException {
+        while(Character.isWhitespace(currentChar)) {
+            readChar();
+        }
+    }
 }

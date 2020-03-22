@@ -1,7 +1,9 @@
 package sw417f20.ebal;
 
+import sw417f20.ebal.SyntaxAnalysis.*;
+import sw417f20.ebal.SyntaxAnalysis.Reader;
+
 import java.io.*;
-import sw417f20.ebal.Reader.Reader;
 
 public class Main {
 
@@ -13,13 +15,7 @@ public class Main {
     public static void ParserStuff() throws FileNotFoundException {
         Parser parser = new Parser();
 
-        String filePath = new File("").getAbsolutePath();
-        String fileInput = filePath + "/TestFiles/TestProgram.txt";
-
-        FileReader fileReader = new FileReader(fileInput);
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-        Reader reader = new Reader(bufferedReader);
-        Scanner scanner = new Scanner(reader);
+        Scanner scanner = createScanner();
 
         long start = System.currentTimeMillis();
         parser.Parse(scanner);
@@ -34,13 +30,7 @@ public class Main {
         long start = System.currentTimeMillis();
 
         System.out.println();
-        String filePath = new File("").getAbsolutePath();
-        String fileInput = filePath + "/TestFiles/TestProgram.txt";
-
-        FileReader fileReader = new FileReader(fileInput);
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-        Reader reader = new Reader(bufferedReader);
-        Scanner scanner = new Scanner(reader);
+        Scanner scanner = createScanner();
         int tokenCount = 0;
 
         while (scanner.currentToken.type != Token.Type.EOF) {
@@ -58,6 +48,16 @@ public class Main {
         System.out.println();
         System.out.println("Tokens found in file: " + tokenCount);
         System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms");
+    }
+
+    private static Scanner createScanner() throws FileNotFoundException {
+        String filePath = new File("").getAbsolutePath();
+        String fileInput = filePath + "/TestFiles/TestProgram.txt";
+
+        FileReader fileReader = new FileReader(fileInput);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        Reader reader = new Reader(bufferedReader);
+        return new Scanner(reader, new Tokenizer());
     }
 
     public static String GetFullPath(String file) {

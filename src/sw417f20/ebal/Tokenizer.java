@@ -5,34 +5,8 @@ import sw417f20.ebal.Reader.Reader;
 import java.io.IOException;
 
 public class Tokenizer {
-    private Reader reader;
 
-    public Tokenizer(Reader reader) {
-        this.reader = reader;
-    }
-
-    // Could maybe move back to scanner
-    public Token getToken() throws IOException {
-        Token token = new Token(Token.Type.NOTATOKEN, "");
-        token.lineNumber = reader.currentLine;
-        token.offSet = reader.currentOffset;
-
-        token.content += reader.readChar();
-
-        IsSingleCharacter(token);
-        if (token.type == Token.Type.NOTATOKEN) {
-            token.content = reader.findNumber();
-            findNumberTokenType(token);
-        }
-        if (token.type == Token.Type.NOTATOKEN) {
-            token.content = reader.findWord();
-            findKeyword(token);
-        }
-
-        if (token.type == Token.Type.NOTATOKEN && token.content.length() >= 1) {
-            token.type = Token.Type.IDENTIFIER;
-        }
-        return token;
+    public Tokenizer() {
     }
 
     public void findKeyword(Token token) {
@@ -133,119 +107,113 @@ public class Tokenizer {
     }
 
     public void IsSingleCharacter(Token token) throws IOException {
-        if(token.content.length() > 1) {
+        // Max length of a "single" character token
+        if(token.content.length() > 2) {
             return;
         }
-        switch (token.content.charAt(0)) {
-            case '+':
-                if (reader.nextChar == '=') {
-                    token.type = Token.Type.OP_PLUS_EQUALS;
-                } else token.type = Token.Type.OP_PLUS;
+        switch (token.content) {
+            case "+":
+                token.type = Token.Type.OP_PLUS;
                 break;
-            case '-':
-                if (reader.nextChar == '=') {
-                    token.content += reader.readChar();
-                    token.type = Token.Type.OP_MINUS_EQUALS;
-                } else token.type = Token.Type.OP_MINUS;
+            case "+=":
+                token.type = Token.Type.OP_PLUS_EQUALS;
                 break;
-            case '*':
-                if (reader.nextChar == '=') {
-                    token.content += reader.readChar();
-                    token.type = Token.Type.OP_TIMES_EQUALS;
-                } else token.type = Token.Type.OP_TIMES;
+            case "-":
+                token.type = Token.Type.OP_MINUS;
                 break;
-            case '/':   // Has some special cases when followed by other symbols
-                if (reader.nextChar == '=') {
-                    token.type = Token.Type.OP_DIVIDE_EQUALS;
-                    token.content += reader.readChar();
-                } else if (reader.nextChar == '*') {
-                    reader.readToEndOfComment();
-                } else if (reader.nextChar == '/') {
-                    while (reader.currentChar != '\n') {
-                        reader.readChar();
-                    }
-                } else token.type = Token.Type.OP_DIVIDE;
+            case "-=":
+                token.type = Token.Type.OP_MINUS_EQUALS;
                 break;
-
-            case '=':
-                if (reader.nextChar == '=') {
-                    token.type = Token.Type.LOP_EQUALS;
-                    token.content += reader.readChar();
-                } else token.type = Token.Type.ASSIGN;
+            case "*":
+                token.type = Token.Type.OP_TIMES;
                 break;
-
-            case '%':
+            case "*=":
+                token.type = Token.Type.OP_TIMES_EQUALS;
+                break;
+            case "/":   // Has some special cases when followed by other symbols
+                token.type = Token.Type.OP_DIVIDE;
+                break;
+            case "/=":
+                token.type = Token.Type.OP_DIVIDE_EQUALS;
+                break;
+            case "/*":
+                token.type = Token.Type.MULTILINE_COMMENT;
+                break;
+            case "//":
+                token.type = Token.Type.COMMENT;
+                break;
+            case "=":
+                token.type = Token.Type.ASSIGN;
+                break;
+            case "==":
+                token.type = Token.Type.LOP_EQUALS;
+                break;
+            case "%":
                 token.type = Token.Type.OP_MODULO;
                 break;
             //TODO slet mig '?' måske
-            case '?':
+            case "?":
                 token.type = Token.Type.OP_QUESTION;
                 break;
-
-            case '!':
-                if (reader.nextChar == '=') {
-                    token.type = Token.Type.LOP_NOTEQUAL;
-                } else token.type = Token.Type.OP_NOT;
+            case "!":
+                token.type = Token.Type.OP_NOT;
                 break;
-
-            case '(':
+            case "!=":
+                token.type = Token.Type.LOP_NOTEQUAL;
+                break;
+            case "(":
                 token.type = Token.Type.LPAREN;
                 break;
-
-            case ')':
+            case ")":
                 token.type = Token.Type.RPAREN;
                 break;
             //TODO har vi [] stadig væk?
-            case '[':
+            case "[":
                 token.type = Token.Type.LSQBRACKET;
                 break;
-
-            case ']':
+            case "]":
                 token.type = Token.Type.RSQBRACKET;
                 break;
-
-            case '{':
+            case "{":
                 token.type = Token.Type.LBRACKET;
                 break;
-
-            case '}':
+            case "}":
                 token.type = Token.Type.RBRACKET;
                 break;
-
-            case ',':
+            case ",":
                 token.type = Token.Type.COMMA;
                 break;
-            case ';':
+            case ";":
                 token.type = Token.Type.SEMI;
                 break;
             //TODO slet mig ':' måske
-            case ':':
+            case ":":
                 token.type = Token.Type.COLON;
                 break;
             //TODO hvad gør '\' i vores sprog
-            case '\\':
+            case "\\":
                 token.type = Token.Type.BACKSLASH;
                 break;
-            case '"':
+            case "\"":
                 token.type = Token.Type.DOUBLEQUOTE;
                 break;
-            case '\'':
+            case "'":
                 token.type = Token.Type.SINGLEQUOTE;
                 break;
-            case '\uFFFF':
+            case "\uFFFF":
                 token.type = Token.Type.EOF;
                 break;
-            case '>':
-                if (reader.nextChar == '=') {
-                    token.type = Token.Type.LOP_GREATEROREQUAL;
-                    token.content += reader.readChar();
-                } else token.type = Token.Type.LOP_GREATERTHAN;
+            case ">":
+                token.type = Token.Type.LOP_GREATERTHAN;
                 break;
-            case '<':
-                if (reader.nextChar == '=') {
-                    token.type = Token.Type.LOP_LESSOREQUAL;
-                    token.content += reader.readChar();
-                } else token.type = Token.Type.LOP_LESSTHAN;
+            case ">=":
+                token.type = Token.Type.LOP_GREATEROREQUAL;
+                break;
+            case "<":
+                token.type = Token.Type.LOP_LESSTHAN;
+                break;
+            case "<=":
+                token.type = Token.Type.LOP_LESSOREQUAL;
                 break;
             default:
                 token.type = Token.Type.NOTATOKEN;
