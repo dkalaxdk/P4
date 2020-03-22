@@ -1,4 +1,4 @@
-package sw417f20.ebal;
+package sw417f20.ebal.SyntaxAnalysis;
 
 public class Token {
     public enum Type {
@@ -12,6 +12,8 @@ public class Token {
         // Logic Operators
         LOP_LESSTHAN, LOP_GREATERTHAN, LOP_NOTEQUAL,
         LOP_GREATEROREQUAL, LOP_LESSOREQUAL, LOP_EQUALS,
+
+        LOP_AND, LOP_OR,
 
         // Literals
         LIT_Int, LIT_Float, LIT_Bool,

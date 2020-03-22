@@ -1,4 +1,4 @@
-package sw417f20.ebal.Reader;
+package sw417f20.ebal.SyntaxAnalysis;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,11 +23,7 @@ public class Reader {
     // Reads and returns the next char in the input
     // Keeps track of line and offset
     public char readChar() throws IOException {
-        char c;
-        int res = inputStream.read();
-
-        c = (char) res;
-
+        char c = (char) inputStream.read();
         currentOffset++;
         if (c == '\n') {
             currentLine++;
@@ -49,7 +45,7 @@ public class Reader {
         StringBuilder output = new StringBuilder();
         char currentChar = this.currentChar;
         while (whitespace.indexOf(currentChar) == -1) {
-            if ((output.length() >= 1) && String.valueOf(currentChar).matches("[A-Za-z_0-9]")) {
+            if (output.length() >= 1 && String.valueOf(currentChar).matches("[A-Za-z_0-9]")) {
                 output.append(currentChar);
             } else if (String.valueOf(currentChar).matches("[A-Za-z_]")) {
                 output.append(currentChar);
@@ -88,8 +84,6 @@ public class Reader {
                 currentChar = readChar();
             } else break;
         }
-
-
         return output.toString();
     }
 
