@@ -47,16 +47,12 @@ public class Scanner {
 
     // Could maybe move back to scanner
     public Token getToken() throws IOException {
+        reader.skipWhitespace();
         Token token = new Token(Token.Type.NOTATOKEN, "");
         token.lineNumber = reader.currentLine;
         token.offSet = reader.currentOffset;
 
         char character = reader.readChar();
-        //char character = reader.currentChar;
-
-        while(Character.isWhitespace(character)) {
-            character = reader.readChar();
-        }
         token.content += character;
 
         // if the first character of a token is a number, it must be a number literal
@@ -68,28 +64,18 @@ public class Scanner {
         else if(isLetter(character) || character == '_') {
             token.content = reader.findWord();
             tokenizer.findKeyword(token);
+            // if it started with a letter but was not a keyword it must be an identifier
             if(token.type == Token.Type.NOTATOKEN) {
                 token.type = Token.Type.IDENTIFIER;
             }
         }
         // if it is none of the above it must be a "single" character token
         else {
-            /*
-            // add characters until a character is read that cannot be part of
-            // a "single" character token
-            //TODO: Determine what to do if it reads more characters than are used in the token
-            // Supports tokens of arbitrary length
-            while(canBePartOfSingleCharacterToken(reader.nextChar)) {
-                token.content += reader.readChar();
-            }
-             */
-
             // This supports tokens with a max length of 2
             if(canBePartOfSingleCharacterToken(reader.nextChar)) {
                 token.content += reader.readChar();
             }
 
-            //token.content += reader.readChar();
             tokenizer.IsSingleCharacter(token);
 
             // Handle special cases
@@ -128,9 +114,5 @@ public class Scanner {
 
     private boolean canBePartOfSingleCharacterToken(char c) {
         return (!isLetter(c) && !isNumber(c) && !isWhitespace(c) && c != '_');
-    }
-
-    private boolean isEndOfFile(char c) {
-        return c == '\uFFFF';
     }
 }

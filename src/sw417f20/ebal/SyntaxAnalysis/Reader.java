@@ -96,7 +96,7 @@ public class Reader {
     }
 
     public void skipWhitespace() throws IOException {
-        while(Character.isWhitespace(currentChar)) {
+        while(Character.isWhitespace(nextChar)) {
             readChar();
         }
     }
