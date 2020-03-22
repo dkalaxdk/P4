@@ -51,8 +51,12 @@ public class Scanner {
         token.lineNumber = reader.currentLine;
         token.offSet = reader.currentOffset;
 
-        //char character = reader.readChar();
-        char character = reader.currentChar;
+        char character = reader.readChar();
+        //char character = reader.currentChar;
+
+        while(Character.isWhitespace(character)) {
+            character = reader.readChar();
+        }
         token.content += character;
 
         // if the first character of a token is a number, it must be a number literal
@@ -85,7 +89,7 @@ public class Scanner {
                 token.content += reader.readChar();
             }
 
-            token.content += reader.readChar();
+            //token.content += reader.readChar();
             tokenizer.IsSingleCharacter(token);
 
             // Handle special cases
@@ -101,23 +105,10 @@ public class Scanner {
             }
         }
 
-        /*
-        tokenizer.IsSingleCharacter(token);
-        if (token.type == Token.Type.NOTATOKEN) {
-            token.content = reader.findNumber();
-            tokenizer.findNumberTokenType(token);
-        }
-        if (token.type == Token.Type.NOTATOKEN) {
-            token.content = reader.findWord();
-            tokenizer.findKeyword(token);
-        }
-         */
-
         // if none of the cases matched it must be an error
         if (token.type == Token.Type.NOTATOKEN) {
             token.type = Token.Type.ERROR;
         }
-
         return token;
     }
 
@@ -137,5 +128,9 @@ public class Scanner {
 
     private boolean canBePartOfSingleCharacterToken(char c) {
         return (!isLetter(c) && !isNumber(c) && !isWhitespace(c) && c != '_');
+    }
+
+    private boolean isEndOfFile(char c) {
+        return c == '\uFFFF';
     }
 }

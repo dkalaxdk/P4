@@ -108,119 +108,118 @@ public class Tokenizer {
     }
 
     public void IsSingleCharacter(Token token) throws IOException {
-        // Max length of a "single" character token
         if(token.content.length() > 2) {
             return;
         }
-        switch (token.content) {
-            case "+":
-                token.type = Token.Type.OP_PLUS;
+        switch (token.content.charAt(0)) {
+            case '+':
+                if (token.content.length() > 1 && token.content.charAt(1) == '=') {
+                    token.type = Token.Type.OP_PLUS_EQUALS;
+                } else token.type = Token.Type.OP_PLUS;
                 break;
-            case "+=":
-                token.type = Token.Type.OP_PLUS_EQUALS;
+            case '-':
+                if (token.content.length() > 1 && token.content.charAt(1) == '=') {
+                    token.type = Token.Type.OP_MINUS_EQUALS;
+                } else token.type = Token.Type.OP_MINUS;
                 break;
-            case "-":
-                token.type = Token.Type.OP_MINUS;
+            case '*':
+                if (token.content.length() > 1 && token.content.charAt(1) == '=') {
+                    token.type = Token.Type.OP_TIMES_EQUALS;
+                } else token.type = Token.Type.OP_TIMES;
                 break;
-            case "-=":
-                token.type = Token.Type.OP_MINUS_EQUALS;
+            case '/':   // Has some special cases when followed by other symbols
+                if (token.content.length() > 1 && token.content.charAt(1) == '=') {
+                    token.type = Token.Type.OP_DIVIDE_EQUALS;
+                } else if (token.content.length() > 1 && token.content.charAt(1) == '*') {
+                    token.type = Token.Type.MULTILINE_COMMENT;
+                } else if (token.content.length() > 1 && token.content.charAt(1) == '/') {
+                    token.type = Token.Type.COMMENT;
+                } else token.type = Token.Type.OP_DIVIDE;
                 break;
-            case "*":
-                token.type = Token.Type.OP_TIMES;
+
+            case '=':
+                if (token.content.length() > 1 && token.content.charAt(1) == '=') {
+                    token.type = Token.Type.LOP_EQUALS;
+                } else token.type = Token.Type.ASSIGN;
                 break;
-            case "*=":
-                token.type = Token.Type.OP_TIMES_EQUALS;
-                break;
-            case "/":   // Has some special cases when followed by other symbols
-                token.type = Token.Type.OP_DIVIDE;
-                break;
-            case "/=":
-                token.type = Token.Type.OP_DIVIDE_EQUALS;
-                break;
-            case "/*":
-                token.type = Token.Type.MULTILINE_COMMENT;
-                break;
-            case "//":
-                token.type = Token.Type.COMMENT;
-                break;
-            case "=":
-                token.type = Token.Type.ASSIGN;
-                break;
-            case "==":
-                token.type = Token.Type.LOP_EQUALS;
-                break;
-            case "%":
+
+            case '%':
                 token.type = Token.Type.OP_MODULO;
                 break;
             //TODO slet mig '?' måske
-            case "?":
+            case '?':
                 token.type = Token.Type.OP_QUESTION;
                 break;
-            case "!":
-                token.type = Token.Type.OP_NOT;
+
+            case '!':
+                if (token.content.length() > 1 && token.content.charAt(1) == '=') {
+                    token.type = Token.Type.LOP_NOTEQUAL;
+                } else token.type = Token.Type.OP_NOT;
                 break;
-            case "!=":
-                token.type = Token.Type.LOP_NOTEQUAL;
-                break;
-            case "(":
+
+            case '(':
                 token.type = Token.Type.LPAREN;
                 break;
-            case ")":
+
+            case ')':
                 token.type = Token.Type.RPAREN;
                 break;
             //TODO har vi [] stadig væk?
-            case "[":
+            case '[':
                 token.type = Token.Type.LSQBRACKET;
                 break;
-            case "]":
+
+            case ']':
                 token.type = Token.Type.RSQBRACKET;
                 break;
-            case "{":
+
+            case '{':
                 token.type = Token.Type.LBRACKET;
                 break;
-            case "}":
+
+            case '}':
                 token.type = Token.Type.RBRACKET;
                 break;
-            case ",":
+
+            case ',':
                 token.type = Token.Type.COMMA;
                 break;
-            case ";":
+            case ';':
                 token.type = Token.Type.SEMI;
                 break;
             //TODO slet mig ':' måske
-            case ":":
+            case ':':
                 token.type = Token.Type.COLON;
                 break;
             //TODO hvad gør '\' i vores sprog
-            case "\\":
+            case '\\':
                 token.type = Token.Type.BACKSLASH;
                 break;
-            case "\"":
+            case '"':
                 token.type = Token.Type.DOUBLEQUOTE;
                 break;
-            case "'":
+            case '\'':
                 token.type = Token.Type.SINGLEQUOTE;
                 break;
-            case "\uFFFF":
+            case '\uFFFF':
                 token.type = Token.Type.EOF;
                 break;
-            case ">":
-                token.type = Token.Type.LOP_GREATERTHAN;
+            case '>':
+                if (token.content.length() > 1 && token.content.charAt(1) == '=') {
+                    token.type = Token.Type.LOP_GREATEROREQUAL;
+                } else token.type = Token.Type.LOP_GREATERTHAN;
                 break;
-            case ">=":
-                token.type = Token.Type.LOP_GREATEROREQUAL;
-                break;
-            case "<":
-                token.type = Token.Type.LOP_LESSTHAN;
-                break;
-            case "<=":
-                token.type = Token.Type.LOP_LESSOREQUAL;
+            case '<':
+                if (token.content.length() > 1 && token.content.charAt(1) == '=') {
+                    token.type = Token.Type.LOP_LESSOREQUAL;
+                } else token.type = Token.Type.LOP_LESSTHAN;
                 break;
             default:
                 token.type = Token.Type.NOTATOKEN;
                 break;
         }
     }
+
 
     public void findNumberTokenType(Token token) {
         if (token.content.matches("[0-9]+")) {
