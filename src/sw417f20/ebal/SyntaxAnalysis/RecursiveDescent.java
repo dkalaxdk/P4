@@ -1,11 +1,13 @@
-package sw417f20.ebal;
+package sw417f20.ebal.SyntaxAnalysis;
+
+import sw417f20.ebal.Visitors.PrintVisitor;
 
 import java.io.IOException;
 
 public abstract class RecursiveDescent {
     private Scanner PScanner;
     private AST Tree;
-    private PrintVisitor PrintVisitor;
+
     public RecursiveDescent() {}
 
     public AST Parse(Scanner scanner) {
@@ -15,9 +17,9 @@ public abstract class RecursiveDescent {
         Tree.Root = Start();
         Expect(Token.Type.EOF);
 
-        PrintVisitor = new PrintVisitor();
+        PrintVisitor printVisitor = new PrintVisitor();
 
-        PrintVisitor.Visit(Tree.Root);
+        printVisitor.Visit(Tree.Root);
 
         System.out.println("======== Parse successful ========");
 
@@ -53,8 +55,10 @@ public abstract class RecursiveDescent {
     }
 
     protected void MakeError(String message) {
-        System.err.println(message + " on line: " + PScanner.nextToken.lineNumber + " : " + PScanner.nextToken.offSet + ", got [" + PScanner.nextToken.type + "] with content < " + PScanner.nextToken.content + " > " +
-                           "(Current is [" + PScanner.currentToken.type + "] with content < " + PScanner.currentToken.content + " >)");
+        System.err.println(message +
+                            " on line: " + PScanner.nextToken.lineNumber +
+                            " : " + PScanner.nextToken.offSet + ", got [" + PScanner.nextToken.type + "] with content < " + PScanner.nextToken.content + " > " +
+                            "(Current is [" + PScanner.currentToken.type + "] with content < " + PScanner.currentToken.content + " >)");
         System.exit(0);
     }
 }

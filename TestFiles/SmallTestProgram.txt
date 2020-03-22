@@ -5,11 +5,11 @@ BEGIN MASTER
     }
 
     Listener (noget) {
-        //int a = 1 + (2 + 3);
-        //int b = (1 + 2) + 3;
-        //int c = (1 + (2 + (3 + 4)));
-        //int d = (((1 + 2) + 3) + 4);
-        //int e = 1 + (2 + 3) + 4;
+        int a = 1 + (2 + 3);
+        int b = (1 + 2) + 3;
+        int c = (1 + (2 + (3 + 4)));
+        int d = (((1 + 2) + 3) + 4);
+        int e = 1 + (2 + 3) + 4;
     }
 
 END MASTER
@@ -21,6 +21,29 @@ BEGIN SLAVE
     }
 
     EventHandler (noget) {
+        //int a = filterNoise(noget, flip) + 3;
+
+        if (a == 3) {
+            if (b == 3) {
+                c = 4;
+            }
+            else {
+                c = 5;
+            }
+        }
+        else if (a == 5) {
+            c = 6;
+        }
+        else {
+            c = 7;
+        }
+    }
+
+END SLAVE
+
+BEGIN SLAVE
+
+    Initiate {
 
     }
 
