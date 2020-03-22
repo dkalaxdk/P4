@@ -1,8 +1,6 @@
 package sw417f20.ebal;
 
-import sw417f20.ebal.SyntaxAnalysis.Parser;
-import sw417f20.ebal.SyntaxAnalysis.Scanner;
-import sw417f20.ebal.SyntaxAnalysis.Token;
+import sw417f20.ebal.SyntaxAnalysis.*;
 import sw417f20.ebal.SyntaxAnalysis.Reader;
 
 import java.io.*;
