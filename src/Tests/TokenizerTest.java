@@ -35,8 +35,8 @@ class TokenizerTest {
      * Test for the findNumberTokenType method
      */
     @Test
-    void findNumberTokenType_TokenIsNotNumber_ReturnsTokenWithTypeNOTATOKEN() {
-        Token.Type expected = Token.Type.NOTATOKEN;
+    void findNumberTokenType_TokenIsNotNumber_ReturnsTokenWithTypeERROR() {
+        Token.Type expected = Token.Type.ERROR;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "NotANumber");
         tokenizer.findNumberTokenType(actual);
