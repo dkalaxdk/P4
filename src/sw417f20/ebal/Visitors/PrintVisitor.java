@@ -13,12 +13,11 @@ public class PrintVisitor extends Visitor {
             PrintNode(node);
         }
 
+//        PrintNode(node);
+
         indent++;
         if (node.FirstChild != null) {
             VisitChildren(node);
-        }
-        if (node.FirstSibling != null) {
-            VisitSiblings(node);
         }
         indent--;
 
