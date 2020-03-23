@@ -543,19 +543,15 @@ class TokenizerTest {
 
         Mockito.verify(mockReader).readToEndOfComment();
     }
-    /*@Test  //TODO find ud af hvordan man laver en test til en "uendelig" while lykke
+    @Test
     void isSingleCharacter_TokenContentMatchesDivideDivide_CallsReadChar() throws IOException {
-        Mockito.when(mockReader.readChar()).thenReturn('\n');
-
-
         mockReader.nextChar = '/';
         Token actual = new Token(Token.Type.NOTATOKEN, "/");
-        mockReader.currentChar = '\n';
-        actual = tokenizer.IsSingleCharacter(actual);
+        tokenizer.IsSingleCharacter(actual);
 
 
-        Mockito.verify(mockReader).readChar();
-    }*/
+        Mockito.verify(mockReader).readToEndOfLine();
+    }
     @Test
     void isSingleCharacter_TokenContentMatchesEquals_ReturnsTokenWithTypeASSIGN() throws IOException {
         Token.Type expected = Token.Type.ASSIGN;

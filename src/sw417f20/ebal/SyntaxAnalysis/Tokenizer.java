@@ -162,9 +162,7 @@ public class Tokenizer {
                 } else if (reader.nextChar == '*') {
                     reader.readToEndOfComment();
                 } else if (reader.nextChar == '/') {
-                    while (reader.currentChar != '\n') {
-                        reader.readChar();
-                    }
+                    reader.readToEndOfLine();
                 } else token.type = Token.Type.OP_DIVIDE;
                 break;
 
