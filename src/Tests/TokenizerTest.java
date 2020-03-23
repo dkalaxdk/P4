@@ -20,7 +20,6 @@ class TokenizerTest {
         // Mock the reader class needed as parameter for tokenizer
         mockReader = Mockito.mock(Reader.class);
         tokenizer = new Tokenizer(mockReader);
-        //Mockito.when(mockReader.get("nextchar")).thenReturn((int)expected);
     }
 
     @AfterEach
@@ -36,9 +35,9 @@ class TokenizerTest {
      */
     @Test
     void findNumberTokenType_TokenIsNotNumber_ReturnsTokenWithTypeNOTATOKEN() {
-        Token.Type expected = Token.Type.NOTATOKEN;
+        Token.Type expected = Token.Type.ERROR;
 
-        Token actual = new Token(Token.Type.NOTATOKEN, "NotANumber");
+        Token actual = new Token(Token.Type.NOTATOKEN, "1NotANumber");
         tokenizer.findNumberTokenType(actual);
 
         assertEquals(expected, actual.type);
@@ -589,16 +588,6 @@ class TokenizerTest {
         assertEquals(expected, actual.type);
     }
     @Test
-    void isSingleCharacter_TokenContentMatchesQuestionMark_ReturnsTokenWithTypeOP_QUESTION() throws IOException {
-        Token.Type expected = Token.Type.OP_QUESTION;
-        Tokenizer tokenizer = new Tokenizer(mockReader);
-
-        Token actual = new Token(Token.Type.NOTATOKEN, "?");
-        tokenizer.IsSingleCharacter(actual);
-
-        assertEquals(expected, actual.type);
-    }
-    @Test
     void isSingleCharacter_TokenContentMatchesExclamationMark_ReturnsTokenWithTypeLOP_NOT() throws IOException {
         Token.Type expected = Token.Type.OP_NOT;
         Tokenizer tokenizer = new Tokenizer(mockReader);
@@ -640,26 +629,6 @@ class TokenizerTest {
         assertEquals(expected, actual.type);
     }
     @Test
-    void isSingleCharacter_TokenContentMatchesLeftSquareBracket_ReturnsTokenWithTypeLSQBRACKET() throws IOException {
-        Token.Type expected = Token.Type.LSQBRACKET;
-        Tokenizer tokenizer = new Tokenizer(mockReader);
-
-        Token actual = new Token(Token.Type.NOTATOKEN, "[");
-        tokenizer.IsSingleCharacter(actual);
-
-        assertEquals(expected, actual.type);
-    }
-    @Test
-    void isSingleCharacter_TokenContentMatchesRightSquareBracket_ReturnsTokenWithTypeRSQBRACKET() throws IOException {
-        Token.Type expected = Token.Type.RSQBRACKET;
-        Tokenizer tokenizer = new Tokenizer(mockReader);
-
-        Token actual = new Token(Token.Type.NOTATOKEN, "]");
-        tokenizer.IsSingleCharacter(actual);
-
-        assertEquals(expected, actual.type);
-    }
-    @Test
     void isSingleCharacter_TokenContentMatchesLeftBracket_ReturnsTokenWithTypeLBRACKET() throws IOException {
         Token.Type expected = Token.Type.LBRACKET;
         Tokenizer tokenizer = new Tokenizer(mockReader);
@@ -695,46 +664,6 @@ class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(mockReader);
 
         Token actual = new Token(Token.Type.NOTATOKEN, ";");
-        tokenizer.IsSingleCharacter(actual);
-
-        assertEquals(expected, actual.type);
-    }
-    @Test
-    void isSingleCharacter_TokenContentMatchesColon_ReturnsTokenWithTypeCOLON() throws IOException {
-        Token.Type expected = Token.Type.COLON;
-        Tokenizer tokenizer = new Tokenizer(mockReader);
-
-        Token actual = new Token(Token.Type.NOTATOKEN, ":");
-        tokenizer.IsSingleCharacter(actual);
-
-        assertEquals(expected, actual.type);
-    }
-    @Test
-    void isSingleCharacter_TokenContentMatchesBackslash_ReturnsTokenWithTypeBACKSLASH() throws IOException {
-        Token.Type expected = Token.Type.BACKSLASH;
-        Tokenizer tokenizer = new Tokenizer(mockReader);
-
-        Token actual = new Token(Token.Type.NOTATOKEN, "\\");
-        tokenizer.IsSingleCharacter(actual);
-
-        assertEquals(expected, actual.type);
-    }
-    @Test
-    void isSingleCharacter_TokenContentMatchesDoubleQuote_ReturnsTokenWithTypeDOUBLEQUOTE() throws IOException {
-        Token.Type expected = Token.Type.DOUBLEQUOTE;
-        Tokenizer tokenizer = new Tokenizer(mockReader);
-
-        Token actual = new Token(Token.Type.NOTATOKEN, "\"");
-        tokenizer.IsSingleCharacter(actual);
-
-        assertEquals(expected, actual.type);
-    }
-    @Test
-    void isSingleCharacter_TokenContentMatchesSingleQuote_ReturnsTokenWithTypeSINGLEQUOTE() throws IOException {
-        Token.Type expected = Token.Type.SINGLEQUOTE;
-        Tokenizer tokenizer = new Tokenizer(mockReader);
-
-        Token actual = new Token(Token.Type.NOTATOKEN, "\'");
         tokenizer.IsSingleCharacter(actual);
 
         assertEquals(expected, actual.type);

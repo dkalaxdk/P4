@@ -178,10 +178,6 @@ public class Tokenizer {
             case '%':
                 token.type = Token.Type.OP_MODULO;
                 break;
-            //TODO slet mig '?' måske
-            case '?':
-                token.type = Token.Type.OP_QUESTION;
-                break;
 
             case '!':
                 if (reader.nextChar == '=') {
@@ -195,14 +191,6 @@ public class Tokenizer {
 
             case ')':
                 token.type = Token.Type.RPAREN;
-                break;
-            //TODO har vi [] stadig væk?
-            case '[':
-                token.type = Token.Type.LSQBRACKET;
-                break;
-
-            case ']':
-                token.type = Token.Type.RSQBRACKET;
                 break;
 
             case '{':
@@ -219,20 +207,7 @@ public class Tokenizer {
             case ';':
                 token.type = Token.Type.SEMI;
                 break;
-            //TODO slet mig ':' måske
-            case ':':
-                token.type = Token.Type.COLON;
-                break;
-            //TODO hvad gør '\' i vores sprog
-            case '\\':
-                token.type = Token.Type.BACKSLASH;
-                break;
-            case '"':
-                token.type = Token.Type.DOUBLEQUOTE;
-                break;
-            case '\'':
-                token.type = Token.Type.SINGLEQUOTE;
-                break;
+
             case '\uFFFF':
                 token.type = Token.Type.EOF;
                 break;
