@@ -1,8 +1,12 @@
 package sw417f20.ebal;
 
+import sw417f20.ebal.ContextAnalysis.HashSymbolTable;
+import sw417f20.ebal.SyntaxAnalysis.AST;
 import sw417f20.ebal.SyntaxAnalysis.Parser;
 import sw417f20.ebal.SyntaxAnalysis.Scanner;
 import sw417f20.ebal.SyntaxAnalysis.Token;
+import sw417f20.ebal.Visitors.SemanticVisitor;
+import sw417f20.ebal.Visitors.Visitor;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,11 +14,12 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-//         ScannerStuff();
-        ParserStuff();
+        ScannerStuff();
+        AST ast = ParserStuff();
+        SymbolTableStuff(ast);
     }
 
-    public static void ParserStuff() {
+    public static AST ParserStuff() {
         Parser parser = new Parser();
 
         long start = System.currentTimeMillis();
@@ -22,8 +27,10 @@ public class Main {
         System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms");
 
         start = System.currentTimeMillis();
-        parser.Parse(GetFullPath("/TestFiles/TestProgram.txt"));
+        AST ast = parser.Parse(GetFullPath("/TestFiles/TestProgram.txt"));
         System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms");
+
+        return ast;
     }
 
     public static void ScannerStuff() throws IOException {
@@ -53,5 +60,10 @@ public class Main {
     public static String GetFullPath(String file) {
         String filePath = new File("").getAbsolutePath();
         return filePath + file;
+    }
+
+    public static void SymbolTableStuff (AST ast){
+        Visitor visitor = new SemanticVisitor();
+        visitor.Visit(ast.Root);
     }
 }

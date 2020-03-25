@@ -2,7 +2,7 @@ package sw417f20.ebal.SyntaxAnalysis;
 
 public class AST {
 
-    Node Root;
+    public Node Root;
 
     public AST() {
 
