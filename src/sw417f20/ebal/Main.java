@@ -18,7 +18,7 @@ public class Main {
         Parser parser = new Parser();
 
         String filePath = new File("").getAbsolutePath();
-        String fileInput = filePath + "/TestFiles/TestProgram.txt";
+        String fileInput = filePath + "/TestFiles/SmallTestProgram.txt";
 
         FileReader fileReader = new FileReader(fileInput);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -28,6 +28,14 @@ public class Main {
         long start = System.currentTimeMillis();
         parser.Parse(scanner);
         System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms");
+
+        filePath = new File("").getAbsolutePath();
+        fileInput = filePath + "/TestFiles/TestProgram.txt";
+
+        fileReader = new FileReader(fileInput);
+        bufferedReader = new BufferedReader(fileReader);
+        reader = new Reader(bufferedReader);
+        scanner = new Scanner(reader);
 
         start = System.currentTimeMillis();
         parser.Parse(scanner);
