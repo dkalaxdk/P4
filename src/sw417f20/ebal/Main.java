@@ -1,8 +1,6 @@
 package sw417f20.ebal;
 
-import sw417f20.ebal.SyntaxAnalysis.Parser;
-import sw417f20.ebal.SyntaxAnalysis.Scanner;
-import sw417f20.ebal.SyntaxAnalysis.Token;
+import sw417f20.ebal.SyntaxAnalysis.*;
 import sw417f20.ebal.SyntaxAnalysis.Reader;
 
 import java.io.*;
@@ -15,7 +13,6 @@ public class Main {
     }
 
     public static void ParserStuff() throws FileNotFoundException {
-        Parser parser = new Parser();
 
         String filePath = new File("").getAbsolutePath();
         String fileInput = filePath + "/TestFiles/SmallParserTestProgram.txt";
@@ -25,8 +22,15 @@ public class Main {
         Reader reader = new Reader(bufferedReader);
         Scanner scanner = new Scanner(reader);
 
+        Parser parser = new Parser(scanner);
+
         long start = System.currentTimeMillis();
-        parser.Parse(scanner);
+        try {
+            parser.Parse();
+        }
+        catch (RecursiveDescent.SyntaxException e) {
+            System.err.println(e.getMessage());
+        }
         System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms");
 
         filePath = new File("").getAbsolutePath();
@@ -37,8 +41,15 @@ public class Main {
         reader = new Reader(bufferedReader);
         scanner = new Scanner(reader);
 
+        parser = new Parser(scanner);
+
         start = System.currentTimeMillis();
-        parser.Parse(scanner);
+        try {
+            parser.Parse();
+        }
+        catch (RecursiveDescent.SyntaxException e) {
+            System.err.println(e.getMessage());
+        }
         System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms");
     }
 
