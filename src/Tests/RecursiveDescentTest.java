@@ -17,26 +17,13 @@ class RecursiveDescentTest {
     }
 
     @Test
-    void parse() {
+    void Peek_ReturnsNextToken() {
+
     }
 
     @Test
-    void start() {
+    void Peek_DoesNotAdvanceScanner() {
+
     }
 
-    @Test
-    void peek() {
-    }
-
-    @Test
-    void expect() {
-    }
-
-    @Test
-    void testExpect() {
-    }
-
-    @Test
-    void makeError() {
-    }
 }
