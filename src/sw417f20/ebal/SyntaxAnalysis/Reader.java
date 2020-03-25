@@ -88,14 +88,14 @@ public class Reader {
     }
 
     public void readToEndOfComment() throws IOException {
-        System.out.println("Comment found");
+//        System.out.println("Comment found");
         while (!(currentChar == '*' && nextChar == '/')) {
             readChar();
         }
         readChar();
     }
     public void readToEndOfLine() throws IOException {
-        System.out.println("Comment found");
+//        System.out.println("Comment found");
         while (!(currentChar == '\n')) {
             readChar();
         }

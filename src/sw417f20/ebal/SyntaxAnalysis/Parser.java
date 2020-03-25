@@ -2,6 +2,7 @@ package sw417f20.ebal.SyntaxAnalysis;
 
 public class Parser extends RecursiveDescent {
 
+    // TODO: Tilføj linienummer og offset til Node, så det kan bruges af SemanticsVisitor til fejlmeddeleser
     public Parser(Scanner scanner) {
         super(scanner);
     }
