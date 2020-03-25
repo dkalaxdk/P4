@@ -76,7 +76,7 @@ public class Reader {
                     output.append(currentChar);
                 }
             // If the output string is not longer than one, it must be 0-9.
-            } else if (String.valueOf(currentChar).matches("[0-9]")) {
+            } else if (String.valueOf(currentChar).matches("[0-9.]")) {
                 output.append(currentChar);
             } else break;
             // If the next char is not a white space, continue reading.
@@ -90,6 +90,13 @@ public class Reader {
     public void readToEndOfComment() throws IOException {
         System.out.println("Comment found");
         while (!(currentChar == '*' && nextChar == '/')) {
+            readChar();
+        }
+        readChar();
+    }
+    public void readToEndOfLine() throws IOException {
+        System.out.println("Comment found");
+        while (!(currentChar == '/' && nextChar == '/')) {
             readChar();
         }
         readChar();

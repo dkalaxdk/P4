@@ -26,7 +26,7 @@ class ReaderTest {
         char expected = 'a';
         // Mock the inputStream
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
-        Mockito.when(mockReader.read()).thenReturn((int)expected);
+        Mockito.when(mockReader.read()).thenReturn((int) expected);
         Reader reader = new Reader(mockReader);
 
         char actual = reader.readChar();
@@ -39,7 +39,7 @@ class ReaderTest {
         char expected = 'b';
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
         // Mock two consecutive calls to the method with different return values.
-        Mockito.when(mockReader.read()).thenReturn((int)'a', (int)'b');
+        Mockito.when(mockReader.read()).thenReturn((int) 'a', (int) 'b');
         Reader reader = new Reader(mockReader);
 
         reader.readChar();
@@ -53,7 +53,7 @@ class ReaderTest {
         int expected = 1;
         // Mock the inputStream
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
-        Mockito.when(mockReader.read()).thenReturn((int)'a');
+        Mockito.when(mockReader.read()).thenReturn((int) 'a');
         Reader reader = new Reader(mockReader);
 
         reader.readChar();
@@ -67,7 +67,7 @@ class ReaderTest {
         int expected = 2;
         // Mock the inputStream
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
-        Mockito.when(mockReader.read()).thenReturn((int)'\n');
+        Mockito.when(mockReader.read()).thenReturn((int) '\n');
         Reader reader = new Reader(mockReader);
 
         reader.readChar();
@@ -81,7 +81,7 @@ class ReaderTest {
         int expected = 0;
         // Mock the inputStream
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
-        Mockito.when(mockReader.read()).thenReturn((int)'\n');
+        Mockito.when(mockReader.read()).thenReturn((int) '\n');
         Reader reader = new Reader(mockReader);
         reader.currentOffset = 5;
 
@@ -96,7 +96,7 @@ class ReaderTest {
         String expected = "word";
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
         // Mock to return the characters of a word followed by whitespace
-        Mockito.when(mockReader.read()).thenReturn((int)'w', (int)'o', (int)'r', (int)'d', (int)'\t');
+        Mockito.when(mockReader.read()).thenReturn((int) 'w', (int) 'o', (int) 'r', (int) 'd', (int) '\t');
         Reader reader = new Reader(mockReader);
 
         reader.readChar();
@@ -110,7 +110,7 @@ class ReaderTest {
         String expected = "word";
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
         // Mock to return the characters of a word followed by whitespace
-        Mockito.when(mockReader.read()).thenReturn((int)'w', (int)'o', (int)'r', (int)'d', (int)'\t', (int)'\n');
+        Mockito.when(mockReader.read()).thenReturn((int) 'w', (int) 'o', (int) 'r', (int) 'd', (int) '\t', (int) '\n');
         Reader reader = new Reader(mockReader);
 
         reader.readChar();
@@ -124,9 +124,9 @@ class ReaderTest {
         String expected = "word";
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
         // Mock to return the characters of a word followed by whitespace
-        Mockito.when(mockReader.read()).thenReturn((int)'w', (int)'o', (int)'r', (int)'d',
-                                                   (int)'\t',
-                                                   (int)'n', (int)'e', (int)'w');
+        Mockito.when(mockReader.read()).thenReturn((int) 'w', (int) 'o', (int) 'r', (int) 'd',
+                (int) '\t',
+                (int) 'n', (int) 'e', (int) 'w');
         Reader reader = new Reader(mockReader);
 
         reader.readChar();
@@ -140,7 +140,7 @@ class ReaderTest {
         String expected = "word";
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
         // Mock to return the characters of a word followed by whitespace
-        Mockito.when(mockReader.read()).thenReturn((int)'w', (int)'o', (int)'r', (int)'d', (int)'(', (int)'\t');
+        Mockito.when(mockReader.read()).thenReturn((int) 'w', (int) 'o', (int) 'r', (int) 'd', (int) '(', (int) '\t');
         Reader reader = new Reader(mockReader);
 
         reader.readChar();
@@ -148,4 +148,102 @@ class ReaderTest {
 
         assertEquals(expected, actual);
     }
+
+    @Test
+    void findWord_ReadsWord_AccecptsWordWithUnderscoreInBeginning() throws IOException {
+        String expected = "_word";
+        BufferedReader mockReader = Mockito.mock(BufferedReader.class);
+        // Mock to return the characters of a word followed by whitespace
+        Mockito.when(mockReader.read()).thenReturn((int) '_', (int) 'w', (int) 'o', (int) 'r', (int) 'd', (int) '\t');
+        Reader reader = new Reader(mockReader);
+
+        reader.readChar();
+        String actual = reader.findWord();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void findWord_ReadsWord_AccecptsWordWithUnderscoreInMiddle() throws IOException {
+        String expected = "wo_rd";
+        BufferedReader mockReader = Mockito.mock(BufferedReader.class);
+        // Mock to return the characters of a word followed by whitespace
+        Mockito.when(mockReader.read()).thenReturn((int) 'w', (int) 'o', (int) '_', (int) 'r', (int) 'd', (int) '\t');
+        Reader reader = new Reader(mockReader);
+
+        reader.readChar();
+        String actual = reader.findWord();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void findWord_ReadsWord_AccecptsWordWithUnderscoreATEnd() throws IOException {
+        String expected = "word_";
+        BufferedReader mockReader = Mockito.mock(BufferedReader.class);
+        // Mock to return the characters of a word followed by whitespace
+        Mockito.when(mockReader.read()).thenReturn((int) 'w', (int) 'o', (int) 'r', (int) 'd', (int) '_', (int) '\t');
+        Reader reader = new Reader(mockReader);
+
+        reader.readChar();
+        String actual = reader.findWord();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void findNumber_ReadsNumber_AcceptsNumberOne() throws IOException {
+        String expected = "1";
+        BufferedReader mockReader = Mockito.mock(BufferedReader.class);
+        Mockito.when(mockReader.read()).thenReturn((int) '1', (int) '\t');
+        Reader reader = new Reader(mockReader);
+
+        reader.readChar();
+        String actual = reader.findNumber();
+
+        assertEquals(expected, actual);
+    }
+
+
+    @Test
+    void findNumber_ReadsNumber_DecimalNumber() throws IOException {
+        String expected = "1.2";
+        BufferedReader mockReader = Mockito.mock(BufferedReader.class);
+        Mockito.when(mockReader.read()).thenReturn((int) '1', (int) '.', (int) '2', (int) '\t');
+        Reader reader = new Reader(mockReader);
+
+        reader.readChar();
+        String actual = reader.findNumber();
+
+        assertEquals(expected, actual);
+    }
+
+    //jeg er ikke helt sikker på om den her test skal virke.
+    @Test
+    void findNumber_ReadsNumber_NumberThatStartsWithDot() throws IOException {
+        String expected = ".2";
+        BufferedReader mockReader = Mockito.mock(BufferedReader.class);
+        Mockito.when(mockReader.read()).thenReturn((int) '.', (int) '2', (int) '\t');
+        Reader reader = new Reader(mockReader);
+
+        String actual = String.valueOf(reader.readChar());
+        reader.readChar();
+        actual += reader.findNumber();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void findNumber_ReadsNumber_NumberThatHasACharacter() throws IOException {
+        String expected = "1a";
+        BufferedReader mockReader = Mockito.mock(BufferedReader.class);
+        Mockito.when(mockReader.read()).thenReturn((int) '1', (int) 'a', (int) '\t');
+        Reader reader = new Reader(mockReader);
+
+        reader.readChar();
+        String actual = reader.findNumber();
+
+        assertEquals(expected, actual);
+    }
+
 }

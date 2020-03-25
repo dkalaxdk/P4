@@ -3,9 +3,9 @@ package sw417f20.ebal;
 import sw417f20.ebal.SyntaxAnalysis.Parser;
 import sw417f20.ebal.SyntaxAnalysis.Scanner;
 import sw417f20.ebal.SyntaxAnalysis.Token;
+import sw417f20.ebal.SyntaxAnalysis.Reader;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 public class Main {
 
@@ -14,15 +14,23 @@ public class Main {
         ParserStuff();
     }
 
-    public static void ParserStuff() {
+    public static void ParserStuff() throws FileNotFoundException {
         Parser parser = new Parser();
 
+        String filePath = new File("").getAbsolutePath();
+        String fileInput = filePath + "/TestFiles/TestProgram.txt";
+
+        FileReader fileReader = new FileReader(fileInput);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        Reader reader = new Reader(bufferedReader);
+        Scanner scanner = new Scanner(reader);
+
         long start = System.currentTimeMillis();
-        parser.Parse(GetFullPath("/TestFiles/SmallTestProgram.txt"));
+        parser.Parse(scanner);
         System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms");
 
         start = System.currentTimeMillis();
-        parser.Parse(GetFullPath("/TestFiles/TestProgram.txt"));
+        parser.Parse(scanner);
         System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms");
     }
 
@@ -30,13 +38,19 @@ public class Main {
         long start = System.currentTimeMillis();
 
         System.out.println();
-        Scanner scanner = new Scanner(GetFullPath("/TestFiles/TestProgram.txt"));
+        String filePath = new File("").getAbsolutePath();
+        String fileInput = filePath + "/TestFiles/TestProgram.txt";
+
+        FileReader fileReader = new FileReader(fileInput);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        Reader reader = new Reader(bufferedReader);
+        Scanner scanner = new Scanner(reader);
         int tokenCount = 0;
 
         while (scanner.currentToken.type != Token.Type.EOF) {
             scanner.Advance();
 
-            if (scanner.currentToken.type != Token.Type.NOTATOKEN) {
+            if (scanner.currentToken.type != Token.Type.NOTATOKEN && scanner.currentToken.type != Token.Type.ERROR) {
                 System.out.println("Token found: " + scanner.currentToken.type + " on line: " + scanner.currentToken.lineNumber + " : " + scanner.currentToken.offSet + " with content: " + scanner.currentToken.content);
                 tokenCount++;
             } else if (scanner.currentToken.type == Token.Type.ERROR){
