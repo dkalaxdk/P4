@@ -10,7 +10,7 @@ import java.io.*;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-//         ScannerStuff();
+//       ScannerStuff();
         ParserStuff();
     }
 
@@ -18,7 +18,7 @@ public class Main {
         Parser parser = new Parser();
 
         String filePath = new File("").getAbsolutePath();
-        String fileInput = filePath + "/TestFiles/SmallTestProgram.txt";
+        String fileInput = filePath + "/TestFiles/SmallParserTestProgram.txt";
 
         FileReader fileReader = new FileReader(fileInput);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -30,7 +30,7 @@ public class Main {
         System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms");
 
         filePath = new File("").getAbsolutePath();
-        fileInput = filePath + "/TestFiles/TestProgram.txt";
+        fileInput = filePath + "/TestFiles/ParserTestProgram.txt";
 
         fileReader = new FileReader(fileInput);
         bufferedReader = new BufferedReader(fileReader);
@@ -47,7 +47,7 @@ public class Main {
 
         System.out.println();
         String filePath = new File("").getAbsolutePath();
-        String fileInput = filePath + "/TestFiles/TestProgram.txt";
+        String fileInput = filePath + "/TestFiles/ScannerTestProgram.txt";
 
         FileReader fileReader = new FileReader(fileInput);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
