@@ -13,44 +13,38 @@ public class Main {
     }
 
     public static void ParserStuff() throws FileNotFoundException {
-
-        String filePath = new File("").getAbsolutePath();
-        String fileInput = filePath + "/TestFiles/SmallParserTestProgram.txt";
-
-        FileReader fileReader = new FileReader(fileInput);
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-        Reader reader = new Reader(bufferedReader);
-        Scanner scanner = new Scanner(reader);
-
-        Parser parser = new Parser(scanner);
-
-        long start = System.currentTimeMillis();
         try {
+            String filePath = new File("").getAbsolutePath();
+            String fileInput = filePath + "/TestFiles/SmallParserTestProgram.txt";
+
+            FileReader fileReader = new FileReader(fileInput);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            Reader reader = new Reader(bufferedReader);
+            Scanner scanner = new Scanner(reader);
+
+            Parser parser = new Parser(scanner);
+
+            long start = System.currentTimeMillis();
             parser.Parse();
+            System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms");
+
+            filePath = new File("").getAbsolutePath();
+            fileInput = filePath + "/TestFiles/ParserTestProgram.txt";
+
+            fileReader = new FileReader(fileInput);
+            bufferedReader = new BufferedReader(fileReader);
+            reader = new Reader(bufferedReader);
+            scanner = new Scanner(reader);
+
+            parser = new Parser(scanner);
+
+            start = System.currentTimeMillis();
+            parser.Parse();
+            System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms");
         }
         catch (RecursiveDescent.SyntaxException e) {
             System.err.println(e.getMessage());
         }
-        System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms");
-
-        filePath = new File("").getAbsolutePath();
-        fileInput = filePath + "/TestFiles/ParserTestProgram.txt";
-
-        fileReader = new FileReader(fileInput);
-        bufferedReader = new BufferedReader(fileReader);
-        reader = new Reader(bufferedReader);
-        scanner = new Scanner(reader);
-
-        parser = new Parser(scanner);
-
-        start = System.currentTimeMillis();
-        try {
-            parser.Parse();
-        }
-        catch (RecursiveDescent.SyntaxException e) {
-            System.err.println(e.getMessage());
-        }
-        System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms");
     }
 
     public static void ScannerStuff() throws IOException {
