@@ -41,7 +41,7 @@ BEGIN SLAVE
         {
             write(light1, LOW);
         }
-            else if (value == LOW)
+        else if (value == LOW)
         {
             write(light1, HIGH);
         }
