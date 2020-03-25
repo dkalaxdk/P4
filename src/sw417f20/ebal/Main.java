@@ -10,8 +10,8 @@ import java.io.*;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-//         ScannerStuff();
-        ParserStuff();
+       ScannerStuff();
+    //    ParserStuff();
     }
 
     public static void ParserStuff() throws FileNotFoundException {
