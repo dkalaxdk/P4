@@ -1,5 +1,7 @@
 package sw417f20.ebal.SyntaxAnalysis;
 
+import net.bytebuddy.asm.Advice;
+
 public class Parser extends RecursiveDescent {
 
     // TODO: Tilføj linienummer og offset til Node, så det kan bruges af SemanticsVisitor til fejlmeddeleser
@@ -637,7 +639,7 @@ public class Parser extends RecursiveDescent {
             ReturnsCall.AddChild(AST.MakeNode(Expect(Token.Type.GETVALUE)));
 
             Expect(Token.Type.LPAREN);
-            ReturnsCall.AddChild(Value());
+            ReturnsCall.AddChild(AST.MakeNode(Expect(Token.Type.IDENTIFIER)));
             Expect(Token.Type.RPAREN);
         }
         else if (Peek().type == Token.Type.CREATEEVENT) {
