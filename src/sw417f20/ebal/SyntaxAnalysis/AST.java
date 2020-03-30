@@ -85,29 +85,5 @@ public class AST {
             default:
                 return new Node(NodeType.Error);
         }
-
-
     }
-
-
-//    public Node MakeFamiliy(Node parent, Node child1, Node child2) {
-//        parent.AdoptChildren(child1.MakeSiblings(child2));
-//
-//        return parent;
-//    }
-//
-//    public Node MakeFamiliy(Node parent, Node child1, Node child2, Node child3) {
-//        parent.AdoptChildren(child1.MakeSiblings(child2.MakeSiblings(child3)));
-//
-//        return parent;
-//    }
-
-//    public Node MakeFamily(Node parent, Node[] children, int length) {
-//
-//        if (length >= 2) {
-//            parent.AdoptChildren(children[length - 2].MakeSiblings(children[length - 1]));
-//        }
-//
-//        return parent;
-//    }
 }
