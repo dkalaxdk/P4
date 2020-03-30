@@ -15,11 +15,11 @@ public class PrintVisitor extends Visitor {
 
 //        PrintNode(node);
 
-        indent++;
         if (node.FirstChild != null) {
+            indent++;
             VisitChildren(node);
+            indent--;
         }
-        indent--;
 
     }
 
