@@ -1293,6 +1293,7 @@ class ParserTest {
         assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.IOType);
     }
 
+    // TODO: Test for andre typer?
     @Test
     void PinDcl_MinimumProgram_ReturnedNodeFourthChildIsLiteral() {
         // Arrange
@@ -1310,7 +1311,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Next.Next.Type, AST.NodeType.Literal);
+        assertSame(node.FirstChild.Next.Next.Next.Type, AST.NodeType.IntLiteral);
     }
 
 
@@ -1414,6 +1415,7 @@ class ParserTest {
     }
 
 
+
     @Test
     void IOType_NoProgram_ThrowSyntaxException() {
         // Arrange
@@ -1491,4 +1493,606 @@ class ParserTest {
 
         assertSame(node.Type, AST.NodeType.IOType);
     }
+
+
+
+    @Test
+    void Listeners_NoProgram_ThrowSyntaxException() {
+        // Arrange
+        String program = "";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Listeners();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void Listeners_MinimumProgram_ReturnEmptyNode() {
+        // Arrange
+        String program = "END";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Listeners();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Empty);
+    }
+
+    @Test
+    void Listeners_OneListener_ReturnListenerNode() {
+        // Arrange
+        String program = "Listener (id) { } END";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Listeners();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Listener);
+    }
+
+    @Test
+    void Listeners_TwoListeners_ReturnListenerNode() {
+        // Arrange
+        String program = "Listener (id) { } " +
+                         "Listener (id) { } " +
+                         "END";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Listeners();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Listener);
+    }
+
+    @Test
+    void Listeners_TwoListeners_ReturnedNodeNextSiblingIsListenerNode() {
+        // Arrange
+        String program = "Listener (id) { } " +
+                         "Listener (id) { } " +
+                         "END";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Listeners();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Next.Type, AST.NodeType.Listener);
+    }
+
+
+
+    @Test
+    void Listener_NoProgram_ThrowSyntaxException() {
+        // Arrange
+        String program = "";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Listener();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void Listener_NoListener_ThrowSyntaxException() {
+        // Arrange
+        String program = "(id) { }";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Listener();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void Listener_NoLParen_ThrowSyntaxException() {
+        // Arrange
+        String program = "Listener id) { }";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Listener();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void Listener_NoIdentifier_ThrowSyntaxException() {
+        // Arrange
+        String program = "Listener () { }";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Listener();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void Listener_NoRParen_ThrowSyntaxException() {
+        // Arrange
+        String program = "Listener (id { }";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Listener();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void Listener_NoLBracket_ThrowSyntaxException() {
+        // Arrange
+        String program = "Listener (id) }";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Listener();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void Listener_NoRBracket_ThrowSyntaxException() {
+        // Arrange
+        String program = "Listener (id) {";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Listener();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void Listener_MinimumProgram_ReturnListenerNode() {
+        // Arrange
+        String program = "Listener (id) { }";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Listener();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Listener);
+    }
+
+    @Test
+    void Listener_MinimumProgram_ReturnedNodeFirstChildIsIdentifier() {
+        // Arrange
+        String program = "Listener (id) { }";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Listener();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Type, AST.NodeType.Identifier);
+    }
+
+    @Test
+    void Listener_MinimumProgram_ReturnedNodeFirstChildIdentifierHasName() {
+        // Arrange
+        String program = "Listener (id) { }";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Listener();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertTrue(node.FirstChild.Value.equals("id"));
+    }
+
+    @Test
+    void Listener_MinimalProgram_ReturnedNodeHasSecondChild() {
+        // Arrange
+        String program = "Listener (id) { int a = 4; }";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Listener();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertNotNull(node.FirstChild.Next);
+    }
+
+    @Test
+    void Listener_MinimalProgram_ContainsCode_ReturnedNodeSecondChildIsBlock() {
+        // Arrange
+        String program = "Listener (id) { int a = 4; }";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Listener();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Next.Type, AST.NodeType.Block);
+    }
+
+
+
+    @Test
+    void EventHandlers_NoProgram_ThrowSyntaxException() {
+        // Arrange
+        String program = "";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.EventHandlers();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void EventHandlers_MinimumProgram_ReturnEmptyNode() {
+        // Arrange
+        String program = "END";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.EventHandlers();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Empty);
+    }
+
+    @Test
+    void EventHandlers_OneEventHandler_ReturnEventHandlerNode() {
+        // Arrange
+        String program = "EventHandler (id) { }" +
+                         "END";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.EventHandlers();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.EventHandler);
+    }
+
+    @Test
+    void EventHandlers_TwoEventHandlers_ReturnEventHandlerNode() {
+        // Arrange
+        String program = "EventHandler (id) { }" +
+                         "EventHandler (id) { }" +
+                         "END";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.EventHandlers();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.EventHandler);
+    }
+
+    @Test
+    void EventHandlers_TwoEventHandlers_ReturnedNodeNextSiblingIsEventHandler() {
+        // Arrange
+        String program = "EventHandler (id) { }" +
+                         "EventHandler (id) { }" +
+                         "END";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.EventHandlers();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.EventHandler);
+    }
+
+
+
+    @Test
+    void EventHandler_NoProgram_ThrowSyntaxException() {
+        // Arrange
+        String program = "";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.EventHandler();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void EventHandler_NoEventHandler_ThrowSyntaxException() {
+        // Arrange
+        String program = "(id) { }";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.EventHandler();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void EventHandler_NoLParen_ThrowSyntaxException() {
+        // Arrange
+        String program = "EventHandler id) { }";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.EventHandler();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void EventHandler_NoIdentifier_ThrowSyntaxException() {
+        // Arrange
+        String program = "EventHandler () { }";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.EventHandler();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void EventHandler_NoRParen_ThrowSyntaxException() {
+        // Arrange
+        String program = "EventHandler (id { }";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.EventHandler();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void EventHandler_NoLBracket_ThrowSyntaxException() {
+        // Arrange
+        String program = "EventHandler (id) }";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.EventHandler();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void EventHandler_NoRBracket_ThrowSyntaxException() {
+        // Arrange
+        String program = "EventHandler (id) {";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.EventHandler();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void EventHandler_MinimumProgram_ThrowSyntaxException() {
+        // Arrange
+        String program = "EventHandler (id) { };";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.EventHandler();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.EventHandler);
+    }
+
 }
