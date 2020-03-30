@@ -19,7 +19,8 @@ public class AST {
 
         Expression,
 
-        Identifier, Type, Literal, Operator, Prefix, Func, Returns,
+        Identifier, Type, Operator, Prefix,
+        IntLiteral, FloatLiteral, BoolLiteral,
         PinType, IOType, FilterType,
 
 
@@ -32,8 +33,14 @@ public class AST {
             case IDENTIFIER:
                 return new Node(NodeType.Identifier, token.content);
 
-            case LIT_Int: case LIT_Bool: case LIT_Float:
-                return new Node(NodeType.Literal, token.content);
+            case LIT_Bool:
+                return new Node(NodeType.BoolLiteral, token.content);
+
+            case LIT_Int:
+                return new Node(NodeType.IntLiteral, token.content);
+
+            case LIT_Float:
+                return new Node(NodeType.FloatLiteral, token.content);
 
             case INPUT: case OUTPUT:
                 return new Node(NodeType.IOType, token.content);
@@ -53,7 +60,7 @@ public class AST {
                 return new Node(NodeType.Prefix, token.content);
 
             case CREATEEVENT: case GETVALUE: case BROADCAST: case WRITE: case FILTERNOISE:
-                return new Node(NodeType.Func, token.content);
+                return new Node(NodeType.Function, token.content);
 
             case FLIP: case CONSTANT: case RANGE:
                 return new Node(NodeType.FilterType, token.content);
@@ -77,37 +84,11 @@ public class AST {
             case Assignment:
             case If:
             case Call:
-            case Function:
-            case Returns:
             case Expression:
             case Empty:
                 return new Node(nodeType);
             default:
                 return new Node(NodeType.Error);
         }
-
-
     }
-
-
-//    public Node MakeFamiliy(Node parent, Node child1, Node child2) {
-//        parent.AdoptChildren(child1.MakeSiblings(child2));
-//
-//        return parent;
-//    }
-//
-//    public Node MakeFamiliy(Node parent, Node child1, Node child2, Node child3) {
-//        parent.AdoptChildren(child1.MakeSiblings(child2.MakeSiblings(child3)));
-//
-//        return parent;
-//    }
-
-//    public Node MakeFamily(Node parent, Node[] children, int length) {
-//
-//        if (length >= 2) {
-//            parent.AdoptChildren(children[length - 2].MakeSiblings(children[length - 1]));
-//        }
-//
-//        return parent;
-//    }
 }
