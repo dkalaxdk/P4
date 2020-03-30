@@ -1,10 +1,13 @@
 package sw417f20.ebal.SyntaxAnalysis;
 
+import sw417f20.ebal.ContextAnalysis.Symbol;
+
 // This class is inspired by the data structure
 // outlined in Crafting a Compiler by Fischer et. al.
 public class Node {
     public AST.NodeType Type;
     public String Value;
+    public Symbol.SymbolType Datatype;
 
     public Node Next;
     public Node FirstSibling;

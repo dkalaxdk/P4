@@ -8,16 +8,17 @@ import java.util.HashMap;
 
 public class HashSymbolTable extends SymbolTable{
 
+    private HashSymbolTable GlobalScope = this;
     private HashSymbolTable Parent;
     private ArrayList<HashSymbolTable> Children = new ArrayList<>();
     private HashMap<String, Symbol> hashtable = new HashMap<>();
-    private SemanticVisitor Visitor = new SemanticVisitor();
 
     @Override
     public HashSymbolTable OpenScope() {
         HashSymbolTable NewChild = new HashSymbolTable();
         Children.add(NewChild);
         NewChild.Parent = this;
+        NewChild.GlobalScope = this.GlobalScope;
         return NewChild;
     }
 
@@ -27,15 +28,26 @@ public class HashSymbolTable extends SymbolTable{
     }
 
     @Override
-    public void EnterSymbol(String name, String type) {
+    public boolean EnterSymbol(String name, Symbol.SymbolType type) {
         // Checks that name is not null and that symbol is not already in hashtable
         if (!DeclaredLocally(name)) {
             hashtable.put(name, new Symbol(name, type));
+            return true;
         }
         else {
-            // TODO:hvordan håndterer vi semantiske fejl?
-            System.err.println(name + " already declared.");
-            System.exit(0);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean EnterSymbol(String name, Symbol.SymbolType type, PinSymbol.IOType ioType) {
+        // Checks that name is not null and that symbol is not already in hashtable
+        if (!DeclaredLocally(name)) {
+            hashtable.put(name, new PinSymbol(name, type, ioType));
+            return true;
+        }
+        else {
+            return false;
         }
     }
 
@@ -55,5 +67,10 @@ public class HashSymbolTable extends SymbolTable{
     @Override
     public boolean DeclaredLocally(String name) {
         return hashtable.containsKey(name);
+    }
+
+    @Override
+    public HashSymbolTable GetGlobalScope (){
+        return GlobalScope;
     }
 }
