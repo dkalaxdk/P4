@@ -592,19 +592,16 @@ public class Parser extends RecursiveDescent {
     //	         |	write lparen identifier comma Expr rparen.
     public Node VoidCall() throws SyntaxException {
         Node VoidCall = AST.MakeNode(AST.NodeType.Call);
-        VoidCall.AddChild(AST.MakeNode(AST.NodeType.Function));
 
         if (Peek().type == Token.Type.BROADCAST) {
-            VoidCall.FirstChild.AddChild(AST.MakeNode(Expect(Token.Type.BROADCAST)));
-            VoidCall.FirstChild.AddChild(AST.MakeNode(AST.NodeType.Returns));
+            VoidCall.AddChild(AST.MakeNode(Expect(Token.Type.BROADCAST)));
 
             Expect(Token.Type.LPAREN);
             VoidCall.AddChild(AST.MakeNode(Expect(Token.Type.IDENTIFIER)));
             Expect(Token.Type.RPAREN);
         }
         else if (Peek().type == Token.Type.WRITE) {
-            VoidCall.FirstChild.AddChild(AST.MakeNode(Expect(Token.Type.WRITE)));
-            VoidCall.FirstChild.AddChild(AST.MakeNode(AST.NodeType.Returns));
+            VoidCall.AddChild(AST.MakeNode(Expect(Token.Type.WRITE)));
 
             Expect(Token.Type.LPAREN);
             VoidCall.AddChild(AST.MakeNode(Expect(Token.Type.IDENTIFIER)));
@@ -626,11 +623,9 @@ public class Parser extends RecursiveDescent {
     //	             |  createEvent lparen Value rparen.
     public Node ReturnsCall() throws SyntaxException {
         Node ReturnsCall = AST.MakeNode(AST.NodeType.Call);
-        ReturnsCall.AddChild(AST.MakeNode(AST.NodeType.Function));
 
         if (Peek().type == Token.Type.FILTERNOISE) {
-            ReturnsCall.FirstChild.AddChild(AST.MakeNode(Expect(Token.Type.FILTERNOISE)));
-            ReturnsCall.FirstChild.AddChild(AST.MakeNode(AST.NodeType.Returns));
+            ReturnsCall.AddChild(AST.MakeNode(Expect(Token.Type.FILTERNOISE)));
 
             Expect(Token.Type.LPAREN);
             ReturnsCall.AddChild(AST.MakeNode(Expect(Token.Type.IDENTIFIER)));
@@ -639,16 +634,14 @@ public class Parser extends RecursiveDescent {
             Expect(Token.Type.RPAREN);
         }
         else if (Peek().type == Token.Type.GETVALUE) {
-            ReturnsCall.FirstChild.AddChild(AST.MakeNode(Expect(Token.Type.GETVALUE)));
-            ReturnsCall.FirstChild.AddChild(AST.MakeNode(AST.NodeType.Returns));
+            ReturnsCall.AddChild(AST.MakeNode(Expect(Token.Type.GETVALUE)));
 
             Expect(Token.Type.LPAREN);
             ReturnsCall.AddChild(Value());
             Expect(Token.Type.RPAREN);
         }
         else if (Peek().type == Token.Type.CREATEEVENT) {
-            ReturnsCall.FirstChild.AddChild(AST.MakeNode(Expect(Token.Type.CREATEEVENT)));
-            ReturnsCall.FirstChild.AddChild(AST.MakeNode(AST.NodeType.Returns));
+            ReturnsCall.AddChild(AST.MakeNode(Expect(Token.Type.CREATEEVENT)));
 
             Expect(Token.Type.LPAREN);
             ReturnsCall.AddChild(Value());

@@ -19,7 +19,7 @@ public class AST {
 
         Expression,
 
-        Identifier, Type, Literal, Operator, Prefix, Func, Returns,
+        Identifier, Type, Literal, Operator, Prefix,
         PinType, IOType, FilterType,
 
 
@@ -53,7 +53,7 @@ public class AST {
                 return new Node(NodeType.Prefix, token.content);
 
             case CREATEEVENT: case GETVALUE: case BROADCAST: case WRITE: case FILTERNOISE:
-                return new Node(NodeType.Func, token.content);
+                return new Node(NodeType.Function, token.content);
 
             case FLIP: case CONSTANT: case RANGE:
                 return new Node(NodeType.FilterType, token.content);
@@ -77,8 +77,6 @@ public class AST {
             case Assignment:
             case If:
             case Call:
-            case Function:
-            case Returns:
             case Expression:
             case Empty:
                 return new Node(nodeType);
