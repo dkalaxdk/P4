@@ -806,7 +806,6 @@ public class Parser extends RecursiveDescent {
             MakeError("Expected <, >, !=, >=, <=, ==, ||, or &&");
             return AST.MakeNode(AST.NodeType.Error);
         }
-
     }
 
     public boolean CheckForType() {

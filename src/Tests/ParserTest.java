@@ -736,6 +736,25 @@ class ParserTest {
     }
 
     @Test
+    void Initiate_Declaration_ThrowSyntaxException() {
+        // Arrange
+        String program = "Initiate { int a = 5; }";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Initiate();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
     void Initiate_MinimumProgram_ReturnInitiateNode() {
         // Arrange
         String program = "Initiate { }";
@@ -805,6 +824,20 @@ class ParserTest {
 
     @Test
     void PinDcls() {
-
+//        // Arrange
+//        String program = "";
+//        Parser parser = createParser(program);
+//
+//        // Act
+//        try {
+//            parser.Initiate();
+//        }
+//        // Assert
+//        catch (SyntaxException e) {
+//            assertTrue(true);
+//            return;
+//        }
+//
+//        fail();
     }
 }
