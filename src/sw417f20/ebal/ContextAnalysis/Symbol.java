@@ -5,7 +5,7 @@ public class Symbol {
     public String Name;
     public SymbolType Type;
     public enum SymbolType{
-        EVENT, PIN, FLOAT, INT, BOOL
+        EVENT, PIN, FLOAT, INT, BOOL, FILTERTYPE, IO, PINTYPE, VOID
     }
 
     public Symbol(){}

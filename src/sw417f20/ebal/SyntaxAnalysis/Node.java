@@ -7,7 +7,7 @@ import sw417f20.ebal.ContextAnalysis.Symbol;
 public class Node {
     public AST.NodeType Type;
     public String Value;
-    public Symbol.SymbolType Datatype;
+    public Symbol.SymbolType DataType;
 
     public Node Next;
     public Node FirstSibling;

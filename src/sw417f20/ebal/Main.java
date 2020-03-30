@@ -82,8 +82,8 @@ public class Main {
         return filePath + file;
     }
 
-    public static void SymbolTableStuff (AST ast){
-        Visitor visitor = new SemanticVisitor();
-        visitor.Visit(ast.Root);
-    }
+//    public static void SymbolTableStuff (AST ast){
+//        Visitor visitor = new SemanticVisitor();
+//        visitor.Visit(ast.Root);
+//    }
 }

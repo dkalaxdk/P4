@@ -13,7 +13,7 @@ public class SemanticVisitor extends Visitor {
 
     SymbolTable CurrentScope = new HashSymbolTable();
 
-    private enum ErrorType{ NotDeclared, AlreadyDeclared, WrongType}
+    private enum ErrorType{ NotDeclared, AlreadyDeclared, WrongType, Default}
 
     @Override
     public void Visit(Node node) {
@@ -51,6 +51,12 @@ public class SemanticVisitor extends Visitor {
                 break;
             case Expression:
                 CheckExpression(node);
+                break;
+            case Identifier:
+                CheckIdentifier(node);
+                break;
+            case Literal:
+                CheckLiteral(node);
                 break;
             case Error:
             case Empty:
@@ -115,8 +121,10 @@ public class SemanticVisitor extends Visitor {
             Node expression = node.FirstChild.Next.Next;
             if (expression != null){
                 Visit(expression);
+                if(node.FirstChild.DataType != expression.DataType){
+                    MakeError(node.FirstChild.Value, ErrorType.WrongType);
+                }
             }
-            //TODO: check at identifier og expression har samme type
             CurrentScope.EnterSymbol(node.Value, GetType(node));
         }
         else {
@@ -151,32 +159,119 @@ public class SemanticVisitor extends Visitor {
         }
     }
 
-    //TODO: husk at afkommentere når ast er dekoreret
     private void TypeCheckAssignment(Node node) {
-//        if(CurrentScope.RetrieveSymbol(node.FirstChild.Value).Type != node.FirstChild.Next.DataType){
-//            MakeError(node.FirstChild.Value, ErrorType.WrongType);
-//        }
+        if(CurrentScope.RetrieveSymbol(node.FirstChild.Value).Type != node.FirstChild.Next.DataType){
+            MakeError(node.FirstChild.Value, ErrorType.WrongType);
+        }
     }
 
     private void CheckIf(Node node) {
         Visit(node.FirstChild);
-//        if(node.FirstChild.DataType == Symbol.SymbolType.BOOL){
-//            Visit(node.FirstChild.Next);
-//            if (node.FirstChild.Next.Next != null){
-//                Visit(node.FirstChild.Next.Next);
-//            }
-//        }
+        if(node.FirstChild.DataType == Symbol.SymbolType.BOOL){
+            Visit(node.FirstChild.Next);
+            if (node.FirstChild.Next.Next != null){
+                Visit(node.FirstChild.Next.Next);
+            }
+        }
     }
 
     private void CheckCall(Node node) {
+        VisitChildren(node);
+        switch (node.FirstChild.Value){
+            case "broadcast":
+                if (node.FirstChild.Next.DataType == Symbol.SymbolType.EVENT){
+                    break;
+                }
+                MakeError(node.FirstChild.Value, ErrorType.WrongType);
+                break;
 
+            case "filterNoise":
+                if (node.FirstChild.Next.DataType == Symbol.SymbolType.PIN &&
+                    node.FirstChild.Next.Next.DataType == Symbol.SymbolType.FILTERTYPE){
+
+                    break;
+                }
+                MakeError(node.FirstChild.Value, ErrorType.WrongType);
+                break;
+
+            case "getValue":
+                if (node.FirstChild.Next.DataType == Symbol.SymbolType.PIN ||
+                    node.FirstChild.Next.DataType == Symbol.SymbolType.EVENT){
+
+                    break;
+                }
+                MakeError(node.FirstChild.Value, ErrorType.WrongType);
+                break;
+
+            case "write":
+                if (node.FirstChild.Next.DataType == Symbol.SymbolType.PIN &&
+                    node.FirstChild.Next.Next.DataType == Symbol.SymbolType.INT){
+
+                    break;
+                }
+                MakeError(node.FirstChild.Value, ErrorType.WrongType);
+                break;
+
+            case "createEvent":
+                if (node.FirstChild.Next.DataType == Symbol.SymbolType.INT){
+                    break;
+                }
+                MakeError(node.FirstChild.Value, ErrorType.WrongType);
+                break;
+
+            case "createPin":
+                if (node.FirstChild.Next.DataType == Symbol.SymbolType.PINTYPE &&
+                    node.FirstChild.Next.Next.DataType == Symbol.SymbolType.IO &&
+                    node.FirstChild.Next.Next.Next.DataType == Symbol.SymbolType.INT){
+
+                    break;
+                }
+                MakeError(node.FirstChild.Value, ErrorType.WrongType);
+                break;
+
+            default:
+                MakeError(node.FirstChild.Value, ErrorType.Default);
+        }
+        node.DataType = node.FirstChild.DataType;
     }
 
     private void CheckFunction(Node node) {
+        switch (node.Value){
+            case "write":
+            case "broadcast":
+                node.DataType = Symbol.SymbolType.VOID;
+                break;
+            case "filterNoise":
+            case "getValue":
+                node.DataType = Symbol.SymbolType.INT;
+                break;
+            case "createEvent":
+                node.DataType = Symbol.SymbolType.EVENT;
+                break;
+            case "createPin":
+                node.DataType = Symbol.SymbolType.PIN;
+                break;
+        }
     }
 
     private void CheckExpression(Node node) {
+//TODO: lav den her
     }
+
+    private void CheckIdentifier(Node node) {
+        Symbol sym = CurrentScope.RetrieveSymbol(node.Value);
+        if (sym != null){
+            node.DataType = sym.Type;
+        }
+        else{
+            MakeError(node.Value, ErrorType.NotDeclared);
+        }
+    }
+
+    private void CheckLiteral(Node node) {
+
+    }
+
 
     private void MakeError(String name, ErrorType errorType){
         String message = "";
@@ -191,6 +286,8 @@ public class SemanticVisitor extends Visitor {
             case WrongType:
                 message = name + ": wrong type";
                 break;
+            case Default:
+                message = name + ": error";
         }
 
         System.err.println(message);
