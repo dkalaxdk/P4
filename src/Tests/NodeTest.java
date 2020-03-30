@@ -5,14 +5,55 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import sw417f20.ebal.SyntaxAnalysis.AST;
 import sw417f20.ebal.SyntaxAnalysis.Node;
-import sw417f20.ebal.SyntaxAnalysis.Token;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class NodeTest {
+    private Node ParentNode1;
+    private Node ParentNode2;
+
+    private Node Child1;
+    private Node Child2;
+
+    private Node Sibling1_1;
+    private Node Sibling1_2;
+    private Node Sibling2_1;
+    private Node Sibling2_2;
+
 
     @BeforeEach
     void setUp() {
+        ParentNode1 = new Node(AST.NodeType.Master);
+        ParentNode2 = new Node(AST.NodeType.Slave);
+
+        Child1 = new Node(AST.NodeType.Listener);
+        Child2 = new Node(AST.NodeType.EventHandler);
+
+        Sibling1_1 = new Node(AST.NodeType.Declaration);
+        Sibling1_2 = new Node(AST.NodeType.Declaration);
+        Sibling2_1 = new Node(AST.NodeType.Assignment);
+        Sibling2_2 = new Node(AST.NodeType.Assignment);
+
+        ParentNode1.FirstChild = Child1;
+        Child1.Parent = ParentNode1;
+
+        Child1.Next = Sibling1_1;
+        Sibling1_1.FirstSibling = Child1;
+        Sibling1_1.Parent = ParentNode1;
+        Sibling1_1.Next = Sibling1_2;
+        Sibling1_2.FirstSibling = Child1;
+        Sibling1_2.Parent = ParentNode1;
+
+
+        ParentNode2.FirstChild = Child2;
+        Child2.Parent = ParentNode2;
+
+        Child2.Next = Sibling2_1;
+        Sibling2_1.FirstSibling = Child2;
+        Sibling2_1.Parent = ParentNode2;
+        Sibling2_1.Next = Sibling2_2;
+        Sibling2_2.FirstSibling = Child2;
+        Sibling2_2.Parent = ParentNode2;
     }
 
     @AfterEach
@@ -186,70 +227,319 @@ class NodeTest {
         assertNull(node1.Next);
     }
 
-
     @Test
-    void MakeSiblings_ThisIsFirstSibling_Other() {
+    void MakeSiblings_InputParentIsNotNull_InputParentFirstChildSetToNull() {
         // Arrange
-        Node node1 = new Node(AST.NodeType.Empty);
-        Node node2 = new Node(AST.NodeType.Master);
 
         // Act
+        Child1.MakeSiblings(Child2);
 
         // Assert
+        assertNull(ParentNode2.FirstChild);
+    }
+
+    // #############################################################################################################
+
+    // This is first sibling, other is first sibling
+
+    // This last sibling's next set to other
+    @Test
+    void MakeSiblings_ThisIsFirstSibling_OtherIsFirstSibling_ThisLastSiblingNextSetToOther() {
+        // Arrange
+
+        // Act
+        Child1.MakeSiblings(Child2);
+
+        // Assert
+        assertTrue(IsLastSiblingNextSetToOther(Child2));
     }
 
 
-
-
-
-
-    // Don't update FirstChild
-    // Don't update FirstSibling
+    // Other's parent updated
     @Test
-    void MakeSiblings_InputIsFirstSibling() {
+    void MakeSiblings_ThisIsFirstSibling_OtherIsFirstSibling_OtherParentSetToThisNodeParent() {
         // Arrange
-        Node node1 = new Node(AST.NodeType.Empty);
-        Node node2 = new Node(AST.NodeType.Master);
 
         // Act
+        Child1.MakeSiblings(Child2);
 
         // Assert
+        assertTrue(IsOtherParentSetToThisNodeParent(Child2));
     }
 
-    // Update FirstChild
-    // Update FirstSibling
+
+    // Other's first sibling set to this
     @Test
-    void MakeSiblings_InputIsNotFirstSibling() {
+    void MakeSiblings_ThisIsFirstSibling_OtherIsFirstSibling_OtherFirstSiblingSetToThisNode() {
         // Arrange
-        Node node1 = new Node(AST.NodeType.Empty);
-        Node node2 = new Node(AST.NodeType.Master);
 
         // Act
+        Child1.MakeSiblings(Child2);
 
         // Assert
+        assertTrue(IsOtherFirstSiblingSetToThisNode(Child2));
     }
 
-    // Don't update FirstChild
+
+    // Other's sibling's parent set to this's parent
     @Test
-    void MakeSiblings_InputIsFirstChild() {
+    void MakeSiblings_ThisIsFirstSibling_OtherIsFirstSibling_OtherSiblingParentSetToThisNodeParent() {
         // Arrange
-        Node node1 = new Node(AST.NodeType.Empty);
-        Node node2 = new Node(AST.NodeType.Master);
 
         // Act
+        Child1.MakeSiblings(Child2);
 
         // Assert
+        assertTrue(IsOtherSiblingParentSetToThisNodeParent());
     }
 
-    // Update FirstChild
+    // Other's sibling's first sibling set to this
     @Test
-    void MakeSiblings_InputIsNotFirstChild() {
+    void MakeSiblings_ThisIsFirstSibling_OtherIsFirstSibling_OtherSiblingFirstSiblingSetToThisNode() {
         // Arrange
-        Node node1 = new Node(AST.NodeType.Empty);
-        Node node2 = new Node(AST.NodeType.Master);
 
         // Act
+        Child1.MakeSiblings(Child2);
 
         // Assert
+        assertTrue(IsOtherSiblingFirstSiblingSetToThisNode());
+    }
+
+    // #############################################################################################################
+
+    // This is first sibling, other is middle sibling
+
+    // This last sibling's next set to other's first sibling
+    @Test
+    void MakeSiblings_ThisIsFirstSibling_OtherIsMiddleSibling_ThisLastSiblingNextSetToOtherFirstSibling() {
+        // Arrange
+
+        // Act
+        Child1.MakeSiblings(Sibling2_1);
+
+        // Assert
+        assertTrue(IsLastSiblingNextSetToOtherFirstSibling());
+    }
+
+    // Other's parent updated
+    @Test
+    void MakeSiblings_ThisIsFirstSibling_OtherIsMiddleSibling_OtherParentSetToThisNodeParent() {
+        // Arrange
+
+        // Act
+        Child1.MakeSiblings(Sibling2_1);
+
+        // Assert
+        assertTrue(IsOtherParentSetToThisNodeParent(Sibling2_1));
+    }
+
+    // Other's first sibling set to this
+    @Test
+    void MakeSiblings_ThisIsFirstSibling_OtherIsMiddleSibling_OtherFirstSiblingSetToThisNode() {
+        // Arrange
+
+        // Act
+        Child1.MakeSiblings(Sibling2_1);
+
+        // Assert
+        assertTrue(IsOtherFirstSiblingSetToThisNode(Sibling2_1));
+    }
+
+    // Other's sibling's parent set to this's parent
+    @Test
+    void MakeSiblings_ThisIsFirstSibling_OtherIsMiddleSibling_OtherSiblingParentSetToThisNodeParent() {
+        // Arrange
+
+        // Act
+        Child1.MakeSiblings(Sibling2_1);
+
+        // Assert
+        assertTrue(IsOtherSiblingParentSetToThisNodeParent());
+    }
+
+    // Other's sibling's first sibling set to this
+    @Test
+    void MakeSiblings_ThisIsFirstSibling_OtherIsMiddleSibling_OtherSiblingFirstSiblingSetToThisNode() {
+        // Arrange
+
+        // Act
+        Child1.MakeSiblings(Sibling2_1);
+
+        // Assert
+        assertTrue(IsOtherSiblingFirstSiblingSetToThisNode());
+    }
+
+    // #############################################################################################################
+
+    // This is middle sibling, other is first sibling
+
+    // This last sibling's next set to other
+    // Other's parent updated
+    // Other's first sibling set to this's first sibling
+    // Other's sibling's parent set to this's parent
+    // Other's sibling's first sibling set to this's first sibling
+    @Test
+    void MakeSiblings_ThisIsMiddleSibling_OtherIsFirstSibling_ThisLastSiblingNextSetToOther() {
+        // Arrange
+
+        // Act
+        Sibling1_1.MakeSiblings(Child2);
+
+        // Assert
+        assertTrue(IsLastSiblingNextSetToOther(Child2));
+    }
+
+    // Other's parent updated
+    @Test
+    void MakeSiblings_ThisIsMiddleSibling_OtherIsFirstSibling_OtherParentSetToThisNodeParent() {
+        // Arrange
+
+        // Act
+        Sibling1_1.MakeSiblings(Child2);
+
+        // Assert
+        assertTrue(IsOtherParentSetToThisNodeParent(Child2));
+    }
+
+    // Other's first sibling set to this's first sibling
+    @Test
+    void MakeSiblings_ThisIsMiddleSibling_OtherIsFirstSibling_OtherFirstSiblingSetToThisNodeFirstSibling() {
+        // Arrange
+
+        // Act
+        Sibling1_1.MakeSiblings(Child2);
+
+        // Assert
+        assertTrue(IsOtherFirstSiblingSetToThisNodeFirstSibling(Child2));
+    }
+
+    // Other's sibling's parent set to this's parent
+    @Test
+    void MakeSiblings_ThisIsMiddleSibling_OtherIsFirstSibling_OtherSiblingParentSetToThisNodeParent() {
+        // Arrange
+
+        // Act
+        Sibling1_1.MakeSiblings(Child2);
+
+        // Assert
+        assertTrue(IsOtherSiblingParentSetToThisNodeParent());
+    }
+
+    // Other's sibling's first sibling set to this's first sibling
+    @Test
+    void MakeSiblings_ThisIsMiddleSibling_OtherIsFirstSibling_OtherSiblingFirstSiblingSetToThisNodeSibling() {
+        // Arrange
+
+        // Act
+        Sibling1_1.MakeSiblings(Child2);
+
+        // Assert
+        assertTrue(IsOtherSiblingFirstSiblingSetToThisNodeSibling(Child2));
+    }
+
+    // #############################################################################################################
+
+    // This is middle sibling, other is middle sibling
+
+    // This last sibling's next set to other's first sibling
+    @Test
+    void MakeSiblings_ThisIsMiddleSibling_OtherIsMiddleSibling_ThisLastSiblingNextSetToOther() {
+        // Arrange
+
+        // Act
+        Sibling1_1.MakeSiblings(Sibling2_1);
+
+        // Assert
+        assertTrue(IsLastSiblingNextSetToOther(Child2));
+    }
+
+
+    // Other's parent updated
+    @Test
+    void MakeSiblings_ThisIsMiddleSibling_OtherIsMiddleSibling_OtherParentSetToThisNodeParent() {
+        // Arrange
+
+        // Act
+        Sibling1_1.MakeSiblings(Sibling2_1);
+
+        // Assert
+        assertTrue(IsOtherParentSetToThisNodeParent(Sibling2_1));
+    }
+
+    // Other's first sibling set to this's first sibling
+    @Test
+    void MakeSiblings_ThisIsMiddleSibling_OtherIsMiddleSibling_OtherFirstSiblingSetToThisNodeFirstSibling() {
+        // Arrange
+
+        // Act
+        Sibling1_1.MakeSiblings(Sibling2_1);
+
+        // Assert
+        assertTrue(IsOtherFirstSiblingSetToThisNodeFirstSibling(Sibling2_1));
+    }
+
+
+    // Other's sibling's parent set to this's parent
+    @Test
+    void MakeSiblings_ThisIsMiddleSibling_OtherIsMiddleSibling_OtherSiblingParentSetToThisNodeParent() {
+        // Arrange
+
+        // Act
+        Sibling1_1.MakeSiblings(Sibling2_1);
+
+        // Assert
+        assertTrue(IsOtherSiblingParentSetToThisNodeParent());
+    }
+
+    // Other's sibling's first sibling set to this's first sibling
+    @Test
+    void MakeSiblings_ThisIsMiddleSibling_OtherIsMiddleSibling_OtherSiblingFirstSiblingSetToThisNodeSibling() {
+        // Arrange
+
+        // Act
+        Sibling1_1.MakeSiblings(Sibling2_1);
+
+        // Assert
+        assertTrue(IsOtherSiblingFirstSiblingSetToThisNodeSibling(Sibling2_1));
+    }
+
+    // This last sibling's next set to other
+    boolean IsLastSiblingNextSetToOther(Node other) {
+        return Sibling1_2.Next == other;
+    }
+
+    // Other's parent updated
+    boolean IsOtherParentSetToThisNodeParent(Node other) {
+        return other.Parent == ParentNode1;
+    }
+
+    // Other's first sibling set to this
+    boolean IsOtherFirstSiblingSetToThisNode(Node other) {
+        return other.FirstSibling == Child1;
+    }
+
+    // Other's sibling's parent set to this's parent
+    boolean IsOtherSiblingParentSetToThisNodeParent() {
+        return Sibling2_2.Parent == ParentNode1;
+    }
+
+    // Other's sibling's first sibling set to this
+    boolean IsOtherSiblingFirstSiblingSetToThisNode() {
+        return Sibling2_2.FirstSibling == Child1;
+    }
+
+    // This last sibling's next set to other's first sibling
+    boolean IsLastSiblingNextSetToOtherFirstSibling() {
+        return Sibling1_2.Next == Child2;
+    }
+
+    // Other's first sibling set to this's first sibling
+    boolean IsOtherFirstSiblingSetToThisNodeFirstSibling(Node other) {
+        return other.FirstSibling == Sibling1_1.FirstSibling;
+    }
+
+    // Other's sibling's first sibling set to this's first sibling
+    boolean IsOtherSiblingFirstSiblingSetToThisNodeSibling(Node other) {
+        return Sibling2_2.FirstSibling == Sibling1_1.FirstSibling;
     }
 }

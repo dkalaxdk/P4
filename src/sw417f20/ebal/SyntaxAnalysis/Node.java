@@ -71,56 +71,67 @@ public class Node {
         }
     }
 
-    // Makes the input node the sibling of this node.
-    // Also makes sure connect the two list of siblings, as well
-    // as changing the parent to this node's parent.
     public void MakeSiblings(Node otherNode) {
 
-        // If the input child is null, do nothing
+        // If the input node is null, do nothing
         if (otherNode == null) {
             return;
         }
 
-        // Get a reference to this node's list of siblings.
-        // Doesn't have to be the first sibling, as we just need
-        // to get to the end.
+        // Remove connection from other's old parent to their first child
+        if (otherNode.Parent != null) {
+            otherNode.Parent.FirstChild = null;
+        }
+
+        // Get a reference to this node's list of siblings
         Node mySiblings = this;
 
-        // Find the last sibling in the chain
+        // Get to the end of this node's list of siblings
         while (mySiblings.Next != null) {
             mySiblings = mySiblings.Next;
         }
 
-        // Get a reference to the input node's list of siblings
-        Node otherSiblings = otherNode.FirstSibling;
+        // Get a reference to other's list of siblings
+        Node otherSiblings;
 
-        // If the input node doesn't have any siblings,
-        // only the input node is added to the chain of siblings
-        if (otherSiblings == null) {
+        // Other node is first sibling
+        if (otherNode.FirstSibling == null) {
+            // This node's last sibling's next set to other
             mySiblings.Next = otherNode;
 
-            otherNode.FirstSibling = mySiblings.FirstSibling;
-            otherNode.Parent = mySiblings.Parent;
+            // Other node's list of siblings
+            // is updated starting from other node
+            otherSiblings = otherNode;
         }
 
-        // Otherwise, connect the input node's list of siblings
-        // to this node's list of siblings
+        // Other is not first sibling
         else {
-            mySiblings.Next = otherSiblings;
+            // This last sibling's next set to other's first sibling
+            mySiblings.Next = otherNode.FirstSibling;
 
-            // The input node's first sibling and parent, is set to
-            // this node's first sibling and parent
-            otherSiblings.FirstSibling = mySiblings.FirstSibling;
-            otherSiblings.Parent = mySiblings.Parent;
+            // Other node's list of siblings
+            // is updated starting from other node's first sibling
+            otherSiblings = otherNode.FirstSibling;
+        }
 
-            // Do the same for the rest of the input node's siblings
-            // (In the first iteration, Next refers to otherNode's old FirstSibling's Next,
-            // so that we can iterate through the list of siblings from the beginning)
-            while (otherSiblings.Next != null) {
-                otherSiblings = otherSiblings.Next;
-                otherSiblings.FirstSibling = mySiblings.FirstSibling;
-                otherSiblings.Parent = mySiblings.Parent;
-            }
+        // Get a reference to this node's list of siblings
+        Node firstSibling;
+
+        // This is first sibling
+        if (this.FirstSibling == null) {
+            firstSibling = this;
+        }
+
+        // This is not first sibling
+        else {
+            firstSibling = this.FirstSibling;
+        }
+
+        // Update other and other's sibling's first sibling and parent
+        while (otherSiblings != null) {
+            otherSiblings.Parent = this.Parent;
+            otherSiblings.FirstSibling = firstSibling;
+            otherSiblings = otherSiblings.Next;
         }
     }
 }

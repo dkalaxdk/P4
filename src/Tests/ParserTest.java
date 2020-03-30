@@ -3,168 +3,841 @@ package Tests;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import sw417f20.ebal.SyntaxAnalysis.*;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.StringReader;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static sw417f20.ebal.SyntaxAnalysis.RecursiveDescent.*;
 
 class ParserTest {
 
-    @BeforeEach
-    void setUp() {
-    }
 
-    @AfterEach
-    void tearDown() {
-    }
+    Parser createParser(String program) {
+        StringReader stringReader = new StringReader(program);
+        BufferedReader bufferedReader = new BufferedReader(stringReader);
+        Reader reader = new Reader(bufferedReader);
+        Scanner scanner = new Scanner(reader);
 
-    @Test
-    void start() {
-    }
-
-    @Test
-    void master() {
+        return new Parser(scanner);
     }
 
     @Test
-    void slaves() {
+    void Start_NoProgram_ThrowSyntaxException() {
+        // Arrange
+        String program = "";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Start();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void slave() {
+    void Start_OnlyBeginEnd_ThrowSyntaxException() {
+        // Arrange
+        String program = "BEGIN END";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Start();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void initiate() {
+    void Start_NoMaster_ThrowSyntaxException() {
+        // Arrange
+        String program = "BEGIN SLAVE Initiate { } END SLAVE";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Start();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void pinDcls() {
+    void Start_NoSlaves_ThrowSyntaxException() {
+        // Arrange
+        String program = "BEGIN MASTER Initiate { } END MASTER";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Start();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void pinDcl() {
+    void Start_MinimumProgram_ReturnProgNode() {
+        // Arrange
+        String program = "BEGIN MASTER Initiate { } END MASTER " +
+                         "BEGIN SLAVE Initiate { } END SLAVE";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Start();
+        }
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        // Assert
+        assertSame(node.Type, AST.NodeType.Prog);
     }
 
     @Test
-    void pinType() {
+    void Start_MinimumProgram_ReturnedNodeFirstChildIsMaster() {
+        // Arrange
+        String program = "BEGIN MASTER Initiate { } END MASTER " +
+                "BEGIN SLAVE Initiate { } END SLAVE";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Start();
+        }
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        // Assert
+        assertSame(node.FirstChild.Type, AST.NodeType.Master);
     }
 
     @Test
-    void IOType() {
+    void Start_MinimalProgram_TwoSlaves_ReturnedNodeThirdChildIsSlave() {
+        // Arrange
+        String program = "BEGIN MASTER Initiate { } END MASTER " +
+                "BEGIN SLAVE Initiate { } END SLAVE " +
+                "BEGIN SLAVE Initiate { } END SLAVE ";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Start();
+        }
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        // Assert
+        assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.Slave);
+    }
+
+
+
+    @Test
+    void Master_NoProgram_ThrowSyntaxException() {
+        // Arrange
+        String program = "";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Master();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void listeners() {
+    void Master_OnlyBeginEnd_ThrowSyntaxException() {
+        // Arrange
+        String program = "BEGIN END";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Master();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void listener() {
+    void Master_NoBegin_ThrowSyntaxException() {
+        // Arrange
+        String program = "MASTER Initiate { } END MASTER";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Master();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void eventHandlers() {
+    void Master_NoEnd_ThrowSyntaxException() {
+        // Arrange
+        String program = "BEGIN MASTER Initiate { } MASTER";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Master();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void eventHandler() {
+    void Master_NoFirstMaster_ThrowSyntaxException() {
+        // Arrange
+        String program = "BEGIN Initiate { } END MASTER";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Master();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void block() {
+    void Master_NoLastMaster_ThrowSyntaxException() {
+        // Arrange
+        String program = "BEGIN MASTER Initiate { } END";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Master();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void stmts() {
+    void Master_NoInitiate_ThrowSyntaxException() {
+        // Arrange
+        String program = "BEGIN MASTER END MASTER";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Master();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void stmt() {
+    void Master_MinimumProgram_ReturnMasterNode() {
+        // Arrange
+        String program = "BEGIN MASTER Initiate { } END MASTER";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Master();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Master);
     }
 
     @Test
-    void assignment() {
+    void Master_MinimumProgram_ReturnedNodeFirstChildIsInitiate() {
+        // Arrange
+        String program = "BEGIN MASTER Initiate { } Listener(id) { } END MASTER";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Master();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Type, AST.NodeType.Initiate);
     }
 
     @Test
-    void dcl() {
+    void Master_MinimalProgram_ReturnedNodeSecondChildIsListener() {
+        // Arrange
+        String program = "BEGIN MASTER Initiate { } Listener(id) { } END MASTER";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Master();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Next.Type, AST.NodeType.Listener);
+    }
+
+
+
+    @Test
+    void Slaves_NoProgram_ReturnEmptyNode() {
+        // Arrange
+        String program = "";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Slaves();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Empty);
     }
 
     @Test
-    void dclAssign() {
+    void Slaves_OneSlave_ReturnSlaveNode() {
+        // Arrange
+        String program = "BEGIN SLAVE Initiate { } END SLAVE";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Slaves();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Slave);
     }
 
     @Test
-    void expr() {
+    void Slaves_TwoSlaves_ReturnSlaveNode() {
+        // Arrange
+        String program = "BEGIN SLAVE Initiate { } END SLAVE " + "BEGIN SLAVE Initiate { } END SLAVE";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Slaves();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Slave);
     }
 
     @Test
-    void value() {
+    void Slaves_TwoSlaves_ReturnedNodeFirstSiblingIsSlave() {
+        // Arrange
+        String program = "BEGIN SLAVE Initiate { } END SLAVE " + "BEGIN SLAVE Initiate { } END SLAVE";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Slaves();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Next.Type, AST.NodeType.Slave);
+    }
+
+
+
+    @Test
+    void Slave_NoProgram_ThrowSyntaxException() {
+        // Arrange
+        String program = "";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Slave();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void afterExpr() {
+    void Slave_OnlyBeginEnd_ThrowSyntaxException() {
+        // Arrange
+        String program = "BEGIN END";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Slave();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void call() {
+    void Slave_NoBegin_ThrowSyntaxException() {
+        // Arrange
+        String program = "SLAVE Initiate { } END SLAVE";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Slave();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void voidCall() {
+    void Slave_NoEnd_ThrowSyntaxException() {
+        // Arrange
+        String program = "BEGIN SLAVE Initiate { } SLAVE";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Slave();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void returnsCall() {
+    void Slave_NoFirstSlave_ThrowSyntaxException() {
+        // Arrange
+        String program = "BEGIN Initiate { } END SLAVE";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Slave();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void ifStmt() {
+    void Slave_NoLastSlave_ThrowSyntaxException() {
+        // Arrange
+        String program = "BEGIN SLAVE Initiate { } END";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Slave();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void ifEnd() {
+    void Slave_NoInitiate_ThrowSyntaxException() {
+        // Arrange
+        String program = "BEGIN SLAVE END SLAVE";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Slave();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void afterElse() {
+    void Slave_MinimumProgram_ReturnSlaveNode() {
+        // Arrange
+        String program = "BEGIN SLAVE Initiate { } END SLAVE";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Slaves();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Slave);
     }
 
     @Test
-    void filterType() {
+    void Slave_MinimalProgram_ReturnedNodeFirstChildIsInitiate() {
+        // Arrange
+        String program = "BEGIN SLAVE Initiate { } EventHandler(id) { } END SLAVE";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Slaves();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Type, AST.NodeType.Initiate);
     }
 
     @Test
-    void operator() {
+    void Slave_MinimalProgram_ReturnedNodeSecondChildIsEventHandler() {
+        // Arrange
+        String program = "BEGIN SLAVE Initiate { } EventHandler(id) { } END SLAVE";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Slaves();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Next.Type, AST.NodeType.EventHandler);
+    }
+
+
+
+    @Test
+    void Initiate_NoProgram_ThrowSyntaxException() {
+        // Arrange
+        String program = "";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Initiate();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void logicOperator() {
+    void Initiate_NoInitiate_ThrowSyntaxException() {
+        // Arrange
+        String program = "{ }";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Initiate();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void checkForType() {
+    void Initiate_NoLeftBracket_ThrowSyntaxException() {
+        // Arrange
+        String program = "Initiate }";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Initiate();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void checkForCall() {
+    void Initiate_NoRightBracket_ThrowSyntaxException() {
+        // Arrange
+        String program = "Initiate {";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Initiate();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void checkForReturnsCall() {
+    void Initiate_NoBlock_ThrowSyntaxException() {
+        // Arrange
+        String program = "Initiate";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Initiate();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void checkForVoidCall() {
+    void Initiate_Declaration_ThrowSyntaxException() {
+        // Arrange
+        String program = "Initiate { int a = 5; }";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Initiate();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void checkForLiteral() {
+    void Initiate_MinimumProgram_ReturnInitiateNode() {
+        // Arrange
+        String program = "Initiate { }";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Initiate();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Initiate);
     }
 
     @Test
-    void checkForOperator() {
+    void Initiate_MinimalProgram_ReturnedNodeFirstChildIsPinDeclaration() {
+        // Arrange
+        String program = "Initiate { " +
+                "pin a = createPin(digital, input, 1); " +
+                "pin b = createPin(digital, input, 2); " +
+                "}";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Initiate();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Type, AST.NodeType.PinDeclaration);
     }
 
     @Test
-    void checkForLogicOperator() {
+    void Initiate_MinimalProgram_ReturnedNodeSecondChildIsPinDeclaration() {
+        // Arrange
+        String program = "Initiate { " +
+                "pin a = createPin(digital, input, 1); " +
+                "pin b = createPin(digital, input, 2); " +
+                "}";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Initiate();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Next.Type, AST.NodeType.PinDeclaration);
+    }
+
+
+
+    @Test
+    void PinDcls() {
+//        // Arrange
+//        String program = "";
+//        Parser parser = createParser(program);
+//
+//        // Act
+//        try {
+//            parser.Initiate();
+//        }
+//        // Assert
+//        catch (SyntaxException e) {
+//            assertTrue(true);
+//            return;
+//        }
+//
+//        fail();
     }
 }
