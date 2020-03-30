@@ -19,7 +19,8 @@ public class AST {
 
         Expression,
 
-        Identifier, Type, Literal, Operator, Prefix,
+        Identifier, Type, Operator, Prefix,
+        IntLiteral, FloatLiteral, BoolLiteral,
         PinType, IOType, FilterType,
 
 
@@ -32,8 +33,14 @@ public class AST {
             case IDENTIFIER:
                 return new Node(NodeType.Identifier, token.content);
 
-            case LIT_Int: case LIT_Bool: case LIT_Float:
-                return new Node(NodeType.Literal, token.content);
+            case LIT_Bool:
+                return new Node(NodeType.BoolLiteral, token.content);
+
+            case LIT_Int:
+                return new Node(NodeType.IntLiteral, token.content);
+
+            case LIT_Float:
+                return new Node(NodeType.FloatLiteral, token.content);
 
             case INPUT: case OUTPUT:
                 return new Node(NodeType.IOType, token.content);

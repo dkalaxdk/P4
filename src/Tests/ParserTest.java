@@ -1293,6 +1293,7 @@ class ParserTest {
         assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.IOType);
     }
 
+    // TODO: Test for andre typer?
     @Test
     void PinDcl_MinimumProgram_ReturnedNodeFourthChildIsLiteral() {
         // Arrange
@@ -1310,7 +1311,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Next.Next.Type, AST.NodeType.Literal);
+        assertSame(node.FirstChild.Next.Next.Next.Type, AST.NodeType.IntLiteral);
     }
 
 
