@@ -23,6 +23,7 @@ public class AST {
         IntLiteral, FloatLiteral, BoolLiteral,
         PinType, IOType, FilterType,
 
+        /* FloatDeclaration, IntDeclaration, BoolDeclaration, EventDeclaration, */
 
         Error, Empty
     }
@@ -55,7 +56,7 @@ public class AST {
             case LOP_EQUALS: case LOP_NOTEQUAL: case LOP_LESSTHAN: case LOP_GREATERTHAN: case LOP_LESSOREQUAL: case LOP_GREATEROREQUAL:
                 return new Node(NodeType.Operator, token.content);
 
-            // TODO: Her burde der også være en for minus somehow. Måske noget der skal fixes på en senere stadie?
+            // TODO: Her burde der også være en for minus somehow. Måske noget der skal fixes på et senere stadie?
             case OP_NOT:
                 return new Node(NodeType.Prefix, token.content);
 
