@@ -1270,7 +1270,8 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Type, AST.NodeType.PinType);
+//        assertSame(node.FirstChild.Next.Type, AST.NodeType.PinType);
+        fail();
     }
 
     @Test
@@ -1290,7 +1291,8 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.IOType);
+//        assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.IOType);
+        fail();
     }
 
     // TODO: Test for andre typer?
@@ -1371,7 +1373,8 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.PinType);
+//        assertSame(node.Type, AST.NodeType.PinType);
+        fail();
     }
 
     @Test
@@ -1391,7 +1394,8 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.PinType);
+//        assertSame(node.Type, AST.NodeType.PinType);
+        fail();
     }
 
     @Test
@@ -1411,7 +1415,8 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.PinType);
+//        assertSame(node.Type, AST.NodeType.PinType);
+        fail();
     }
 
 
@@ -1471,7 +1476,8 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.IOType);
+//        assertSame(node.Type, AST.NodeType.IOType);
+        fail();
     }
 
     @Test
@@ -1491,7 +1497,8 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.IOType);
+//        assertSame(node.Type, AST.NodeType.IOType);
+        fail();
     }
 
 
@@ -2251,7 +2258,8 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.Declaration);
+//        assertSame(node.FirstChild.Type, AST.NodeType.Declaration);
+        fail();
     }
 
     @Test
@@ -2271,7 +2279,8 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Type, AST.NodeType.Declaration);
+//        assertSame(node.FirstChild.Next.Type, AST.NodeType.Declaration);
+        fail();
     }
 
 
@@ -2333,7 +2342,8 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Declaration);
+//        assertSame(node.Type, AST.NodeType.Declaration);
+        fail();
     }
 
     @Test
@@ -2355,7 +2365,8 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Declaration);
+//        assertSame(node.Type, AST.NodeType.Declaration);
+        fail();
     }
 
     @Test
@@ -2377,7 +2388,8 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Next.Type, AST.NodeType.Declaration);
+//        assertSame(node.Next.Type, AST.NodeType.Declaration);
+        fail();
     }
 
 
@@ -2694,7 +2706,8 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Declaration);
+//        assertSame(node.Type, AST.NodeType.Declaration);
+        fail();
     }
 
     @Test
@@ -2714,7 +2727,8 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.Type);
+//        assertSame(node.FirstChild.Type, AST.NodeType.Type);
+        fail();
     }
 
     @Test
@@ -3258,7 +3272,8 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Operator);
+//        assertSame(node.Type, AST.NodeType.Operator);
+        fail();
     }
 
     @Test
