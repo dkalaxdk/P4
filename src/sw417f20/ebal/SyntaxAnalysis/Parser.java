@@ -489,8 +489,7 @@ public class Parser extends RecursiveDescent {
         else if (Peek().type == Token.Type.OP_MINUS) {
             Expect(Token.Type.OP_MINUS);
 
-            // TODO: Hotfix, bør være med MakeNode!
-            Node prefix = new Node(AST.NodeType.Prefix, "-");
+            Node prefix = new Node(AST.NodeType.PrefixMinus);
             Node value = Value();
 
             value.AddChild(prefix);
@@ -505,7 +504,8 @@ public class Parser extends RecursiveDescent {
             Expr.AddChild(afterExpr);
         }
         else if (Peek().type == Token.Type.OP_NOT) {
-            Node prefix = AST.MakeNode(Expect(Token.Type.OP_NOT));
+            Expect(Token.Type.OP_NOT);
+            Node prefix = AST.MakeNode(AST.NodeType.PrefixNot);
             Node identifier = AST.MakeNode(Expect(Token.Type.IDENTIFIER));
 
             identifier.AddChild(prefix);

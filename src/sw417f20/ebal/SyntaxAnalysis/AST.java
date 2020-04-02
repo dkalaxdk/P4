@@ -20,7 +20,7 @@ public class AST {
 
         Expression,
 
-        Identifier, Prefix,
+        Identifier,
 
         // Literals
         IntLiteral, FloatLiteral, BoolLiteral,
@@ -41,6 +41,9 @@ public class AST {
         LessThan, GreaterThan, NotEqual, Equals, GreaterOrEqual, LessOrEqual, And, Or,
         Plus, Minus, Times, Divide, Modulo,
 
+        // Prefixes
+        PrefixNot, PrefixMinus,
+
         Error, Empty
     }
 
@@ -58,10 +61,6 @@ public class AST {
 
             case LIT_Float:
                 return new Node(NodeType.FloatLiteral, token.content);
-
-            // TODO: Her burde der også være en for minus somehow. Måske noget der skal fixes på et senere stadie?
-            case OP_NOT:
-                return new Node(NodeType.Prefix, token.content);
 
             default:
                 return new Node(NodeType.Error);
