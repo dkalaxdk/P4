@@ -7,7 +7,6 @@ public class TopVisitor extends Visitor {
 
     @Override
     public void Visit(Node node) {
-
         switch (node.Type) {
             case Prog:
                 Visit(node.Next);
@@ -85,7 +84,8 @@ public class TopVisitor extends Visitor {
     }
 
     private void emitSlave() {
-
+        Node node;
+        Visit(node.Next);
     }
 
     private void EmitInitiate() {
