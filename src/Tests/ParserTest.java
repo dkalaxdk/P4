@@ -3390,7 +3390,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.IfStmt();
+            parser.IfEnd();
         }
         // Assert
         catch (SyntaxException e) {
@@ -3399,5 +3399,349 @@ class ParserTest {
         }
 
         fail();
+    }
+
+
+
+    @Test
+    void AfterElse_NoProgram_ThrowSyntaxException() {
+        // Arrange
+        String program = "";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.AfterElse();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+
+
+    @Test
+    void FilterType_NoProgram_ThrowSyntaxException() {
+        // Arrange
+        String program = "";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.FilterType();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+
+
+    @Test
+    void Operator_NoProgram_ThrowSyntaxException() {
+        // Arrange
+        String program = "";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Operator();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void Operator_Plus_ReturnPlusNode() {
+        // Arrange
+        String program = "+";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Operator();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Plus);
+    }
+
+    @Test
+    void Operator_Minus_ReturnMinusNode() {
+        // Arrange
+        String program = "-";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Operator();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Minus);
+    }
+
+    @Test
+    void Operator_Times_ReturnTimesNode() {
+        // Arrange
+        String program = "*";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Operator();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Times);
+    }
+
+    @Test
+    void Operator_Divide_ReturnDivideNode() {
+        // Arrange
+        String program = "/";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Operator();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Divide);
+    }
+
+    @Test
+    void Operator_Modulo_ReturnModuloNode() {
+        // Arrange
+        String program = "%";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Operator();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Modulo);
+    }
+
+
+
+    @Test
+    void LogicOperator_NoProgram_ThrowSyntaxException() {
+        // Arrange
+        String program = "";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.LogicOperator();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void LogicOperator_LessThan_ReturnLessThanNode() {
+        // Arrange
+        String program = "<";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.LogicOperator();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.LessThan);
+    }
+
+    @Test
+    void LogicOperator_GreaterThan_ReturnGreaterThanNode() {
+        // Arrange
+        String program = ">";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.LogicOperator();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.GreaterThan);
+    }
+
+    @Test
+    void LogicOperator_NotEqual_ReturnNotEqualNode() {
+        // Arrange
+        String program = "!=";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.LogicOperator();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.NotEqual);
+    }
+
+    @Test
+    void LogicOperator_Equals_ReturnEqualsNode() {
+        // Arrange
+        String program = "==";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.LogicOperator();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Equals);
+    }
+
+    @Test
+    void LogicOperator_GreaterOrEqual_ReturnGreaterOrEqualNode() {
+        // Arrange
+        String program = ">=";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.LogicOperator();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.GreaterOrEqual);
+    }
+
+    @Test
+    void LogicOperator_LessOrEqual_ReturnLessOrEqualNode() {
+        // Arrange
+        String program = "<=";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.LogicOperator();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.LessOrEqual);
+    }
+
+    @Test
+    void LogicOperator_And_ReturnAndNode() {
+        // Arrange
+        String program = "&&";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.LogicOperator();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.And);
+    }
+
+    @Test
+    void LogicOperator_Or_ReturnOrNode() {
+        // Arrange
+        String program = "||";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.LogicOperator();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Or);
     }
 }
