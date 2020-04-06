@@ -4,6 +4,7 @@ import sw417f20.ebal.ContextAnalysis.HashSymbolTable;
 import sw417f20.ebal.ContextAnalysis.PinSymbol;
 import sw417f20.ebal.ContextAnalysis.Symbol;
 import sw417f20.ebal.ContextAnalysis.SymbolTable;
+import sw417f20.ebal.SyntaxAnalysis.AST;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
 import javax.naming.Name;
@@ -34,8 +35,17 @@ public class SemanticVisitor extends Visitor {
             case PinDeclaration:
                 CheckPinDeclaration(node);
                 break;
-            case Declaration:
-                CheckDeclaration(node);
+            case BoolDeclaration:
+                CheckBoolDeclaration(node);
+                break;
+            case IntDeclaration:
+                CheckIntDeclaration(node);
+                break;
+            case FloatDeclaration:
+                CheckFloatDeclaration(node);
+                break;
+            case EventDeclaration:
+                CheckEventDeclaration(node);
                 break;
             case Assignment:
                 CheckAssignment(node);
@@ -55,8 +65,14 @@ public class SemanticVisitor extends Visitor {
             case Identifier:
                 CheckIdentifier(node);
                 break;
-            case Literal:
-                CheckLiteral(node);
+            case IntLiteral:
+                CheckIntLiteral(node);
+                break;
+            case BoolLiteral:
+                CheckBoolLiteral(node);
+                break;
+            case FloatLiteral:
+                CheckFloatLiteral(node);
                 break;
             case Error:
             case Empty:
@@ -107,12 +123,7 @@ public class SemanticVisitor extends Visitor {
     }
 
     private PinSymbol.IOType GetIOType(Node node) {
-        if (node.Value.equals("input")){
-            return PinSymbol.IOType.Input;
-        }
-        else{
-            return PinSymbol.IOType.Output;
-        }
+        return node.Type == AST.NodeType.Input ? PinSymbol.IOType.Input : PinSymbol.IOType.Output;
     }
 
 
@@ -149,7 +160,7 @@ public class SemanticVisitor extends Visitor {
 
     private void CheckAssignment(Node node) {
         ScopeCheckAssignment(node);
-        VisitChildren(node.FirstChild.Next);
+        Visit(node.FirstChild.Next);
         TypeCheckAssignment(node);
     }
 
@@ -219,16 +230,6 @@ public class SemanticVisitor extends Visitor {
                 MakeError(node.FirstChild.Value, ErrorType.WrongType);
                 break;
 
-            case "createPin":
-                if (node.FirstChild.Next.DataType == Symbol.SymbolType.PINTYPE &&
-                    node.FirstChild.Next.Next.DataType == Symbol.SymbolType.IO &&
-                    node.FirstChild.Next.Next.Next.DataType == Symbol.SymbolType.INT){
-
-                    break;
-                }
-                MakeError(node.FirstChild.Value, ErrorType.WrongType);
-                break;
-
             default:
                 MakeError(node.FirstChild.Value, ErrorType.Default);
         }
@@ -248,14 +249,11 @@ public class SemanticVisitor extends Visitor {
             case "createEvent":
                 node.DataType = Symbol.SymbolType.EVENT;
                 break;
-            case "createPin":
-                node.DataType = Symbol.SymbolType.PIN;
-                break;
         }
     }
 
     private void CheckExpression(Node node) {
-//TODO: lav den her
+
     }
 
     private void CheckIdentifier(Node node) {
@@ -268,10 +266,17 @@ public class SemanticVisitor extends Visitor {
         }
     }
 
-    private void CheckLiteral(Node node) {
-
+    private void CheckBoolLiteral(Node node) {
+        node.DataType = Symbol.SymbolType.BOOL;
     }
 
+    private void CheckIntLiteral(Node node) {
+        node.DataType = Symbol.SymbolType.INT;
+    }
+
+    private void CheckFloatLiteral(Node node) {
+        node.DataType = Symbol.SymbolType.FLOAT;
+    }
 
     private void MakeError(String name, ErrorType errorType){
         String message = "";
