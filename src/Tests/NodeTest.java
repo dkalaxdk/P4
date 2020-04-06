@@ -29,8 +29,8 @@ class NodeTest {
         Child1 = new Node(AST.NodeType.Listener);
         Child2 = new Node(AST.NodeType.EventHandler);
 
-        Sibling1_1 = new Node(AST.NodeType.Declaration);
-        Sibling1_2 = new Node(AST.NodeType.Declaration);
+        Sibling1_1 = new Node(AST.NodeType.IntDeclaration);
+        Sibling1_2 = new Node(AST.NodeType.IntDeclaration);
         Sibling2_1 = new Node(AST.NodeType.Assignment);
         Sibling2_2 = new Node(AST.NodeType.Assignment);
 
