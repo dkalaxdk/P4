@@ -41,6 +41,20 @@ public class Main {
             start = System.currentTimeMillis();
             parser.Parse();
             System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms");
+
+            filePath = new File("").getAbsolutePath();
+            fileInput = filePath + "/TestFiles/TestAllTheThings.txt";
+
+            fileReader = new FileReader(fileInput);
+            bufferedReader = new BufferedReader(fileReader);
+            reader = new Reader(bufferedReader);
+            scanner = new Scanner(reader);
+
+            parser = new Parser(scanner);
+
+            start = System.currentTimeMillis();
+            parser.Parse();
+            System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms");
         }
         catch (RecursiveDescent.SyntaxException e) {
             System.err.println(e.getMessage());

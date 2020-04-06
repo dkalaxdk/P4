@@ -1250,11 +1250,11 @@ class ParserTest {
             return;
         }
 
-        assertTrue(node.FirstChild.Value.equals("id"));
+        assertEquals("id", node.FirstChild.Value);
     }
 
     @Test
-    void PinDcl_MinimumProgram_ReturnedNodeSecondChildIsPinType() {
+    void PinDcl_MinimumProgram_PinTypeIsDigital_ReturnedNodeSecondChildIsDigital() {
         // Arrange
         String program = "pin id = createPin(digital, input, 1)";
         Parser parser = createParser(program);
@@ -1270,12 +1270,11 @@ class ParserTest {
             return;
         }
 
-//        assertSame(node.FirstChild.Next.Type, AST.NodeType.PinType);
-        fail();
+        assertSame(node.FirstChild.Next.Type, AST.NodeType.Digital);
     }
 
     @Test
-    void PinDcl_MinimumProgram_ReturnedNodeThirdChildIsIOType() {
+    void PinDcl_MinimumProgram_IOTypeIsInput_ReturnedNodeThirdChildIsInput() {
         // Arrange
         String program = "pin id = createPin(digital, input, 1)";
         Parser parser = createParser(program);
@@ -1291,8 +1290,7 @@ class ParserTest {
             return;
         }
 
-//        assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.IOType);
-        fail();
+        assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.Input);
     }
 
     // TODO: Test for andre typer?
@@ -1357,7 +1355,7 @@ class ParserTest {
     }
 
     @Test
-    void PinType_TypeIsDigital_ReturnPinTypeNode() {
+    void PinType_TypeIsDigital_ReturnDigitalNode() {
         // Arrange
         String program = "digital";
         Parser parser = createParser(program);
@@ -1373,12 +1371,11 @@ class ParserTest {
             return;
         }
 
-//        assertSame(node.Type, AST.NodeType.PinType);
-        fail();
+        assertSame(node.Type, AST.NodeType.Digital);
     }
 
     @Test
-    void PinType_TypeIsAnalog_ReturnPinTypeNode() {
+    void PinType_TypeIsAnalog_ReturnAnalogNode() {
         // Arrange
         String program = "analog";
         Parser parser = createParser(program);
@@ -1394,12 +1391,11 @@ class ParserTest {
             return;
         }
 
-//        assertSame(node.Type, AST.NodeType.PinType);
-        fail();
+        assertSame(node.Type, AST.NodeType.Analog);
     }
 
     @Test
-    void PinType_TypeIsPWM_ReturnPinTypeNode() {
+    void PinType_TypeIsPWM_ReturnPWMNode() {
         // Arrange
         String program = "pwm";
         Parser parser = createParser(program);
@@ -1415,8 +1411,7 @@ class ParserTest {
             return;
         }
 
-//        assertSame(node.Type, AST.NodeType.PinType);
-        fail();
+        assertSame(node.Type, AST.NodeType.PWM);
     }
 
 
@@ -1460,7 +1455,7 @@ class ParserTest {
     }
 
     @Test
-    void IOType_TypeIsInput_ReturnIOTypeNode() {
+    void IOType_TypeIsInput_ReturnInputNode() {
         // Arrange
         String program = "input";
         Parser parser = createParser(program);
@@ -1476,12 +1471,11 @@ class ParserTest {
             return;
         }
 
-//        assertSame(node.Type, AST.NodeType.IOType);
-        fail();
+        assertSame(node.Type, AST.NodeType.Input);
     }
 
     @Test
-    void IOType_TypeIsOutput_ReturnIOTypeNode() {
+    void IOType_TypeIsOutput_ReturnOutputNode() {
         // Arrange
         String program = "output";
         Parser parser = createParser(program);
@@ -1497,8 +1491,7 @@ class ParserTest {
             return;
         }
 
-//        assertSame(node.Type, AST.NodeType.IOType);
-        fail();
+        assertSame(node.Type, AST.NodeType.Output);
     }
 
 
@@ -2242,7 +2235,7 @@ class ParserTest {
     }
 
     @Test
-    void Block_MinimalProgram_ContainsDeclaration_ReturnedNodeFirstChildIsDeclarationNode() {
+    void Block_MinimalProgram_ContainsIntDeclaration_ReturnedNodeFirstChildIsIntDeclarationNode() {
         // Arrange
         String program = "{ int a = 6; }";
         Parser parser = createParser(program);
@@ -2258,12 +2251,11 @@ class ParserTest {
             return;
         }
 
-//        assertSame(node.FirstChild.Type, AST.NodeType.Declaration);
-        fail();
+        assertSame(node.FirstChild.Type, AST.NodeType.IntDeclaration);
     }
 
     @Test
-    void Block_MinimalProgram_ContainsTwoDeclarations_ReturnedNodeSecondChildIsDeclarationNode() {
+    void Block_MinimalProgram_ContainsTwoIntDeclarations_ReturnedNodeSecondChildIsIntDeclarationNode() {
         // Arrange
         String program = "{ int a = 6; int b = 3; }";
         Parser parser = createParser(program);
@@ -2279,8 +2271,7 @@ class ParserTest {
             return;
         }
 
-//        assertSame(node.FirstChild.Next.Type, AST.NodeType.Declaration);
-        fail();
+        assertSame(node.FirstChild.Next.Type, AST.NodeType.IntDeclaration);
     }
 
 
@@ -2325,7 +2316,7 @@ class ParserTest {
     }
 
     @Test
-    void Stmts_MinimalProgram_OneDeclaration_ReturnDeclarationNode() {
+    void Stmts_MinimalProgram_OneIntDeclaration_ReturnIntDeclarationNode() {
         // Arrange
         String program = "int a = 2;" +
                 "}";
@@ -2342,12 +2333,11 @@ class ParserTest {
             return;
         }
 
-//        assertSame(node.Type, AST.NodeType.Declaration);
-        fail();
+        assertSame(node.Type, AST.NodeType.IntDeclaration);
     }
 
     @Test
-    void Stmts_MinimalProgram_TwoDeclarations_ReturnDeclarationNode() {
+    void Stmts_MinimalProgram_TwoIntDeclarations_ReturnIntDeclarationNode() {
         // Arrange
         String program = "int a = 2;" +
                 "int b = 3;" +
@@ -2365,12 +2355,11 @@ class ParserTest {
             return;
         }
 
-//        assertSame(node.Type, AST.NodeType.Declaration);
-        fail();
+        assertSame(node.Type, AST.NodeType.IntDeclaration);
     }
 
     @Test
-    void Stmts_MinimalProgram_TwoDeclarations_ReturnedNodeNextSiblingIsDeclarationNode() {
+    void Stmts_MinimalProgram_TwoIntDeclarations_ReturnedNodeNextSiblingIsIntDeclarationNode() {
         // Arrange
         String program = "int a = 2;" +
                 "int b = 3;" +
@@ -2388,8 +2377,7 @@ class ParserTest {
             return;
         }
 
-//        assertSame(node.Next.Type, AST.NodeType.Declaration);
-        fail();
+        assertSame(node.Next.Type, AST.NodeType.IntDeclaration);
     }
 
 
@@ -2690,7 +2678,7 @@ class ParserTest {
     }
 
     @Test
-    void Dcl_MinimumProgram_ReturnDeclarationNode() {
+    void Dcl_MinimumProgram_TypeIsInt_ReturnIntDeclarationNode() {
         // Arrange
         String program = "int a;";
         Parser parser = createParser(program);
@@ -2706,33 +2694,11 @@ class ParserTest {
             return;
         }
 
-//        assertSame(node.Type, AST.NodeType.Declaration);
-        fail();
+        assertSame(node.Type, AST.NodeType.IntDeclaration);
     }
 
     @Test
-    void Dcl_MinimumProgram_ReturnedNodeFirstChildIsType() {
-        // Arrange
-        String program = "int a;";
-        Parser parser = createParser(program);
-        Node node;
-
-        // Act
-        try {
-            node = parser.Dcl();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            fail();
-            return;
-        }
-
-//        assertSame(node.FirstChild.Type, AST.NodeType.Type);
-        fail();
-    }
-
-    @Test
-    void Dcl_MinimumProgram_TypeIsFloat_ReturnedNodeFirstChildIsTypeFloat() {
+    void Dcl_MinimumProgram_TypeIsFloat_ReturnFloatDeclarationNode() {
         // Arrange
         String program = "float a;";
         Parser parser = createParser(program);
@@ -2748,31 +2714,11 @@ class ParserTest {
             return;
         }
 
-        assertEquals("float", node.FirstChild.Value);
+        assertSame(node.Type, AST.NodeType.FloatDeclaration);
     }
 
     @Test
-    void Dcl_MinimumProgram_TypeIsInt_ReturnedNodeFirstChildIsTypeInt() {
-        // Arrange
-        String program = "int a;";
-        Parser parser = createParser(program);
-        Node node;
-
-        // Act
-        try {
-            node = parser.Dcl();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            fail();
-            return;
-        }
-
-        assertEquals("int", node.FirstChild.Value);
-    }
-
-    @Test
-    void Dcl_MinimumProgram_TypeIsBool_ReturnedNodeFirstChildIsTypeBool() {
+    void Dcl_MinimumProgram_TypeIsBool_ReturnBoolDeclarationNode() {
         // Arrange
         String program = "bool a;";
         Parser parser = createParser(program);
@@ -2788,11 +2734,11 @@ class ParserTest {
             return;
         }
 
-        assertEquals("bool", node.FirstChild.Value);
+        assertSame(node.Type, AST.NodeType.BoolDeclaration);
     }
 
     @Test
-    void Dcl_MinimumProgram_TypeIsEvent_ReturnedNodeFirstChildIsTypeEvent() {
+    void Dcl_MinimumProgram_TypeIsEvent_ReturnEventDeclarationNode() {
         // Arrange
         String program = "event a;";
         Parser parser = createParser(program);
@@ -2808,11 +2754,11 @@ class ParserTest {
             return;
         }
 
-        assertEquals("event", node.FirstChild.Value);
+        assertSame(node.Type, AST.NodeType.EventDeclaration);
     }
 
     @Test
-    void Dcl_MinimumProgram_ReturnedNodeSecondChildIsIdentifier() {
+    void Dcl_MinimumProgram_ReturnedNodeFirstChildIsIdentifier() {
         // Arrange
         String program = "int a;";
         Parser parser = createParser(program);
@@ -2828,11 +2774,11 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Type, AST.NodeType.Identifier);
+        assertSame(node.FirstChild.Type, AST.NodeType.Identifier);
     }
 
     @Test
-    void Dcl_MinimalProgramWithAssigment_ExpressionIsIntLiteral_ReturnedNodeThirdChildIsIntLiteral() {
+    void Dcl_MinimalProgramWithAssigment_ExpressionIsIntLiteral_ReturnedNodeSecondChildIsIntLiteral() {
         // Arrange
         String program = "int a = 3;";
         Parser parser = createParser(program);
@@ -2848,11 +2794,11 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.IntLiteral);
+        assertSame(node.FirstChild.Next.Type, AST.NodeType.IntLiteral);
     }
 
     @Test
-    void Dcl_MinimalProgramWithAssigment_ExpressionIsComposite_ReturnedNodeThirdChildIsExpression() {
+    void Dcl_MinimalProgramWithAssigment_ExpressionIsComposite_ReturnedNodeSecondChildIsExpression() {
         // Arrange
         String program = "int a = 3 + 3;";
         Parser parser = createParser(program);
@@ -2868,7 +2814,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.Expression);
+        assertSame(node.FirstChild.Next.Type, AST.NodeType.Expression);
     }
 
 
@@ -3256,7 +3202,7 @@ class ParserTest {
     }
 
     @Test
-    void AfterExpr_MinimumProgram_ReturnOperatorNode() {
+    void AfterExpr_MinimumProgram_OperatorIsPlus_ReturnPlusNode() {
         // Arrange
         String program = "+ 4;";
         Parser parser = createParser(program);
@@ -3272,8 +3218,7 @@ class ParserTest {
             return;
         }
 
-//        assertSame(node.Type, AST.NodeType.Operator);
-        fail();
+        assertSame(node.Type, AST.NodeType.Plus);
     }
 
     @Test
