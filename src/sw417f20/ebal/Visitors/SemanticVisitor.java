@@ -7,16 +7,13 @@ import sw417f20.ebal.ContextAnalysis.SymbolTable;
 import sw417f20.ebal.SyntaxAnalysis.AST;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
-import javax.naming.Name;
-import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
 
-public class SemanticVisitor extends Visitor {
+public class SemanticVisitor {
 
     SymbolTable CurrentScope = new HashSymbolTable();
 
     private enum ErrorType{ NotDeclared, AlreadyDeclared, WrongType, Default}
 
-    @Override
     public void Visit(Node node) {
         switch(node.Type) {
             case Prog:
@@ -24,7 +21,6 @@ public class SemanticVisitor extends Visitor {
             case Slave:
             case Initiate:
             case Block:
-                VisitChildren(node);
                 break;
             case Listener:
                 CheckListener(node);
@@ -82,6 +78,27 @@ public class SemanticVisitor extends Visitor {
         }
     }
 
+
+    private void CheckProg(Node node){
+
+    }
+
+    private void CheckMaster(Node node){
+
+    }
+
+    private void CheckSlave(Node node){
+
+    }
+
+    private void CheckInitiate(Node node){
+
+    }
+
+    private void CheckBlock(Node node){
+
+    }
+
     private void CheckListener(Node node) {
 
         Symbol symbol = CurrentScope.RetrieveSymbol(node.FirstChild.Value);
@@ -120,6 +137,18 @@ public class SemanticVisitor extends Visitor {
         else {
             MakeError(node.FirstChild.Value, ErrorType.NotDeclared);
         }
+    }
+
+    private void CheckBoolDeclaration(Node node) {
+    }
+
+    private void CheckIntDeclaration(Node node) {
+    }
+
+    private void CheckFloatDeclaration(Node node) {
+    }
+
+    private void CheckEventDeclaration(Node node) {
     }
 
     private PinSymbol.IOType GetIOType(Node node) {
