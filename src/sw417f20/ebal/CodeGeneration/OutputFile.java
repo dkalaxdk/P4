@@ -10,12 +10,9 @@ public class OutputFile {
 
     public OutputFile(String filepath, String content) throws IOException {
         File OutputFile = CreateFile(filepath);
-        System.out.println("Can write to this file: " + OutputFile.canWrite());
         FileWriter fileWriter = new FileWriter(OutputFile);
-        System.out.println("Writing " + content + " to " + filepath);
         fileWriter.write(content);
         fileWriter.close();
-        //fileWriter.append(content);
     }
 
     private File CreateFile(String filepath) throws IOException {
