@@ -10,8 +10,12 @@ public class OutputFile {
 
     public OutputFile(String filepath, String content) throws IOException {
         File OutputFile = CreateFile(filepath);
+        System.out.println("Can write to this file: " + OutputFile.canWrite());
         FileWriter fileWriter = new FileWriter(OutputFile);
+        System.out.println("Writing " + content + " to " + filepath);
         fileWriter.write(content);
+        fileWriter.close();
+        //fileWriter.append(content);
     }
 
     private File CreateFile(String filepath) throws IOException {
@@ -26,13 +30,13 @@ public class OutputFile {
             }
         }
         outputFile = new File(filepath);
-        boolean fileExists = outputFile.createNewFile();
-        if(fileExists) {
+        boolean fileCreated = outputFile.createNewFile();
+        if(fileCreated) {
             // This does not currently have any effect, but could be used to check if user truly wants to overwrite
-            System.out.println("File: " + filepath + " already exists");
+            System.out.println("File: " + filepath + " created");
         }
         else {
-            System.out.println("File: " + filepath + " created");
+            System.out.println("File: " + filepath + " already exists");
         }
         return outputFile;
     }
