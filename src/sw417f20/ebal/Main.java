@@ -1,15 +1,18 @@
 package sw417f20.ebal;
 
+import sw417f20.ebal.CodeGeneration.OutputFileGenerator;
 import sw417f20.ebal.SyntaxAnalysis.*;
 import sw417f20.ebal.SyntaxAnalysis.Reader;
 
 import java.io.*;
+import java.util.ArrayList;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
 //       ScannerStuff();
-        ParserStuff();
+        //ParserStuff();
+        CodeGenStuff();
     }
 
     public static void ParserStuff() throws FileNotFoundException {
@@ -80,5 +83,18 @@ public class Main {
     public static String GetFullPath(String file) {
         String filePath = new File("").getAbsolutePath();
         return filePath + file;
+    }
+
+    public static void CodeGenStuff() {
+        ArrayList<String> fileContents = new ArrayList<String>();
+        fileContents.add("This is the Master file");
+        fileContents.add("This is the first Slave file");
+        fileContents.add("This is the second Slave file");
+
+        try {
+            OutputFileGenerator outGen = new OutputFileGenerator(fileContents);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
