@@ -28,6 +28,7 @@ public class CodeGeneration {
     private String EmitMaster(Node node) {
         String content = "";
         NodeList nodeList = new NodeList();
+        int name = 0;
 
         content += "void setup(){\n";
         content += EmitInitiate(node.FirstChild);
@@ -36,8 +37,9 @@ public class CodeGeneration {
 
         content += "void loop() {\n";
         nodeList.VisitSiblings(node.FirstChild);
-        for(Node slave : nodeList.nodeList){
-            content += Files.add(EmitListener(slave));
+        for(Node listener : nodeList.nodeList){
+            name++;
+            content += EmitListener(listener, name);
         }
         content += "}\n";
 
@@ -78,12 +80,21 @@ public class CodeGeneration {
 
     private String EmitInitiate(Node node) {
         String content = "";
+        NodeList nodeList = new NodeList();
 
+        nodeList.VisitChildren(node);
+        for(Node pinDecl : nodeList.nodeList){
+            content += EmitPinDeclaration(pinDecl);
+        }
         return content;
     }
 
-    private String EmitListener(Node node) {
+    private String EmitListener(Node node, int functionName) {
         String content = "";
+        String pinName = node.FirstChild.Value;
+        content += "reading" + functionName + " = ??? (" + functionName + ");\n"; //TODO find ud af hvordan man finde typen af pin, brug symbol table
+
+        content += EmitBlock(node.FirstChild.FirstSibling);
 
         return content;
     }
