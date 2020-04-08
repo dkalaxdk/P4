@@ -10,10 +10,13 @@ import java.util.ArrayList;
 
 public class CodeGeneration {
     ArrayList<String> Files;
+    EventDictionary EventDictionary;
+    int CommandSize = 6;    //Length of a command sent between master and slaves
 
     public CodeGeneration(Node node){
-        EmitProg(node);
+        EventDictionary = new EventDictionary();
         Files = new ArrayList<String>();
+        EmitProg(node);
     }
 
     private void EmitProg(Node node){
@@ -52,8 +55,8 @@ public class CodeGeneration {
         String content = "";
         NodeList nodeList = new NodeList();
         content += "#include <Wire.h>\n";
-        content += "const int commandSize =" + 5 + ";"; //TODO: Determine command size
-        content += "byte input[commandSize];";
+        content += "const int commandSize =" + CommandSize + ";"; //TODO: Determine command size
+        content += "char input[commandSize];";
         content += "void setup(){\n";
         content += EmitInitiate(node.FirstChild);
         content += "Wire.begin(" + address + ");"; // TODO: Add slave address to dictionary?
@@ -103,6 +106,10 @@ public class CodeGeneration {
 
     private String EmitEventHandler(Node node) {
         String content = "";
+        String eventName = node.FirstChild.Value;
+
+        content += "if (input[0] == " + EventDictionary.getEventID(eventName) + ")";
+        content += EmitBlock(node.FirstChild.Next);
 
         return content;
     }

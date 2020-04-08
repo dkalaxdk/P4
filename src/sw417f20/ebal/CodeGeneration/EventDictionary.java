@@ -3,19 +3,25 @@ package sw417f20.ebal.CodeGeneration;
 import java.util.Dictionary;
 
 public class EventDictionary {
-    private Dictionary<String, String> dictionary;
+    private Dictionary<String, String[]> dictionary;
 
     public EventDictionary() { }
 
-    public void AddEvent(String eventName, String eventValue) {
-        dictionary.put(eventName, eventValue);
+    public void AddEvent(String eventName, String eventID, String eventValue) {
+        String[] idAndValue = { eventID.substring(0, 1), eventValue };
+
+        dictionary.put(eventName, idAndValue);
+    }
+
+    public String getEventID(String eventName) {
+        return dictionary.get(eventName)[0];
     }
 
     public String getEventValue(String eventName) {
-        return dictionary.get(eventName);
+        return dictionary.get(eventName)[1];
     }
 
-    public Dictionary<String, String> getDictionary() {
+    public Dictionary<String, String[]> getDictionary() {
         return dictionary;
     }
 }
