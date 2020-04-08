@@ -2382,7 +2382,6 @@ class ParserTest {
 
 
 
-    // TODO: Lav Stmt test
     @Test
     void Stmt_NoProgram_ThrowSyntaxException() {
         // Arrange
@@ -2403,23 +2402,84 @@ class ParserTest {
     }
 
     @Test
-    void Stmt_Call() {
+    void Stmt_Call_BroadcastReturnCallNode() {
+        // Arrange
+        String program = "broadcast ( b )";
+        Parser parser = createParser(program);
+        Node node;
 
+        // Act
+        try {
+            node = parser.Call();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Call);
     }
 
     @Test
-    void Stmt_Assignment() {
+    void Stmt_Assignment_ReturnAssignmentNode() {
+        // Arrange
+        String program = "a = 3;";
+        Parser parser = createParser(program);
+        Node node;
 
+        // Act
+        try {
+            node = parser.Stmt();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Assignment);
     }
 
     @Test
-    void Stmt_Dcl() {
+    void Stmt_Dcl_DeclarationIsInt_ReturnIntDeclaration() {
+        // Arrange
+        String program = "int a;";
+        Parser parser = createParser(program);
+        Node node;
 
+        // Act
+        try {
+            node = parser.Stmt();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.IntDeclaration);
     }
 
     @Test
-    void Stmt_IfStmt() {
+    void Stmt_IfStmt_ReturnIfNode() {
+        // Arrange
+        String program = "if ( b ) { } " +
+                "}";
+        Parser parser = createParser(program);
+        Node node;
 
+        // Act
+        try {
+            node = parser.Stmt();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.If);
     }
 
 
@@ -2957,7 +3017,6 @@ class ParserTest {
 
 
 
-    // TODO: Lav Expr test
     @Test
     void Expr_NoProgram_ThrowSyntaxException() {
         // Arrange
@@ -2978,28 +3037,360 @@ class ParserTest {
     }
 
     @Test
-    void Expr_Value() {
+    void Expr_Value_Identifier_ReturnIdentifierNode() {
+        // Arrange
+        String program = "a;";
+        Parser parser = createParser(program);
+        Node node;
 
+        // Act
+        try {
+            node = parser.Expr();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Identifier);
     }
 
     @Test
-    void Expr_LParen() {
+    void Expr_Value_Literal_Int_ReturnLiteralNode() {
+        // Arrange
+        String program = "2;";
+        Parser parser = createParser(program);
+        Node node;
 
+        // Act
+        try {
+            node = parser.Expr();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.IntLiteral);
     }
 
     @Test
-    void Expr_Minus() {
+    void Expr_Parenthesised_Identifier_ReturnIdentifierNode() {
+        // Arrange
+        String program = "(a);";
+        Parser parser = createParser(program);
+        Node node;
 
+        // Act
+        try {
+            node = parser.Expr();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Identifier);
     }
 
     @Test
-    void Expr_Not() {
+    void Expr_Parenthesised_Literal_Int_ReturnLiteralNode() {
+        // Arrange
+        String program = "(1);";
+        Parser parser = createParser(program);
+        Node node;
 
+        // Act
+        try {
+            node = parser.Expr();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.IntLiteral);
     }
 
     @Test
-    void Expr_ReturnsCall() {
+    void Expr_Parenthesised_Composite_ReturnExpressionNode() {
+        // Arrange
+        String program = "(1 + 1);";
+        Parser parser = createParser(program);
+        Node node;
 
+        // Act
+        try {
+            node = parser.Expr();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Expression);
+    }
+
+    @Test
+    void Expr_Composite_ReturnExpressionNode() {
+        // Arrange
+        String program = "1 + 1;";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Expr();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Expression);
+    }
+
+    @Test
+    void Expr_Composite_IdentifierPlusIdentifier_ReturnedNodeFirstChildIsIdentifier() {
+        // Arrange
+        String program = "a + b;";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Expr();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Type, AST.NodeType.Identifier);
+    }
+
+    @Test
+    void Expr_Composite_IdentifierPlusIdentifier_ReturnedNodeSecondChildIsPlusOperator() {
+        // Arrange
+        String program = "a + b;";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Expr();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Next.Type, AST.NodeType.Plus);
+    }
+
+    @Test
+    void Expr_Composite_IdentifierPlusIdentifier_ReturnedNodeThirdChildIsIdentifier() {
+        // Arrange
+        String program = "a + b;";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Expr();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.Identifier);
+    }
+
+    @Test
+    void Expr_Composite_IdentifierPlusIdentifierPlusIdentifier_ReturnedNodeThirdChildIsExpression() {
+        // Arrange
+        String program = "a + b + c;";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Expr();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.Expression);
+    }
+
+    @Test
+    void Expr_Prefix_Minus_Identifier_ReturnedNodeFirstChildIsPrefixMinus() {
+        // Arrange
+        String program = "-a;";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Expr();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Type, AST.NodeType.PrefixMinus);
+    }
+
+    @Test
+    void Expr_Prefix_Minus_Literal_ReturnedNodeFirstChildIsPrefixMinus() {
+        // Arrange
+        String program = "-1;";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Expr();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Type, AST.NodeType.PrefixMinus);
+    }
+
+    @Test
+    void Expr_Prefix_Minus_InsideParenthesis_ReturnedNodeFirstChildIsPrefixMinus() {
+        // Arrange
+        String program = "(-1);";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Expr();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Type, AST.NodeType.PrefixMinus);
+    }
+
+    @Test
+    void Expr_Prefix_Minus_OutsideParenthesis_ThrowSyntaxException() {
+        // Arrange
+        String program = "-(1);";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Expr();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void Expr_Prefix_Not_Identifier_ReturnedNodeFirstChildIsPrefixNot() {
+        // Arrange
+        String program = "!a;";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Expr();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Type, AST.NodeType.PrefixNot);
+    }
+
+    @Test
+    void Expr_Prefix_Not_Literal_ThrowSyntaxException() {
+        // Arrange
+        String program = "!1;";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Expr();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void Expr_ReturnsCall_ReturnCallNode() {
+        // Arrange
+        String program = "getValue(a);";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Expr();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Call);
+    }
+
+    @Test
+    void Expr_VoidCall_ThrowSyntaxException() {
+        // Arrange
+        String program = "broadcast(a);";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.Expr();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
 
@@ -3262,7 +3653,7 @@ class ParserTest {
     }
 
 
-    // TODO: Lav Call test
+
     @Test
     void Call_NoProgram_ThrowSyntaxException() {
         // Arrange
@@ -3283,13 +3674,203 @@ class ParserTest {
     }
 
     @Test
-    void Call_VoidCall() {
+    void Call_VoidCall_CallIsBroadcast_ReturnCallNode() {
+        // Arrange
+        String program = "broadcast ( b )";
+        Parser parser = createParser(program);
+        Node node;
 
+        // Act
+        try {
+            node = parser.Call();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Call);
     }
 
     @Test
-    void Call_ReturnsCall() {
+    void Call_VoidCall_CallIsBroadcast_ReturnedNodeFirstChildIsBroadcast() {
+        // Arrange
+        String program = "broadcast ( b )";
+        Parser parser = createParser(program);
+        Node node;
 
+        // Act
+        try {
+            node = parser.Call();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Type, AST.NodeType.Broadcast);
+    }
+
+    @Test
+    void Call_VoidCall_CallIsWrite_ReturnCallNode() {
+        // Arrange
+        String program = "write(a, 1)";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Call();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Call);
+    }
+
+    @Test
+    void Call_VoidCall_CallIsWrite_ReturnedNodeFirstChildIsWrite() {
+        // Arrange
+        String program = "write(a, 1)";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Call();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Type, AST.NodeType.Write);
+    }
+
+    @Test
+    void Call_ReturnsCall_CallIsFilterNoise_ReturnCallNode() {
+        // Arrange
+        String program = "filterNoise(a, flip)";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Call();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Call);
+    }
+
+    @Test
+    void Call_ReturnsCall_CallIsFilterNoise_ReturnedNodeFirstChildIsFilterNoise() {
+        // Arrange
+        String program = "filterNoise(a, flip)";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Call();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Type, AST.NodeType.FilterNoise);
+    }
+
+    @Test
+    void Call_ReturnsCall_CallIsGetValue_ReturnCallNode() {
+        // Arrange
+        String program = "getValue(a)";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Call();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Call);
+    }
+
+    @Test
+    void Call_ReturnsCall_CallIsGetValue_ReturnedNodeFirstChildIsGetValue() {
+        // Arrange
+        String program = "getValue(a)";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Call();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Type, AST.NodeType.GetValue);
+    }
+
+    @Test
+    void Call_ReturnsCall_CallIsCreateEvent_ReturnCallNode() {
+        // Arrange
+        String program = "createEvent(a)";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Call();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Call);
+    }
+
+    @Test
+    void Call_ReturnsCall_CallIsCreateEvent_ReturnedNodeFirstChildIsCreateEvent() {
+        // Arrange
+        String program = "createEvent(a)";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Call();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Type, AST.NodeType.CreateEvent);
     }
 
 
@@ -3313,14 +3894,356 @@ class ParserTest {
         fail();
     }
 
-    @Test
-    void VoidCall_Broadcast() {
 
+    @Test
+    void VoidCall_Broadcast_NoBroadcast_ThrowSyntaxException() {
+        // Arrange
+        String program = "( b )";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.VoidCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void VoidCall_Write() {
+    void VoidCall_Broadcast_NoLParen_ThrowSyntaxException() {
+        // Arrange
+        String program = "broadcast  b )";
+        Parser parser = createParser(program);
 
+        // Act
+        try {
+            parser.VoidCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void VoidCall_Broadcast_NoIdentifier_ThrowSyntaxException() {
+        // Arrange
+        String program = "broadcast (  )";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.VoidCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void VoidCall_Broadcast_NoRParen_ThrowSyntaxException() {
+        // Arrange
+        String program = "broadcast ( b ";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.VoidCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void VoidCall_Broadcast_MinimumProgram_ReturnCallNode() {
+        // Arrange
+        String program = "broadcast ( b )";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.VoidCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Call);
+    }
+
+    @Test
+    void VoidCall_Broadcast_MinimumProgram_ReturnedNodeFirstChildIsBroadcast() {
+        // Arrange
+        String program = "broadcast ( b )";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.VoidCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Type, AST.NodeType.Broadcast);
+    }
+
+    @Test
+    void VoidCall_Broadcast_MinimumProgram_ReturnedNodeSecondChildIsIdentifier() {
+        // Arrange
+        String program = "broadcast ( b )";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.VoidCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Next.Type, AST.NodeType.Identifier);
+    }
+
+
+    @Test
+    void VoidCall_Write_NoWrite_ThrowSyntaxException() {
+        // Arrange
+        String program = " (a, 1)";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.VoidCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void VoidCall_Write_NoLParen_ThrowSyntaxException() {
+        // Arrange
+        String program = "write a, 1)";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.VoidCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void VoidCall_Write_NoIdentifier_ThrowSyntaxException() {
+        // Arrange
+        String program = "write (, 1)";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.VoidCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void VoidCall_Write_NoComma_ThrowSyntaxException() {
+        // Arrange
+        String program = "write (a 1)";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.VoidCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void VoidCall_Write_NoExpression_ThrowSyntaxException() {
+        // Arrange
+        String program = "write (a, )";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.VoidCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void VoidCall_Write_NoRParen_ThrowSyntaxException() {
+        // Arrange
+        String program = "write (a, 1";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.VoidCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void VoidCall_Write_MinimumProgram_ReturnCallNode() {
+        // Arrange
+        String program = "write (a, 1)";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.VoidCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Call);
+    }
+
+    @Test
+    void VoidCall_Write_MinimumProgram_ReturnedNodeFirstChildIsWrite() {
+        // Arrange
+        String program = "write (a, 1)";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.VoidCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Type, AST.NodeType.Write);
+    }
+
+    @Test
+    void VoidCall_Write_MinimumProgram_ReturnedNodeSecondChildIsIdentifier() {
+        // Arrange
+        String program = "write (a, 1)";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.VoidCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Next.Type, AST.NodeType.Identifier);
+    }
+
+    @Test
+    void VoidCall_Write_MinimumProgram_ExpressionIsIntLiteral_ReturnedNodeThirdChildIsIntLiteral() {
+        // Arrange
+        String program = "write (a, 1)";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.VoidCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.IntLiteral);
+    }
+
+    @Test
+    void VoidCall_Write_MinimumProgram_ExpressionIsComposite_ReturnedNodeThirdChildIsExpression() {
+        // Arrange
+        String program = "write (a, 1 + 1)";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.VoidCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.Expression);
     }
 
 
@@ -3344,19 +4267,473 @@ class ParserTest {
         fail();
     }
 
-    @Test
-    void ReturnsCall_FilterNoise() {
 
+    @Test
+    void ReturnsCall_FilterNoise_NoFilterNoise_ThrowSyntaxException() {
+        // Arrange
+        String program = "(a, flip)";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.ReturnsCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void ReturnsCall_GetValue() {
+    void ReturnsCall_FilterNoise_NoLParen_ThrowSyntaxException() {
+        // Arrange
+        String program = "filterNoise a, flip)";
+        Parser parser = createParser(program);
 
+        // Act
+        try {
+            parser.ReturnsCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
     }
 
     @Test
-    void ReturnsCall_CreateEvent() {
+    void ReturnsCall_FilterNoise_NoIdentifier_ThrowSyntaxException() {
+        // Arrange
+        String program = "filterNoise( , flip)";
+        Parser parser = createParser(program);
 
+        // Act
+        try {
+            parser.ReturnsCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void ReturnsCall_FilterNoise_NoComma_ThrowSyntaxException() {
+        // Arrange
+        String program = "filterNoise(a flip)";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.ReturnsCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void ReturnsCall_FilterNoise_NoFilterType_ThrowSyntaxException() {
+        // Arrange
+        String program = "filterNoise(a, )";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.ReturnsCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void ReturnsCall_FilterNoise_NoRParen_ThrowSyntaxException() {
+        // Arrange
+        String program = "filterNoise(a, flip";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.ReturnsCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void ReturnsCall_FilterNoise_MinimumProgram_ReturnCallNode() {
+        // Arrange
+        String program = "filterNoise(a, flip)";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.ReturnsCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Call);
+    }
+
+    @Test
+    void ReturnsCall_FilterNoise_MinimumProgram_ReturnedNodeFirstChildIsFilterNoise() {
+        // Arrange
+        String program = "filterNoise(a, flip)";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.ReturnsCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Type, AST.NodeType.FilterNoise);
+    }
+
+    @Test
+    void ReturnsCall_FilterNoise_MinimumProgram_ReturnedNodeFirstSecondChildIsIdentifier() {
+        // Arrange
+        String program = "filterNoise(a, flip)";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.ReturnsCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Next.Type, AST.NodeType.Identifier);
+    }
+
+    @Test
+    void ReturnsCall_FilterNoise_MinimumProgram_FilterTypeIsFlip_ReturnedNodeFirstThirdChildIsFlip() {
+        // Arrange
+        String program = "filterNoise(a, flip)";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.ReturnsCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.Flip);
+    }
+
+
+    @Test
+    void ReturnsCall_GetValue_NoGetValue_ThrowSyntaxException() {
+        // Arrange
+        String program = "(a)";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.ReturnsCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void ReturnsCall_GetValue_NoLParen_ThrowSyntaxException() {
+        // Arrange
+        String program = "getValue a)";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.ReturnsCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void ReturnsCall_GetValue_NoValue_ThrowSyntaxException() {
+        // Arrange
+        String program = "getValue( )";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.ReturnsCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void ReturnsCall_GetValue_NoRParen_ThrowSyntaxException() {
+        // Arrange
+        String program = "getValue(a";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.ReturnsCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void ReturnsCall_GetValue_MinimumProgram_ReturnCallNode() {
+        // Arrange
+        String program = "getValue(a)";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.ReturnsCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Call);
+    }
+
+    @Test
+    void ReturnsCall_GetValue_MinimumProgram_ReturnedNodeFirstChildIsGetValue() {
+        // Arrange
+        String program = "getValue(a)";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.ReturnsCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Type, AST.NodeType.GetValue);
+    }
+
+    @Test
+    void ReturnsCall_GetValue_MinimumProgram_ReturnedNodeSecondChildIsIdentifier() {
+        // Arrange
+        String program = "getValue(a)";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.ReturnsCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Next.Type, AST.NodeType.Identifier);
+    }
+
+
+    @Test
+    void ReturnsCall_CreateEvent_NoCreateEvent_ThrowSyntaxException() {
+        // Arrange
+        String program = "(a)";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.ReturnsCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void ReturnsCall_CreateEvent_NoLParen_ThrowSyntaxException() {
+        // Arrange
+        String program = "createEvent a)";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.ReturnsCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void ReturnsCall_CreateEvent_NoValue_ThrowSyntaxException() {
+        // Arrange
+        String program = "createEvent( )";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.ReturnsCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void ReturnsCall_CreateEvent_NoRParen_ThrowSyntaxException() {
+        // Arrange
+        String program = "createEvent(a";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.ReturnsCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void ReturnsCall_CreateEvent_MinimumProgram_ReturnCallNode() {
+        // Arrange
+        String program = "createEvent(a)";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.ReturnsCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Call);
+    }
+
+    @Test
+    void ReturnsCall_CreateEvent_MinimumProgram_ReturnedNodeFirstChildIsCreateEvent() {
+        // Arrange
+        String program = "createEvent(a)";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.ReturnsCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Type, AST.NodeType.CreateEvent);
+    }
+
+    @Test
+    void ReturnsCall_CreateEvent_MinimumProgram_ReturnedNodeSecondChildIsIdentifier() {
+        // Arrange
+        String program = "createEvent(a)";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.ReturnsCall();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Next.Type, AST.NodeType.Identifier);
     }
 
 
@@ -3380,6 +4757,273 @@ class ParserTest {
         fail();
     }
 
+    @Test
+    void IfStmt_NoIf_ThrowSyntaxException() {
+        // Arrange
+        String program = "( b ) { } " +
+                "}";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.IfStmt();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void IfStmt_NoLParen_ThrowSyntaxException() {
+        // Arrange
+        String program = "if  b ) { } " +
+                "}";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.IfStmt();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void IfStmt_NoExpression_ThrowSyntaxException() {
+        // Arrange
+        String program = "if ( ) { } " +
+                "}";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.IfStmt();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void IfStmt_NoRParen_ThrowSyntaxException() {
+        // Arrange
+        String program = "if ( b  { } " +
+                "}";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.IfStmt();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void IfStmt_NoLBracket_ThrowSyntaxException() {
+        // Arrange
+        String program = "if ( b ) } " +
+                "}";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.IfStmt();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void IfStmt_NoRBracket_ThrowSyntaxException() {
+        // Arrange
+        String program = "if ( b ) {  " +
+                "}";
+        Parser parser = createParser(program);
+
+        // Act
+        try {
+            parser.IfStmt();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void IfStmt_MinimumProgram_ReturnIfNode() {
+        // Arrange
+        String program = "if ( b ) { } " +
+                "}";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.IfStmt();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.If);
+    }
+
+    @Test
+    void IfStmt_MinimumProgram_ExpressionIsIdentifier_ReturnedNodeFirstChildIsIdentifier() {
+        // Arrange
+        String program = "if ( b ) { } " +
+                "}";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.IfStmt();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Type, AST.NodeType.Identifier);
+    }
+
+    @Test
+    void IfStmt_MinimumProgram_ExpressionIsComposite_ReturnedNodeFirstChildIsExpression() {
+        // Arrange
+        String program = "if ( a == b ) { } " +
+                "}";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.IfStmt();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Type, AST.NodeType.Expression);
+    }
+
+    @Test
+    void IfStmt_MinimumProgram_ReturnedNodeSecondChildIsBlock() {
+        // Arrange
+        String program = "if ( b ) { } " +
+                "}";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.IfStmt();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Next.Type, AST.NodeType.Block);
+    }
+
+    @Test
+    void IfStmt_MinimumProgram_ReturnedNodeThirdChildIsEmpty() {
+        // Arrange
+        String program = "if ( b ) { } " +
+                "}";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.IfStmt();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.Empty);
+    }
+
+    @Test
+    void IfStmt_MinimalProgram_WithElse_ReturnedNodeThirdChildIsBlock() {
+        // Arrange
+        String program = "if ( b ) { } else { }" +
+                "}";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.IfStmt();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.Block);
+    }
+
+    @Test
+    void IfStmt_MinimalProgram_WithElseIf_ReturnedNodeThirdChildIsIf() {
+        // Arrange
+        String program = "if ( b ) { } else if ( c ) { }" +
+                "}";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.IfStmt();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.If);
+    }
+
 
 
     @Test
@@ -3399,6 +5043,66 @@ class ParserTest {
         }
 
         fail();
+    }
+
+    @Test
+    void IfEnd_NoElse_ReturnEmptyNode() {
+        // Arrange
+        String program = "}";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.IfEnd();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Empty);
+    }
+
+    @Test
+    void IfEnd_Else_ReturnBlockNode() {
+        // Arrange
+        String program = "else { } }";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.IfEnd();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Block);
+    }
+
+    @Test
+    void IfEnd_ElseIf_ReturnIfNode() {
+        // Arrange
+        String program = "else if ( b ) { } }";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.IfEnd();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.If);
     }
 
 
@@ -3422,6 +5126,47 @@ class ParserTest {
         fail();
     }
 
+    @Test
+    void AfterElse_Block_ReturnBlockNode() {
+        // Arrange
+        String program = "{ }";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.AfterElse();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Block);
+    }
+
+    @Test
+    void AfterElse_ElseIf_ReturnIfNode() {
+        // Arrange
+        String program = "if ( b ) { }" +
+                "}";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.AfterElse();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.If);
+    }
+
 
 
     @Test
@@ -3441,6 +5186,66 @@ class ParserTest {
         }
 
         fail();
+    }
+
+    @Test
+    void FilterType_Flip_ReturnFlipNode() {
+        // Arrange
+        String program = "flip";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.FilterType();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Flip);
+    }
+
+    @Test
+    void FilterType_Constant_ReturnConstantNode() {
+        // Arrange
+        String program = "constant";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.FilterType();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Constant);
+    }
+
+    @Test
+    void FilterType_Range_ReturnRangeNode() {
+        // Arrange
+        String program = "range";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.FilterType();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.Type, AST.NodeType.Range);
     }
 
 

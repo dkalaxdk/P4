@@ -641,9 +641,8 @@ public class Parser extends RecursiveDescent {
         return VoidCall;
     }
 
-    // TODO: Måske skal getValue kun tage en identifier?
     // ReturnsCall	-> filterNoise lparen identifier comma FilterType rparen
-    //	             | 	getValue lparen Value rparen
+    //	             | 	getValue lparen identifier rparen
     //	             |  createEvent lparen Value rparen.
     public Node ReturnsCall() throws SyntaxException {
         Node ReturnsCall = AST.MakeNode(AST.NodeType.Call);

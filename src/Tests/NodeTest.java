@@ -175,7 +175,6 @@ class NodeTest {
         // Act
         parent.AddChild(child2);
 
-        // TODO: Muligt fix: Giv hver node med som parameter ned igennem parseren
         // Assert
         assertTrue(parent.FirstChild.Next.Parent == parent && parent.FirstChild.Next.Next.Parent == parent);
     }
