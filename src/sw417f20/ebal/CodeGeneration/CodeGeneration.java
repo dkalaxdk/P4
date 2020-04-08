@@ -1,6 +1,8 @@
 package sw417f20.ebal.CodeGeneration;
 
+import sw417f20.ebal.SyntaxAnalysis.AST;
 import sw417f20.ebal.SyntaxAnalysis.Node;
+import sw417f20.ebal.SyntaxAnalysis.Token;
 
 import java.lang.reflect.Array;
 import java.net.ContentHandler;
@@ -29,7 +31,7 @@ public class CodeGeneration {
         String content = "";
         NodeList nodeList = new NodeList();
         int name = 0;
-
+        //TODO Husk at sætte h filer ind
         content += "void setup(){\n";
         content += EmitInitiate(node.FirstChild);
         content += "Wire.begin();";
@@ -107,6 +109,72 @@ public class CodeGeneration {
 
     private String EmitBlock(Node node) {
         String content = "";
+        NodeList nodeList = new NodeList();
+
+        content += "{\n";
+        nodeList.VisitChildren(node);
+        for(Node statement : nodeList.nodeList){
+            if(statement.Type == AST.NodeType.Call){
+                content += EmitCall(statement);
+            }
+            else if(statement.Type == AST.NodeType.BoolDeclaration){
+                content += EmitBoolDcl(statement);
+            }
+            else if(statement.Type == AST.NodeType.IntDeclaration){
+                content += EmitIntDcl(statement);
+            }
+            else if(statement.Type == AST.NodeType.FloatDeclaration){
+                content += EmitFloatDcl(statement);
+            }
+            else if(statement.Type == AST.NodeType.EventDeclaration){
+                content += EmitEventDcl(statement);
+            }
+            else if(statement.Type == AST.NodeType.Assignment){
+                content += EmitAssignment(statement);
+            }
+            else if(statement.Type == AST.NodeType.If){
+                content += EmitIf(statement);
+            }
+        }
+        content += "}\n";
+
+        return content;
+    }
+
+    private String EmitEventDcl(Node node) {
+        String content = "";
+
+        content = "char " + node.Value + "[] = \"" + node.Value + "\"";
+        if (node.FirstChild.Next.Type == AST.NodeType.Expression){
+            content += EmitExpression(node.FirstChild.Next);
+        }
+        else{
+            content += ";\n";
+        }
+
+        return content;
+    }
+
+    private String EmitFloatDcl(Node node) {
+        String content = "";
+
+        return content;
+    }
+
+    private String EmitIntDcl(Node node) {
+        String content = "";
+
+        return content;
+    }
+
+    private String EmitBoolDcl(Node node) {
+        String content = "";
+
+        return content;
+    }
+
+    private String EmitCall(Node node) {
+        String content = "";
 
         return content;
     }
@@ -117,11 +185,6 @@ public class CodeGeneration {
         return content;
     }
 
-    private String EmitDeclaration(Node node) {
-        String content = "";
-
-        return content;
-    }
 
     private String EmitAssignment(Node node) {
         String content = "";
@@ -135,79 +198,73 @@ public class CodeGeneration {
         return content;
     }
 
-    private String emitCall(Node node) {
+    private String EmitFunction(Node node) {
         String content = "";
 
         return content;
     }
 
-    private String emitFunction(Node node) {
+    private String EmitExpression(Node node) {
         String content = "";
 
         return content;
     }
 
-    private String emitExpression(Node node) {
+    private String EmitIdentifier(Node node) {
         String content = "";
 
         return content;
     }
 
-    private String emitIdentifier(Node node) {
+    private String EmitType(Node node) {
         String content = "";
 
         return content;
     }
 
-    private String emitType(Node node) {
+    private String EmitOperator(Node node) {
         String content = "";
 
         return content;
     }
 
-    private String emitOperator(Node node) {
+    private String EmitPrefix(Node node) {
         String content = "";
 
         return content;
     }
 
-    private String emitPrefix(Node node) {
+    private String EmitFunc(Node node) {
         String content = "";
 
         return content;
     }
 
-    private String emitFunc(Node node) {
+    private String EmitReturns(Node node) {
         String content = "";
 
         return content;
     }
 
-    private String emitReturns(Node node) {
+    private String EmitPinType(Node node) {
         String content = "";
 
         return content;
     }
 
-    private String emitPinType(Node node) {
+    private String EmitIOType(Node node) {
         String content = "";
 
         return content;
     }
 
-    private String emitIOType(Node node) {
+    private String EmitLiteral(Node node) {
         String content = "";
 
         return content;
     }
 
-    private String emitLiteral(Node node) {
-        String content = "";
-
-        return content;
-    }
-
-    private String emitFilterType(Node node) {
+    private String EmitFilterType(Node node) {
         String content = "";
 
         return content;
