@@ -19,8 +19,10 @@ public class CodeGeneration {
         Files.add(EmitMaster(node.FirstChild));
 
         nodeList.VisitSiblings(node.FirstChild);
+        int slaveAddress = 1;
         for(Node slave : nodeList.nodeList){
-            Files.add(EmitSlave(slave));
+            Files.add(EmitSlave(slave, slaveAddress));
+            slaveAddress++;
         }
     }
     private String EmitMaster(Node node) {
@@ -42,93 +44,162 @@ public class CodeGeneration {
         return content;
     }
 
-    private String EmitSlave(Node node) {
+    private String EmitSlave(Node node, int address) {
+        String content = "";
+        NodeList nodeList = new NodeList();
+        content += "#include <Wire.h>\n";
+        content += "const int commandSize =" + 5 + ";"; //TODO: Determine command size
+        content += "byte input[commandSize];";
+        content += "void setup(){\n";
+        content += EmitInitiate(node.FirstChild);
+        content += "Wire.begin(" + address + ");"; // TODO: Add slave address to dictionary?
+        content += "Wire.onReceive(receiveEvent);";
+        content += "}\n";
 
+        content += "void loop() {\n";
 
+        content += "}\n";
+        //TODO: Determine how to distribute events
+        content += "void receiveEvent(int eventSize)\n" +
+                "{\n" +
+                "  for (int i = 0; i < commandSize-1 || i < eventSize; i++) {\n" +
+                "    char c = Wire.read();\n" +
+                "    input[i] = c;\n" +
+                "  }";
+
+        nodeList.VisitSiblings(node.FirstChild);
+        for(Node EventHandler : nodeList.nodeList){
+            content += Files.add(EmitEventHandler(EventHandler));
+        }
+
+        content += "}";
+        return content;
     }
 
     private String EmitInitiate(Node node) {
+        String content = "";
 
+        return content;
     }
 
     private String EmitListener(Node node) {
+        String content = "";
 
+        return content;
     }
 
     private String EmitEventHandler(Node node) {
+        String content = "";
 
+        return content;
     }
 
     private String EmitBlock(Node node) {
+        String content = "";
 
+        return content;
     }
 
     private String EmitPinDeclaration(Node node) {
+        String content = "";
 
+        return content;
     }
 
     private String EmitDeclaration(Node node) {
+        String content = "";
 
+        return content;
     }
 
     private String EmitAssignment(Node node) {
+        String content = "";
 
+        return content;
     }
 
     private String EmitIf(Node node) {
+        String content = "";
 
+        return content;
     }
 
     private String emitCall(Node node) {
+        String content = "";
 
+        return content;
     }
 
     private String emitFunction(Node node) {
+        String content = "";
 
+        return content;
     }
 
     private String emitExpression(Node node) {
+        String content = "";
 
+        return content;
     }
 
     private String emitIdentifier(Node node) {
+        String content = "";
 
+        return content;
     }
 
     private String emitType(Node node) {
+        String content = "";
 
+        return content;
     }
 
     private String emitOperator(Node node) {
+        String content = "";
 
+        return content;
     }
 
     private String emitPrefix(Node node) {
+        String content = "";
 
+        return content;
     }
 
     private String emitFunc(Node node) {
+        String content = "";
 
+        return content;
     }
 
     private String emitReturns(Node node) {
+        String content = "";
 
+        return content;
     }
 
     private String emitPinType(Node node) {
+        String content = "";
 
+        return content;
     }
 
     private String emitIOType(Node node) {
+        String content = "";
 
+        return content;
     }
 
     private String emitLiteral(Node node) {
+        String content = "";
 
+        return content;
     }
 
     private String emitFilterType(Node node) {
+        String content = "";
 
+        return content;
     }
 
 
