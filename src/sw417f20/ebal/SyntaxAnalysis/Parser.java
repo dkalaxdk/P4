@@ -641,9 +641,8 @@ public class Parser extends RecursiveDescent {
         return VoidCall;
     }
 
-    // TODO: Måske skal getValue kun tage en identifier?
     // ReturnsCall	-> filterNoise lparen identifier comma FilterType rparen
-    //	             | 	getValue lparen Value rparen
+    //	             | 	getValue lparen identifier rparen
     //	             |  createEvent lparen Value rparen.
     public Node ReturnsCall() throws SyntaxException {
         Node ReturnsCall = AST.MakeNode(AST.NodeType.Call);
@@ -844,36 +843,36 @@ public class Parser extends RecursiveDescent {
         }
     }
 
-    public boolean CheckForType() {
+    private boolean CheckForType() {
         return  Peek().type == Token.Type.FLOAT                 ||
                 Peek().type == Token.Type.INT                   ||
                 Peek().type == Token.Type.BOOL                  ||
                 Peek().type == Token.Type.EVENT;
     }
 
-    public boolean CheckForCall() {
+    private boolean CheckForCall() {
         return  CheckForReturnsCall()                           ||
                 CheckForVoidCall();
     }
 
-    public boolean CheckForReturnsCall() {
+    private boolean CheckForReturnsCall() {
         return  Peek().type == Token.Type.FILTERNOISE           ||
                 Peek().type == Token.Type.GETVALUE              ||
                 Peek().type == Token.Type.CREATEEVENT;
     }
 
-    public boolean CheckForVoidCall() {
+    private boolean CheckForVoidCall() {
         return  Peek().type == Token.Type.BROADCAST             ||
                 Peek().type == Token.Type.WRITE;
     }
 
-    public boolean CheckForLiteral() {
+    private boolean CheckForLiteral() {
         return  Peek().type == Token.Type.LIT_Int               ||
                 Peek().type == Token.Type.LIT_Float             ||
                 Peek().type == Token.Type.LIT_Bool;
     }
 
-    public boolean CheckForOperator() {
+    private boolean CheckForOperator() {
         return  Peek().type == Token.Type.OP_PLUS               ||
                 Peek().type == Token.Type.OP_MINUS              ||
                 Peek().type == Token.Type.OP_TIMES              ||
@@ -881,7 +880,7 @@ public class Parser extends RecursiveDescent {
                 Peek().type == Token.Type.OP_MODULO;
     }
 
-    public boolean CheckForLogicOperator() {
+    private boolean CheckForLogicOperator() {
         return  Peek().type == Token.Type.LOP_LESSTHAN          ||
                 Peek().type == Token.Type.LOP_GREATERTHAN       ||
                 Peek().type == Token.Type.LOP_NOTEQUAL          ||

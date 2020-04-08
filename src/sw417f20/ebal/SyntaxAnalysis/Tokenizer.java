@@ -221,6 +221,21 @@ public class Tokenizer {
                     token.content += reader.readChar();
                 } else token.type = Token.Type.LOP_LESSTHAN;
                 break;
+
+            case '&':
+                if (reader.nextChar == '&') {
+                    token.type = Token.Type.LOP_AND;
+                    token.content += reader.readChar();
+                }
+                break;
+
+            case '|':
+                if (reader.nextChar == '|') {
+                    token.type = Token.Type.LOP_OR;
+                    token.content += reader.readChar();
+                }
+                break;
+
             default:
                 token.type = Token.Type.NOTATOKEN;
                 break;
