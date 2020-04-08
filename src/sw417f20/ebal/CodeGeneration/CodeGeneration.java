@@ -10,10 +10,12 @@ import java.util.ArrayList;
 
 public class CodeGeneration {
     ArrayList<String> Files;
+    EventDictionary EventDictionary;
 
     public CodeGeneration(Node node){
-        EmitProg(node);
         Files = new ArrayList<String>();
+        EventDictionary = new EventDictionary();
+        EmitProg(node);
     }
 
     private void EmitProg(Node node){
@@ -143,7 +145,7 @@ public class CodeGeneration {
 
     private String EmitEventDcl(Node node) {
         String content = "";
-
+        EventDictionary.AddEvent();
         content = "char " + node.Value + "[] = \"" + node.Value + "\"";
         if (node.FirstChild.Next.Type == AST.NodeType.Expression){
             content += EmitExpression(node.FirstChild.Next);
@@ -158,6 +160,13 @@ public class CodeGeneration {
     private String EmitFloatDcl(Node node) {
         String content = "";
 
+        content = "float " + node.Value;
+        if (node.FirstChild.Next.Type == AST.NodeType.Expression){
+            content += EmitExpression(node.FirstChild.Next);
+        }
+        else{
+            content += ";\n";
+        }
         return content;
     }
 
@@ -175,6 +184,13 @@ public class CodeGeneration {
 
     private String EmitCall(Node node) {
         String content = "";
+
+        if(node.FirstChild.Type == AST.NodeType.CreateEvent){
+            content += "";
+        }
+        else if(node.FirstChild.Type == AST.NodeType.Broadcast){
+            content += "";
+        }
 
         return content;
     }
