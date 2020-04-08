@@ -150,7 +150,7 @@ public class CodeGeneration {
 
     private String EmitEventDcl(Node node) {
         String content = "";
-        EventDictionary.AddEvent();
+        //EventDictionary.AddEvent();
         content = "char " + node.Value + "[] = \"" + node.Value + "\"";
         if (node.FirstChild.Next.Type == AST.NodeType.Expression){
             content += EmitExpression(node.FirstChild.Next);
