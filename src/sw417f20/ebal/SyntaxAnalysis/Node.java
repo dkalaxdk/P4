@@ -1,15 +1,22 @@
 package sw417f20.ebal.SyntaxAnalysis;
 
+import sw417f20.ebal.CodeGeneration.Strategies.CodeGenerationStrategy;
+
 // This class is inspired by the data structure
 // outlined in Crafting a Compiler by Fischer et. al.
 public class Node {
     public AST.NodeType Type;
     public String Value;
 
+    // The next element in the linked list of siblings
     public Node Next;
+    // Reference to head of singly linked list of siblings
     public Node FirstSibling;
+    // The first child node.
+    // Acts as head of a singly linked list of children.
     public Node FirstChild;
     public Node Parent;
+    public CodeGenerationStrategy codeGen;
 
     public Node(AST.NodeType type) {
         this.Type = type;
