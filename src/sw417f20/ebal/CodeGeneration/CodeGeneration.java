@@ -10,10 +10,13 @@ import java.util.ArrayList;
 
 public class CodeGeneration {
     ArrayList<String> Files;
+    EventDictionary EventDictionary;
+    int CommandSize = 6;    //Length of a command sent between master and slaves
 
     public CodeGeneration(Node node){
-        EmitProg(node);
         Files = new ArrayList<String>();
+        EventDictionary = new EventDictionary();
+        EmitProg(node);
     }
 
     private void EmitProg(Node node){
@@ -52,8 +55,8 @@ public class CodeGeneration {
         String content = "";
         NodeList nodeList = new NodeList();
         content += "#include <Wire.h>\n";
-        content += "const int commandSize =" + 5 + ";"; //TODO: Determine command size
-        content += "byte input[commandSize];";
+        content += "const int commandSize =" + CommandSize + ";"; //TODO: Determine command size
+        content += "char input[commandSize];";
         content += "void setup(){\n";
         content += EmitInitiate(node.FirstChild);
         content += "Wire.begin(" + address + ");"; // TODO: Add slave address to dictionary?
@@ -103,6 +106,10 @@ public class CodeGeneration {
 
     private String EmitEventHandler(Node node) {
         String content = "";
+        String eventName = node.FirstChild.Value;
+
+        content += "if (input[0] == " + EventDictionary.getEventID(eventName) + ")";
+        content += EmitBlock(node.FirstChild.Next);
 
         return content;
     }
@@ -143,7 +150,7 @@ public class CodeGeneration {
 
     private String EmitEventDcl(Node node) {
         String content = "";
-
+        //EventDictionary.AddEvent();
         content = "char " + node.Value + "[] = \"" + node.Value + "\"";
         if (node.FirstChild.Next.Type == AST.NodeType.Expression){
             content += EmitExpression(node.FirstChild.Next);
@@ -158,6 +165,13 @@ public class CodeGeneration {
     private String EmitFloatDcl(Node node) {
         String content = "";
 
+        content = "float " + node.Value;
+        if (node.FirstChild.Next.Type == AST.NodeType.Expression){
+            content += EmitExpression(node.FirstChild.Next);
+        }
+        else{
+            content += ";\n";
+        }
         return content;
     }
 
@@ -175,6 +189,13 @@ public class CodeGeneration {
 
     private String EmitCall(Node node) {
         String content = "";
+
+        if(node.FirstChild.Type == AST.NodeType.CreateEvent){
+            content += "";
+        }
+        else if(node.FirstChild.Type == AST.NodeType.Broadcast){
+            content += "";
+        }
 
         return content;
     }
