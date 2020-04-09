@@ -140,10 +140,13 @@ public class Node {
         }
     }
 
+    // Just makes checks for empty nodes shorter.
     public boolean IsEmpty() {
         return this.Type == AST.NodeType.Empty;
     }
 
+    // Calls the provided codeGen strategy, and returns the result.
+    // Is the common interface for code generation.
     public String GenerateCode() {
         return codeGen.GenerateCode(this);
     }
