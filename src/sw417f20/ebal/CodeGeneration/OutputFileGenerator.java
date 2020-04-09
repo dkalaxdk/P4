@@ -10,6 +10,7 @@ public class OutputFileGenerator {
         Files = new ArrayList<File>();
     }
 
+    //TODO: Refactor to use a stream/StreamWriter, then make wrapper class
     public OutputFileGenerator(ArrayList<String> fileContents) throws IOException {
         Files = new ArrayList<File>();
         String filePath = getFilePath();

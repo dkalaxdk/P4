@@ -206,7 +206,36 @@ public class CodeGeneration {
 
     private String EmitExpression(Node node) {
         String content = "";
-
+        Node firstOperand = node.FirstChild;
+        Node nextNode = firstOperand.Next;
+        // if the next node is not operator or expression, simply emit first operand
+        if (!IsOperator(nextNode) && nextNode.Type != AST.NodeType.Expression && !IsOperand(nextNode)) {
+            if(firstOperand.Type == AST.NodeType.Identifier) {
+                content += EmitIdentifier(firstOperand);
+            }
+            else if(IsLiteral(firstOperand)) {
+                content += EmitLiteral(firstOperand);
+            }
+            else if(firstOperand.Type == AST.NodeType.Call) {
+                content += EmitCall(firstOperand);
+            }
+            else {
+                //TODO: Should this be an else-if instead?
+                content += EmitExpression(firstOperand);
+            }
+        }
+        // handle that the following node is an operator or expression;
+        else {
+            if(IsOperator(nextNode)) {
+                content += EmitOperator(nextNode);
+                if(CanBeExpression(nextNode.Next)) {
+                    content += EmitExpression(nextNode.Next);
+                }
+            }
+            else if(CanBeExpression(nextNode)){
+                content += EmitExpression(nextNode);
+            }
+        }
         return content;
     }
 
@@ -268,6 +297,62 @@ public class CodeGeneration {
         String content = "";
 
         return content;
+    }
+
+    private boolean IsOperator(Node node) {
+        switch (node.Type) {
+            case LessThan:
+            case GreaterThan:
+            case LessOrEqual:
+            case GreaterOrEqual:
+            case NotEqual:
+            case Equals:
+            case And:
+            case Or:
+            case Plus:
+            case Minus:
+            case Times:
+            case Divide:
+            case Modulo:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private boolean IsOperand(Node node) {
+        //TODO: Determine if prefixes cause issues
+        switch (node.Type) {
+            case IntLiteral:
+            case FloatLiteral:
+            case BoolLiteral:
+            case Identifier:
+            case Call:
+            case Expression:
+            case PrefixMinus:
+            case PrefixNot:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private boolean IsLiteral(Node node) {
+        //TODO: Determine if prefixes cause issues
+        switch (node.Type) {
+            case IntLiteral:
+            case FloatLiteral:
+            case BoolLiteral:
+            case PrefixMinus:
+            case PrefixNot:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private boolean CanBeExpression(Node node) {
+        return IsOperand(node) || node.Type == AST.NodeType.Expression;
     }
 
 
