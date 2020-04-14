@@ -1,11 +1,9 @@
 package sw417f20.ebal.CodeGeneration;
 
+import sw417f20.ebal.CodeGeneration.Utility.EventDictionary;
 import sw417f20.ebal.SyntaxAnalysis.AST;
 import sw417f20.ebal.SyntaxAnalysis.Node;
-import sw417f20.ebal.SyntaxAnalysis.Token;
 
-import java.lang.reflect.Array;
-import java.net.ContentHandler;
 import java.util.ArrayList;
 
 public class CodeGeneration {

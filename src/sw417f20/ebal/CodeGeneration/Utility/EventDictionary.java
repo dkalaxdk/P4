@@ -1,4 +1,4 @@
-package sw417f20.ebal.CodeGeneration;
+package sw417f20.ebal.CodeGeneration.Utility;
 
 import java.util.Dictionary;
 
