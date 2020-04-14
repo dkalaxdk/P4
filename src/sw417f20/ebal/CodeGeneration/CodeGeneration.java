@@ -97,9 +97,9 @@ public class CodeGeneration {
     private String EmitListener(Node node, int functionName) {
         String content = "";
         String pinName = node.FirstChild.Value;
-        content += "reading" + functionName + " = ??? (" + functionName + ");\n"; //TODO find ud af hvordan man finde typen af pin, brug symbol table
+        content += "reading" + functionName + " = ??? (" + functionName + ");\n"; //TODO find ud af hvordan man finde typen af pin, brug symbol table. poin dictionary
 
-        content += EmitBlock(node.FirstChild.FirstSibling);
+        content += EmitBlock(node.FirstChild.Next);
 
         return content;
     }
@@ -134,7 +134,9 @@ public class CodeGeneration {
                 content += EmitFloatDcl(statement);
             }
             else if(statement.Type == AST.NodeType.EventDeclaration){
-                content += EmitEventDcl(statement);
+                int IDNumber = 1;
+                content += EmitEventDcl(statement, IDNumber);
+                IDNumber++;
             }
             else if(statement.Type == AST.NodeType.Assignment){
                 content += EmitAssignment(statement);
@@ -148,11 +150,11 @@ public class CodeGeneration {
         return content;
     }
 
-    private String EmitEventDcl(Node node) {
+    private String EmitEventDcl(Node node, int IDNumber) {
         String content = "";
-        //EventDictionary.AddEvent();
-        content = "char " + node.Value + "[] = \"" + node.Value + "\"";
-        if (node.FirstChild.Next.Type == AST.NodeType.Expression){
+        EventDictionary.AddEvent(node.FirstChild.Value, "" + IDNumber, "");
+        content = "char " + node.FirstChild.Value + "[] = \"" + IDNumber + "\"";
+        if (node.FirstChild.Next.Type == AST.NodeType.Expression){ //TODO typen kan være Call eller identifier
             content += EmitExpression(node.FirstChild.Next);
         }
         else{
@@ -191,6 +193,7 @@ public class CodeGeneration {
         String content = "";
 
         if(node.FirstChild.Type == AST.NodeType.CreateEvent){
+            EventDictionary.EditEventValue(node.FirstChild.Next.Value, "");
             content += "";
         }
         else if(node.FirstChild.Type == AST.NodeType.Broadcast){

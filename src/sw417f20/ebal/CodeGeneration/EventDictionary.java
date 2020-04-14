@@ -3,7 +3,8 @@ package sw417f20.ebal.CodeGeneration;
 import java.util.Dictionary;
 
 public class EventDictionary {
-    private Dictionary<String, String[]> dictionary;
+    private Dictionary<String, String[]> dictionary; //TODO lav value om til en klasse
+                                                    //TODO Find ud af hvordan man beholder events der hedder det samme
 
     public EventDictionary() { }
 
@@ -11,6 +12,12 @@ public class EventDictionary {
         String[] idAndValue = { eventID.substring(0, 1), eventValue };
 
         dictionary.put(eventName, idAndValue);
+    }
+
+    public void EditEventValue(String eventName, String eventValue) {
+        String id = dictionary.get(eventName)[0];
+        dictionary.remove(eventName);
+        AddEvent(eventName, id, eventValue);
     }
 
     public String getEventID(String eventName) {
