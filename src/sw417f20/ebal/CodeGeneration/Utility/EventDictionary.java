@@ -23,46 +23,56 @@ public class EventDictionary {
      * @param node The root node of the AST to be read for events.
      */
     public EventDictionary(Node node) {
-        int id = 0;
+        int slaveID = 0;
+        int eventID = 0;
         NodeList nodeList = new NodeList();
 
-        //Visit slaves
+        //Visit slaves.
         nodeList.VisitSiblings(node.FirstChild);
 
-        for (Node slave : nodeList.nodeList) {
+        for (Node slaveNode : nodeList.nodeList) {
+            Slave slave = new Slave(slaveNode.FirstChild.Value, "" + slaveID++);
+
             Node eventNode;
             Event event;
 
             //If There are no EventHandlers, continue to the next slave
-            if (slave.FirstChild.Next.Next.IsEmpty()) continue;
+            if (slaveNode.FirstChild.Next.Next.IsEmpty()) continue;
 
-            eventNode = slave.FirstChild.Next.Next;
-            event = new Event(eventNode.FirstChild.Value, "" + id++, "" + 0);
-            event.AddSlave(new Slave(slave.FirstChild.Value));
+            eventNode = slaveNode.FirstChild.Next.Next;
+            event = new Event(eventNode.FirstChild.Value, "" + eventID++, "" + 0);
+            event.AddSlave(slave);
             AddEvent(event.GetName(), event);
 
             while (!eventNode.Next.IsEmpty()) {
                 eventNode = eventNode.Next;
-                event = new Event(eventNode.FirstChild.Value, "" + id++, "" + 0);
-                event.AddSlave(new Slave(slave.FirstChild.Value));
+                event = new Event(eventNode.FirstChild.Value, "" + eventID++, "" + 0);
+                event.AddSlave(slave);
                 AddEvent(event.GetName(), event);
             }
         }
     }
 
     /**
-     * Method that puts an existing event to the dictionary.
-     * @param eventName
-     * @param event
+     * Method that puts an existing event into the dictionary.
+     * @param eventName Name of the event (Key)
+     * @param event The actual event (Value)
      */
     public void AddEvent(String eventName, Event event) {
         dictionary.put(eventName, event);
     }
 
+    /**
+     * Method that puts a new event into the dictionary.
+     * @param eventName     Name of the event (Key)
+     * @param eventID       ID of the event (0..*)
+     * @param eventValue    The value of the event (e.g. if a switch, was it turned on or off)
+     */
     public void AddNewEvent(String eventName, String eventID, String eventValue) {
         dictionary.put(eventName, new Event(eventName, eventID, eventValue));
     }
 
+    ///Remaining methods should be self-explanatory -> no doc provided.
     public void EditEventValue(String eventName, String eventValue) {
         dictionary.get(eventName).SetValue(eventValue);
     }
