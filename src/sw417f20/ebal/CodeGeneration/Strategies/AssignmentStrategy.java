@@ -8,9 +8,9 @@ public class AssignmentStrategy extends CodeGenerationStrategy {
     public String GenerateCode(Node node) {
         String content = "";
         String identifier = node.FirstChild.Value;
-        Node expression = node.FirstChild.Next;
+        String expression = node.FirstChild.Next.GenerateCode();
 
-        content += identifier + " = " + expression.GenerateCode() + "\n";
+        content += identifier + " = " + expression + "\n";
 
         return content;
     }
