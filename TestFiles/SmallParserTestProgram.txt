@@ -15,7 +15,7 @@ BEGIN MASTER
 
 END MASTER
 
-BEGIN SLAVE
+BEGIN SLAVE : TestSlave1
 
     Initiate {
 
@@ -42,7 +42,7 @@ BEGIN SLAVE
 
 END SLAVE
 
-BEGIN SLAVE
+BEGIN SLAVE : TestSlave2
 
     Initiate {
 

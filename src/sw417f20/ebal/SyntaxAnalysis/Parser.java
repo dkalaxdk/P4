@@ -1,14 +1,10 @@
 package sw417f20.ebal.SyntaxAnalysis;
 
-import net.bytebuddy.asm.Advice;
-
-import java.security.spec.ECField;
-
 public class Parser extends RecursiveDescent {
 
     // TODO: Tilføj linienummer og offset til Node, så det kan bruges af SemanticsVisitor til fejlmeddeleser
-    public Parser(Scanner scanner) {
-        super(scanner);
+    public Parser(Scanner scanner, String file) {
+        super(scanner, file);
     }
 
     // Start 	-> 	Master Slave Slaves.
@@ -67,7 +63,7 @@ public class Parser extends RecursiveDescent {
         }
     }
 
-    // Slave 	-> 	begin slave Initiate EventHandlers end slave.
+    // Slave 	-> 	begin slave colon identifier Initiate EventHandlers end slave.
     public Node Slave() throws SyntaxException {
 
         if (Peek().type == Token.Type.BEGIN) {
@@ -75,7 +71,9 @@ public class Parser extends RecursiveDescent {
 
             Expect(Token.Type.BEGIN);
             Expect(Token.Type.SLAVE);
+            Expect(Token.Type.COLON);
 
+            Slave.AddChild(AST.MakeNode(Expect(Token.Type.IDENTIFIER)));
             Slave.AddChild(Initiate());
             Slave.AddChild(EventHandlers());
 
@@ -90,7 +88,7 @@ public class Parser extends RecursiveDescent {
         }
     }
 
-    // Initiate 	-> 	initiate lbracket PinDcls rbracket.
+    // Initiate 	-> 	initiate Block.
     public Node Initiate() throws SyntaxException {
 
         if (Peek().type == Token.Type.INITIATE) {
@@ -98,9 +96,7 @@ public class Parser extends RecursiveDescent {
             Node Initiate = AST.MakeNode(AST.NodeType.Initiate);
 
             Expect(Token.Type.INITIATE);
-            Expect(Token.Type.LBRACKET);
-            Initiate.AddChild(PinDcls());
-            Expect(Token.Type.RBRACKET);
+            Initiate.AddChild(Block());
 
             return Initiate;
         }
@@ -110,98 +106,7 @@ public class Parser extends RecursiveDescent {
         }
     }
 
-    // PinDcls 	-> 	PinDcl semi PinDcls
-    //	         | 	.
-    public Node PinDcls() throws SyntaxException {
 
-        if (Peek().type == Token.Type.PIN) {
-            Node pinDcl = PinDcl();
-            Expect(Token.Type.SEMI);
-            Node otherPinDcls = PinDcls();
-
-            pinDcl.MakeSiblings(otherPinDcls);
-
-            return pinDcl;
-        }
-        else if (Peek().type == Token.Type.RBRACKET) {
-            return AST.MakeNode(AST.NodeType.Empty);
-        }
-        else {
-            MakeError("Expected pin or }");
-            return AST.MakeNode(AST.NodeType.Error);
-        }
-    }
-
-    // PinDcl	-> pin identifier assign createPin lparen PinType comma IOType comma intLiteral rparen.
-    public Node PinDcl() throws SyntaxException {
-
-        if (Peek().type == Token.Type.PIN) {
-            Node PinDcl = AST.MakeNode(AST.NodeType.PinDeclaration);
-
-            Expect(Token.Type.PIN);
-
-            PinDcl.AddChild(AST.MakeNode(Expect(Token.Type.IDENTIFIER)));
-
-            Expect(Token.Type.ASSIGN);
-            Expect(Token.Type.CREATEPIN);
-            Expect(Token.Type.LPAREN);
-            PinDcl.AddChild(PinType());
-            Expect(Token.Type.COMMA);
-            PinDcl.AddChild(IOType());
-            Expect(Token.Type.COMMA);
-
-            PinDcl.AddChild(AST.MakeNode(Expect(Token.Type.LIT_Int)));
-
-            Expect(Token.Type.RPAREN);
-
-            return PinDcl;
-        }
-        else {
-            MakeError("Expected pin");
-            return AST.MakeNode(AST.NodeType.Error);
-        }
-    }
-
-    // PinType 	-> 	digital
-    //	         | 	analog
-    //	         | 	pwm.
-    public Node PinType() throws SyntaxException {
-
-        if (Peek().type == Token.Type.DIGITAL) {
-            Expect(Token.Type.DIGITAL);
-            return AST.MakeNode(AST.NodeType.Digital);
-        }
-        else if (Peek().type == Token.Type.ANALOG) {
-            Expect(Token.Type.ANALOG);
-            return AST.MakeNode(AST.NodeType.Analog);
-        }
-        else if (Peek().type == Token.Type.PWM) {
-            Expect(Token.Type.PWM);
-            return AST.MakeNode(AST.NodeType.PWM);
-        }
-        else {
-            MakeError("Expected digital, analog, or pwm");
-            return AST.MakeNode(AST.NodeType.Error);
-        }
-    }
-
-    // IOType 	-> 	input
-    //	         | 	output.
-    public Node IOType() throws SyntaxException {
-
-        if (Peek().type == Token.Type.INPUT) {
-            Expect(Token.Type.INPUT);
-            return AST.MakeNode(AST.NodeType.Input);
-        }
-        else if (Peek().type == Token.Type.OUTPUT) {
-            Expect(Token.Type.OUTPUT);
-            return AST.MakeNode(AST.NodeType.Output);
-        }
-        else {
-            MakeError("Expected input or output");
-            return AST.MakeNode(AST.NodeType.Error);
-        }
-    }
 
     // Listeners 	-> 	Listener Listeners
     //	             | 	.
@@ -232,7 +137,7 @@ public class Parser extends RecursiveDescent {
     public Node Listener() throws SyntaxException {
 
         if (Peek().type == Token.Type.LISTENER) {
-            Node Listener = AST.MakeNode(AST.NodeType.Listener);
+            Node Listener = AST.MakeNode(AST.NodeType.Listener, getLineNumber());
 
             Expect(Token.Type.LISTENER);
             Expect(Token.Type.LPAREN);
@@ -277,7 +182,7 @@ public class Parser extends RecursiveDescent {
     public Node EventHandler() throws SyntaxException {
 
         if (Peek().type == Token.Type.EVENTHANDLER) {
-            Node EventHandler = AST.MakeNode(AST.NodeType.EventHandler);
+            Node EventHandler = AST.MakeNode(AST.NodeType.EventHandler, getLineNumber());
 
             Expect(Token.Type.EVENTHANDLER);
             Expect(Token.Type.LPAREN);
@@ -297,7 +202,7 @@ public class Parser extends RecursiveDescent {
     public Node Block() throws SyntaxException {
 
         if (Peek().type == Token.Type.LBRACKET) {
-            Node Block = AST.MakeNode(AST.NodeType.Block);
+            Node Block = AST.MakeNode(AST.NodeType.Block, getLineNumber());
 
             Expect(Token.Type.LBRACKET);
             Block.AddChild(Stmts());
@@ -371,7 +276,7 @@ public class Parser extends RecursiveDescent {
     public Node Assignment() throws SyntaxException {
 
         if (Peek().type == Token.Type.IDENTIFIER) {
-            Node Assignment = AST.MakeNode(AST.NodeType.Assignment);
+            Node Assignment = AST.MakeNode(AST.NodeType.Assignment, getLineNumber());
 
             Assignment.AddChild(AST.MakeNode(Expect(Token.Type.IDENTIFIER)));
             Expect(Token.Type.ASSIGN);
@@ -388,53 +293,40 @@ public class Parser extends RecursiveDescent {
     // Dcl 	-> 	float identifier DclAssign
     //	     | 	int identifier DclAssign
     //	     | 	bool identifier DclAssign
-    //	     | 	event identifier DclAssign.
+    //	     | 	event identifier DclAssign
+    //	     |  pin identifier DclAssign .
     public Node Dcl() throws SyntaxException {
 
-        if (Peek().type == Token.Type.FLOAT) {
-            Node Dcl = AST.MakeNode(AST.NodeType.FloatDeclaration);
+        switch (Peek().type) {
+            case FLOAT:
+                return GenerateDcl(AST.NodeType.FloatDeclaration, Token.Type.FLOAT);
 
-            Expect(Token.Type.FLOAT);
-            Dcl.AddChild(AST.MakeNode(Expect(Token.Type.IDENTIFIER)));
-            Dcl.AddChild(DclAssign());
+            case INT:
+                return GenerateDcl(AST.NodeType.IntDeclaration, Token.Type.INT);
 
-            return Dcl;
+            case BOOL:
+                return GenerateDcl(AST.NodeType.BoolDeclaration, Token.Type.BOOL);
+
+            case EVENT:
+                return GenerateDcl(AST.NodeType.EventDeclaration, Token.Type.EVENT);
+
+            case PIN:
+                return GenerateDcl(AST.NodeType.PinDeclaration, Token.Type.PIN);
+
+            default:
+                MakeError("Expected declaration");
+                return AST.MakeNode(AST.NodeType.Error);
         }
-        else if (Peek().type == Token.Type.INT) {
-            Node Dcl = AST.MakeNode(AST.NodeType.IntDeclaration);
+    }
 
-            Expect(Token.Type.INT);
-            Dcl.AddChild(AST.MakeNode(Expect(Token.Type.IDENTIFIER)));
-            Dcl.AddChild(DclAssign());
+    private Node GenerateDcl(AST.NodeType nodeType, Token.Type tokenType) throws SyntaxException {
+        Node Dcl = AST.MakeNode(nodeType, getLineNumber());
 
-            return Dcl;
-        }
-        else if (Peek().type == Token.Type.BOOL) {
-            Node Dcl = AST.MakeNode(AST.NodeType.BoolDeclaration);
+        Expect(tokenType);
+        Dcl.AddChild(AST.MakeNode(Expect(Token.Type.IDENTIFIER)));
+        Dcl.AddChild(DclAssign());
 
-            Expect(Token.Type.BOOL);
-            Dcl.AddChild(AST.MakeNode(Expect(Token.Type.IDENTIFIER)));
-            Dcl.AddChild(DclAssign());
-
-            return Dcl;
-        }
-        else if (Peek().type == Token.Type.EVENT) {
-            Node Dcl = AST.MakeNode(AST.NodeType.EventDeclaration);
-
-            Expect(Token.Type.EVENT);
-            Dcl.AddChild(AST.MakeNode(Expect(Token.Type.IDENTIFIER)));
-            Dcl.AddChild(DclAssign());
-
-            return Dcl;
-        }
-        else if (Peek().type == Token.Type.PIN) {
-            MakeError("Pins can only be declared in Initiate");
-            return AST.MakeNode(AST.NodeType.Error);
-        }
-        else {
-            MakeError("Expected float, int, bool, or event declaration");
-            return AST.MakeNode(AST.NodeType.Error);
-        }
+        return Dcl;
     }
 
     // DclAssign	-> assign Expr
@@ -448,7 +340,7 @@ public class Parser extends RecursiveDescent {
             return AST.MakeNode(AST.NodeType.Empty);
         }
         else {
-            MakeError("Expected assignment or ;");
+            MakeError("Expected assignment or end of statement");
             return AST.MakeNode(AST.NodeType.Error);
         }
     }
@@ -457,9 +349,9 @@ public class Parser extends RecursiveDescent {
     //	         | 	lparen Expr rparen AfterExpr
     //	         | 	minus Value AfterExpr
     //	         | 	not identifier AfterExpr
-    //	         | 	ReturnsCall AfterExpr.
+    //	         | 	FunctionCall AfterExpr.
     public Node Expr() throws SyntaxException {
-        Node Expr = AST.MakeNode(AST.NodeType.Expression);
+        Node Expr = AST.MakeNode(AST.NodeType.Expression, getLineNumber());
 
         if (Peek().type == Token.Type.IDENTIFIER || CheckForLiteral()) {
             Node value = Value();
@@ -519,8 +411,8 @@ public class Parser extends RecursiveDescent {
             Expr.AddChild(identifier);
             Expr.AddChild(afterExpr);
         }
-        else if (CheckForReturnsCall()) {
-            Node call = ReturnsCall();
+        else if (CheckForFunctionCall()) {
+            Node call = FunctionCall();
             Node afterExpr = AfterExpr();
 
             if (afterExpr.Type == AST.NodeType.Empty) {
@@ -544,21 +436,22 @@ public class Parser extends RecursiveDescent {
     //	         | 	identifier.
     public Node Value() throws SyntaxException {
 
-        if (Peek().type == Token.Type.LIT_Int) {
-            return AST.MakeNode(Expect(Token.Type.LIT_Int));
-        }
-        else if (Peek().type == Token.Type.LIT_Float) {
-            return AST.MakeNode(Expect(Token.Type.LIT_Float));
-        }
-        else if (Peek().type == Token.Type.LIT_Bool) {
-            return AST.MakeNode(Expect(Token.Type.LIT_Bool));
-        }
-        else if (Peek().type == Token.Type.IDENTIFIER) {
-            return AST.MakeNode(Expect(Token.Type.IDENTIFIER));
-        }
-        else {
-            MakeError("Expected literal int, float, or bool or an identifier");
-            return AST.MakeNode(AST.NodeType.Error);
+        switch (Peek().type) {
+            case IDENTIFIER:
+                return AST.MakeNode(Expect(Token.Type.IDENTIFIER));
+
+            case LIT_Int:
+                return AST.MakeNode(Expect(Token.Type.LIT_Int));
+
+            case LIT_Float:
+                return AST.MakeNode(Expect(Token.Type.LIT_Float));
+
+            case LIT_Bool:
+                return AST.MakeNode(Expect(Token.Type.LIT_Bool));
+
+            default:
+                MakeError("Expected literal int, float, or bool or an identifier");
+                return AST.MakeNode(AST.NodeType.Error);
         }
     }
 
@@ -594,43 +487,43 @@ public class Parser extends RecursiveDescent {
     }
 
 
-    // Call 	-> 	VoidCall
-    //         	 | 	ReturnsCall.
+    // Call 	-> 	ProcedureCall
+    //         	 | 	FunctionCall.
     public Node Call() throws SyntaxException {
 
-        if (CheckForVoidCall()) {
-            return VoidCall();
+        if (CheckForProcedureCall()) {
+            return ProcedureCall();
         }
-        else if (CheckForReturnsCall()) {
-            return ReturnsCall();
+        else if (CheckForFunctionCall()) {
+            return FunctionCall();
         }
         else {
-            MakeError("Expected function call");
+            MakeError("Expected call");
             return AST.MakeNode(AST.NodeType.Error);
         }
     }
 
-    // VoidCall	->	broadcast lparen identifier rparen
-    //	         |	write lparen identifier comma Expr rparen.
-    public Node VoidCall() throws SyntaxException {
-        Node VoidCall = AST.MakeNode(AST.NodeType.Call);
+    // ProcedureCall	->	broadcast lparen identifier rparen
+    //	                 |	write lparen identifier comma Expr rparen.
+    public Node ProcedureCall() throws SyntaxException {
+        Node ProcedureCall = AST.MakeNode(AST.NodeType.Call, getLineNumber());
 
         if (Peek().type == Token.Type.BROADCAST) {
             Expect(Token.Type.BROADCAST);
-            VoidCall.AddChild(AST.MakeNode(AST.NodeType.Broadcast));
+            ProcedureCall.AddChild(AST.MakeNode(AST.NodeType.Broadcast));
 
             Expect(Token.Type.LPAREN);
-            VoidCall.AddChild(AST.MakeNode(Expect(Token.Type.IDENTIFIER)));
+            ProcedureCall.AddChild(AST.MakeNode(Expect(Token.Type.IDENTIFIER)));
             Expect(Token.Type.RPAREN);
         }
         else if (Peek().type == Token.Type.WRITE) {
             Expect(Token.Type.WRITE);
-            VoidCall.AddChild(AST.MakeNode(AST.NodeType.Write));
+            ProcedureCall.AddChild(AST.MakeNode(AST.NodeType.Write));
 
             Expect(Token.Type.LPAREN);
-            VoidCall.AddChild(AST.MakeNode(Expect(Token.Type.IDENTIFIER)));
+            ProcedureCall.AddChild(AST.MakeNode(Expect(Token.Type.IDENTIFIER)));
             Expect(Token.Type.COMMA);
-            VoidCall.AddChild(Expr());
+            ProcedureCall.AddChild(Expr());
             Expect(Token.Type.RPAREN);
         }
         else {
@@ -638,55 +531,67 @@ public class Parser extends RecursiveDescent {
             return AST.MakeNode(AST.NodeType.Error);
         }
 
-        return VoidCall;
+        return ProcedureCall;
     }
 
-    // TODO: Måske skal getValue kun tage en identifier?
-    // ReturnsCall	-> filterNoise lparen identifier comma FilterType rparen
-    //	             | 	getValue lparen Value rparen
-    //	             |  createEvent lparen Value rparen.
-    public Node ReturnsCall() throws SyntaxException {
-        Node ReturnsCall = AST.MakeNode(AST.NodeType.Call);
+    // FunctionCall	-> filterNoise lparen identifier comma FilterType rparen
+    //	             | 	getValue lparen identifier rparen
+    //	             |  createEvent lparen Value rparen
+    //	             |  createPin lparen PinType comma IOType comma intLiteral rparen.
+    public Node FunctionCall() throws SyntaxException {
+        Node FunctionCall = AST.MakeNode(AST.NodeType.Call, getLineNumber());
 
         if (Peek().type == Token.Type.FILTERNOISE) {
             Expect(Token.Type.FILTERNOISE);
-            ReturnsCall.AddChild(AST.MakeNode(AST.NodeType.FilterNoise));
+            FunctionCall.AddChild(AST.MakeNode(AST.NodeType.FilterNoise));
 
             Expect(Token.Type.LPAREN);
-            ReturnsCall.AddChild(AST.MakeNode(Expect(Token.Type.IDENTIFIER)));
+            FunctionCall.AddChild(AST.MakeNode(Expect(Token.Type.IDENTIFIER)));
             Expect(Token.Type.COMMA);
-            ReturnsCall.AddChild(FilterType());
+            FunctionCall.AddChild(FilterType());
             Expect(Token.Type.RPAREN);
         }
         else if (Peek().type == Token.Type.GETVALUE) {
             Expect(Token.Type.GETVALUE);
-            ReturnsCall.AddChild(AST.MakeNode(AST.NodeType.GetValue));
+            FunctionCall.AddChild(AST.MakeNode(AST.NodeType.GetValue));
 
             Expect(Token.Type.LPAREN);
-            ReturnsCall.AddChild(AST.MakeNode(Expect(Token.Type.IDENTIFIER)));
+            FunctionCall.AddChild(AST.MakeNode(Expect(Token.Type.IDENTIFIER)));
             Expect(Token.Type.RPAREN);
         }
         else if (Peek().type == Token.Type.CREATEEVENT) {
             Expect(Token.Type.CREATEEVENT);
-            ReturnsCall.AddChild(AST.MakeNode(AST.NodeType.CreateEvent));
+            FunctionCall.AddChild(AST.MakeNode(AST.NodeType.CreateEvent));
 
             Expect(Token.Type.LPAREN);
-            ReturnsCall.AddChild(Value());
+            FunctionCall.AddChild(Value());
+            Expect(Token.Type.RPAREN);
+        }
+        else if (Peek().type == Token.Type.CREATEPIN) {
+            Expect(Token.Type.CREATEPIN);
+            FunctionCall.AddChild(AST.MakeNode(AST.NodeType.CreatePin));
+
+            Expect(Token.Type.LPAREN);
+            FunctionCall.AddChild(PinType());
+            Expect(Token.Type.COMMA);
+            FunctionCall.AddChild(IOType());
+            Expect(Token.Type.COMMA);
+            FunctionCall.AddChild(AST.MakeNode(Expect(Token.Type.LIT_Int)));
             Expect(Token.Type.RPAREN);
         }
         else {
-            MakeError("Expected filterNoise, getValue, or createEvent");
+            MakeError("Expected filterNoise, getValue, createEvent, or createPin");
             return AST.MakeNode(AST.NodeType.Error);
         }
 
-        return ReturnsCall;
+        return FunctionCall;
     }
 
     // IfStmt 	-> 	if lparen Expr rparen Block IfEnd.
     public Node IfStmt() throws SyntaxException {
 
         if (Peek().type == Token.Type.IF) {
-            Node IfStmt = AST.MakeNode(AST.NodeType.If);
+            Node IfStmt = AST.MakeNode(AST.NodeType.If, getLineNumber());
 
             Expect(Token.Type.IF);
             Expect(Token.Type.LPAREN);
@@ -745,21 +650,65 @@ public class Parser extends RecursiveDescent {
     //	           | 	range.
     public Node FilterType() throws SyntaxException {
 
-        if (Peek().type == Token.Type.FLIP) {
-            Expect(Token.Type.FLIP);
-            return AST.MakeNode(AST.NodeType.Flip);
+        switch (Peek().type) {
+            case FLIP:
+                Expect(Token.Type.FLIP);
+                return AST.MakeNode(AST.NodeType.Flip);
+
+            case CONSTANT:
+                Expect(Token.Type.CONSTANT);
+                return AST.MakeNode(AST.NodeType.Constant);
+
+            case RANGE:
+                Expect(Token.Type.RANGE);
+                return AST.MakeNode(AST.NodeType.Range);
+
+            default:
+                MakeError("Expected FLIP, CONSTANT, or RANGE");
+                return AST.MakeNode(AST.NodeType.Error);
         }
-        else if (Peek().type == Token.Type.CONSTANT) {
-            Expect(Token.Type.CONSTANT);
-            return AST.MakeNode(AST.NodeType.Constant);
+    }
+
+    // PinType 	-> 	digital
+    //	         | 	analog
+    //	         | 	pwm.
+    public Node PinType() throws SyntaxException {
+
+        switch (Peek().type) {
+            case DIGITAL:
+                Expect(Token.Type.DIGITAL);
+                return AST.MakeNode(AST.NodeType.Digital);
+
+            case ANALOG:
+                Expect(Token.Type.ANALOG);
+                return AST.MakeNode(AST.NodeType.Analog);
+
+            case PWM:
+                Expect(Token.Type.PWM);
+                return AST.MakeNode(AST.NodeType.PWM);
+
+            default:
+                MakeError("Expected digital, analog, or pwm");
+                return AST.MakeNode(AST.NodeType.Error);
         }
-        else if (Peek().type == Token.Type.RANGE) {
-            Expect(Token.Type.RANGE);
-            return AST.MakeNode(AST.NodeType.Range);
-        }
-        else {
-            MakeError("Expected FLIP, CONSTANT, or RANGE");
-            return AST.MakeNode(AST.NodeType.Error);
+    }
+
+    // IOType 	-> 	input
+    //	         | 	output.
+    public Node IOType() throws SyntaxException {
+
+        switch (Peek().type) {
+            case INPUT:
+                Expect(Token.Type.INPUT);
+                return AST.MakeNode(AST.NodeType.Input);
+
+            case OUTPUT:
+                Expect(Token.Type.OUTPUT);
+                return AST.MakeNode(AST.NodeType.Output);
+
+            default:
+                MakeError("Expected input or output");
+                return AST.MakeNode(AST.NodeType.Error);
         }
     }
 
@@ -770,29 +719,30 @@ public class Parser extends RecursiveDescent {
     //	             | 	modulo.
     public Node Operator() throws SyntaxException {
 
-        if (Peek().type == Token.Type.OP_PLUS) {
-            Expect(Token.Type.OP_PLUS);
-            return AST.MakeNode(AST.NodeType.Plus);
-        }
-        else if (Peek().type == Token.Type.OP_MINUS) {
-            Expect(Token.Type.OP_MINUS);
-            return AST.MakeNode(AST.NodeType.Minus);
-        }
-        else if (Peek().type == Token.Type.OP_TIMES) {
-            Expect(Token.Type.OP_TIMES);
-            return AST.MakeNode(AST.NodeType.Times);
-        }
-        else if (Peek().type == Token.Type.OP_DIVIDE) {
-            Expect(Token.Type.OP_DIVIDE);
-            return AST.MakeNode(AST.NodeType.Divide);
-        }
-        else if (Peek().type == Token.Type.OP_MODULO) {
-            Expect(Token.Type.OP_MODULO);
-            return AST.MakeNode(AST.NodeType.Modulo);
-        }
-        else {
-            MakeError("Expected +, -, *, /, or %");
-            return AST.MakeNode(AST.NodeType.Error);
+        switch (Peek().type) {
+            case OP_PLUS:
+                Expect(Token.Type.OP_PLUS);
+                return AST.MakeNode(AST.NodeType.Plus);
+
+            case OP_MINUS:
+                Expect(Token.Type.OP_MINUS);
+                return AST.MakeNode(AST.NodeType.Minus);
+
+            case OP_TIMES:
+                Expect(Token.Type.OP_TIMES);
+                return AST.MakeNode(AST.NodeType.Times);
+
+            case OP_DIVIDE:
+                Expect(Token.Type.OP_DIVIDE);
+                return AST.MakeNode(AST.NodeType.Divide);
+
+            case OP_MODULO:
+                Expect(Token.Type.OP_MODULO);
+                return AST.MakeNode(AST.NodeType.Modulo);
+
+            default:
+                MakeError("Expected +, -, *, /, or %");
+                return AST.MakeNode(AST.NodeType.Error);
         }
     }
 
@@ -806,74 +756,77 @@ public class Parser extends RecursiveDescent {
     //	         |  or.
     public Node LogicOperator() throws SyntaxException {
 
-        if (Peek().type == Token.Type.LOP_LESSTHAN) {
-            Expect(Token.Type.LOP_LESSTHAN);
-            return AST.MakeNode(AST.NodeType.LessThan);
-        }
-        else if (Peek().type == Token.Type.LOP_GREATERTHAN) {
-            Expect(Token.Type.LOP_GREATERTHAN);
-            return AST.MakeNode(AST.NodeType.GreaterThan);
-        }
-        else if (Peek().type == Token.Type.LOP_NOTEQUAL) {
-            Expect(Token.Type.LOP_NOTEQUAL);
-            return AST.MakeNode(AST.NodeType.NotEqual);
-        }
-        else if (Peek().type == Token.Type.LOP_GREATEROREQUAL) {
-            Expect(Token.Type.LOP_GREATEROREQUAL);
-            return AST.MakeNode(AST.NodeType.GreaterOrEqual);
-        }
-        else if (Peek().type == Token.Type.LOP_LESSOREQUAL) {
-            Expect(Token.Type.LOP_LESSOREQUAL);
-            return AST.MakeNode(AST.NodeType.LessOrEqual);
-        }
-        else if (Peek().type == Token.Type.LOP_EQUALS) {
-            Expect(Token.Type.LOP_EQUALS);
-            return AST.MakeNode(AST.NodeType.Equals);
-        }
-        else if (Peek().type == Token.Type.LOP_AND) {
-            Expect(Token.Type.LOP_AND);
-            return AST.MakeNode(AST.NodeType.And);
-        }
-        else if (Peek().type == Token.Type.LOP_OR) {
-            Expect(Token.Type.LOP_OR);
-            return AST.MakeNode(AST.NodeType.Or);
-        }
-        else {
-            MakeError("Expected <, >, !=, >=, <=, ==, ||, or &&");
-            return AST.MakeNode(AST.NodeType.Error);
+        switch (Peek().type) {
+            case LOP_LESSTHAN:
+                Expect(Token.Type.LOP_LESSTHAN);
+                return AST.MakeNode(AST.NodeType.LessThan);
+
+            case LOP_GREATERTHAN:
+                Expect(Token.Type.LOP_GREATERTHAN);
+                return AST.MakeNode(AST.NodeType.GreaterThan);
+
+            case LOP_NOTEQUAL:
+                Expect(Token.Type.LOP_NOTEQUAL);
+                return AST.MakeNode(AST.NodeType.NotEqual);
+
+            case LOP_GREATEROREQUAL:
+                Expect(Token.Type.LOP_GREATEROREQUAL);
+                return AST.MakeNode(AST.NodeType.GreaterOrEqual);
+
+            case LOP_LESSOREQUAL:
+                Expect(Token.Type.LOP_LESSOREQUAL);
+                return AST.MakeNode(AST.NodeType.LessOrEqual);
+
+            case LOP_EQUALS:
+                Expect(Token.Type.LOP_EQUALS);
+                return AST.MakeNode(AST.NodeType.Equals);
+
+            case LOP_AND:
+                Expect(Token.Type.LOP_AND);
+                return AST.MakeNode(AST.NodeType.And);
+
+            case LOP_OR:
+                Expect(Token.Type.LOP_OR);
+                return AST.MakeNode(AST.NodeType.Or);
+
+            default:
+                MakeError("Expected <, >, !=, >=, <=, ==, ||, or &&");
+                return AST.MakeNode(AST.NodeType.Error);
         }
     }
 
-    public boolean CheckForType() {
+    private boolean CheckForType() {
         return  Peek().type == Token.Type.FLOAT                 ||
                 Peek().type == Token.Type.INT                   ||
                 Peek().type == Token.Type.BOOL                  ||
-                Peek().type == Token.Type.EVENT;
+                Peek().type == Token.Type.EVENT                 ||
+                Peek().type == Token.Type.PIN;
     }
 
-    public boolean CheckForCall() {
-        return  CheckForReturnsCall()                           ||
-                CheckForVoidCall();
+    private boolean CheckForCall() {
+        return  CheckForFunctionCall()                           ||
+                CheckForProcedureCall();
     }
 
-    public boolean CheckForReturnsCall() {
+    private boolean CheckForFunctionCall() {
         return  Peek().type == Token.Type.FILTERNOISE           ||
                 Peek().type == Token.Type.GETVALUE              ||
-                Peek().type == Token.Type.CREATEEVENT;
+                Peek().type == Token.Type.CREATEEVENT           ||
+                Peek().type == Token.Type.CREATEPIN;
     }
 
-    public boolean CheckForVoidCall() {
+    private boolean CheckForProcedureCall() {
         return  Peek().type == Token.Type.BROADCAST             ||
                 Peek().type == Token.Type.WRITE;
     }
 
-    public boolean CheckForLiteral() {
+    private boolean CheckForLiteral() {
         return  Peek().type == Token.Type.LIT_Int               ||
                 Peek().type == Token.Type.LIT_Float             ||
                 Peek().type == Token.Type.LIT_Bool;
     }
 
-    public boolean CheckForOperator() {
+    private boolean CheckForOperator() {
         return  Peek().type == Token.Type.OP_PLUS               ||
                 Peek().type == Token.Type.OP_MINUS              ||
                 Peek().type == Token.Type.OP_TIMES              ||
@@ -881,7 +834,7 @@ public class Parser extends RecursiveDescent {
                 Peek().type == Token.Type.OP_MODULO;
     }
 
-    public boolean CheckForLogicOperator() {
+    private boolean CheckForLogicOperator() {
         return  Peek().type == Token.Type.LOP_LESSTHAN          ||
                 Peek().type == Token.Type.LOP_GREATERTHAN       ||
                 Peek().type == Token.Type.LOP_NOTEQUAL          ||

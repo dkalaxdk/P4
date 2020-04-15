@@ -41,7 +41,7 @@ public class Token {
         ERROR,
 
         // Misc
-        COMMA, SEMI,
+        COMMA, SEMI, COLON,
         LPAREN, RPAREN, RBRACKET, LBRACKET,
 
         EOF

@@ -35,7 +35,7 @@ public class AST {
         Constant, Flip, Range,
 
         // Function
-        Broadcast, Write, GetValue, FilterNoise, CreateEvent,
+        Broadcast, Write, GetValue, FilterNoise, CreateEvent, CreatePin,
 
         // Operator
         LessThan, GreaterThan, NotEqual, Equals, GreaterOrEqual, LessOrEqual, And, Or,
@@ -51,16 +51,16 @@ public class AST {
 
         switch (token.type) {
             case IDENTIFIER:
-                return new Node(NodeType.Identifier, token.content);
+                return new Node(NodeType.Identifier, token);
 
             case LIT_Bool:
-                return new Node(NodeType.BoolLiteral, token.content);
+                return new Node(NodeType.BoolLiteral, token);
 
             case LIT_Int:
-                return new Node(NodeType.IntLiteral, token.content);
+                return new Node(NodeType.IntLiteral, token);
 
             case LIT_Float:
-                return new Node(NodeType.FloatLiteral, token.content);
+                return new Node(NodeType.FloatLiteral, token);
 
             default:
                 return new Node(NodeType.Error);
@@ -69,5 +69,9 @@ public class AST {
 
     public static Node MakeNode(NodeType nodeType) {
         return new Node(nodeType);
+    }
+
+    public static Node MakeNode(NodeType nodeType, int lineNumber) {
+        return new Node(nodeType, lineNumber);
     }
 }
