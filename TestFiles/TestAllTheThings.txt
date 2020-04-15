@@ -31,7 +31,7 @@ Listener(FunctionCalls) {
 END MASTER
 
 
-BEGIN SLAVE
+BEGIN SLAVE : TestSlave
 
 Initiate {
 

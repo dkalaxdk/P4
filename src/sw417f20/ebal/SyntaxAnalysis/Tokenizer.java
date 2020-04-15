@@ -205,6 +205,9 @@ public class Tokenizer {
             case ';':
                 token.type = Token.Type.SEMI;
                 break;
+            case ':':
+                token.type = Token.Type.COLON;
+                break;
 
             case '\uFFFF':
                 token.type = Token.Type.EOF;

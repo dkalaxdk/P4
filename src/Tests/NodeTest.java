@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import sw417f20.ebal.SyntaxAnalysis.AST;
 import sw417f20.ebal.SyntaxAnalysis.Node;
+import sw417f20.ebal.SyntaxAnalysis.Token;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -63,7 +64,7 @@ class NodeTest {
     @Test
     void toString_ValueIsEmpty_ReturnsTypeName() {
         // Arrange
-        Node node = new Node(AST.NodeType.Empty, "");
+        Node node = new Node(AST.NodeType.Empty, new Token(Token.Type.ERROR, ""));
 
         // Act
         String expected = AST.NodeType.Empty.toString();
@@ -77,7 +78,7 @@ class NodeTest {
     void toString_ValueIsNotEmpty_ReturnsTypeNameAndValue() {
         // Arrange
         String testString = "TestValue";
-        Node node = new Node(AST.NodeType.Empty, testString);
+        Node node = new Node(AST.NodeType.Empty, new Token(Token.Type.ERROR, testString));
 
         // Act
         String expected = AST.NodeType.Empty.toString() + " : " + testString;

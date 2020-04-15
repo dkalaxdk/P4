@@ -5,6 +5,8 @@ package sw417f20.ebal.SyntaxAnalysis;
 public class Node {
     public AST.NodeType Type;
     public String Value;
+    public int LineNumber = -1;
+    public Node DefinitionReference;
 
     public Node Next;
     public Node FirstSibling;
@@ -16,14 +18,20 @@ public class Node {
         this.Value = "";
     }
 
-    public Node(AST.NodeType type, String value) {
+    public Node(AST.NodeType type, Token token) {
         this.Type = type;
-        this.Value = value;
+        this.Value = token.content;
+    }
+
+    public Node(AST.NodeType type, int lineNumber) {
+        this.Type = type;
+        this.Value = "";
+        LineNumber = lineNumber;
     }
 
     @Override
     public String toString() {
-        return Type.toString() + (!Value.isEmpty() ? " : " + Value : "");
+        return Type.toString() + (!Value.isEmpty() ? " : " + Value : "") + ((LineNumber != -1) ? " : " + LineNumber : "");
     }
 
     // Adds the input child to this node's list of children.

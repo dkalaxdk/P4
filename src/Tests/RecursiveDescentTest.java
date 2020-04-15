@@ -21,7 +21,7 @@ class RecursiveDescentTest {
     @Test
     void Parse_InputScannerIsNull_ReturnNull() {
         // Arrange
-        Parser parser = new Parser(null);
+        Parser parser = new Parser(null, "");
 
         try {
             // Act

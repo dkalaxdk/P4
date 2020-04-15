@@ -1,14 +1,9 @@
 package Tests;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import sw417f20.ebal.SyntaxAnalysis.*;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.StringReader;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,7 +18,7 @@ class ParserTest {
         Reader reader = new Reader(bufferedReader);
         Scanner scanner = new Scanner(reader);
 
-        return new Parser(scanner);
+        return new Parser(scanner, program);
     }
 
     @Test
@@ -819,502 +814,6 @@ class ParserTest {
 
         assertSame(node.FirstChild.Next.Type, AST.NodeType.PinDeclaration);
     }
-
-
-
-    @Test
-    void PinDcls_NoProgram_ThrowSyntaxException() {
-        // Arrange
-        String program = "";
-        Parser parser = createParser(program);
-
-        // Act
-        try {
-            parser.PinDcls();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            assertTrue(true);
-            return;
-        }
-
-        fail();
-    }
-
-    @Test
-    void PinDcls_MinimalProgram_ReturnEmptyNode() {
-        // Arrange
-        String program = "}";
-        Parser parser = createParser(program);
-        Node node;
-
-        // Act
-        try {
-            node = parser.PinDcls();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            fail();
-            return;
-        }
-
-        assertSame(node.Type, AST.NodeType.Empty);
-    }
-
-    @Test
-    void PinDcls_OnePinDcl_NoSemi_ThrowSyntaxException() {
-        // Arrange
-        String program = "pin a = createPin(digital, input, 1) } ";
-        Parser parser = createParser(program);
-
-        // Act
-        try {
-            parser.PinDcls();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            assertTrue(true);
-            return;
-        }
-
-        fail();
-    }
-
-    @Test
-    void PinDcls_OnePinDcl_ReturnPinDclNode() {
-        // Arrange
-        String program = "pin a = createPin(digital, input, 1); } ";
-        Parser parser = createParser(program);
-        Node node;
-
-        // Act
-        try {
-            node = parser.PinDcls();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            fail();
-            return;
-        }
-
-        assertSame(node.Type, AST.NodeType.PinDeclaration);
-    }
-
-    @Test
-    void PinDcls_TwoPinDcls_ReturnPinDclNode() {
-        // Arrange
-        String program = "pin a = createPin(digital, input, 1); " +
-                         "pin b = createPin(digital, input, 2); " +
-                         "}";
-        Parser parser = createParser(program);
-        Node node;
-
-        // Act
-        try {
-            node = parser.PinDcls();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            fail();
-            return;
-        }
-
-        assertSame(node.Type, AST.NodeType.PinDeclaration);
-    }
-
-    @Test
-    void PinDcls_TwoPinDcls_ReturnedNodeNextSiblingIsPinDcl() {
-        // Arrange
-        String program = "pin a = createPin(digital, input, 1); " +
-                         "pin b = createPin(digital, input, 2); " +
-                         "}";
-        Parser parser = createParser(program);
-        Node node;
-
-        // Act
-        try {
-            node = parser.PinDcls();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            fail();
-            return;
-        }
-
-        assertSame(node.Next.Type, AST.NodeType.PinDeclaration);
-    }
-
-
-
-    @Test
-    void PinDcl_NoProgram_ThrowSyntaxException() {
-        // Arrange
-        String program = "";
-        Parser parser = createParser(program);
-
-        // Act
-        try {
-            parser.PinDcl();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            assertTrue(true);
-            return;
-        }
-
-        fail();
-    }
-
-    @Test
-    void PinDcl_NoPin_ThrowSyntaxException() {
-        // Arrange
-        String program = "id = createPin(digital, input, 1)";
-        Parser parser = createParser(program);
-
-        // Act
-        try {
-            parser.PinDcl();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            assertTrue(true);
-            return;
-        }
-
-        fail();
-    }
-
-    @Test
-    void PinDcl_NoIdentifier_ThrowSyntaxException() {
-        // Arrange
-        String program = "pin = createPin(digital, input, 1)";
-        Parser parser = createParser(program);
-
-        // Act
-        try {
-            parser.PinDcl();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            assertTrue(true);
-            return;
-        }
-
-        fail();
-    }
-
-    @Test
-    void PinDcl_NoAssign_ThrowSyntaxException() {
-        // Arrange
-        String program = "pin id createPin(digital, input, 1)";
-        Parser parser = createParser(program);
-
-        // Act
-        try {
-            parser.PinDcl();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            assertTrue(true);
-            return;
-        }
-
-        fail();
-    }
-
-    @Test
-    void PinDcl_NoCreatePinCall_ThrowSyntaxException() {
-        // Arrange
-        String program = "pin id = (digital, input, 1)";
-        Parser parser = createParser(program);
-
-        // Act
-        try {
-            parser.PinDcl();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            assertTrue(true);
-            return;
-        }
-
-        fail();
-    }
-
-    @Test
-    void PinDcl_NoLParen_ThrowSyntaxException() {
-        // Arrange
-        String program = "pin id = createPin digital, input, 1)";
-        Parser parser = createParser(program);
-
-        // Act
-        try {
-            parser.PinDcl();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            assertTrue(true);
-            return;
-        }
-
-        fail();
-    }
-
-    @Test
-    void PinDcl_NoPinType_ThrowSyntaxException() {
-        // Arrange
-        String program = "pin id = createPin(, input, 1)";
-        Parser parser = createParser(program);
-
-        // Act
-        try {
-            parser.PinDcl();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            assertTrue(true);
-            return;
-        }
-
-        fail();
-    }
-
-    @Test
-    void PinDcl_NoFirstComma_ThrowSyntaxException() {
-        // Arrange
-        String program = "pin id = createPin(digital input, 1)";
-        Parser parser = createParser(program);
-
-        // Act
-        try {
-            parser.PinDcl();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            assertTrue(true);
-            return;
-        }
-
-        fail();
-    }
-
-    @Test
-    void PinDcl_NoIOType_ThrowSyntaxException() {
-        // Arrange
-        String program = "pin id = createPin(digital, , 1)";
-        Parser parser = createParser(program);
-
-        // Act
-        try {
-            parser.PinDcl();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            assertTrue(true);
-            return;
-        }
-
-        fail();
-    }
-
-    @Test
-    void PinDcl_NoSecondComma_ThrowSyntaxException() {
-        // Arrange
-        String program = "pin id = createPin(digital, input 1)";
-        Parser parser = createParser(program);
-
-        // Act
-        try {
-            parser.PinDcl();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            assertTrue(true);
-            return;
-        }
-
-        fail();
-    }
-
-    @Test
-    void PinDcl_NoIntLiteral_ThrowSyntaxException() {
-        // Arrange
-        String program = "pin id = createPin(digital, input, )";
-        Parser parser = createParser(program);
-
-        // Act
-        try {
-            parser.PinDcl();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            assertTrue(true);
-            return;
-        }
-
-        fail();
-    }
-
-    @Test
-    void PinDcl_NoRParen_ThrowSyntaxException() {
-        // Arrange
-        String program = "pin id = createPin(digital, input, 1";
-        Parser parser = createParser(program);
-
-        // Act
-        try {
-            parser.PinDcl();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            assertTrue(true);
-            return;
-        }
-
-        fail();
-    }
-
-    @Test
-    void PinDcl_OnlyDeclaration_ThrowSyntaxException() {
-        // Arrange
-        String program = "pin id";
-        Parser parser = createParser(program);
-
-        // Act
-        try {
-            parser.PinDcl();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            assertTrue(true);
-            return;
-        }
-
-        fail();
-    }
-
-    @Test
-    void PinDcl_MinimumProgram_ReturnPinDclNode() {
-        // Arrange
-        String program = "pin id = createPin(digital, input, 1)";
-        Parser parser = createParser(program);
-        Node node;
-
-        // Act
-        try {
-            node = parser.PinDcl();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            fail();
-            return;
-        }
-
-        assertSame(node.Type, AST.NodeType.PinDeclaration);
-    }
-
-    @Test
-    void PinDcl_MinimumProgram_ReturnedNodeFirstChildIsIdentifier() {
-        // Arrange
-        String program = "pin id = createPin(digital, input, 1)";
-        Parser parser = createParser(program);
-        Node node;
-
-        // Act
-        try {
-            node = parser.PinDcl();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            fail();
-            return;
-        }
-
-        assertSame(node.FirstChild.Type, AST.NodeType.Identifier);
-    }
-
-    @Test
-    void PinDcl_MinimumProgram_ReturnedNodeFirstChildHasValueOfIdentifier() {
-        // Arrange
-        String program = "pin id = createPin(digital, input, 1)";
-        Parser parser = createParser(program);
-        Node node;
-
-        // Act
-        try {
-            node = parser.PinDcl();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            fail();
-            return;
-        }
-
-        assertEquals("id", node.FirstChild.Value);
-    }
-
-    @Test
-    void PinDcl_MinimumProgram_PinTypeIsDigital_ReturnedNodeSecondChildIsDigital() {
-        // Arrange
-        String program = "pin id = createPin(digital, input, 1)";
-        Parser parser = createParser(program);
-        Node node;
-
-        // Act
-        try {
-            node = parser.PinDcl();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            fail();
-            return;
-        }
-
-        assertSame(node.FirstChild.Next.Type, AST.NodeType.Digital);
-    }
-
-    @Test
-    void PinDcl_MinimumProgram_IOTypeIsInput_ReturnedNodeThirdChildIsInput() {
-        // Arrange
-        String program = "pin id = createPin(digital, input, 1)";
-        Parser parser = createParser(program);
-        Node node;
-
-        // Act
-        try {
-            node = parser.PinDcl();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            fail();
-            return;
-        }
-
-        assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.Input);
-    }
-
-    // TODO: Test for andre typer?
-    @Test
-    void PinDcl_MinimumProgram_ReturnedNodeFourthChildIsLiteral() {
-        // Arrange
-        String program = "pin id = createPin(digital, input, 1)";
-        Parser parser = createParser(program);
-        Node node;
-
-        // Act
-        try {
-            node = parser.PinDcl();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            fail();
-            return;
-        }
-
-        assertSame(node.FirstChild.Next.Next.Next.Type, AST.NodeType.IntLiteral);
-    }
-
-
 
     @Test
     void PinType_NoProgram_ThrowSyntaxException() {
@@ -3883,7 +3382,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.VoidCall();
+            parser.ProcedureCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -3903,7 +3402,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.VoidCall();
+            parser.ProcedureCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -3922,7 +3421,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.VoidCall();
+            parser.ProcedureCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -3941,7 +3440,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.VoidCall();
+            parser.ProcedureCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -3960,7 +3459,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.VoidCall();
+            parser.ProcedureCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -3980,7 +3479,7 @@ class ParserTest {
 
         // Act
         try {
-            node = parser.VoidCall();
+            node = parser.ProcedureCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4000,7 +3499,7 @@ class ParserTest {
 
         // Act
         try {
-            node = parser.VoidCall();
+            node = parser.ProcedureCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4020,7 +3519,7 @@ class ParserTest {
 
         // Act
         try {
-            node = parser.VoidCall();
+            node = parser.ProcedureCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4040,7 +3539,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.VoidCall();
+            parser.ProcedureCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4059,7 +3558,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.VoidCall();
+            parser.ProcedureCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4078,7 +3577,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.VoidCall();
+            parser.ProcedureCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4097,7 +3596,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.VoidCall();
+            parser.ProcedureCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4116,7 +3615,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.VoidCall();
+            parser.ProcedureCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4135,7 +3634,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.VoidCall();
+            parser.ProcedureCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4155,7 +3654,7 @@ class ParserTest {
 
         // Act
         try {
-            node = parser.VoidCall();
+            node = parser.ProcedureCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4175,7 +3674,7 @@ class ParserTest {
 
         // Act
         try {
-            node = parser.VoidCall();
+            node = parser.ProcedureCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4195,7 +3694,7 @@ class ParserTest {
 
         // Act
         try {
-            node = parser.VoidCall();
+            node = parser.ProcedureCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4215,7 +3714,7 @@ class ParserTest {
 
         // Act
         try {
-            node = parser.VoidCall();
+            node = parser.ProcedureCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4235,7 +3734,7 @@ class ParserTest {
 
         // Act
         try {
-            node = parser.VoidCall();
+            node = parser.ProcedureCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4256,7 +3755,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.ReturnsCall();
+            parser.FunctionCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4276,7 +3775,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.ReturnsCall();
+            parser.FunctionCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4295,7 +3794,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.ReturnsCall();
+            parser.FunctionCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4314,7 +3813,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.ReturnsCall();
+            parser.FunctionCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4333,7 +3832,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.ReturnsCall();
+            parser.FunctionCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4352,7 +3851,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.ReturnsCall();
+            parser.FunctionCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4371,7 +3870,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.ReturnsCall();
+            parser.FunctionCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4391,7 +3890,7 @@ class ParserTest {
 
         // Act
         try {
-            node = parser.ReturnsCall();
+            node = parser.FunctionCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4411,7 +3910,7 @@ class ParserTest {
 
         // Act
         try {
-            node = parser.ReturnsCall();
+            node = parser.FunctionCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4431,7 +3930,7 @@ class ParserTest {
 
         // Act
         try {
-            node = parser.ReturnsCall();
+            node = parser.FunctionCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4451,7 +3950,7 @@ class ParserTest {
 
         // Act
         try {
-            node = parser.ReturnsCall();
+            node = parser.FunctionCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4471,7 +3970,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.ReturnsCall();
+            parser.FunctionCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4490,7 +3989,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.ReturnsCall();
+            parser.FunctionCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4509,7 +4008,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.ReturnsCall();
+            parser.FunctionCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4528,7 +4027,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.ReturnsCall();
+            parser.FunctionCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4548,7 +4047,7 @@ class ParserTest {
 
         // Act
         try {
-            node = parser.ReturnsCall();
+            node = parser.FunctionCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4568,7 +4067,7 @@ class ParserTest {
 
         // Act
         try {
-            node = parser.ReturnsCall();
+            node = parser.FunctionCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4588,7 +4087,7 @@ class ParserTest {
 
         // Act
         try {
-            node = parser.ReturnsCall();
+            node = parser.FunctionCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4608,7 +4107,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.ReturnsCall();
+            parser.FunctionCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4627,7 +4126,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.ReturnsCall();
+            parser.FunctionCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4646,7 +4145,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.ReturnsCall();
+            parser.FunctionCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4665,7 +4164,7 @@ class ParserTest {
 
         // Act
         try {
-            parser.ReturnsCall();
+            parser.FunctionCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4685,7 +4184,7 @@ class ParserTest {
 
         // Act
         try {
-            node = parser.ReturnsCall();
+            node = parser.FunctionCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4705,7 +4204,7 @@ class ParserTest {
 
         // Act
         try {
-            node = parser.ReturnsCall();
+            node = parser.FunctionCall();
         }
         // Assert
         catch (SyntaxException e) {
@@ -4725,7 +4224,7 @@ class ParserTest {
 
         // Act
         try {
-            node = parser.ReturnsCall();
+            node = parser.FunctionCall();
         }
         // Assert
         catch (SyntaxException e) {

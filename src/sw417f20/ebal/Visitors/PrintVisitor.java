@@ -5,7 +5,7 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class PrintVisitor extends Visitor {
 
-    private int indent = 0;
+    private int indent = -1;
 
     @Override
     public void Visit(Node node) {
