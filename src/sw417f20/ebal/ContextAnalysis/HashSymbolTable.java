@@ -1,7 +1,6 @@
 package sw417f20.ebal.ContextAnalysis;
 
-import sw417f20.ebal.SyntaxAnalysis.AST;
-import sw417f20.ebal.Visitors.SemanticVisitor;
+import sw417f20.ebal.SyntaxAnalysis.Node;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,16 +39,28 @@ public class HashSymbolTable extends SymbolTable{
     }
 
     @Override
-    public boolean EnterSymbol(String name, Symbol.SymbolType type, PinSymbol.IOType ioType) {
+    public boolean EnterSymbol(String name, Symbol.SymbolType type, Node reference) {
         // Checks that name is not null and that symbol is not already in hashtable
         if (!DeclaredLocally(name)) {
-            hashtable.put(name, new PinSymbol(name, type, ioType));
+            hashtable.put(name, new Symbol(name, type, reference));
             return true;
         }
         else {
             return false;
         }
     }
+
+//    @Override
+//    public boolean EnterSymbol(String name, Symbol.SymbolType type, PinSymbol.PinType pinType, PinSymbol.IOType ioType, int pinNumber) {
+//        // Checks that name is not null and that symbol is not already in hashtable
+//        if (!DeclaredLocally(name)) {
+//            hashtable.put(name, new PinSymbol(name, type, pinType, ioType, pinNumber));
+//            return true;
+//        }
+//        else {
+//            return false;
+//        }
+//    }
 
     @Override
     public Symbol RetrieveSymbol(String name) {
