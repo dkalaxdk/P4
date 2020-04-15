@@ -1,5 +1,8 @@
 package sw417f20.ebal.CodeGeneration.Utility;
 
+/**
+ * Class that represents a slave during code generation.
+ */
 public class Slave {
     private String Name;
     private String ID;

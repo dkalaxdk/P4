@@ -2,6 +2,9 @@ package sw417f20.ebal.CodeGeneration.Utility;
 
 import java.util.ArrayList;
 
+/**
+ * Class that represents an event during code generation.
+ */
 public class Event {
     private String Name;
     private String ID;
