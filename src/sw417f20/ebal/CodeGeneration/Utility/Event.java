@@ -1,46 +1,49 @@
 package sw417f20.ebal.CodeGeneration.Utility;
 
+import java.util.ArrayList;
+
 public class Event {
-    private String name;
-    private String id;
-    private String value;
-    private Slave[] slaves;
+    private String Name;
+    private String ID;
+    private String Value;
+    private ArrayList<Slave> UsingSlaves;
 
     public Event(String name, String id, String value) {
-        this.name = name;
-        this.id = id;
-        this.value = value;
+        this.Name = name;
+        this.ID = id;
+        this.Value = value;
+        UsingSlaves = new ArrayList<>();
     }
 
-    public String getName() {
-        return name;
+    public String GetName() {
+        return Name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void SetName(String name) {
+        this.Name = name;
     }
 
-    public String getId() {
-        return id;
+    public String GetID() {
+        return ID;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void SetID(String ID) {
+        this.ID = ID;
     }
 
-    public String getValue() {
-        return value;
+    public String GetValue() {
+        return Value;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void SetValue(String value) {
+        this.Value = value;
     }
 
-    public Slave[] getSlaves() {
-        return slaves;
+    public ArrayList<Slave> GetUsingSlaves() {
+        return UsingSlaves;
     }
 
-    public void setSlaves(Slave[] slaves) {
-        this.slaves = slaves;
+    public void AddSlave(Slave slave) {
+        UsingSlaves.add(slave);
     }
 }

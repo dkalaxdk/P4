@@ -13,7 +13,7 @@ public class CodeGeneration {
 
     public CodeGeneration(Node node){
         Files = new ArrayList<String>();
-        EventDictionary = new EventDictionary();
+        EventDictionary = new EventDictionary(node);
         EmitProg(node);
     }
 
@@ -106,7 +106,7 @@ public class CodeGeneration {
         String content = "";
         String eventName = node.FirstChild.Value;
 
-        content += "if (input[0] == " + EventDictionary.getEventID(eventName) + ")";
+        content += "if (input[0] == " + EventDictionary.GetEventID(eventName) + ")";
         content += EmitBlock(node.FirstChild.Next);
 
         return content;
@@ -150,7 +150,7 @@ public class CodeGeneration {
 
     private String EmitEventDcl(Node node, int IDNumber) {
         String content = "";
-        EventDictionary.AddEvent(node.FirstChild.Value, "" + IDNumber, "");
+        EventDictionary.AddNewEvent(node.FirstChild.Value, "" + IDNumber, "");
         content = "char " + node.FirstChild.Value + "[] = \"" + IDNumber + "\"";
         if (node.FirstChild.Next.Type == AST.NodeType.Expression){ //TODO typen kan være Call eller identifier
             content += EmitExpression(node.FirstChild.Next);
