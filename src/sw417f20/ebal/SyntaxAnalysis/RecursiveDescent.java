@@ -8,7 +8,6 @@ import java.io.IOException;
 
 public abstract class RecursiveDescent {
     private Scanner PScanner;
-    private AST Tree;
     private String currentFile;
 
     public RecursiveDescent(Scanner scanner, String file) {
@@ -16,29 +15,30 @@ public abstract class RecursiveDescent {
         currentFile = file;
     }
 
-    public AST Parse() throws SyntaxException {
+
+    public AST Parse(boolean debug) throws SyntaxException {
         if (PScanner == null) {
             return null;
         }
 
+        AST tree = new AST();
+
+        // Parse the input file
         System.out.println("Parsing: " + currentFile);
-
-        Tree = new AST();
-
-        Tree.Root = Start();
-
+        tree.Root = Start();
         Expect(Token.Type.EOF);
 
-        PrintVisitor printVisitor = new PrintVisitor();
-
-        printVisitor.Visit(Tree.Root);
+        if (debug) {
+            PrintTree(tree);
+        }
 
         System.out.println("======== Parse successful ========\n");
 
-        return Tree;
+        return tree;
     }
 
-    public abstract Node Start() throws SyntaxException;
+
+    protected abstract Node Start() throws SyntaxException;
 
     protected Token Peek() {
         return PScanner.Peek();
@@ -78,5 +78,8 @@ public abstract class RecursiveDescent {
         return PScanner.reader.currentLine;
     }
 
-
+    private void PrintTree(AST tree) {
+        PrintVisitor printVisitor = new PrintVisitor();
+        printVisitor.Visit(tree.Root);
+    }
 }

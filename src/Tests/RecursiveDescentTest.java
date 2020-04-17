@@ -26,7 +26,7 @@ class RecursiveDescentTest {
 
         try {
             // Act
-            AST ast = parser.Parse();
+            AST ast = parser.Parse(false);
 
             // Assert
             assertNull(ast);

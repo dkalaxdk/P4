@@ -14,6 +14,8 @@ public class Main {
     }
 
     public static void ParserStuff() throws FileNotFoundException {
+        boolean debug = true;
+
         try {
             String filePath = new File("").getAbsolutePath();
             String fileInput = filePath + "/TestFiles/SmallParserTestProgram.txt";
@@ -26,7 +28,7 @@ public class Main {
             Parser parser = new Parser(scanner, fileInput);
 
             long start = System.currentTimeMillis();
-            parser.Parse();
+            parser.Parse(debug);
             System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms \n");
 
             filePath = new File("").getAbsolutePath();
@@ -41,7 +43,7 @@ public class Main {
             parser = new Parser(scanner, fileInput);
 
             start = System.currentTimeMillis();
-            parser.Parse();
+            parser.Parse(debug);
             System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms \n");
 
 
@@ -56,7 +58,7 @@ public class Main {
             parser = new Parser(scanner, fileInput);
 
             start = System.currentTimeMillis();
-            parser.Parse();
+            parser.Parse(debug);
             System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms \n");
 
 
