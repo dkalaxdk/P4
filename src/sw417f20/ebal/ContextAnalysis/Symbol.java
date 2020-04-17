@@ -5,7 +5,7 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 public class Symbol {
 
     public String Name;
-    public SymbolType Type;
+    public SymbolType Type; //TODO: ænder til DataType
     public Node ReferenceNode = null;
     public enum SymbolType{
         EVENT, PIN, FLOAT, INT, BOOL, FILTERTYPE, IO, PINTYPE, VOID

@@ -50,6 +50,8 @@ public class HashSymbolTable extends SymbolTable{
         }
     }
 
+    //TODO:lav tilføj til root metode
+
 //    @Override
 //    public boolean EnterSymbol(String name, Symbol.SymbolType type, PinSymbol.PinType pinType, PinSymbol.IOType ioType, int pinNumber) {
 //        // Checks that name is not null and that symbol is not already in hashtable
