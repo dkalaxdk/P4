@@ -45,22 +45,17 @@ public abstract class RecursiveDescent {
     }
 
     protected Token Expect(Token.Type t) throws SyntaxException {
-        return Expect(t, "Expected [" + t + "]");
-    }
-
-    protected Token Expect(Token.Type t, String message) throws SyntaxException {
         Token token = Peek();
 
         if (token.type != t) {
-            MakeError(message);
+            MakeError("Expected [" + t + "]");
         }
-        else {
-            try {
-                PScanner.Advance();
-            }
-            catch (IOException e) {
-                System.err.println(e);
-            }
+
+        try {
+            PScanner.Advance();
+        }
+        catch (IOException e) {
+            System.err.println(e);
         }
 
         return token;

@@ -4,7 +4,6 @@ import sw417f20.ebal.Exceptions.SyntaxException;
 
 public class Parser extends RecursiveDescent {
 
-    // TODO: Tilføj linienummer og offset til Node, så det kan bruges af SemanticsVisitor til fejlmeddeleser
     public Parser(Scanner scanner, String file) {
         super(scanner, file);
     }
