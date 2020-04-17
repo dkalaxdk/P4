@@ -9,13 +9,13 @@ public class Event {
     private String Name;
     private String ID;
     private String Value;
-    private ArrayList<Slave> UsingSlaves;
+    private ArrayList<Slave> AssociatedSlaves;
 
     public Event(String name, String id, String value) {
         this.Name = name;
         this.ID = id;
         this.Value = value;
-        UsingSlaves = new ArrayList<>();
+        AssociatedSlaves = new ArrayList<>();
     }
 
     public String GetName() {
@@ -42,11 +42,11 @@ public class Event {
         this.Value = value;
     }
 
-    public ArrayList<Slave> GetUsingSlaves() {
-        return UsingSlaves;
+    public ArrayList<Slave> GetAssociatedSlaves() {
+        return AssociatedSlaves;
     }
 
     public void AddSlave(Slave slave) {
-        UsingSlaves.add(slave);
+        AssociatedSlaves.add(slave);
     }
 }

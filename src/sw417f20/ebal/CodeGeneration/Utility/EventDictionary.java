@@ -1,9 +1,10 @@
 package sw417f20.ebal.CodeGeneration.Utility;
 
-import sw417f20.ebal.CodeGeneration.NodeList;
 import sw417f20.ebal.SyntaxAnalysis.Node;
+import sw417f20.ebal.CodeGeneration.NodeList;
 
 import java.util.Dictionary;
+import java.util.ArrayList;
 
 /**
  * Class that implements a dictionary of events which can be addressed by their names.
@@ -33,14 +34,11 @@ public class EventDictionary {
         for (Node slaveNode : nodeList.nodeList) {
             Slave slave = new Slave(slaveNode.FirstChild.Value, "" + slaveID++);
 
-            Node eventNode;
-            Event event;
-
             //If There are no EventHandlers, continue to the next slave
             if (slaveNode.FirstChild.Next.Next.IsEmpty()) continue;
 
-            eventNode = slaveNode.FirstChild.Next.Next;
-            event = new Event(eventNode.FirstChild.Value, "" + eventID++, "" + 0);
+            Node eventNode = slaveNode.FirstChild.Next.Next;
+            Event event = new Event(eventNode.FirstChild.Value, "" + eventID++, "" + 0);
             event.AddSlave(slave);
             AddEvent(event.GetName(), event);
 
@@ -55,8 +53,8 @@ public class EventDictionary {
 
     /**
      * Method that puts an existing event into the dictionary.
-     * @param eventName Name of the event (Key)
-     * @param event The actual event (Value)
+     * @param eventName Name of the event (Key).
+     * @param event The actual event (Value).
      */
     public void AddEvent(String eventName, Event event) {
         dictionary.put(eventName, event);
@@ -64,24 +62,47 @@ public class EventDictionary {
 
     /**
      * Method that puts a new event into the dictionary.
-     * @param eventName     Name of the event (Key)
-     * @param eventID       ID of the event (0..*)
-     * @param eventValue    The value of the event (e.g. if a switch, was it turned on or off)
+     * @param eventName     Name of the event (Key).
+     * @param eventID       ID of the event (0..*).
+     * @param eventValue    The value of the event (e.g. if a switch, was it turned on or off).
      */
     public void AddNewEvent(String eventName, String eventID, String eventValue) {
         dictionary.put(eventName, new Event(eventName, eventID, eventValue));
     }
 
-    ///Remaining methods should be self-explanatory -> no doc provided.
+    /**
+     * Method that edits the value of an event.
+     * @param eventName     Name of the event to be edited (Key).
+     * @param eventValue    The value the events value should be changed to.
+     */
     public void EditEventValue(String eventName, String eventValue) {
         dictionary.get(eventName).SetValue(eventValue);
     }
 
+    /**
+     * Getter for the ID of an event.
+     * @param eventName     Name of the event to get from (Key).
+     * @return              Returns a string representing the events ID.
+     */
     public String GetEventID(String eventName) {
         return dictionary.get(eventName).GetID();
     }
 
+    /**
+     * Getter for the value of an event.
+     * @param eventName     Name of the event to get from (Key).
+     * @return              Returns a string representing the events value.
+     */
     public String GetEventValue(String eventName) {
         return dictionary.get(eventName).GetValue();
+    }
+
+    /**
+     * Getter for the list of slaves associated with an event.
+     * @param eventName     Name of the event to get from (Key).
+     * @return              Returns an ArrayList of slaves that has an EventHandler for the event.
+     */
+    public ArrayList<Slave> GetEventAssociatedSlaves(String eventName) {
+        return dictionary.get(eventName).GetAssociatedSlaves();
     }
 }
