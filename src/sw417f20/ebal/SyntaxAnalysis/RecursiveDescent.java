@@ -16,16 +16,16 @@ public abstract class RecursiveDescent {
     }
 
 
-    public AST Parse(boolean debug) throws SyntaxException {
+    public Node Parse(boolean debug) throws SyntaxException {
         if (PScanner == null) {
             return null;
         }
 
-        AST tree = new AST();
+
 
         // Parse the input file
         System.out.println("Parsing: " + currentFile);
-        tree.Root = Start();
+        Node tree = Start();
         Expect(Token.Type.EOF);
 
         if (debug) {
@@ -73,8 +73,8 @@ public abstract class RecursiveDescent {
         return PScanner.reader.currentLine;
     }
 
-    private void PrintTree(AST tree) {
+    private void PrintTree(Node tree) {
         PrintVisitor printVisitor = new PrintVisitor();
-        printVisitor.Visit(tree.Root);
+        printVisitor.Visit(tree);
     }
 }

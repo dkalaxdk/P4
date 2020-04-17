@@ -1,6 +1,5 @@
 package sw417f20.ebal.Visitors;
 
-import sw417f20.ebal.SyntaxAnalysis.AST;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class PrintVisitor extends Visitor {

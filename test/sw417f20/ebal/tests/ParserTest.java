@@ -8,7 +8,6 @@ import java.io.BufferedReader;
 import java.io.StringReader;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static sw417f20.ebal.SyntaxAnalysis.RecursiveDescent.*;
 
 class ParserTest {
 
@@ -116,7 +115,7 @@ class ParserTest {
         }
 
         // Assert
-        assertSame(node.Type, AST.NodeType.Prog);
+        assertSame(node.Type, Node.NodeType.Prog);
     }
 
     @Test
@@ -137,7 +136,7 @@ class ParserTest {
         }
 
         // Assert
-        assertSame(node.FirstChild.Type, AST.NodeType.Master);
+        assertSame(node.FirstChild.Type, Node.NodeType.Master);
     }
 
     @Test
@@ -159,7 +158,7 @@ class ParserTest {
         }
 
         // Assert
-        assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.Slave);
+        assertSame(node.FirstChild.Next.Next.Type, Node.NodeType.Slave);
     }
 
 
@@ -314,7 +313,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Master);
+        assertSame(node.Type, Node.NodeType.Master);
     }
 
     @Test
@@ -334,7 +333,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.Initiate);
+        assertSame(node.FirstChild.Type, Node.NodeType.Initiate);
     }
 
     @Test
@@ -354,7 +353,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Type, AST.NodeType.Listener);
+        assertSame(node.FirstChild.Next.Type, Node.NodeType.Listener);
     }
 
 
@@ -376,7 +375,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Empty);
+        assertSame(node.Type, Node.NodeType.Empty);
     }
 
     @Test
@@ -396,7 +395,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Slave);
+        assertSame(node.Type, Node.NodeType.Slave);
     }
 
     @Test
@@ -416,7 +415,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Slave);
+        assertSame(node.Type, Node.NodeType.Slave);
     }
 
     @Test
@@ -436,7 +435,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Next.Type, AST.NodeType.Slave);
+        assertSame(node.Next.Type, Node.NodeType.Slave);
     }
 
 
@@ -591,7 +590,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Slave);
+        assertSame(node.Type, Node.NodeType.Slave);
     }
 
     @Test
@@ -611,7 +610,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.Initiate);
+        assertSame(node.FirstChild.Type, Node.NodeType.Initiate);
     }
 
     @Test
@@ -631,7 +630,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Type, AST.NodeType.EventHandler);
+        assertSame(node.FirstChild.Next.Type, Node.NodeType.EventHandler);
     }
 
 
@@ -767,7 +766,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Initiate);
+        assertSame(node.Type, Node.NodeType.Initiate);
     }
 
     @Test
@@ -790,7 +789,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.PinDeclaration);
+        assertSame(node.FirstChild.Type, Node.NodeType.PinDeclaration);
     }
 
     @Test
@@ -813,7 +812,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Type, AST.NodeType.PinDeclaration);
+        assertSame(node.FirstChild.Next.Type, Node.NodeType.PinDeclaration);
     }
 
     @Test
@@ -871,7 +870,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Digital);
+        assertSame(node.Type, Node.NodeType.Digital);
     }
 
     @Test
@@ -891,7 +890,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Analog);
+        assertSame(node.Type, Node.NodeType.Analog);
     }
 
     @Test
@@ -911,7 +910,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.PWM);
+        assertSame(node.Type, Node.NodeType.PWM);
     }
 
 
@@ -971,7 +970,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Input);
+        assertSame(node.Type, Node.NodeType.Input);
     }
 
     @Test
@@ -991,7 +990,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Output);
+        assertSame(node.Type, Node.NodeType.Output);
     }
 
 
@@ -1032,7 +1031,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Empty);
+        assertSame(node.Type, Node.NodeType.Empty);
     }
 
     @Test
@@ -1052,7 +1051,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Listener);
+        assertSame(node.Type, Node.NodeType.Listener);
     }
 
     @Test
@@ -1074,7 +1073,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Listener);
+        assertSame(node.Type, Node.NodeType.Listener);
     }
 
     @Test
@@ -1096,7 +1095,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Next.Type, AST.NodeType.Listener);
+        assertSame(node.Next.Type, Node.NodeType.Listener);
     }
 
 
@@ -1251,7 +1250,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Listener);
+        assertSame(node.Type, Node.NodeType.Listener);
     }
 
     @Test
@@ -1271,7 +1270,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.Identifier);
+        assertSame(node.FirstChild.Type, Node.NodeType.Identifier);
     }
 
     @Test
@@ -1311,7 +1310,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Type, AST.NodeType.Block);
+        assertSame(node.FirstChild.Next.Type, Node.NodeType.Block);
     }
 
 
@@ -1352,7 +1351,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Empty);
+        assertSame(node.Type, Node.NodeType.Empty);
     }
 
     @Test
@@ -1373,7 +1372,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.EventHandler);
+        assertSame(node.Type, Node.NodeType.EventHandler);
     }
 
     @Test
@@ -1395,7 +1394,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.EventHandler);
+        assertSame(node.Type, Node.NodeType.EventHandler);
     }
 
     @Test
@@ -1417,7 +1416,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.EventHandler);
+        assertSame(node.Type, Node.NodeType.EventHandler);
     }
 
 
@@ -1572,7 +1571,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.EventHandler);
+        assertSame(node.Type, Node.NodeType.EventHandler);
     }
 
     @Test
@@ -1592,7 +1591,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.Identifier);
+        assertSame(node.FirstChild.Type, Node.NodeType.Identifier);
     }
 
     @Test
@@ -1632,7 +1631,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Type, AST.NodeType.Block);
+        assertSame(node.FirstChild.Next.Type, Node.NodeType.Block);
     }
 
 
@@ -1711,7 +1710,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Block);
+        assertSame(node.Type, Node.NodeType.Block);
     }
 
     @Test
@@ -1731,7 +1730,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.Empty);
+        assertSame(node.FirstChild.Type, Node.NodeType.Empty);
     }
 
     @Test
@@ -1751,7 +1750,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.IntDeclaration);
+        assertSame(node.FirstChild.Type, Node.NodeType.IntDeclaration);
     }
 
     @Test
@@ -1771,7 +1770,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Type, AST.NodeType.IntDeclaration);
+        assertSame(node.FirstChild.Next.Type, Node.NodeType.IntDeclaration);
     }
 
 
@@ -1812,7 +1811,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Empty);
+        assertSame(node.Type, Node.NodeType.Empty);
     }
 
     @Test
@@ -1833,7 +1832,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.IntDeclaration);
+        assertSame(node.Type, Node.NodeType.IntDeclaration);
     }
 
     @Test
@@ -1855,7 +1854,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.IntDeclaration);
+        assertSame(node.Type, Node.NodeType.IntDeclaration);
     }
 
     @Test
@@ -1877,7 +1876,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Next.Type, AST.NodeType.IntDeclaration);
+        assertSame(node.Next.Type, Node.NodeType.IntDeclaration);
     }
 
 
@@ -1918,7 +1917,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Call);
+        assertSame(node.Type, Node.NodeType.Call);
     }
 
     @Test
@@ -1938,7 +1937,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Assignment);
+        assertSame(node.Type, Node.NodeType.Assignment);
     }
 
     @Test
@@ -1958,7 +1957,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.IntDeclaration);
+        assertSame(node.Type, Node.NodeType.IntDeclaration);
     }
 
     @Test
@@ -1979,7 +1978,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.If);
+        assertSame(node.Type, Node.NodeType.If);
     }
 
 
@@ -2096,7 +2095,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Assignment);
+        assertSame(node.Type, Node.NodeType.Assignment);
     }
 
     @Test
@@ -2116,7 +2115,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.Identifier);
+        assertSame(node.FirstChild.Type, Node.NodeType.Identifier);
     }
 
     @Test
@@ -2136,7 +2135,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Type, AST.NodeType.IntLiteral);
+        assertSame(node.FirstChild.Next.Type, Node.NodeType.IntLiteral);
     }
 
     @Test
@@ -2156,7 +2155,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Type, AST.NodeType.Expression);
+        assertSame(node.FirstChild.Next.Type, Node.NodeType.Expression);
     }
 
 
@@ -2254,7 +2253,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.IntDeclaration);
+        assertSame(node.Type, Node.NodeType.IntDeclaration);
     }
 
     @Test
@@ -2274,7 +2273,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.FloatDeclaration);
+        assertSame(node.Type, Node.NodeType.FloatDeclaration);
     }
 
     @Test
@@ -2294,7 +2293,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.BoolDeclaration);
+        assertSame(node.Type, Node.NodeType.BoolDeclaration);
     }
 
     @Test
@@ -2314,7 +2313,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.EventDeclaration);
+        assertSame(node.Type, Node.NodeType.EventDeclaration);
     }
 
     @Test
@@ -2334,7 +2333,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.Identifier);
+        assertSame(node.FirstChild.Type, Node.NodeType.Identifier);
     }
 
     @Test
@@ -2354,7 +2353,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Type, AST.NodeType.IntLiteral);
+        assertSame(node.FirstChild.Next.Type, Node.NodeType.IntLiteral);
     }
 
     @Test
@@ -2374,7 +2373,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Type, AST.NodeType.Expression);
+        assertSame(node.FirstChild.Next.Type, Node.NodeType.Expression);
     }
 
 
@@ -2472,7 +2471,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Empty);
+        assertSame(node.Type, Node.NodeType.Empty);
     }
 
     @Test
@@ -2492,7 +2491,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.IntLiteral);
+        assertSame(node.Type, Node.NodeType.IntLiteral);
     }
 
     @Test
@@ -2512,7 +2511,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Expression);
+        assertSame(node.Type, Node.NodeType.Expression);
     }
 
 
@@ -2553,7 +2552,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Identifier);
+        assertSame(node.Type, Node.NodeType.Identifier);
     }
 
     @Test
@@ -2573,7 +2572,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.IntLiteral);
+        assertSame(node.Type, Node.NodeType.IntLiteral);
     }
 
     @Test
@@ -2593,7 +2592,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Identifier);
+        assertSame(node.Type, Node.NodeType.Identifier);
     }
 
     @Test
@@ -2613,7 +2612,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.IntLiteral);
+        assertSame(node.Type, Node.NodeType.IntLiteral);
     }
 
     @Test
@@ -2633,7 +2632,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Expression);
+        assertSame(node.Type, Node.NodeType.Expression);
     }
 
     @Test
@@ -2653,7 +2652,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Expression);
+        assertSame(node.Type, Node.NodeType.Expression);
     }
 
     @Test
@@ -2673,7 +2672,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.Identifier);
+        assertSame(node.FirstChild.Type, Node.NodeType.Identifier);
     }
 
     @Test
@@ -2693,7 +2692,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Type, AST.NodeType.Plus);
+        assertSame(node.FirstChild.Next.Type, Node.NodeType.Plus);
     }
 
     @Test
@@ -2713,7 +2712,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.Identifier);
+        assertSame(node.FirstChild.Next.Next.Type, Node.NodeType.Identifier);
     }
 
     @Test
@@ -2733,7 +2732,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.Expression);
+        assertSame(node.FirstChild.Next.Next.Type, Node.NodeType.Expression);
     }
 
     @Test
@@ -2753,7 +2752,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.PrefixMinus);
+        assertSame(node.FirstChild.Type, Node.NodeType.PrefixMinus);
     }
 
     @Test
@@ -2773,7 +2772,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.PrefixMinus);
+        assertSame(node.FirstChild.Type, Node.NodeType.PrefixMinus);
     }
 
     @Test
@@ -2793,7 +2792,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.PrefixMinus);
+        assertSame(node.FirstChild.Type, Node.NodeType.PrefixMinus);
     }
 
     @Test
@@ -2832,7 +2831,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.PrefixNot);
+        assertSame(node.FirstChild.Type, Node.NodeType.PrefixNot);
     }
 
     @Test
@@ -2871,7 +2870,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Call);
+        assertSame(node.Type, Node.NodeType.Call);
     }
 
     @Test
@@ -2931,7 +2930,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.IntLiteral);
+        assertSame(node.Type, Node.NodeType.IntLiteral);
     }
 
     @Test
@@ -2951,7 +2950,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.FloatLiteral);
+        assertSame(node.Type, Node.NodeType.FloatLiteral);
     }
 
     @Test
@@ -2971,7 +2970,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.BoolLiteral);
+        assertSame(node.Type, Node.NodeType.BoolLiteral);
     }
 
     @Test
@@ -2991,7 +2990,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Identifier);
+        assertSame(node.Type, Node.NodeType.Identifier);
     }
 
 
@@ -3089,7 +3088,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Empty);
+        assertSame(node.Type, Node.NodeType.Empty);
     }
 
     @Test
@@ -3109,7 +3108,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Plus);
+        assertSame(node.Type, Node.NodeType.Plus);
     }
 
     @Test
@@ -3129,7 +3128,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Next.Type, AST.NodeType.IntLiteral);
+        assertSame(node.Next.Type, Node.NodeType.IntLiteral);
     }
 
     @Test
@@ -3149,7 +3148,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Next.Type, AST.NodeType.Expression);
+        assertSame(node.Next.Type, Node.NodeType.Expression);
     }
 
 
@@ -3190,7 +3189,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Call);
+        assertSame(node.Type, Node.NodeType.Call);
     }
 
     @Test
@@ -3210,7 +3209,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.Broadcast);
+        assertSame(node.FirstChild.Type, Node.NodeType.Broadcast);
     }
 
     @Test
@@ -3230,7 +3229,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Call);
+        assertSame(node.Type, Node.NodeType.Call);
     }
 
     @Test
@@ -3250,7 +3249,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.Write);
+        assertSame(node.FirstChild.Type, Node.NodeType.Write);
     }
 
     @Test
@@ -3270,7 +3269,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Call);
+        assertSame(node.Type, Node.NodeType.Call);
     }
 
     @Test
@@ -3290,7 +3289,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.FilterNoise);
+        assertSame(node.FirstChild.Type, Node.NodeType.FilterNoise);
     }
 
     @Test
@@ -3310,7 +3309,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Call);
+        assertSame(node.Type, Node.NodeType.Call);
     }
 
     @Test
@@ -3330,7 +3329,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.GetValue);
+        assertSame(node.FirstChild.Type, Node.NodeType.GetValue);
     }
 
     @Test
@@ -3350,7 +3349,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Call);
+        assertSame(node.Type, Node.NodeType.Call);
     }
 
     @Test
@@ -3370,7 +3369,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.CreateEvent);
+        assertSame(node.FirstChild.Type, Node.NodeType.CreateEvent);
     }
 
 
@@ -3488,7 +3487,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Call);
+        assertSame(node.Type, Node.NodeType.Call);
     }
 
     @Test
@@ -3508,7 +3507,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.Broadcast);
+        assertSame(node.FirstChild.Type, Node.NodeType.Broadcast);
     }
 
     @Test
@@ -3528,7 +3527,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Type, AST.NodeType.Identifier);
+        assertSame(node.FirstChild.Next.Type, Node.NodeType.Identifier);
     }
 
 
@@ -3663,7 +3662,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Call);
+        assertSame(node.Type, Node.NodeType.Call);
     }
 
     @Test
@@ -3683,7 +3682,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.Write);
+        assertSame(node.FirstChild.Type, Node.NodeType.Write);
     }
 
     @Test
@@ -3703,7 +3702,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Type, AST.NodeType.Identifier);
+        assertSame(node.FirstChild.Next.Type, Node.NodeType.Identifier);
     }
 
     @Test
@@ -3723,7 +3722,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.IntLiteral);
+        assertSame(node.FirstChild.Next.Next.Type, Node.NodeType.IntLiteral);
     }
 
     @Test
@@ -3743,7 +3742,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.Expression);
+        assertSame(node.FirstChild.Next.Next.Type, Node.NodeType.Expression);
     }
 
 
@@ -3899,7 +3898,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Call);
+        assertSame(node.Type, Node.NodeType.Call);
     }
 
     @Test
@@ -3919,7 +3918,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.FilterNoise);
+        assertSame(node.FirstChild.Type, Node.NodeType.FilterNoise);
     }
 
     @Test
@@ -3939,7 +3938,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Type, AST.NodeType.Identifier);
+        assertSame(node.FirstChild.Next.Type, Node.NodeType.Identifier);
     }
 
     @Test
@@ -3959,7 +3958,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.Flip);
+        assertSame(node.FirstChild.Next.Next.Type, Node.NodeType.Flip);
     }
 
 
@@ -4056,7 +4055,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Call);
+        assertSame(node.Type, Node.NodeType.Call);
     }
 
     @Test
@@ -4076,7 +4075,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.GetValue);
+        assertSame(node.FirstChild.Type, Node.NodeType.GetValue);
     }
 
     @Test
@@ -4096,7 +4095,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Type, AST.NodeType.Identifier);
+        assertSame(node.FirstChild.Next.Type, Node.NodeType.Identifier);
     }
 
 
@@ -4193,7 +4192,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Call);
+        assertSame(node.Type, Node.NodeType.Call);
     }
 
     @Test
@@ -4213,7 +4212,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.CreateEvent);
+        assertSame(node.FirstChild.Type, Node.NodeType.CreateEvent);
     }
 
     @Test
@@ -4233,7 +4232,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Type, AST.NodeType.Identifier);
+        assertSame(node.FirstChild.Next.Type, Node.NodeType.Identifier);
     }
 
 
@@ -4395,7 +4394,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.If);
+        assertSame(node.Type, Node.NodeType.If);
     }
 
     @Test
@@ -4416,7 +4415,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.Identifier);
+        assertSame(node.FirstChild.Type, Node.NodeType.Identifier);
     }
 
     @Test
@@ -4437,7 +4436,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, AST.NodeType.Expression);
+        assertSame(node.FirstChild.Type, Node.NodeType.Expression);
     }
 
     @Test
@@ -4458,7 +4457,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Type, AST.NodeType.Block);
+        assertSame(node.FirstChild.Next.Type, Node.NodeType.Block);
     }
 
     @Test
@@ -4479,7 +4478,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.Empty);
+        assertSame(node.FirstChild.Next.Next.Type, Node.NodeType.Empty);
     }
 
     @Test
@@ -4500,7 +4499,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.Block);
+        assertSame(node.FirstChild.Next.Next.Type, Node.NodeType.Block);
     }
 
     @Test
@@ -4521,7 +4520,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Next.Type, AST.NodeType.If);
+        assertSame(node.FirstChild.Next.Next.Type, Node.NodeType.If);
     }
 
 
@@ -4562,7 +4561,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Empty);
+        assertSame(node.Type, Node.NodeType.Empty);
     }
 
     @Test
@@ -4582,7 +4581,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Block);
+        assertSame(node.Type, Node.NodeType.Block);
     }
 
     @Test
@@ -4602,7 +4601,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.If);
+        assertSame(node.Type, Node.NodeType.If);
     }
 
 
@@ -4643,7 +4642,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Block);
+        assertSame(node.Type, Node.NodeType.Block);
     }
 
     @Test
@@ -4664,7 +4663,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.If);
+        assertSame(node.Type, Node.NodeType.If);
     }
 
 
@@ -4705,7 +4704,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Flip);
+        assertSame(node.Type, Node.NodeType.Flip);
     }
 
     @Test
@@ -4725,7 +4724,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Constant);
+        assertSame(node.Type, Node.NodeType.Constant);
     }
 
     @Test
@@ -4745,7 +4744,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Range);
+        assertSame(node.Type, Node.NodeType.Range);
     }
 
 
@@ -4786,7 +4785,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Plus);
+        assertSame(node.Type, Node.NodeType.Plus);
     }
 
     @Test
@@ -4806,7 +4805,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Minus);
+        assertSame(node.Type, Node.NodeType.Minus);
     }
 
     @Test
@@ -4826,7 +4825,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Times);
+        assertSame(node.Type, Node.NodeType.Times);
     }
 
     @Test
@@ -4846,7 +4845,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Divide);
+        assertSame(node.Type, Node.NodeType.Divide);
     }
 
     @Test
@@ -4866,7 +4865,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Modulo);
+        assertSame(node.Type, Node.NodeType.Modulo);
     }
 
 
@@ -4907,7 +4906,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.LessThan);
+        assertSame(node.Type, Node.NodeType.LessThan);
     }
 
     @Test
@@ -4927,7 +4926,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.GreaterThan);
+        assertSame(node.Type, Node.NodeType.GreaterThan);
     }
 
     @Test
@@ -4947,7 +4946,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.NotEqual);
+        assertSame(node.Type, Node.NodeType.NotEqual);
     }
 
     @Test
@@ -4967,7 +4966,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Equals);
+        assertSame(node.Type, Node.NodeType.Equals);
     }
 
     @Test
@@ -4987,7 +4986,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.GreaterOrEqual);
+        assertSame(node.Type, Node.NodeType.GreaterOrEqual);
     }
 
     @Test
@@ -5007,7 +5006,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.LessOrEqual);
+        assertSame(node.Type, Node.NodeType.LessOrEqual);
     }
 
     @Test
@@ -5027,7 +5026,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.And);
+        assertSame(node.Type, Node.NodeType.And);
     }
 
     @Test
@@ -5047,6 +5046,6 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, AST.NodeType.Or);
+        assertSame(node.Type, Node.NodeType.Or);
     }
 }
