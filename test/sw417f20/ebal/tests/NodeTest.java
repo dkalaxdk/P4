@@ -1,9 +1,8 @@
-package Tests;
+package sw417f20.ebal.tests;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import sw417f20.ebal.SyntaxAnalysis.AST;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 import sw417f20.ebal.SyntaxAnalysis.Token;
 
@@ -24,16 +23,16 @@ class NodeTest {
 
     @BeforeEach
     void setUp() {
-        ParentNode1 = new Node(AST.NodeType.Master);
-        ParentNode2 = new Node(AST.NodeType.Slave);
+        ParentNode1 = new Node(Node.NodeType.Master);
+        ParentNode2 = new Node(Node.NodeType.Slave);
 
-        Child1 = new Node(AST.NodeType.Listener);
-        Child2 = new Node(AST.NodeType.EventHandler);
+        Child1 = new Node(Node.NodeType.Listener);
+        Child2 = new Node(Node.NodeType.EventHandler);
 
-        Sibling1_1 = new Node(AST.NodeType.IntDeclaration);
-        Sibling1_2 = new Node(AST.NodeType.IntDeclaration);
-        Sibling2_1 = new Node(AST.NodeType.Assignment);
-        Sibling2_2 = new Node(AST.NodeType.Assignment);
+        Sibling1_1 = new Node(Node.NodeType.IntDeclaration);
+        Sibling1_2 = new Node(Node.NodeType.IntDeclaration);
+        Sibling2_1 = new Node(Node.NodeType.Assignment);
+        Sibling2_2 = new Node(Node.NodeType.Assignment);
 
         ParentNode1.FirstChild = Child1;
         Child1.Parent = ParentNode1;
@@ -64,10 +63,10 @@ class NodeTest {
     @Test
     void toString_ValueIsEmpty_ReturnsTypeName() {
         // Arrange
-        Node node = new Node(AST.NodeType.Empty, new Token(Token.Type.ERROR, ""));
+        Node node = new Node(Node.NodeType.Empty, new Token(Token.Type.ERROR, ""));
 
         // Act
-        String expected = AST.NodeType.Empty.toString();
+        String expected = Node.NodeType.Empty.toString();
         String actual = node.toString();
 
         // Assert
@@ -78,10 +77,10 @@ class NodeTest {
     void toString_ValueIsNotEmpty_ReturnsTypeNameAndValue() {
         // Arrange
         String testString = "TestValue";
-        Node node = new Node(AST.NodeType.Empty, new Token(Token.Type.ERROR, testString));
+        Node node = new Node(Node.NodeType.Empty, new Token(Token.Type.ERROR, testString));
 
         // Act
-        String expected = AST.NodeType.Empty.toString() + " : " + testString;
+        String expected = Node.NodeType.Empty.toString() + " : " + testString;
         String actual = node.toString();
 
         // Assert
@@ -91,7 +90,7 @@ class NodeTest {
     @Test
     void AddChild_InputIsNull_InputNotAdded() {
         // Arrange
-        Node node = new Node(AST.NodeType.Empty);
+        Node node = new Node(Node.NodeType.Empty);
 
         // Act
         node.AddChild(null);
@@ -103,8 +102,8 @@ class NodeTest {
     @Test
     void AddChild_FirstChildIsNull_FirstChildSetToInput() {
         // Arrange
-        Node parent = new Node(AST.NodeType.Empty);
-        Node child = new Node(AST.NodeType.Master);
+        Node parent = new Node(Node.NodeType.Empty);
+        Node child = new Node(Node.NodeType.Master);
 
         // Act
         parent.AddChild(child);
@@ -116,8 +115,8 @@ class NodeTest {
     @Test
     void AddChild_FirstChildIsNull_InputParentUpdated() {
         // Arrange
-        Node parent = new Node(AST.NodeType.Empty);
-        Node child = new Node(AST.NodeType.Master);
+        Node parent = new Node(Node.NodeType.Empty);
+        Node child = new Node(Node.NodeType.Master);
 
         // Act
         parent.AddChild(child);
@@ -129,9 +128,9 @@ class NodeTest {
     @Test
     void AddChild_FirstChildIsNull_InputNodeIsNotFirstSibling_InputFirstSiblingUpdatedParent() {
         // Arrange
-        Node parent = new Node(AST.NodeType.Empty);
-        Node child1 = new Node(AST.NodeType.Master);
-        Node child2 = new Node(AST.NodeType.Slave);
+        Node parent = new Node(Node.NodeType.Empty);
+        Node child1 = new Node(Node.NodeType.Master);
+        Node child2 = new Node(Node.NodeType.Slave);
 
         child1.MakeSiblings(child2);
 
@@ -145,9 +144,9 @@ class NodeTest {
     @Test
     void AddChild_FirstChildIsNull_InputNodeIsNotFirstSibling_ParentUpdatedFirstChild() {
         // Arrange
-        Node parent = new Node(AST.NodeType.Empty);
-        Node child1 = new Node(AST.NodeType.Master);
-        Node child2 = new Node(AST.NodeType.Slave);
+        Node parent = new Node(Node.NodeType.Empty);
+        Node child1 = new Node(Node.NodeType.Master);
+        Node child2 = new Node(Node.NodeType.Slave);
 
         child1.Next = child2;
         child2.FirstSibling = child1;
@@ -162,10 +161,10 @@ class NodeTest {
     @Test
     void AddChild_FirstChildIsNull_InputNodeIsNotFirstSibling_InputSiblingsUpdatedParent() {
         // Arrange
-        Node parent = new Node(AST.NodeType.Empty);
-        Node child1 = new Node(AST.NodeType.Master);
-        Node child2 = new Node(AST.NodeType.Slave);
-        Node child3 = new Node(AST.NodeType.Listener);
+        Node parent = new Node(Node.NodeType.Empty);
+        Node child1 = new Node(Node.NodeType.Master);
+        Node child2 = new Node(Node.NodeType.Slave);
+        Node child3 = new Node(Node.NodeType.Listener);
 
         child1.MakeSiblings(child2);
         child1.MakeSiblings(child3);
@@ -183,9 +182,9 @@ class NodeTest {
     @Test
     void AddChild_FirstChildIsNull_InputNodeIsFirstSibling_InputSiblingsUpdatedParent() {
         // Arrange
-        Node parent = new Node(AST.NodeType.Empty);
-        Node child1 = new Node(AST.NodeType.Master);
-        Node child2 = new Node(AST.NodeType.Slave);
+        Node parent = new Node(Node.NodeType.Empty);
+        Node child1 = new Node(Node.NodeType.Master);
+        Node child2 = new Node(Node.NodeType.Slave);
 
         child1.MakeSiblings(child2);
 
@@ -199,9 +198,9 @@ class NodeTest {
     @Test
     void AddChild_FirstChildIsNotNull_InputAddedToChainEnd() {
         // Arrange
-        Node parent = new Node(AST.NodeType.Empty);
-        Node child1 = new Node(AST.NodeType.Master);
-        Node child2 = new Node(AST.NodeType.Slave);
+        Node parent = new Node(Node.NodeType.Empty);
+        Node child1 = new Node(Node.NodeType.Master);
+        Node child2 = new Node(Node.NodeType.Slave);
 
         parent.FirstChild = child1;
 
@@ -218,7 +217,7 @@ class NodeTest {
     @Test
     void MakeSiblings_InputIsNull_InputNotAdded() {
         // Arrange
-        Node node1 = new Node(AST.NodeType.Empty);
+        Node node1 = new Node(Node.NodeType.Empty);
 
         // Act
         node1.MakeSiblings(null);

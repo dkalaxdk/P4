@@ -1,9 +1,10 @@
-package Tests;
+package sw417f20.ebal.tests;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import sw417f20.ebal.Exceptions.SyntaxException;
 import sw417f20.ebal.SyntaxAnalysis.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,12 +26,12 @@ class RecursiveDescentTest {
 
         try {
             // Act
-            AST ast = parser.Parse();
+            Node ast = parser.Parse(false);
 
             // Assert
             assertNull(ast);
         }
-        catch (RecursiveDescent.SyntaxException e) {
+        catch (SyntaxException e) {
 
         }
     }

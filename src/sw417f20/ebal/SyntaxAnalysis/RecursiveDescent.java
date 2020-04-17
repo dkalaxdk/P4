@@ -1,5 +1,6 @@
 package sw417f20.ebal.SyntaxAnalysis;
 
+import sw417f20.ebal.Exceptions.SyntaxException;
 import sw417f20.ebal.Visitors.PrintVisitor;
 
 import java.io.File;
@@ -7,7 +8,6 @@ import java.io.IOException;
 
 public abstract class RecursiveDescent {
     private Scanner PScanner;
-    private AST Tree;
     private String currentFile;
 
     public RecursiveDescent(Scanner scanner, String file) {
@@ -15,51 +15,47 @@ public abstract class RecursiveDescent {
         currentFile = file;
     }
 
-    public AST Parse() throws SyntaxException{
+
+    public Node Parse(boolean debug) throws SyntaxException {
         if (PScanner == null) {
             return null;
         }
 
+
+
+        // Parse the input file
         System.out.println("Parsing: " + currentFile);
-
-        Tree = new AST();
-
-        Tree.Root = Start();
-
+        Node tree = Start();
         Expect(Token.Type.EOF);
 
-        PrintVisitor printVisitor = new PrintVisitor();
-
-        printVisitor.Visit(Tree.Root);
+        if (debug) {
+            PrintTree(tree);
+        }
 
         System.out.println("======== Parse successful ========\n");
 
-        return Tree;
+        return tree;
     }
 
-    public abstract Node Start() throws SyntaxException;
+
+    protected abstract Node Start() throws SyntaxException;
 
     protected Token Peek() {
         return PScanner.Peek();
     }
 
     protected Token Expect(Token.Type t) throws SyntaxException {
-        return Expect(t, "Expected [" + t + "]");
-    }
-
-    protected Token Expect(Token.Type t, String message) throws SyntaxException {
         Token token = Peek();
 
         if (token.type != t) {
-            MakeError(message);
+            MakeError("Expected [" + t + "]");
         }
-        else {
-            try {
-                PScanner.Advance();
-            }
-            catch (IOException e) {
-                System.err.println(e);
-            }
+
+        try {
+            PScanner.Advance();
+        }
+        catch (IOException e) {
+            System.err.println(e);
         }
 
         return token;
@@ -77,10 +73,8 @@ public abstract class RecursiveDescent {
         return PScanner.reader.currentLine;
     }
 
-    public static class SyntaxException extends Exception {
-
-        public SyntaxException(String message) {
-            super(message);
-        }
+    private void PrintTree(Node tree) {
+        PrintVisitor printVisitor = new PrintVisitor();
+        printVisitor.Visit(tree);
     }
 }
