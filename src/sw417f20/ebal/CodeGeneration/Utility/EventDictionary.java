@@ -39,7 +39,11 @@ public class EventDictionary {
         int eventID = 0;
 
         //Visit slaves.
-        nodeList.Visit(node.FirstChild.Next);
+        Node currentSlaveNode = node.FirstChild.Next;
+        while (!currentSlaveNode.IsEmpty()) {
+            nodeList.Visit(currentSlaveNode);
+            currentSlaveNode = currentSlaveNode.Next;
+        }
 
         for (Node slaveNode : nodeList.nodeList) {
             Slave slave = new Slave(slaveNode.FirstChild.Value, "" + slaveID++);
