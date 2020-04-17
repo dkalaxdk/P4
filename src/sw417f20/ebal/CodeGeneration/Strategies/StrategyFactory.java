@@ -198,7 +198,7 @@ public class StrategyFactory {
 
     public IntDeclarationStrategy GetIntDeclarationStrategy() {
         if(intDeclarationStrategy == null) {
-            pinDeclarationStrategy = new PinDeclarationStrategy();
+            intDeclarationStrategy = new IntDeclarationStrategy();
         }
 
         return intDeclarationStrategy;

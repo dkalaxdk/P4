@@ -1,7 +1,6 @@
 package sw417f20.ebal.Visitors;
 
 import sw417f20.ebal.CodeGeneration.Strategies.CodeGenerationStrategy;
-import sw417f20.ebal.CodeGeneration.Strategies.ProgStrategy;
 import sw417f20.ebal.CodeGeneration.Strategies.StrategyFactory;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
