@@ -17,7 +17,7 @@ public class Node {
     public Node FirstChild;
     public Node Parent;
     //TODO: Make private?
-    public CodeGenerationStrategy codeGen;
+    public CodeGenerationStrategy CodeGenerationStrategy;
 
     public Node(AST.NodeType type) {
         this.Type = type;
@@ -148,6 +148,11 @@ public class Node {
     // Calls the provided codeGen strategy, and returns the result.
     // Is the common interface for code generation.
     public String GenerateCode() {
-        return codeGen.GenerateCode(this);
+        if(CodeGenerationStrategy != null) {
+            return CodeGenerationStrategy.GenerateCode(this);
+        }
+        else {
+            return "";
+        }
     }
 }
