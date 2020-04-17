@@ -8,6 +8,12 @@ public class OutputFile {
 
     public File OutputFile;
 
+    /**
+     * Creates a new file at the given file path, then writes the given content to the file.
+     * @param filepath Path of the file
+     * @param content Content of the file
+     * @throws IOException
+     */
     public OutputFile(String filepath, String content) throws IOException {
         File OutputFile = CreateFile(filepath);
         FileWriter fileWriter = new FileWriter(OutputFile);
@@ -15,6 +21,14 @@ public class OutputFile {
         fileWriter.close();
     }
 
+    /**
+     * Creates a new file a the given file path, adds the extension '.ino'
+     * if it is not already present.
+     *
+     * @param filepath Path of the file
+     * @return File at the given file path
+     * @throws IOException
+     */
     private File CreateFile(String filepath) throws IOException {
         File outputFile;
 
@@ -29,10 +43,10 @@ public class OutputFile {
         outputFile = new File(filepath);
         boolean fileCreated = outputFile.createNewFile();
         if(fileCreated) {
-            // This does not currently have any effect, but could be used to check if user truly wants to overwrite
             System.out.println("File: " + filepath + " created");
         }
         else {
+            // This does not currently have any effect, but could be used to check if user truly wants to overwrite
             System.out.println("File: " + filepath + " already exists");
         }
         return outputFile;
