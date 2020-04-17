@@ -1,6 +1,7 @@
 package Tests;
 
 import org.junit.jupiter.api.Test;
+import sw417f20.ebal.Exceptions.SyntaxException;
 import sw417f20.ebal.SyntaxAnalysis.*;
 
 import java.io.BufferedReader;

@@ -1,5 +1,6 @@
 package sw417f20.ebal;
 
+import sw417f20.ebal.Exceptions.SyntaxException;
 import sw417f20.ebal.SyntaxAnalysis.*;
 import sw417f20.ebal.SyntaxAnalysis.Reader;
 
@@ -73,7 +74,7 @@ public class Main {
 //            parser.Parse();
 //            System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms \n");
         }
-        catch (RecursiveDescent.SyntaxException e) {
+        catch (SyntaxException e) {
             System.err.println(e.getMessage());
         }
     }

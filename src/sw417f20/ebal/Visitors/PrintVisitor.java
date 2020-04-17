@@ -9,11 +9,11 @@ public class PrintVisitor extends Visitor {
 
     @Override
     public void Visit(Node node) {
-        if (node.Type != AST.NodeType.Empty) {
-            PrintNode(node);
-        }
+//        if (node.Type != AST.NodeType.Empty) {
+//            PrintNode(node);
+//        }
 
-//        PrintNode(node);
+        PrintNode(node);
 
         if (node.FirstChild != null) {
             indent++;

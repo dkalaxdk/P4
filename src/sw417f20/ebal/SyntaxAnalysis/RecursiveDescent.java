@@ -1,5 +1,6 @@
 package sw417f20.ebal.SyntaxAnalysis;
 
+import sw417f20.ebal.Exceptions.SyntaxException;
 import sw417f20.ebal.Visitors.PrintVisitor;
 
 import java.io.File;
@@ -15,7 +16,7 @@ public abstract class RecursiveDescent {
         currentFile = file;
     }
 
-    public AST Parse() throws SyntaxException{
+    public AST Parse() throws SyntaxException {
         if (PScanner == null) {
             return null;
         }
@@ -77,10 +78,5 @@ public abstract class RecursiveDescent {
         return PScanner.reader.currentLine;
     }
 
-    public static class SyntaxException extends Exception {
 
-        public SyntaxException(String message) {
-            super(message);
-        }
-    }
 }
