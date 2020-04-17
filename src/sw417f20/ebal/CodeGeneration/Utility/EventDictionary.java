@@ -5,6 +5,7 @@ import sw417f20.ebal.CodeGeneration.NodeList;
 
 import java.util.Dictionary;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 /**
  * Class that implements a dictionary of events which can be addressed by their names.
@@ -24,12 +25,21 @@ public class EventDictionary {
      * @param node The root node of the AST to be read for events.
      */
     public EventDictionary(Node node) {
+        dictionary = new Hashtable<String, Event>();
+        LinkEventsAndSlaves(node);
+    }
+
+    /**
+     * Method that links events and slaves in an AST.
+     * @param node The root node of the AST whose events and slaves should be linked.
+     */
+    public void LinkEventsAndSlaves(Node node) {
+        NodeList nodeList = new NodeList();
         int slaveID = 0;
         int eventID = 0;
-        NodeList nodeList = new NodeList();
 
         //Visit slaves.
-        nodeList.VisitSiblings(node.FirstChild);
+        nodeList.Visit(node.FirstChild.Next);
 
         for (Node slaveNode : nodeList.nodeList) {
             Slave slave = new Slave(slaveNode.FirstChild.Value, "" + slaveID++);
