@@ -382,7 +382,7 @@ public class Parser extends RecursiveDescent {
         else if (Peek().type == Token.Type.OP_MINUS) {
             Expect(Token.Type.OP_MINUS);
 
-            Node prefix = new Node(Node.NodeType.PrefixMinus);
+            Node prefix = Node.MakeNode(Node.NodeType.PrefixMinus);
             Node value = Value();
 
             value.AddChild(prefix);
