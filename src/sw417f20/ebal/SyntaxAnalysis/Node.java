@@ -178,11 +178,7 @@ public class Node {
         // Declarations
         PinDeclaration, FloatDeclaration, IntDeclaration, BoolDeclaration, EventDeclaration,
 
-        Assignment, If,
-
-        Call,
-
-        Expression,
+        Assignment, If, Call, Expression,
 
         Identifier,
 
