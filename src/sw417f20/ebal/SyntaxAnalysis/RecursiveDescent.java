@@ -21,20 +21,18 @@ public abstract class RecursiveDescent {
             return null;
         }
 
-
-
         // Parse the input file
         System.out.println("Parsing: " + currentFile);
-        Node tree = Start();
+        Node root = Start();
         Expect(Token.Type.EOF);
 
         if (debug) {
-            PrintTree(tree);
+            PrintTree(root);
         }
 
         System.out.println("======== Parse successful ========\n");
 
-        return tree;
+        return root;
     }
 
 
