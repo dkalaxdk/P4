@@ -11,14 +11,19 @@ public class EventDeclarationStrategy extends CodeGenerationStrategy {
         String content = "";
 
         Node nextChild = node.FirstChild.Next;
+
+        //Initialization if there is an expression as the next node.
         if(!nextChild.IsEmpty()) {
+            //The value that is assigned to the event
             String eventValue = node.FirstChild.Next.FirstChild.Next.Value;
 
+            //The event is represented as a char array.
             content += "char " + node.FirstChild.Value + "[4]";
             content += " = \"" + eventValue + "\";\n";
         }
         else {
-            content += content += "char " + node.FirstChild.Value + "[2];";
+            //Declare the identifier, the event is represented as a char array
+            content += content += "char " + node.FirstChild.Value + "[4];";
         }
         content += "\n";
         return content;

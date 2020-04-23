@@ -6,9 +6,11 @@ public class BlockStrategy extends CodeGenerationStrategy {
     @Override
     public String GenerateCode(Node node) {
         String content = "";
+
         content += "{\n";
         content += GenerateCodeForLinkedList(node.FirstChild);
         content += "}\n";
+
         return content;
     }
 }

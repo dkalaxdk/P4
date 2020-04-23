@@ -9,10 +9,14 @@ public class BroadcastStrategy extends CodeGenerationStrategy {
     @Override
     public String GenerateCode(Node node) {
         String content = "";
-        String event = node.FirstChild.Next.Value;
-        ArrayList<Slave> slaves = EventList.GetEventAssociatedSlaves(node.FirstChild.Value);
+        //The event used as a parameter.
+        String event = node.Next.Value;
+        //A list of all the slaves that have event as events.
+        ArrayList<Slave> slaves = EventList.GetEventAssociatedSlaves(event);
 
+        //iterating through the list of slaves
         for (Slave slave : slaves) {
+            //Sending the event by the use of the slaves ID and the char array that represents the event.
             content += "Wire.beginTransmission(" + slave.getID() + ");\n";
             content += "Wire.write(" + event + ");\n";
             content += "Wire.endTransmission();\n";

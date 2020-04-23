@@ -7,9 +7,10 @@ public class CreatePinStrategy extends CodeGenerationStrategy {
     public String GenerateCode(Node node) {
         String content = "";
         String pinNumber = node.Next.Next.Next.GenerateCode();
-        String mode = node.Next.Next.GenerateCode();
+        String pinType = node.Next.Next.GenerateCode();
 
-        content += "pinMode(" + pinNumber + "," + mode + ");\n";
+        //Creating a pin with the pinMode function.
+        content += "pinMode(" + pinNumber + "," + pinType + ");\n";
 
         return content;
     }

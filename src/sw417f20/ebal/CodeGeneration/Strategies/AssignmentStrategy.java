@@ -27,6 +27,7 @@ public class AssignmentStrategy extends CodeGenerationStrategy {
             content += " = \"" + eventValue + "\";\n";
         }
         else{
+            //add the assignment
             content += identifier + " = " + expression + ";\n";
         }
 
