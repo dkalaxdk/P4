@@ -1,6 +1,5 @@
 package sw417f20.ebal.CodeGeneration.Strategies;
 
-import sw417f20.ebal.SyntaxAnalysis.AST;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class PrefixStrategy extends CodeGenerationStrategy {
@@ -8,10 +7,10 @@ public class PrefixStrategy extends CodeGenerationStrategy {
     public String GenerateCode(Node node) {
         String content = "";
 
-        if (node.Type == AST.NodeType.PrefixNot){
+        if (node.Type == Node.NodeType.PrefixNot){
             content = "!";
         }
-        else if (node.Type == AST.NodeType.PrefixMinus){
+        else if (node.Type == Node.NodeType.PrefixMinus){
             content = "-";
         }
 

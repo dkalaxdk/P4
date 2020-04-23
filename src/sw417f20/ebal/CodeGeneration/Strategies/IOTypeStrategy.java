@@ -1,6 +1,5 @@
 package sw417f20.ebal.CodeGeneration.Strategies;
 
-import sw417f20.ebal.SyntaxAnalysis.AST;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class IOTypeStrategy extends CodeGenerationStrategy {
@@ -8,10 +7,10 @@ public class IOTypeStrategy extends CodeGenerationStrategy {
     public String GenerateCode(Node node) {
         String content = "";
 
-        if (node.Type == AST.NodeType.Input){
+        if (node.Type == Node.NodeType.Input){
             content = "INPUT";
         }
-        else if (node.Type == AST.NodeType.Output){
+        else if (node.Type == Node.NodeType.Output){
             content = "OUTPUT";
         }
 

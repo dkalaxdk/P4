@@ -1,6 +1,5 @@
 package sw417f20.ebal.CodeGeneration.Strategies;
 
-import sw417f20.ebal.SyntaxAnalysis.AST;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class IfStrategy extends CodeGenerationStrategy {
@@ -14,7 +13,7 @@ public class IfStrategy extends CodeGenerationStrategy {
         content += "if(" + expression + ")\n";
         content += block;
 
-        if (thirdChild.Type == AST.NodeType.Empty){
+        if (thirdChild.Type == Node.NodeType.Empty){
             return content;
         }
         else{
