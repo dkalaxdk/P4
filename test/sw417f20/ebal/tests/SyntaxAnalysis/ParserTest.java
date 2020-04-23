@@ -1,4 +1,4 @@
-package sw417f20.ebal.tests;
+package sw417f20.ebal.tests.SyntaxAnalysis;
 
 import org.junit.jupiter.api.Test;
 import sw417f20.ebal.Exceptions.SyntaxException;
