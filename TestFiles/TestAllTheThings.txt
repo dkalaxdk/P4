@@ -1,0 +1,40 @@
+BEGIN MASTER
+
+Initiate {
+    pin pin1 = createPin(digital, input, 1);
+}
+
+Listener(OnlyDeclaration) {
+    int a;
+    float b;
+    bool c;
+    event d;
+}
+
+Listener(Instantiation) {
+    int a = 1;
+    float b = 1.0;
+    bool c = true;
+    event d = createEvent(a);
+}
+
+Listener(FunctionCalls) {
+    getValue(FunctionCalls);
+    filterNoise(FunctionsCalls, flip);
+    createEvent(2);
+    write(pin1, 1);
+    broadcast(testEvent);
+}
+
+
+
+END MASTER
+
+
+BEGIN SLAVE : TestSlave
+
+Initiate {
+
+}
+
+END SLAVE

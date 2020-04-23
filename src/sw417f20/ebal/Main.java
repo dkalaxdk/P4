@@ -1,5 +1,6 @@
 package sw417f20.ebal;
 
+import sw417f20.ebal.Exceptions.SyntaxException;
 import sw417f20.ebal.CodeGeneration.OutputFileGenerator;
 import sw417f20.ebal.SyntaxAnalysis.*;
 import sw417f20.ebal.SyntaxAnalysis.Reader;
@@ -16,6 +17,8 @@ public class Main {
     }
 
     public static void ParserStuff() throws FileNotFoundException {
+        boolean debug = true;
+
         try {
             String filePath = new File("").getAbsolutePath();
             String fileInput = filePath + "/TestFiles/SmallParserTestProgram.txt";
@@ -25,27 +28,58 @@ public class Main {
             Reader reader = new Reader(bufferedReader);
             Scanner scanner = new Scanner(reader);
 
-            Parser parser = new Parser(scanner);
+            Parser parser = new Parser(scanner, fileInput);
 
             long start = System.currentTimeMillis();
-            parser.Parse();
-            System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms");
+            parser.Parse(debug);
+            System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms \n");
 
             filePath = new File("").getAbsolutePath();
             fileInput = filePath + "/TestFiles/ParserTestProgram.txt";
+
 
             fileReader = new FileReader(fileInput);
             bufferedReader = new BufferedReader(fileReader);
             reader = new Reader(bufferedReader);
             scanner = new Scanner(reader);
 
-            parser = new Parser(scanner);
+            parser = new Parser(scanner, fileInput);
 
             start = System.currentTimeMillis();
-            parser.Parse();
-            System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms");
+            parser.Parse(debug);
+            System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms \n");
+
+
+            filePath = new File("").getAbsolutePath();
+            fileInput = filePath + "/TestFiles/TestAllTheThings.txt";
+
+            fileReader = new FileReader(fileInput);
+            bufferedReader = new BufferedReader(fileReader);
+            reader = new Reader(bufferedReader);
+            scanner = new Scanner(reader);
+
+            parser = new Parser(scanner, fileInput);
+
+            start = System.currentTimeMillis();
+            parser.Parse(debug);
+            System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms \n");
+
+
+//            filePath = new File("").getAbsolutePath();
+//            fileInput = filePath + "/TestFiles/DeclarationsTest.txt";
+//
+//            fileReader = new FileReader(fileInput);
+//            bufferedReader = new BufferedReader(fileReader);
+//            reader = new Reader(bufferedReader);
+//            scanner = new Scanner(reader);
+//
+//            parser = new Parser(scanner);
+//
+//            start = System.currentTimeMillis();
+//            parser.Parse();
+//            System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms \n");
         }
-        catch (RecursiveDescent.SyntaxException e) {
+        catch (SyntaxException e) {
             System.err.println(e.getMessage());
         }
     }

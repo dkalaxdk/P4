@@ -5,8 +5,10 @@ import sw417f20.ebal.CodeGeneration.Strategies.CodeGenerationStrategy;
 // This class is inspired by the data structure
 // outlined in Crafting a Compiler by Fischer et. al.
 public class Node {
-    public AST.NodeType Type;
+    public NodeType Type;
     public String Value;
+    public int LineNumber = -1;
+    public Node DefinitionReference;
 
     // The next element in the linked list of siblings
     public Node Next;
@@ -19,19 +21,57 @@ public class Node {
     //TODO: Make private?
     public CodeGenerationStrategy CodeGenerationStrategy;
 
-    public Node(AST.NodeType type) {
+    private Node(NodeType type) {
         this.Type = type;
         this.Value = "";
     }
 
-    public Node(AST.NodeType type, String value) {
+    private Node(NodeType type, Token token) {
         this.Type = type;
-        this.Value = value;
+        this.Value = token.content;
+    }
+
+    private Node(NodeType type, int lineNumber) {
+        this.Type = type;
+        this.Value = "";
+        LineNumber = lineNumber;
+    }
+
+    public static Node MakeNode(Token token) {
+
+        switch (token.type) {
+            case IDENTIFIER:
+                return new Node(NodeType.Identifier, token);
+
+            case LIT_Bool:
+                return new Node(NodeType.BoolLiteral, token);
+
+            case LIT_Int:
+                return new Node(NodeType.IntLiteral, token);
+
+            case LIT_Float:
+                return new Node(NodeType.FloatLiteral, token);
+
+            default:
+                return new Node(NodeType.Error);
+        }
+    }
+
+    public static Node MakeNode(NodeType nodeType) {
+        return new Node(nodeType);
+    }
+
+    public static Node MakeNode(NodeType nodeType, int lineNumber) {
+        return new Node(nodeType, lineNumber);
+    }
+
+    public static Node MakeNode(NodeType nodeType, Token token) {
+        return new Node(nodeType, token);
     }
 
     @Override
     public String toString() {
-        return Type.toString() + (!Value.isEmpty() ? " : " + Value : "");
+        return Type.toString() + (!Value.isEmpty() ? " : " + Value : "") + ((LineNumber != -1) ? " : " + LineNumber : "");
     }
 
     // Adds the input child to this node's list of children.
@@ -138,6 +178,41 @@ public class Node {
             otherSiblings.FirstSibling = firstSibling;
             otherSiblings = otherSiblings.Next;
         }
+    }
+
+    public enum NodeType {
+        Prog, Master, Slave, Initiate, Listener, EventHandler, Block,
+
+        // Declarations
+        PinDeclaration, FloatDeclaration, IntDeclaration, BoolDeclaration, EventDeclaration,
+
+        Assignment, If, Call, Expression,
+
+        Identifier,
+
+        // Literals
+        IntLiteral, FloatLiteral, BoolLiteral,
+
+        // Pin types
+        Digital, Analog, PWM,
+
+        // IO types
+        Input, Output,
+
+        // Filter types
+        Constant, Flip, Range,
+
+        // Function
+        Broadcast, Write, GetValue, FilterNoise, CreateEvent, CreatePin,
+
+        // Operator
+        LessThan, GreaterThan, NotEqual, Equals, GreaterOrEqual, LessOrEqual, And, Or,
+        Plus, Minus, Times, Divide, Modulo,
+
+        // Prefixes
+        PrefixNot, PrefixMinus,
+
+        Error, Empty
     }
 
     // Just makes checks for empty nodes shorter.

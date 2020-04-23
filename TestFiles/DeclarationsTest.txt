@@ -1,0 +1,135 @@
+BEGIN MASTER
+
+Initiate {
+    pin pin1 = createPin(digital, input, 1);
+    pin pin1 = createPin(digital, input, 1);
+    pin pin1 = createPin(digital, input, 1);
+    pin pin1 = createPin(digital, input, 1);
+    pin pin1 = createPin(digital, input, 1);
+    pin pin1 = createPin(digital, input, 1);
+}
+
+Listener(OnlyDeclaration) {
+    int a;
+    float b;
+    bool c;
+    event d;
+}
+
+Listener(Instantiation) {
+    int a = 1;
+    float b = 1.0;
+    bool c = true;
+    event d = createEvent(a);
+}
+
+Listener(OnlyDeclaration) {
+    int a;
+    float b;
+    bool c;
+    event d;
+}
+
+Listener(Instantiation) {
+    int a = 1;
+    float b = 1.0;
+    bool c = true;
+    event d = createEvent(a);
+}
+
+Listener(OnlyDeclaration) {
+    int a;
+    float b;
+    bool c;
+    event d;
+}
+
+Listener(Instantiation) {
+    int a = 1;
+    float b = 1.0;
+    bool c = true;
+    event d = createEvent(a);
+}
+
+Listener(OnlyDeclaration) {
+    int a;
+    float b;
+    bool c;
+    event d;
+}
+
+Listener(Instantiation) {
+    int a = 1;
+    float b = 1.0;
+    bool c = true;
+    event d = createEvent(a);
+}
+
+Listener(OnlyDeclaration) {
+    int a;
+    float b;
+    bool c;
+    event d;
+}
+
+Listener(Instantiation) {
+    int a = 1;
+    float b = 1.0;
+    bool c = true;
+    event d = createEvent(a);
+}
+
+Listener(OnlyDeclaration) {
+    int a;
+    float b;
+    bool c;
+    event d;
+}
+
+Listener(Instantiation) {
+    int a = 1;
+    float b = 1.0;
+    bool c = true;
+    event d = createEvent(a);
+}
+
+Listener(OnlyDeclaration) {
+    int a;
+    float b;
+    bool c;
+    event d;
+}
+
+Listener(Instantiation) {
+    int a = 1;
+    float b = 1.0;
+    bool c = true;
+    event d = createEvent(a);
+}
+
+Listener(OnlyDeclaration) {
+    int a;
+    float b;
+    bool c;
+    event d;
+}
+
+Listener(Instantiation) {
+    int a = 1;
+    float b = 1.0;
+    bool c = true;
+    event d = createEvent(a);
+}
+
+
+
+END MASTER
+
+
+BEGIN SLAVE
+
+Initiate {
+
+}
+
+END SLAVE
