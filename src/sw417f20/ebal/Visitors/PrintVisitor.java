@@ -1,26 +1,24 @@
 package sw417f20.ebal.Visitors;
 
-import sw417f20.ebal.SyntaxAnalysis.AST;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class PrintVisitor extends Visitor {
 
-    private int indent = 0;
+    private int indent = -1;
 
     @Override
     public void Visit(Node node) {
-        if (node.Type != AST.NodeType.Empty) {
-            PrintNode(node);
-        }
+//        if (node.Type != AST.NodeType.Empty) {
+//            PrintNode(node);
+//        }
 
-        indent++;
+        PrintNode(node);
+
         if (node.FirstChild != null) {
+            indent++;
             VisitChildren(node);
+            indent--;
         }
-        if (node.FirstSibling != null) {
-            VisitSiblings(node);
-        }
-        indent--;
 
     }
 

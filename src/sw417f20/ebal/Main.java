@@ -1,42 +1,103 @@
 package sw417f20.ebal;
 
-import sw417f20.ebal.SyntaxAnalysis.Parser;
-import sw417f20.ebal.SyntaxAnalysis.Scanner;
-import sw417f20.ebal.SyntaxAnalysis.Token;
+import sw417f20.ebal.Exceptions.SyntaxException;
+import sw417f20.ebal.SyntaxAnalysis.*;
+import sw417f20.ebal.SyntaxAnalysis.Reader;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
-//         ScannerStuff();
+//       ScannerStuff();
         ParserStuff();
     }
 
-    public static void ParserStuff() {
-        Parser parser = new Parser();
+    public static void ParserStuff() throws FileNotFoundException {
+        boolean debug = true;
 
-        long start = System.currentTimeMillis();
-        parser.Parse(GetFullPath("/TestFiles/SmallTestProgram.txt"));
-        System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms");
+        try {
+            String filePath = new File("").getAbsolutePath();
+            String fileInput = filePath + "/TestFiles/SmallParserTestProgram.txt";
 
-        start = System.currentTimeMillis();
-        parser.Parse(GetFullPath("/TestFiles/TestProgram.txt"));
-        System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms");
+            FileReader fileReader = new FileReader(fileInput);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            Reader reader = new Reader(bufferedReader);
+            Scanner scanner = new Scanner(reader);
+
+            Parser parser = new Parser(scanner, fileInput);
+
+            long start = System.currentTimeMillis();
+            parser.Parse(debug);
+            System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms \n");
+
+            filePath = new File("").getAbsolutePath();
+            fileInput = filePath + "/TestFiles/ParserTestProgram.txt";
+
+
+            fileReader = new FileReader(fileInput);
+            bufferedReader = new BufferedReader(fileReader);
+            reader = new Reader(bufferedReader);
+            scanner = new Scanner(reader);
+
+            parser = new Parser(scanner, fileInput);
+
+            start = System.currentTimeMillis();
+            parser.Parse(debug);
+            System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms \n");
+
+
+            filePath = new File("").getAbsolutePath();
+            fileInput = filePath + "/TestFiles/TestAllTheThings.txt";
+
+            fileReader = new FileReader(fileInput);
+            bufferedReader = new BufferedReader(fileReader);
+            reader = new Reader(bufferedReader);
+            scanner = new Scanner(reader);
+
+            parser = new Parser(scanner, fileInput);
+
+            start = System.currentTimeMillis();
+            parser.Parse(debug);
+            System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms \n");
+
+
+//            filePath = new File("").getAbsolutePath();
+//            fileInput = filePath + "/TestFiles/DeclarationsTest.txt";
+//
+//            fileReader = new FileReader(fileInput);
+//            bufferedReader = new BufferedReader(fileReader);
+//            reader = new Reader(bufferedReader);
+//            scanner = new Scanner(reader);
+//
+//            parser = new Parser(scanner);
+//
+//            start = System.currentTimeMillis();
+//            parser.Parse();
+//            System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms \n");
+        }
+        catch (SyntaxException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     public static void ScannerStuff() throws IOException {
         long start = System.currentTimeMillis();
 
         System.out.println();
-        Scanner scanner = new Scanner(GetFullPath("/TestFiles/TestProgram.txt"));
+        String filePath = new File("").getAbsolutePath();
+        String fileInput = filePath + "/TestFiles/ScannerTestProgram.txt";
+
+        FileReader fileReader = new FileReader(fileInput);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        Reader reader = new Reader(bufferedReader);
+        Scanner scanner = new Scanner(reader);
         int tokenCount = 0;
 
         while (scanner.currentToken.type != Token.Type.EOF) {
             scanner.Advance();
 
-            if (scanner.currentToken.type != Token.Type.NOTATOKEN) {
+            if (scanner.currentToken.type != Token.Type.NOTATOKEN && scanner.currentToken.type != Token.Type.ERROR) {
                 System.out.println("Token found: " + scanner.currentToken.type + " on line: " + scanner.currentToken.lineNumber + " : " + scanner.currentToken.offSet + " with content: " + scanner.currentToken.content);
                 tokenCount++;
             } else if (scanner.currentToken.type == Token.Type.ERROR){

@@ -1,4 +1,4 @@
-package Tests;
+package sw417f20.ebal.tests;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RecursiveDescentTest {
+class ASTTest {
 
     @BeforeEach
     void setUp() {
@@ -17,26 +17,10 @@ class RecursiveDescentTest {
     }
 
     @Test
-    void parse() {
+    void makeNode() {
     }
 
     @Test
-    void start() {
-    }
-
-    @Test
-    void peek() {
-    }
-
-    @Test
-    void expect() {
-    }
-
-    @Test
-    void testExpect() {
-    }
-
-    @Test
-    void makeError() {
+    void testMakeNode() {
     }
 }

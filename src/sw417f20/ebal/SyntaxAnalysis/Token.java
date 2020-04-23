@@ -6,7 +6,7 @@ public class Token {
         NOTATOKEN,
 
         //Operators
-        OP_PLUS, OP_MINUS, OP_TIMES, OP_DIVIDE, OP_NOT, OP_QUESTION, OP_MODULO, ASSIGN,
+        OP_PLUS, OP_MINUS, OP_TIMES, OP_DIVIDE, OP_NOT, OP_MODULO, ASSIGN,
         OP_PLUS_EQUALS, OP_MINUS_EQUALS, OP_TIMES_EQUALS, OP_DIVIDE_EQUALS,
 
         // Logic Operators
@@ -41,8 +41,8 @@ public class Token {
         ERROR,
 
         // Misc
-        COMMA, DOT, BACKSLASH, COLON, SEMI, SINGLEQUOTE, DOUBLEQUOTE,
-        LPAREN, RPAREN, RBRACKET, LBRACKET, RSQBRACKET, LSQBRACKET,
+        COMMA, SEMI, COLON,
+        LPAREN, RPAREN, RBRACKET, LBRACKET,
 
         EOF
 
@@ -56,4 +56,22 @@ public class Token {
         type = inputType;
         content = inputContent;
     }
+
+    @Override
+    public String toString() {
+
+        return type.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj.getClass() != Token.class) {
+            return false;
+        }
+        if(((Token) obj).type != this.type) {
+            return false;
+        }
+        return ((Token) obj).content.equals(this.content);
+    }
+
 }
