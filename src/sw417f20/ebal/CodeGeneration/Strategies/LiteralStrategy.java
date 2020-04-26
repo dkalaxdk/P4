@@ -8,6 +8,7 @@ public class LiteralStrategy extends CodeGenerationStrategy {
         String content = "";
         String prefix = node.FirstChild.GenerateCode();
 
+        //If there is a prefix it is added to content before the value in expressions.
         content += prefix;
         content += node.Value;
 

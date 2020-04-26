@@ -5,19 +5,23 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class SlaveStrategy extends CodeGenerationStrategy {
     private int CommandSize = 5;
-    private int address; //Placeholder
     @Override
     public String GenerateCode(Node node) {
         String content = "";
+        String slaveName = node.FirstChild.Value;
+
+        int slaveID = Lists.slaveDictionary.get(slaveName);
+
         content += "#include <Wire.h>\n";
         content += "const int commandSize =" + CommandSize + ";\n"; //TODO: Determine command size
         content += "char input[commandSize];\n";
+
         content += "void setup(){\n";
-        Node firstChild = node.FirstChild;
-        content += firstChild.GenerateCode();
-        // TODO: Address should be gotten from/stored in some shared state
-        content += "    Wire.begin(" + address + ");\n";
-        content += "    Wire.onReceive(receiveEvent);\n";
+        content += "Wire.begin(" + slaveID + ");\n";
+        content += "Serial.begin(9600);\n";
+        content += "Wire.onReceive(receiveEvent);\n";
+        //generate code for the initiate block
+        content += node.FirstChild.Next.GenerateCode();
         content += "}\n";
 
         content += "void loop() {\n";
@@ -33,7 +37,7 @@ public class SlaveStrategy extends CodeGenerationStrategy {
 
         // Generate and append code for all the siblings of the first node
         // These nodes should all be EventHandlers
-        content += GenerateCodeForLinkedList(firstChild.Next);
+        content += GenerateCodeForLinkedList(node.FirstChild.Next.Next);
 
         content += "}";
         return content;

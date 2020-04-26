@@ -7,8 +7,8 @@ public class InitiateStrategy extends CodeGenerationStrategy {
     public String GenerateCode(Node node) {
         String content = "";
 
-        // Generate and append code for PinDeclarations
-        content += GenerateCodeForLinkedList(node.FirstChild);
+        // Generate code for a block
+        content += node.FirstChild.GenerateCode();
 
         return content;
     }

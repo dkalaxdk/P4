@@ -12,12 +12,14 @@ public class FloatDeclarationStrategy extends CodeGenerationStrategy {
         content += node.FirstChild.Value;
 
         Node nextChild = node.FirstChild.Next;
+        //Initialization if there is an expression as the next node.
         if(!nextChild.IsEmpty()) {
             // Assign a value if there is an expression defined.
             content += " = ";
             content += nextChild.GenerateCode();
         }
         else {
+            //Declare the identifier.
             content += ";";
         }
         content += "\n";

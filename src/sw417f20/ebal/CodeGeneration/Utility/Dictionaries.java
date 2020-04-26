@@ -10,12 +10,12 @@ import java.util.Hashtable;
 /**
  * Class that implements a dictionary of events which can be addressed by their names.
  */
-public class EventDictionary {
+public class Dictionaries {
     /**
      * The dictionary that EventDictionary uses to store the events in.
      */
-    private Dictionary<String, Event> dictionary; //TODO Find ud af hvordan man beholder events der hedder det samme
-
+    private Dictionary<String, Event> eventDictionary; //TODO Find ud af hvordan man beholder events der hedder det samme
+    public Dictionary<String, Integer> slaveDictionary;
     /**
      * Constructor of EventDictionary.
      * <p>
@@ -24,9 +24,11 @@ public class EventDictionary {
      * </p>
      * @param node The root node of the AST to be read for events.
      */
-    public EventDictionary(Node node) {
-        dictionary = new Hashtable<String, Event>();
+    public Dictionaries(Node node) {
+        eventDictionary = new Hashtable<String, Event>();
+        slaveDictionary = new Hashtable<String, Integer>();
         LinkEventsAndSlaves(node);
+        MakeSlaveDictionary(node);
     }
 
     /**
@@ -71,7 +73,28 @@ public class EventDictionary {
      * @param event The actual event (Value).
      */
     public void AddEvent(String eventName, Event event) {
-        dictionary.put(eventName, event);
+        eventDictionary.put(eventName, event);
+    }
+
+    /**
+     * Method that makes a slave dictionary from the slaves name and ID
+     * @param node The root node of the AST whose events and slaves should be linked.
+     */
+    public void MakeSlaveDictionary(Node node){
+        NodeList nodeList = new NodeList();
+        int slaveID = 0;
+        int eventID = 0;
+
+        //Visit slaves.
+        Node currentSlaveNode = node.FirstChild.Next;
+        while (!currentSlaveNode.IsEmpty()) {
+            nodeList.Visit(currentSlaveNode);
+            currentSlaveNode = currentSlaveNode.Next;
+        }
+
+        for (Node slaveNode : nodeList.nodeList) {
+            slaveDictionary.put(slaveNode.FirstChild.Value, slaveID++);
+        }
     }
 
     /**
@@ -81,7 +104,7 @@ public class EventDictionary {
      * @param eventValue    The value of the event (e.g. if a switch, was it turned on or off).
      */
     public void AddNewEvent(String eventName, String eventID, String eventValue) {
-        dictionary.put(eventName, new Event(eventName, eventID, eventValue));
+        eventDictionary.put(eventName, new Event(eventName, eventID, eventValue));
     }
 
     /**
@@ -90,7 +113,7 @@ public class EventDictionary {
      * @param eventValue    The value the events value should be changed to.
      */
     public void EditEventValue(String eventName, String eventValue) {
-        dictionary.get(eventName).SetValue(eventValue);
+        eventDictionary.get(eventName).SetValue(eventValue);
     }
 
     /**
@@ -99,7 +122,7 @@ public class EventDictionary {
      * @return              Returns a string representing the events ID.
      */
     public String GetEventID(String eventName) {
-        return dictionary.get(eventName).GetID();
+        return eventDictionary.get(eventName).GetID();
     }
 
     /**
@@ -108,7 +131,7 @@ public class EventDictionary {
      * @return              Returns a string representing the events value.
      */
     public String GetEventValue(String eventName) {
-        return dictionary.get(eventName).GetValue();
+        return eventDictionary.get(eventName).GetValue();
     }
 
     /**
@@ -117,6 +140,6 @@ public class EventDictionary {
      * @return              Returns an ArrayList of slaves that has an EventHandler for the event.
      */
     public ArrayList<Slave> GetEventAssociatedSlaves(String eventName) {
-        return dictionary.get(eventName).GetAssociatedSlaves();
+        return eventDictionary.get(eventName).GetAssociatedSlaves();
     }
 }

@@ -5,6 +5,7 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 public class GetValueStrategy extends CodeGenerationStrategy {
     @Override
     public String GenerateCode(Node node) {
+        //TODO find ud af hvordan man for get value fra en event
         String content = "";
         //TODO find ud af hvad pin nummer den har
         String pinNumber = node.Next.GenerateCode();

@@ -5,12 +5,14 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 public class PinDeclarationStrategy extends CodeGenerationStrategy {
     @Override
     public String GenerateCode(Node node) {
-        String content = "int ";
+        String content = "";
         String pinNumber = node.FirstChild.Next.FirstChild.Next.Next.Next.GenerateCode();
+        String pinName = node.FirstChild.Value;
 
-        content += node.FirstChild.Value + " = " + pinNumber +";\n";
+        content += "int " + pinName + " = " + pinNumber +";\n";
 
-        content = node.FirstChild.Next.GenerateCode();
+        //Makes code for the createPin function.
+        content += node.FirstChild.Next.GenerateCode();
 
         return content;
     }

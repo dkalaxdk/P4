@@ -13,6 +13,8 @@ public class IfStrategy extends CodeGenerationStrategy {
         content += "if(" + expression + ")\n";
         content += block;
 
+        //Checks if the the third child is empty
+        //if false then it generates code for either a else or else if statement.
         if (thirdChild.Type == Node.NodeType.Empty){
             return content;
         }

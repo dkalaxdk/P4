@@ -1,10 +1,10 @@
 package sw417f20.ebal.CodeGeneration.Strategies;
 
-import sw417f20.ebal.CodeGeneration.Utility.EventDictionary;
+import sw417f20.ebal.CodeGeneration.Utility.Dictionaries;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public abstract class CodeGenerationStrategy {
-    public EventDictionary EventList;
+    public Dictionaries Lists;
     /**
      * Abstract method that all strategies must implement.
      * Generated code for the given node.

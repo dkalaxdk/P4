@@ -1,6 +1,6 @@
 package sw417f20.ebal.CodeGeneration;
 
-import sw417f20.ebal.CodeGeneration.Utility.EventDictionary;
+import sw417f20.ebal.CodeGeneration.Utility.Dictionaries;
 import sw417f20.ebal.SyntaxAnalysis.AST;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
@@ -8,12 +8,12 @@ import java.util.ArrayList;
 
 public class CodeGeneration {
     ArrayList<String> Files;
-    EventDictionary EventDictionary;
+    Dictionaries EventDictionary;
     int CommandSize = 6;    //Length of a command sent between master and slaves
 
     public CodeGeneration(Node node){
         Files = new ArrayList<String>();
-        EventDictionary = new EventDictionary(node);
+        EventDictionary = new Dictionaries(node);
         EmitProg(node);
     }
 
