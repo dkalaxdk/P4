@@ -16,17 +16,17 @@ public class Node {
     public Node FirstChild;
     public Node Parent;
 
-    public Node(NodeType type) {
+    private Node(NodeType type) {
         this.Type = type;
         this.Value = "";
     }
 
-    public Node(NodeType type, Token token) {
+    private Node(NodeType type, Token token) {
         this.Type = type;
         this.Value = token.content;
     }
 
-    public Node(NodeType type, int lineNumber) {
+    private Node(NodeType type, int lineNumber) {
         this.Type = type;
         this.Value = "";
         LineNumber = lineNumber;
@@ -58,6 +58,10 @@ public class Node {
 
     public static Node MakeNode(NodeType nodeType, int lineNumber) {
         return new Node(nodeType, lineNumber);
+    }
+
+    public static Node MakeNode(NodeType nodeType, Token token) {
+        return new Node(nodeType, token);
     }
 
     @Override
@@ -177,11 +181,7 @@ public class Node {
         // Declarations
         PinDeclaration, FloatDeclaration, IntDeclaration, BoolDeclaration, EventDeclaration,
 
-        Assignment, If,
-
-        Call,
-
-        Expression,
+        Assignment, If, Call, Expression,
 
         Identifier,
 

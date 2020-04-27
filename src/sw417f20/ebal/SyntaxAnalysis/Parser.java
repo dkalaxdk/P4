@@ -382,7 +382,7 @@ public class Parser extends RecursiveDescent {
         else if (Peek().type == Token.Type.OP_MINUS) {
             Expect(Token.Type.OP_MINUS);
 
-            Node prefix = new Node(Node.NodeType.PrefixMinus);
+            Node prefix = Node.MakeNode(Node.NodeType.PrefixMinus);
             Node value = Value();
 
             value.AddChild(prefix);
@@ -537,7 +537,7 @@ public class Parser extends RecursiveDescent {
 
     // FunctionCall	-> filterNoise lparen identifier comma FilterType rparen
     //	             | 	getValue lparen identifier rparen
-    //	             |  createEvent lparen Value rparen
+    //	             |  createEvent lparen Expr rparen
     //	             |  createPin lparen PinType comma IOType comma intLiteral rparen.
     public Node FunctionCall() throws SyntaxException {
         Node FunctionCall = Node.MakeNode(Node.NodeType.Call, getLineNumber());
@@ -565,7 +565,7 @@ public class Parser extends RecursiveDescent {
             FunctionCall.AddChild(Node.MakeNode(Node.NodeType.CreateEvent));
 
             Expect(Token.Type.LPAREN);
-            FunctionCall.AddChild(Value());
+            FunctionCall.AddChild(Expr());
             Expect(Token.Type.RPAREN);
         }
         else if (Peek().type == Token.Type.CREATEPIN) {
@@ -797,52 +797,74 @@ public class Parser extends RecursiveDescent {
     }
 
     private boolean CheckForType() {
-        return  Peek().type == Token.Type.FLOAT                 ||
-                Peek().type == Token.Type.INT                   ||
-                Peek().type == Token.Type.BOOL                  ||
-                Peek().type == Token.Type.EVENT                 ||
-                Peek().type == Token.Type.PIN;
+
+        switch (Peek().type) {
+            case FLOAT: case INT: case BOOL:
+            case EVENT: case PIN:
+                return true;
+        }
+
+        return false;
     }
 
     private boolean CheckForCall() {
-        return  CheckForFunctionCall()                           ||
+        return  CheckForFunctionCall() ||
                 CheckForProcedureCall();
     }
 
     private boolean CheckForFunctionCall() {
-        return  Peek().type == Token.Type.FILTERNOISE           ||
-                Peek().type == Token.Type.GETVALUE              ||
-                Peek().type == Token.Type.CREATEEVENT           ||
-                Peek().type == Token.Type.CREATEPIN;
+
+        switch (Peek().type) {
+            case FILTERNOISE: case GETVALUE:
+            case CREATEEVENT: case CREATEPIN:
+                return true;
+        }
+
+        return false;
     }
 
     private boolean CheckForProcedureCall() {
-        return  Peek().type == Token.Type.BROADCAST             ||
-                Peek().type == Token.Type.WRITE;
+
+        switch (Peek().type) {
+            case BROADCAST: case WRITE:
+                return true;
+
+        }
+
+        return false;
     }
 
     private boolean CheckForLiteral() {
-        return  Peek().type == Token.Type.LIT_Int               ||
-                Peek().type == Token.Type.LIT_Float             ||
-                Peek().type == Token.Type.LIT_Bool;
+
+        switch (Peek().type) {
+            case LIT_Int: case LIT_Float: case LIT_Bool:
+                return true;
+        }
+
+        return false;
     }
 
     private boolean CheckForOperator() {
-        return  Peek().type == Token.Type.OP_PLUS               ||
-                Peek().type == Token.Type.OP_MINUS              ||
-                Peek().type == Token.Type.OP_TIMES              ||
-                Peek().type == Token.Type.OP_DIVIDE             ||
-                Peek().type == Token.Type.OP_MODULO;
+
+        switch (Peek().type) {
+            case OP_PLUS: case OP_MINUS: case OP_TIMES:
+            case OP_DIVIDE: case OP_MODULO:
+                return true;
+        }
+
+        return false;
     }
 
     private boolean CheckForLogicOperator() {
-        return  Peek().type == Token.Type.LOP_LESSTHAN          ||
-                Peek().type == Token.Type.LOP_GREATERTHAN       ||
-                Peek().type == Token.Type.LOP_NOTEQUAL          ||
-                Peek().type == Token.Type.LOP_GREATEROREQUAL    ||
-                Peek().type == Token.Type.LOP_LESSOREQUAL       ||
-                Peek().type == Token.Type.LOP_EQUALS            ||
-                Peek().type == Token.Type.LOP_AND               ||
-                Peek().type == Token.Type.LOP_OR;
+
+        switch (Peek().type) {
+            case LOP_LESSTHAN: case LOP_GREATERTHAN:
+            case LOP_LESSOREQUAL: case LOP_GREATEROREQUAL:
+            case LOP_EQUALS: case LOP_NOTEQUAL:
+            case LOP_AND: case LOP_OR:
+                return true;
+        }
+
+        return false;
     }
 }
