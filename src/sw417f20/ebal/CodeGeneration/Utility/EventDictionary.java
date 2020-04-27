@@ -16,12 +16,8 @@ public class EventDictionary {
      */
     private final Dictionary<String, Event> eventDictionary; //TODO Find ud af hvordan man beholder events der hedder det samme
     /**
-     * Constructor of EventDictionary.
-     * <p>
-     *     The constructor goes through an AST and finds all events
-     *     and then links them with the slave that handles them.
-     * </p>
-     * @param node The root node of the AST to be read for events.
+     * Constructor of a EventDictionary.
+     * @param node          The root node of the AST to be read for events.
      */
     public EventDictionary(Node node) {
         eventDictionary = new Hashtable<>();
@@ -30,7 +26,7 @@ public class EventDictionary {
 
     /**
      * Method that links events and slaves in an AST.
-     * @param node The root node of the AST whose events and slaves should be linked.
+     * @param node          The root node of the AST whose events and slaves should be linked.
      */
     public void MakeEventDictionary(Node node) {
         NodeList nodeList = new NodeList();
@@ -66,8 +62,8 @@ public class EventDictionary {
 
     /**
      * Method that puts an existing event into the dictionary.
-     * @param eventName Name of the event (Key).
-     * @param event The actual event (Value).
+     * @param eventName     Name of the event (Key).
+     * @param event         The actual event (Value).
      */
     public void AddEvent(String eventName, Event event) {
         eventDictionary.put(eventName, event);

@@ -6,9 +6,16 @@ import sw417f20.ebal.CodeGeneration.NodeList;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
+/**
+ * Class that implements a dictionary of slaves which can be accessed by their names.
+ */
 public class SlaveDictionary {
     private final Dictionary<String, Slave> slaveDictionary;
 
+    /**
+     * Constructor of a SlaveDictionary.
+     * @param node      The root node of the AST to be read for events.
+     */
     public SlaveDictionary(Node node) {
         slaveDictionary = new Hashtable<>();
         MakeSlaveDictionary(node);
@@ -16,7 +23,7 @@ public class SlaveDictionary {
 
     /**
      * Method that makes a slave dictionary from the slaves name and ID
-     * @param node The root node of the AST whose events and slaves should be linked.
+     * @param node      The root node of the AST from where the slaves should be taken.
      */
     public void MakeSlaveDictionary(Node node){
         NodeList nodeList = new NodeList();
@@ -36,10 +43,19 @@ public class SlaveDictionary {
         }
     }
 
+    /**
+     * Method for adding a slave to the SlaveDictionary.
+     * @param slave     The slave to be added to the dictionary.
+     */
     public void AddSlave(Slave slave) {
         slaveDictionary.put(slave.GetName(), slave);
     }
 
+    /**
+     * Getter for a slaves ID.
+     * @param slaveName The name of the slave to return the ID for.
+     * @return          Returns the ID of a slave.
+     */
     public int GetSlaveID(String slaveName) {
         return slaveDictionary.get(slaveName).getID();
     }
