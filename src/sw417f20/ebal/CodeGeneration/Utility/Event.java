@@ -7,11 +7,11 @@ import java.util.ArrayList;
  */
 public class Event {
     private String Name;
-    private String ID;
+    private int ID;
     private String Value;
     private ArrayList<Slave> AssociatedSlaves;
 
-    public Event(String name, String id, String value) {
+    public Event(String name, int id, String value) {
         this.Name = name;
         this.ID = id;
         this.Value = value;
@@ -26,11 +26,11 @@ public class Event {
         this.Name = name;
     }
 
-    public String GetID() {
+    public int GetID() {
         return ID;
     }
 
-    public void SetID(String ID) {
+    public void SetID(int ID) {
         this.ID = ID;
     }
 

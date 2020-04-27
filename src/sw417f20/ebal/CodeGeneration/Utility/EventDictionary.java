@@ -10,12 +10,11 @@ import java.util.Hashtable;
 /**
  * Class that implements a dictionary of events which can be addressed by their names.
  */
-public class Dictionaries {
+public class EventDictionary {
     /**
      * The dictionary that EventDictionary uses to store the events in.
      */
-    private Dictionary<String, Event> eventDictionary; //TODO Find ud af hvordan man beholder events der hedder det samme
-    public Dictionary<String, Integer> slaveDictionary;
+    private final Dictionary<String, Event> eventDictionary; //TODO Find ud af hvordan man beholder events der hedder det samme
     /**
      * Constructor of EventDictionary.
      * <p>
@@ -24,18 +23,16 @@ public class Dictionaries {
      * </p>
      * @param node The root node of the AST to be read for events.
      */
-    public Dictionaries(Node node) {
-        eventDictionary = new Hashtable<String, Event>();
-        slaveDictionary = new Hashtable<String, Integer>();
-        LinkEventsAndSlaves(node);
-        MakeSlaveDictionary(node);
+    public EventDictionary(Node node) {
+        eventDictionary = new Hashtable<>();
+        MakeEventDictionary(node);
     }
 
     /**
      * Method that links events and slaves in an AST.
      * @param node The root node of the AST whose events and slaves should be linked.
      */
-    public void LinkEventsAndSlaves(Node node) {
+    public void MakeEventDictionary(Node node) {
         NodeList nodeList = new NodeList();
         int slaveID = 0;
         int eventID = 0;
@@ -48,19 +45,19 @@ public class Dictionaries {
         }
 
         for (Node slaveNode : nodeList.nodeList) {
-            Slave slave = new Slave(slaveNode.FirstChild.Value, "" + slaveID++);
+            Slave slave = new Slave(slaveNode.FirstChild.Value, slaveID++);
 
             //If There are no EventHandlers, continue to the next slave
             if (slaveNode.FirstChild.Next.Next.IsEmpty()) continue;
 
             Node eventNode = slaveNode.FirstChild.Next.Next;
-            Event event = new Event(eventNode.FirstChild.Value, "" + eventID++, "" + 0);
+            Event event = new Event(eventNode.FirstChild.Value, eventID++, "" + 0);
             event.AddSlave(slave);
             AddEvent(event.GetName(), event);
 
             while (!eventNode.Next.IsEmpty()) {
                 eventNode = eventNode.Next;
-                event = new Event(eventNode.FirstChild.Value, "" + eventID++, "" + 0);
+                event = new Event(eventNode.FirstChild.Value, eventID++, "" + 0);
                 event.AddSlave(slave);
                 AddEvent(event.GetName(), event);
             }
@@ -77,37 +74,6 @@ public class Dictionaries {
     }
 
     /**
-     * Method that makes a slave dictionary from the slaves name and ID
-     * @param node The root node of the AST whose events and slaves should be linked.
-     */
-    public void MakeSlaveDictionary(Node node){
-        NodeList nodeList = new NodeList();
-        int slaveID = 0;
-        int eventID = 0;
-
-        //Visit slaves.
-        Node currentSlaveNode = node.FirstChild.Next;
-        while (!currentSlaveNode.IsEmpty()) {
-            nodeList.Visit(currentSlaveNode);
-            currentSlaveNode = currentSlaveNode.Next;
-        }
-
-        for (Node slaveNode : nodeList.nodeList) {
-            slaveDictionary.put(slaveNode.FirstChild.Value, slaveID++);
-        }
-    }
-
-    /**
-     * Method that puts a new event into the dictionary.
-     * @param eventName     Name of the event (Key).
-     * @param eventID       ID of the event (0..*).
-     * @param eventValue    The value of the event (e.g. if a switch, was it turned on or off).
-     */
-    public void AddNewEvent(String eventName, String eventID, String eventValue) {
-        eventDictionary.put(eventName, new Event(eventName, eventID, eventValue));
-    }
-
-    /**
      * Method that edits the value of an event.
      * @param eventName     Name of the event to be edited (Key).
      * @param eventValue    The value the events value should be changed to.
@@ -121,7 +87,7 @@ public class Dictionaries {
      * @param eventName     Name of the event to get from (Key).
      * @return              Returns a string representing the events ID.
      */
-    public String GetEventID(String eventName) {
+    public int GetEventID(String eventName) {
         return eventDictionary.get(eventName).GetID();
     }
 

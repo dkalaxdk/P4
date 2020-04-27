@@ -1,6 +1,5 @@
 package sw417f20.ebal.CodeGeneration.Strategies;
 
-import sw417f20.ebal.CodeGeneration.NodeList;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class SlaveStrategy extends CodeGenerationStrategy {
@@ -10,7 +9,7 @@ public class SlaveStrategy extends CodeGenerationStrategy {
         String content = "";
         String slaveName = node.FirstChild.Value;
 
-        int slaveID = Lists.slaveDictionary.get(slaveName);
+        int slaveID = slaveDictionary.GetSlaveID(slaveName);
 
         content += "#include <Wire.h>\n";
         content += "const int commandSize =" + CommandSize + ";\n"; //TODO: Determine command size

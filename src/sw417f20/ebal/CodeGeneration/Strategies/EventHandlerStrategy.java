@@ -6,7 +6,7 @@ public class EventHandlerStrategy extends CodeGenerationStrategy {
     @Override
     public String GenerateCode(Node node) {
         String content = "";
-        String eventID = Lists.GetEventID(node.FirstChild.Value);
+        int eventID = eventDictionary.GetEventID(node.FirstChild.Value);
 
         content += "if (input ==" + eventID + ")\n";
 

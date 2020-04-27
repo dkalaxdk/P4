@@ -12,7 +12,7 @@ public class BroadcastStrategy extends CodeGenerationStrategy {
         //The event used as a parameter.
         String event = node.Next.Value;
         //A list of all the slaves that have event as events.
-        ArrayList<Slave> slaves = Lists.GetEventAssociatedSlaves(event);
+        ArrayList<Slave> slaves = eventDictionary.GetEventAssociatedSlaves(event);
 
         //iterating through the list of slaves
         for (Slave slave : slaves) {

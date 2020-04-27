@@ -5,9 +5,9 @@ package sw417f20.ebal.CodeGeneration.Utility;
  */
 public class Slave {
     private String Name;
-    private String ID;
+    private int ID;
 
-    public Slave(String name, String id) {
+    public Slave(String name, int id) {
         this.Name = name;
         this.ID = id;
     }
@@ -20,11 +20,11 @@ public class Slave {
         this.Name = name;
     }
 
-    public String getID() {
+    public int getID() {
         return ID;
     }
 
-    public void setID(String id) {
+    public void setID(int id) {
         this.ID = id;
     }
 }

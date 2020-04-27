@@ -1,10 +1,6 @@
 package sw417f20.ebal.CodeGeneration.Strategies;
 
-import sw417f20.ebal.CodeGeneration.CodeGeneration;
-import sw417f20.ebal.CodeGeneration.Utility.Slave;
 import sw417f20.ebal.SyntaxAnalysis.Node;
-
-import java.util.ArrayList;
 
 public class AssignmentStrategy extends CodeGenerationStrategy {
     @Override
