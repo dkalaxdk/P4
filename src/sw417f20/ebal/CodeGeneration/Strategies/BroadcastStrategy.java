@@ -10,6 +10,7 @@ public class BroadcastStrategy extends CodeGenerationStrategy {
     public String GenerateCode(Node node) {
         String content = "";
         //The event used as a parameter.
+        //TODO event skal måske laves om hvis vi håndtere events på en anden måde.
         String event = node.Next.Value;
         //A list of all the slaves that have event as events.
         ArrayList<Slave> slaves = eventDictionary.GetEventAssociatedSlaves(event);

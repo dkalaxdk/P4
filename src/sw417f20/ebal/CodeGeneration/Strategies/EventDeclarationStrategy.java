@@ -9,6 +9,7 @@ public class EventDeclarationStrategy extends CodeGenerationStrategy {
     @Override
     public String GenerateCode(Node node) {
         String content = "";
+        //TODO skal laves om så den passer med måden vi håndtere events på.
 
         Node nextChild = node.FirstChild.Next;
 

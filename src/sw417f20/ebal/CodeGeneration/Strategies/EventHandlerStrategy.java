@@ -7,7 +7,7 @@ public class EventHandlerStrategy extends CodeGenerationStrategy {
     public String GenerateCode(Node node) {
         String content = "";
         int eventID = eventDictionary.GetEventID(node.FirstChild.Value);
-
+        //TODO skal laves om så det passer med hvordan vi håndtere events.
         content += "if (input ==" + eventID + ")\n";
 
         //generate code for block.
