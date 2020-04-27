@@ -28,7 +28,7 @@ public class HashSymbolTable extends SymbolTable{
 
     @Override
     public boolean EnterSymbol(String name, Symbol.SymbolType type) {
-        // Checks that name is not null and that symbol is not already in hashtable
+        // Checks that symbol is not already in hashtable
         if (!DeclaredLocally(name)) {
             hashtable.put(name, new Symbol(name, type));
             return true;
@@ -40,7 +40,7 @@ public class HashSymbolTable extends SymbolTable{
 
     @Override
     public boolean EnterSymbol(String name, Symbol.SymbolType type, Node reference) {
-        // Checks that name is not null and that symbol is not already in hashtable
+        // Checks that symbol is not already in hashtable
         if (!DeclaredLocally(name)) {
             hashtable.put(name, new Symbol(name, type, reference));
             return true;
@@ -50,6 +50,17 @@ public class HashSymbolTable extends SymbolTable{
         }
     }
 
+    @Override
+    public boolean EnterSymbol(String name, Symbol.SymbolType type, Symbol.SymbolType valueType) {
+        // Checks  that symbol is not already in hashtable
+        if (!DeclaredLocally(name)) {
+            hashtable.put(name, new Symbol(name, type, valueType));
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
     //TODO:lav tilføj til root metode
 
 //    @Override

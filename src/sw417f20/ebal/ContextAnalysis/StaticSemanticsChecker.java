@@ -1,10 +1,8 @@
 package sw417f20.ebal.ContextAnalysis;
 
 //import sw417f20.ebal.ContextAnalysis.PinSymbol;
-import sw417f20.ebal.SyntaxAnalysis.AST;
 import sw417f20.ebal.SyntaxAnalysis.Node;
-
-        import java.util.ArrayList;
+import java.util.ArrayList;
 
 /**
  * Class responsible for checking the static semantics of the EBAL code
@@ -13,7 +11,7 @@ public class StaticSemanticsChecker {
 
     SymbolTable CurrentScope;
 
-    private enum ErrorType{ NotDeclared, AlreadyDeclared, WrongType, WrongParameter, Default}
+    private enum ErrorType{ NotDeclared, AlreadyDeclared, WrongType, Default}
 
     private boolean InEventHandler;
     private boolean InInitiate;
@@ -40,7 +38,7 @@ public class StaticSemanticsChecker {
         // Sets flag to help check that the slave cannot call broadcast()
         InEventHandler = true;
         child = child.Next;
-        while (child.Type != AST.NodeType.Empty){
+        while (child.Type != Node.NodeType.Empty){
             CheckSlave(child);
             child = child.Next;
         }
@@ -52,7 +50,7 @@ public class StaticSemanticsChecker {
         Node child = node.FirstChild;
         CheckInitiate(child);
         child = child.Next;
-        while (child.Type != AST.NodeType.Empty){
+        while (child.Type != Node.NodeType.Empty){
             CheckListener(child);
             child = child.Next;
         }
@@ -61,15 +59,22 @@ public class StaticSemanticsChecker {
 
     // Checks the Slave node
     private void CheckSlave(Node node){
-        CurrentScope.OpenScope();
-        Node child = node.FirstChild.Next;
-        CheckInitiate(child);
-        child = child.Next;
-        while (child.Type != AST.NodeType.Empty){
-            CheckEventHandler(child);
+        if (!CurrentScope.DeclaredLocally(node.FirstChild.Value)) {
+            CurrentScope.EnterSymbol(node.FirstChild.Value, Symbol.SymbolType.SLAVE);
+
+            CurrentScope.OpenScope();
+            Node child = node.FirstChild.Next;
+            CheckInitiate(child);
             child = child.Next;
+            while (child.Type != Node.NodeType.Empty) {
+                CheckEventHandler(child);
+                child = child.Next;
+            }
+            CurrentScope.CloseScope();
         }
-        CurrentScope.CloseScope();
+        else {
+            MakeError(node, node.FirstChild.Value, ErrorType.AlreadyDeclared);
+        }
     }
 
     // Checks the Initiate node
@@ -101,7 +106,6 @@ public class StaticSemanticsChecker {
         Symbol symbol = CurrentScope.RetrieveSymbol(node.FirstChild.Value);
         if (symbol != null){
             if (symbol.Type == Symbol.SymbolType.EVENT){
-                node.FirstChild.DefinitionReference = symbol.ReferenceNode; //TODO: skal den med?
                 CheckBlock(node.FirstChild.Next);
             }
             else {
@@ -134,8 +138,8 @@ public class StaticSemanticsChecker {
     // Checks an Initiate block
     private void CheckInitiateBlock(Node node){
         Node child = node.FirstChild;
-        while (child.Type != AST.NodeType.Empty) {
-            if (child.Type == AST.NodeType.PinDeclaration) {
+        while (child.Type != Node.NodeType.Empty) {
+            if (child.Type == Node.NodeType.PinDeclaration) {
                 CheckPinDeclaration(child);
             }
             else {
@@ -149,7 +153,7 @@ public class StaticSemanticsChecker {
     // checks a Listener block
     private void CheckListenerBlock(Node node){
         Node child = node.FirstChild;
-        while (child.Type != AST.NodeType.Empty){
+        while (child.Type != Node.NodeType.Empty){
             switch (child.Type){
                 case Call:
                     CheckCall(child);
@@ -182,7 +186,7 @@ public class StaticSemanticsChecker {
     // Check an EventHandler block
     private void CheckEventHandlerBlock(Node node){
         Node child = node.FirstChild;
-        while (child.Type != AST.NodeType.Empty) {
+        while (child.Type != Node.NodeType.Empty) {
             switch (child.Type) {
                 case Call:
                     CheckCall(child);
@@ -211,12 +215,18 @@ public class StaticSemanticsChecker {
     // Scope checks the PinDeclaration node
     private void CheckPinDeclaration(Node node) {
         if (!CurrentScope.DeclaredLocally(node.FirstChild.Value)){
-            if (node.FirstChild.Next.Type == AST.NodeType.Call){
-                CheckCall(node.FirstChild.Next);
-                CurrentScope.EnterSymbol(node.FirstChild.Value, Symbol.SymbolType.PIN, node);
+            Node expression = node.FirstChild.Next;
+            if (expression.Type == Node.NodeType.Call){
+                CheckCall(expression);
+                if (expression.DataType == Symbol.SymbolType.PIN){
+                    CurrentScope.EnterSymbol(node.FirstChild.Value, Symbol.SymbolType.PIN, node);
+                }
+                else {
+                    MakeError(node, "Expression", ErrorType.WrongType);
+                }
             }
             else {
-                MakeError(node, "Illegal declaration of pin");
+                MakeError(node, "Illegal declaration of pin.");
             }
         }
         else {
@@ -224,15 +234,33 @@ public class StaticSemanticsChecker {
         }
     }
 
-    //TODO: Skal code gen bruge andre definitionReferences end til Pins (skal de vide hvor en event mm er erklæret og/eller sidst assignet til?)
-
-    //TODO: Jeg er kommet hertil!
+    // Scope and type checks the EventDeclaration node
+    private void CheckEventDeclaration(Node node) {
+        if (!CurrentScope.DeclaredLocally(node.FirstChild.Value)){
+            Node expression = node.FirstChild.Next;
+            if (expression.Type == Node.NodeType.Call) {
+                CheckCall(expression);
+                if (expression.DataType == Symbol.SymbolType.EVENT){
+                    CurrentScope.EnterSymbol(node.Value, Symbol.SymbolType.EVENT, expression.FirstChild.Next.DataType);
+                }
+                else {
+                    MakeError(node, "Expression", ErrorType.WrongType);
+                }
+            }
+            else {
+                MakeError(node, "Illegal declaration of event.");
+            }
+        }
+        else {
+            MakeError(node, node.FirstChild.Value, ErrorType.AlreadyDeclared);
+        }
+    }
 
     // Scope and type checks the FloatDeclaration node
     private void CheckFloatDeclaration(Node node) {
         if (!CurrentScope.DeclaredLocally(node.FirstChild.Value)){
             Node expression = node.FirstChild.Next;
-            if (expression.Type != AST.NodeType.Empty) {
+            if (expression.Type != Node.NodeType.Empty) {
                 CheckExpression(expression);
                 if (expression.DataType != Symbol.SymbolType.FLOAT){
                     MakeError(node, node.FirstChild.Value, ErrorType.WrongType);
@@ -249,7 +277,7 @@ public class StaticSemanticsChecker {
     private void CheckIntDeclaration(Node node) {
         if (!CurrentScope.DeclaredLocally(node.FirstChild.Value)){
             Node expression = node.FirstChild.Next;
-            if (expression.Type != AST.NodeType.Empty) {
+            if (expression.Type != Node.NodeType.Empty) {
                 CheckExpression(expression);
                 if (expression.DataType != Symbol.SymbolType.INT){
                     MakeError(node, node.FirstChild.Value, ErrorType.WrongType);
@@ -266,7 +294,7 @@ public class StaticSemanticsChecker {
     private void CheckBoolDeclaration(Node node) {
         if (!CurrentScope.DeclaredLocally(node.FirstChild.Value)){
             Node expression = node.FirstChild.Next;
-            if (expression.Type != AST.NodeType.Empty) {
+            if (expression.Type != Node.NodeType.Empty) {
                 CheckExpression(expression);
                 if (expression.DataType != Symbol.SymbolType.BOOL){
                     MakeError(node, node.FirstChild.Value, ErrorType.WrongType);
@@ -278,25 +306,6 @@ public class StaticSemanticsChecker {
             MakeError(node, node.FirstChild.Value, ErrorType.AlreadyDeclared);
         }
     }
-
-    // Scope and type checks the EventDeclaration node
-    private void CheckEventDeclaration(Node node) {
-        if (!CurrentScope.DeclaredLocally(node.FirstChild.Value)){
-            Node expression = node.FirstChild.Next;
-            if (expression != null) {
-                CheckExpression(expression);
-                if (expression.DataType != Symbol.SymbolType.EVENT){
-                    MakeError(node, node.FirstChild.Value, ErrorType.WrongType);
-                }
-            }
-            CurrentScope.EnterSymbol(node.Value, Symbol.SymbolType.EVENT);
-        }
-        else {
-            MakeError(node, node.FirstChild.Value, ErrorType.AlreadyDeclared);
-        }
-    }
-
-    //TODO: må ikke dividere med 0
 
     // Scope and type checks the Assignment node
     private void CheckAssignment(Node node) {
@@ -310,8 +319,8 @@ public class StaticSemanticsChecker {
             else if (expression.DataType == Symbol.SymbolType.PIN){
                 MakeError(node, "expression cannot be of type Pin");
             }
-            else if (InEventHandler && expression.DataType == Symbol.SymbolType.EVENT){
-                MakeError(node, "expression cannot be of type Event in EventHandler");
+            else if (expression.DataType == Symbol.SymbolType.EVENT){
+                MakeError(node, "expression cannot be of type Event");
             }
         }
         else {
@@ -325,8 +334,8 @@ public class StaticSemanticsChecker {
         if(node.FirstChild.DataType == Symbol.SymbolType.BOOL){
             CheckBlock(node.FirstChild.Next);
             Node elseStmt = node.FirstChild.Next.Next;
-            if (elseStmt.Type != AST.NodeType.Empty){
-                if(elseStmt.Type == AST.NodeType.Block){
+            if (elseStmt.Type != Node.NodeType.Empty){
+                if(elseStmt.Type == Node.NodeType.Block){
                     CheckBlock(elseStmt);
                 }
                 else {
@@ -338,14 +347,13 @@ public class StaticSemanticsChecker {
             MakeError(node, "If statement requires boolean expression");
         }
     }
-    //endregion
 
     // Type checks the Call node depending on the function called
     private void CheckCall(Node node) {
-        AST.NodeType functionType = node.FirstChild.Type;
+        Node.NodeType functionType = node.FirstChild.Type;
 
         if (InInitiate){
-            if (functionType == AST.NodeType.CreatePin){
+            if (functionType == Node.NodeType.CreatePin){
                 CheckCreatePinCall(node);
             }
             else{
@@ -382,142 +390,207 @@ public class StaticSemanticsChecker {
                     MakeError(node, "Illegal function call");
             }
         }
-
-//        CheckParameters(node);
-//        switch (node.FirstChild.Type){
-//            case Broadcast:
-//                CheckBroadcastCall(node);
-//                break;
-//
-//            case FilterNoise:
-//                CheckFilterNoiseCall(node);
-//                break;
-//
-//            case GetValue:
-//                CheckGetValueCall(node);
-//                break;
-//
-//            case Write:
-//                CheckWriteCall(node);
-//                break;
-//
-//            case CreateEvent:
-//                CheckCreateEventCall(node);
-//                break;
-//
-//            case CreatePin:
-//                CheckCreatePinCall(node);
-//                break;
-//        }
-//        node.DataType = node.FirstChild.DataType;
     }
-
-
-//region NotDone
 
     // Check the parameters of the Broadcast() function
     private void CheckBroadcastCall(Node node){
         Symbol parameter = CurrentScope.RetrieveSymbol(node.FirstChild.Next.Value);
-        if (parameter.Type != Symbol.SymbolType.EVENT) {
-            MakeError(node, node.FirstChild.Next.DataType.toString(), ErrorType.WrongType);
+        if (parameter != null) {
+            if (parameter.Type == Symbol.SymbolType.EVENT) {
+                node.DataType = Symbol.SymbolType.VOID;
+            } else {
+                MakeError(node, node.FirstChild.Next.DataType.toString(), ErrorType.WrongType);
+            }
+        }
+        else {
+            MakeError(node, node.FirstChild.Next.Value, ErrorType.NotDeclared);
         }
     }
 
-    // digital : flip, constant
-    // analog : range
+    // Checks the parameters of the FilterNoise() function
     private void CheckFilterNoiseCall(Node node){
         Symbol pinParameter = CurrentScope.RetrieveSymbol(node.FirstChild.Next.Value);
-        if (pinParameter.Type == Symbol.SymbolType.PIN &&
-                (node.FirstChild.Next.Next.Type == Symbol.SymbolType.FILTERTYPE){
+        if (pinParameter != null){
+            if (pinParameter.Type == Symbol.SymbolType.PIN){
+                CheckPinAndFilterCombination(pinParameter, node);
+                node.DataType = Symbol.SymbolType.INT;
+            }
+            else {
+                MakeError(node, node.FirstChild.Next.Value, ErrorType.WrongType);
+            }
         }
-        MakeError(node, node.FirstChild.Value, ErrorType.WrongType);
+        else {
+            MakeError(node, node.FirstChild.Next.Value, ErrorType.NotDeclared);
+        }
+
     }
 
+    // Checks that the combination of pin type and filter type for the FilterNoise() function is legal
+    // Allowed combinations:
+    //   Digital: Flip, Constant
+    //   Analog: Range
+    private void CheckPinAndFilterCombination(Symbol symbol, Node node) {
+        Node.NodeType pinType = symbol.ReferenceNode.Type;
+        Node.NodeType filterType = node.FirstChild.Next.Next.Type;
+
+        if (pinType == Node.NodeType.Digital && filterType == Node.NodeType.Range){
+            MakeError(node, "Noise from digital pin cannot be filtered as ranged");
+        }
+        else if (pinType == Node.NodeType.Analog && filterType != Node.NodeType.Range){
+            MakeError(node, "Noise from analog pin can only be filtered as ranged");
+        }
+    }
+
+    // Checks the parameters of the GetValue() function
     private void CheckGetValueCall(Node node){
-        if (node.FirstChild.Next.DataType == Symbol.SymbolType.PIN ||
-                node.FirstChild.Next.DataType == Symbol.SymbolType.EVENT){
+        Symbol parameter = CurrentScope.RetrieveSymbol(node.FirstChild.Next.Value);
+        if (parameter != null) {
+            if (parameter.Type == Symbol.SymbolType.PIN) {
+                node.DataType = Symbol.SymbolType.INT;
+            }
+            else if (parameter.Type == Symbol.SymbolType.EVENT){
+                node.DataType = parameter.ValueType;
+            }
+            else {
+                MakeError(node, node.FirstChild.Next.Value, ErrorType.WrongType);
+            }
         }
-        MakeError(node.FirstChild.Value, ErrorType.WrongType);
+        else {
+            MakeError(node, node.FirstChild.Next.Value, ErrorType.NotDeclared);
+        }
     }
 
+    // Checks the parameters of the Write() function
     private void CheckWriteCall(Node node){
-        if (node.FirstChild.Next.DataType == Symbol.SymbolType.PIN &&
-                node.FirstChild.Next.Next.DataType == Symbol.SymbolType.INT){
+        Symbol pinParameter = CurrentScope.RetrieveSymbol(node.FirstChild.Next.Value);
+        Node intParameter = node.FirstChild.Next.Next;
+
+        if (pinParameter != null) {
+            if (pinParameter.Type == Symbol.SymbolType.PIN) {
+                CheckExpression(intParameter);
+                if (intParameter.DataType == Symbol.SymbolType.INT) {
+                    node.DataType = Symbol.SymbolType.VOID;
+                }
+                else {
+                    MakeError(node, "Second parameter", ErrorType.WrongType);
+                }
+            }
+            else {
+                MakeError(node, node.FirstChild.Next.Value, ErrorType.WrongType);
+            }
         }
-        MakeError(node.FirstChild.Value, ErrorType.WrongType);
+        else {
+            MakeError(node, node.FirstChild.Next.Value, ErrorType.NotDeclared);
+        }
     }
 
+    // Checks the parameters of the CreateEvent() function
     private void CheckCreateEventCall(Node node){
-        if (node.FirstChild.Next.DataType == Symbol.SymbolType.INT){
+        CheckExpression(node.FirstChild.Next);
+        if (node.FirstChild.Next.DataType == Symbol.SymbolType.INT) {
+            node.DataType = Symbol.SymbolType.EVENT;
         }
-        MakeError(node.FirstChild.Value, ErrorType.WrongType);
+        else {
+            MakeError(node, node.FirstChild.Next.Value, ErrorType.WrongType);
+        }
     }
-//endregion
 
-//region Done
     // Check that the Pin declaration was performed correctly and inputs the Pin into the symbol table
+    // PWM is only for output
     private void CheckCreatePinCall(Node node) {
-        CheckPinParameters(node);
-        if (PinNumberNotUsed(node)) {
-            CurrentScope.EnterSymbol(node.Value, Symbol.SymbolType.PIN);
-        }
-        else{
-            MakeError(node, "Pin number already used");
-        }
-    }
+        int pinNumber = Integer.parseInt(node.FirstChild.Next.Next.Next.Value);
 
-    // Checks that the parameters of the CreatePin() function are valid
-    private void CheckPinParameters(Node node){
-        Node firstParameter = node.FirstChild.Next;
-        Node secondParameter = firstParameter.Next;
-        Node thirdParameter = secondParameter.Next;
-
-        if (firstParameter.Type == AST.NodeType.Digital ||
-            firstParameter.Type == AST.NodeType.Analog ||
-            firstParameter.Type == AST.NodeType.PWM){
-
-            if (secondParameter.Type == AST.NodeType.Input ||
-                secondParameter.Type == AST.NodeType.Output){
-
-                if (thirdParameter.Type == AST.NodeType.IntLiteral){
-
-                    if (firstParameter.Type != AST.NodeType.PWM || secondParameter.Type != AST.NodeType.Input){
-                        MakeError(node, "Pin cannot be both input and PWM");
-                    }
-                }
-                else{
-                    MakeError(node, thirdParameter.Type.toString(), ErrorType.WrongParameter);
-                }
+        if (node.FirstChild.Next.Type != Node.NodeType.PWM || node.FirstChild.Next.Next.Type != Node.NodeType.Input) {
+            if (!UsedPinNumbers.contains(pinNumber)) {
+                node.DataType = Symbol.SymbolType.PIN;
+                UsedPinNumbers.add(pinNumber);
             }
             else{
-                MakeError(node, secondParameter.Type.toString(), ErrorType.WrongParameter);
+                MakeError(node, "Pin number already used");
             }
         }
-        else{
-            MakeError(node, firstParameter.Type.toString(), ErrorType.WrongParameter);
+        else {
+            MakeError(node, "Pin cannot be both input and PWM");
         }
     }
 
-    // Checks that the pin number for the Pin declaration has not already been associated with a Pin
-    private boolean PinNumberNotUsed(Node node) {
-        int pinNumber = Integer.parseInt(node.FirstChild.Next.Next.Next.Value);
-        return UsedPinNumbers.contains(pinNumber);
-    }
-//endregion
-
-//region NotDone
+    // Checks which node type the node is and then checks the node as that type
     private void CheckExpression(Node node) {
-//TODO: tjek at det faktisk er en expression node
+        switch (node.Type){
+            case Expression:
+                CheckExpressionNode(node);
+                break;
+            case IntLiteral:
+                node.DataType = Symbol.SymbolType.INT;
+                break;
+            case FloatLiteral:
+                node.DataType = Symbol.SymbolType.FLOAT;
+                break;
+            case BoolLiteral:
+                node.DataType = Symbol.SymbolType.BOOL;
+                break;
+            case Identifier:
+                CheckIdentifier(node);
+                break;
+            case Call:
+                CheckCall(node);
+                break;
+        }
     }
+
+    // Checks that the identifier has been previously declared.
     private void CheckIdentifier(Node node) {
-        Symbol sym = CurrentScope.RetrieveSymbol(node.Value);
-        if (sym != null){
-            node.DataType = sym.Type;
+        Symbol identifier = CurrentScope.RetrieveSymbol(node.Value);
+        if (identifier != null){
+            node.DataType = identifier.Type;
         }
-        else{
-            MakeError(node.Value, ErrorType.NotDeclared);
+        else {
+            MakeError(node, node.Value, ErrorType.NotDeclared);
         }
     }
+
+    private void CheckExpressionNode(Node node) {
+        CheckExpression(node.FirstChild);
+        CheckExpression(node.FirstChild.Next.Next);
+        if (node.FirstChild.DataType == node.FirstChild.Next.Next.DataType){
+            CheckOperator(node);
+        }
+        else {
+            MakeError(node, "Operators in expression must be of same data types");
+        }
+    }
+
+    // Checks that the operator type and operand data type are compatible
+    private void CheckOperator(Node node) {
+        switch (node.FirstChild.Next.Type){
+            case Modulo:
+                if (node.FirstChild.DataType == Symbol.SymbolType.FLOAT){
+                    MakeError(node, "Type error: cannot be float");
+                }
+                //bool float
+            case LessThan:
+            case GreaterThan:
+            case GreaterOrEqual:
+            case LessOrEqual:
+            case Plus:
+            case Minus:
+            case Times:
+            case Divide:
+                if (node.FirstChild.DataType == Symbol.SymbolType.BOOL){
+                    MakeError(node, "Type error: cannot be boolean");
+                }
+                break;
+            case And:
+            case Or:
+                if (node.FirstChild.DataType != Symbol.SymbolType.BOOL){
+                    MakeError(node, "Type error: must be boolean");
+                }
+                break;
+        }
+    }
+
+    // TODO: ved code gen: sæt parantes om expressions
+
 //endregion
 
 
@@ -535,8 +608,6 @@ public class StaticSemanticsChecker {
             case WrongType:
                 message = "Line " + node.LineNumber + ": " + name + ": wrong type";
                 break;
-            case WrongParameter:
-                message = "Line " + node.LineNumber + ": " + name + ": wrong parameter";
             case Default:
                 message = "Line " + node.LineNumber + ": " + name + ": error";
         }
