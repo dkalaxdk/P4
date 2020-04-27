@@ -42,7 +42,7 @@ public class OperatorStrategy extends CodeGenerationStrategy {
                 content += " * ";
                 break;
             case Divide:
-                //TODO find ud af hvordan man smider en fejl hvis man devidere med 0.
+                //TODO find ud af hvordan man smider en fejl hvis man dividere med 0.
                 content += " / ";
                 break;
             case Modulo:

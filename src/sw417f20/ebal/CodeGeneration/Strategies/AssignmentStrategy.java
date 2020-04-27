@@ -13,6 +13,7 @@ public class AssignmentStrategy extends CodeGenerationStrategy {
         //If the right side of the assignment is the CreateEvent function, then this will be of the type CreateEvent node.
         Node createEvent = node.FirstChild.FirstChild;
 
+        //TODO find ud af hvordan events skal fungere.
         //In case that the right side of the assignment contains CreateEvent function, Then it will be true.
         if(createEvent.Type == Node.NodeType.CreateEvent){
             //The value that is assigned to the event
