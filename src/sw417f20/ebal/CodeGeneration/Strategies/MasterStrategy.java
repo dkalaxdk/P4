@@ -14,6 +14,8 @@ public class MasterStrategy extends CodeGenerationStrategy {
         content += "}\n";
 
         content += "void loop() {\n";
+        //pinValue will be overwritten each time a new listener is called
+        content += "int pinValue;\n";
         // Generates code for all the EventCreators
         content += GenerateCodeForLinkedList(node.FirstChild.Next);
         content += "}\n";

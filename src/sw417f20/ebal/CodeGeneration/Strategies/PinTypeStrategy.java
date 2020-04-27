@@ -13,8 +13,9 @@ public class PinTypeStrategy extends CodeGenerationStrategy {
         else if (node.Type == Node.NodeType.Analog){
             content += "analog";
         }
-        //TODO hvilken write og read har PWM
         else if (node.Type == Node.NodeType.PWM){
+            //Returns nothing since PWM should be either digital or analog depending on the situation.
+            //It will be handled in ListenerStrategy and WriteStrategy.
             content += "";
         }
 

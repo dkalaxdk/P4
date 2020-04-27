@@ -6,13 +6,20 @@ public class WriteStrategy extends CodeGenerationStrategy {
     @Override
     public String GenerateCode(Node node) {
         String content = "";
-        //TODO find ud af hvad pin nummer den har
-        String pinNumber = node.Next.GenerateCode();
-        //TODO find ud af om pin er digital eller analog
-        String pinType = "digital";
+        //Finding the pinNumber trough definitionReference.
+        String pinNumber = node.Next.DefinitionReference.FirstChild.Next.FirstChild.Next.Next.Next.GenerateCode();
+        //Finding the pinType trough definitionReference.
+        Node pinType = node.Next.DefinitionReference.FirstChild.Next.FirstChild.Next;
         String output = node.Next.GenerateCode();
 
-        content += pinType + "Write(" + pinNumber + "," + output +");\n";
+        //If the pinType is PWM then it needs to add analogWrite to content.
+        if (pinType.Type == Node.NodeType.PWM){
+            content += "analogWrite(" + pinNumber + "," + output +");\n";
+        }
+        else{
+            content += pinType.GenerateCode() + "Write(" + pinNumber + "," + output +");\n";
+        }
+
 
         return content;
     }
