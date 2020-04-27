@@ -11,7 +11,7 @@ public class ExpressionStrategy extends CodeGenerationStrategy {
         String content = "";
         // Generate code for child nodes.
         // Child nodes should be: Operand, Operator and Expression
-        content += GenerateCodeForLinkedList(node.FirstChild);
+        content += "(" + GenerateCodeForLinkedList(node.FirstChild) + ")";
         return content;
     }
 }
