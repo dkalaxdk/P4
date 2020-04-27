@@ -122,6 +122,11 @@ public class Tokenizer {
             case "event":
                 token.type = Token.Type.EVENT;
                 break;
+            case "HIGH":
+            case "LOW":
+                token.type = Token.Type.LIT_Int;
+                token.content = token.content.equals("HIGH") ? "1" : "0";
+                break;
             case "TRUE":
             case "true":
             case "false":

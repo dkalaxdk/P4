@@ -537,7 +537,7 @@ public class Parser extends RecursiveDescent {
 
     // FunctionCall	-> filterNoise lparen identifier comma FilterType rparen
     //	             | 	getValue lparen identifier rparen
-    //	             |  createEvent lparen Value rparen
+    //	             |  createEvent lparen Expr rparen
     //	             |  createPin lparen PinType comma IOType comma intLiteral rparen.
     public Node FunctionCall() throws SyntaxException {
         Node FunctionCall = Node.MakeNode(Node.NodeType.Call, getLineNumber());
@@ -565,7 +565,7 @@ public class Parser extends RecursiveDescent {
             FunctionCall.AddChild(Node.MakeNode(Node.NodeType.CreateEvent));
 
             Expect(Token.Type.LPAREN);
-            FunctionCall.AddChild(Value());
+            FunctionCall.AddChild(Expr());
             Expect(Token.Type.RPAREN);
         }
         else if (Peek().type == Token.Type.CREATEPIN) {
