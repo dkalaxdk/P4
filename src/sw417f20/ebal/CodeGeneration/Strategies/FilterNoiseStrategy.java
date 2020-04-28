@@ -6,6 +6,7 @@ public class FilterNoiseStrategy extends CodeGenerationStrategy {
     @Override
     public String GenerateCode(Node node) {
         //TODO Jeg ved ikke hvad representationen af filternoise skal være i arduino sproget.
-        return null;
+        String content = "";
+        return content;
     }
 }

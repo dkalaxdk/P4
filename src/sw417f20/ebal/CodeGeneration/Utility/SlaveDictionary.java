@@ -36,7 +36,7 @@ public class SlaveDictionary {
             currentSlaveNode = currentSlaveNode.Next;
         }
 
-        for (Node slaveNode : nodeList.nodeList) {
+        for (Node slaveNode : nodeList.GetList()) {
             String slaveName = slaveNode.FirstChild.Value;
             Slave slave = new Slave(slaveName, slaveID++);
             AddSlave(slave);

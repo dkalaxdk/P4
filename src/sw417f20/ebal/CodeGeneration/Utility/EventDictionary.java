@@ -15,6 +15,7 @@ public class EventDictionary {
      * The dictionary that EventDictionary uses to store the events in.
      */
     private final Dictionary<String, Event> eventDictionary; //TODO Find ud af hvordan man beholder events der hedder det samme
+
     /**
      * Constructor of a EventDictionary.
      * @param node          The root node of the AST to be read for events.
@@ -40,7 +41,7 @@ public class EventDictionary {
             currentSlaveNode = currentSlaveNode.Next;
         }
 
-        for (Node slaveNode : nodeList.nodeList) {
+        for (Node slaveNode : nodeList.GetList()) {
             Slave slave = new Slave(slaveNode.FirstChild.Value, slaveID++);
 
             //If There are no EventHandlers, continue to the next slave

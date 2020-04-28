@@ -4,9 +4,11 @@ import sw417f20.ebal.CodeGeneration.NodeList;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class MasterStrategy extends CodeGenerationStrategy {
+    private final int debounce = 300;
     @Override
     public String GenerateCode(Node node) {
         String content = "";
+        content += "const long debounce = " + debounce + ";";
         //TODO Husk at sætte h filer ind
         content += "void setup(){\n";
         content += node.FirstChild.GenerateCode();
