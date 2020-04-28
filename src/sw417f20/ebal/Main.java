@@ -2,6 +2,7 @@ package sw417f20.ebal;
 
 import sw417f20.ebal.ContextAnalysis.HashSymbolTable;
 import sw417f20.ebal.ContextAnalysis.StaticSemanticsChecker;
+import sw417f20.ebal.Exceptions.SemanticsException;
 import sw417f20.ebal.Exceptions.SyntaxException;
 import sw417f20.ebal.SyntaxAnalysis.*;
 import sw417f20.ebal.SyntaxAnalysis.Reader;
@@ -142,7 +143,7 @@ public class Main {
             HashSymbolTablePrinter printer = new HashSymbolTablePrinter();
             printer.PrintTable(table);
         }
-        catch (SyntaxException e) {
+        catch (SyntaxException | SemanticsException e) {
             System.err.println(e.getMessage());
         }
     }

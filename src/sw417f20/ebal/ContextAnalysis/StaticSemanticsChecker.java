@@ -1,6 +1,7 @@
 package sw417f20.ebal.ContextAnalysis;
 
 //import sw417f20.ebal.ContextAnalysis.PinSymbol;
+import sw417f20.ebal.Exceptions.SemanticsException;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 import java.util.ArrayList;
 
@@ -26,13 +27,13 @@ public class StaticSemanticsChecker {
 
 //region Done
     // Starts the process of scope and type checking the AST and decorating its nodes with datatypes
-    public SymbolTable Run(Node node){
+    public SymbolTable Run(Node node) throws SemanticsException{
         CheckProg(node);
         return CurrentScope.GetGlobalScope();
     }
 
     // Checks the Prog node
-    private void CheckProg(Node node){
+    private void CheckProg(Node node) throws SemanticsException{
         Node child = node.FirstChild;
         CheckMaster(child);
 
@@ -46,7 +47,7 @@ public class StaticSemanticsChecker {
     }
 
     // Checks the Master node
-    private void CheckMaster(Node node){
+    private void CheckMaster(Node node) throws SemanticsException{
         CurrentScope = CurrentScope.OpenScope();
         Node child = node.FirstChild;
         CheckInitiate(child);
@@ -59,7 +60,7 @@ public class StaticSemanticsChecker {
     }
 
     // Checks the Slave node
-    private void CheckSlave(Node node){
+    private void CheckSlave(Node node) throws SemanticsException{
         if (!CurrentScope.DeclaredLocally(node.FirstChild.Value)) {
             CurrentScope.EnterSymbol(node.FirstChild.Value, Symbol.SymbolType.SLAVE);
 
@@ -79,14 +80,14 @@ public class StaticSemanticsChecker {
     }
 
     // Checks the Initiate node
-    private void CheckInitiate(Node node){
+    private void CheckInitiate(Node node) throws SemanticsException{
         InInitiate = true;
         CheckBlock(node.FirstChild);
         InInitiate = false;
     }
 
     // Scope and type checks the Listener node
-    private void CheckListener(Node node) {
+    private void CheckListener(Node node) throws SemanticsException{
         Symbol symbol = CurrentScope.RetrieveSymbol(node.FirstChild.Value);
         if (symbol != null){
             if (symbol.DataType == Symbol.SymbolType.PIN){
@@ -103,7 +104,7 @@ public class StaticSemanticsChecker {
     }
 
     // Scope and type checks the EventHandler node
-    private void CheckEventHandler(Node node) {
+    private void CheckEventHandler(Node node) throws SemanticsException{
         Symbol symbol = CurrentScope.RetrieveSymbol(node.FirstChild.Value);
         if (symbol != null){
             if (symbol.DataType == Symbol.SymbolType.EVENT){
@@ -119,7 +120,7 @@ public class StaticSemanticsChecker {
     }
 
     // Determines what kind of block the node is and then calls the appropriate method for checking it
-    private void CheckBlock(Node node){
+    private void CheckBlock(Node node) throws SemanticsException{
 
         if (InInitiate){
             CheckInitiateBlock(node);
@@ -137,7 +138,7 @@ public class StaticSemanticsChecker {
     }
 
     // Checks an Initiate block
-    private void CheckInitiateBlock(Node node){
+    private void CheckInitiateBlock(Node node) throws SemanticsException{
         Node child = node.FirstChild;
         while (child.Type != Node.NodeType.Empty) {
             if (child.Type == Node.NodeType.PinDeclaration) {
@@ -152,7 +153,7 @@ public class StaticSemanticsChecker {
     }
 
     // checks a Listener block
-    private void CheckListenerBlock(Node node){
+    private void CheckListenerBlock(Node node) throws SemanticsException{
         Node child = node.FirstChild;
         while (child.Type != Node.NodeType.Empty){
             switch (child.Type){
@@ -185,7 +186,7 @@ public class StaticSemanticsChecker {
     }
 
     // Check an EventHandler block
-    private void CheckEventHandlerBlock(Node node){
+    private void CheckEventHandlerBlock(Node node) throws SemanticsException{
         Node child = node.FirstChild;
         while (child.Type != Node.NodeType.Empty) {
             switch (child.Type) {
@@ -215,7 +216,7 @@ public class StaticSemanticsChecker {
     }
 
     // Scope checks the PinDeclaration node
-    private void CheckPinDeclaration(Node node) {
+    private void CheckPinDeclaration(Node node) throws SemanticsException{
         if (!CurrentScope.DeclaredLocally(node.FirstChild.Value)){
             Node expression = node.FirstChild.Next;
             if (expression.Type == Node.NodeType.Call){
@@ -237,7 +238,7 @@ public class StaticSemanticsChecker {
     }
 
     // Scope and type checks the EventDeclaration node
-    private void CheckEventDeclaration(Node node) {
+    private void CheckEventDeclaration(Node node) throws SemanticsException{
         if (!CurrentScope.DeclaredLocally(node.FirstChild.Value)){
             Node expression = node.FirstChild.Next;
             if (expression.Type == Node.NodeType.Call) {
@@ -259,7 +260,7 @@ public class StaticSemanticsChecker {
     }
 
     // Scope and type checks the FloatDeclaration node
-    private void CheckFloatDeclaration(Node node) {
+    private void CheckFloatDeclaration(Node node) throws SemanticsException{
         if (!CurrentScope.DeclaredLocally(node.FirstChild.Value)){
             Node expression = node.FirstChild.Next;
             if (expression.Type != Node.NodeType.Empty) {
@@ -276,7 +277,7 @@ public class StaticSemanticsChecker {
     }
 
     // Scope and type checks the IntDeclaration node
-    private void CheckIntDeclaration(Node node) {
+    private void CheckIntDeclaration(Node node) throws SemanticsException{
         if (!CurrentScope.DeclaredLocally(node.FirstChild.Value)){
             Node expression = node.FirstChild.Next;
             if (expression.Type != Node.NodeType.Empty) {
@@ -293,7 +294,7 @@ public class StaticSemanticsChecker {
     }
 
     // Scope and type checks the BoolDeclaration node
-    private void CheckBoolDeclaration(Node node) {
+    private void CheckBoolDeclaration(Node node) throws SemanticsException{
         if (!CurrentScope.DeclaredLocally(node.FirstChild.Value)){
             Node expression = node.FirstChild.Next;
             if (expression.Type != Node.NodeType.Empty) {
@@ -310,7 +311,7 @@ public class StaticSemanticsChecker {
     }
 
     // Scope and type checks the Assignment node
-    private void CheckAssignment(Node node) {
+    private void CheckAssignment(Node node) throws SemanticsException{
         Symbol identifier = CurrentScope.RetrieveSymbol(node.FirstChild.Value);
         Node expression = node.FirstChild.Next;
         if(identifier != null) {
@@ -331,7 +332,7 @@ public class StaticSemanticsChecker {
     }
 
     // Type checks the If node
-    private void CheckIf(Node node) {
+    private void CheckIf(Node node) throws SemanticsException{
         CheckExpression(node.FirstChild);
         if(node.FirstChild.DataType == Symbol.SymbolType.BOOL){
             CheckBlock(node.FirstChild.Next);
@@ -351,7 +352,7 @@ public class StaticSemanticsChecker {
     }
 
     // Type checks the Call node depending on the function called
-    private void CheckCall(Node node) {
+    private void CheckCall(Node node) throws SemanticsException{
         Node.NodeType functionType = node.FirstChild.Type;
 
         if (InInitiate){
@@ -395,7 +396,7 @@ public class StaticSemanticsChecker {
     }
 
     // Check the parameters of the Broadcast() function
-    private void CheckBroadcastCall(Node node){
+    private void CheckBroadcastCall(Node node) throws SemanticsException{
         Symbol parameter = CurrentScope.RetrieveSymbol(node.FirstChild.Next.Value);
         if (parameter != null) {
             if (parameter.DataType == Symbol.SymbolType.EVENT) {
@@ -410,7 +411,7 @@ public class StaticSemanticsChecker {
     }
 
     // Checks the parameters of the FilterNoise() function
-    private void CheckFilterNoiseCall(Node node){
+    private void CheckFilterNoiseCall(Node node) throws SemanticsException{
         Symbol pinParameter = CurrentScope.RetrieveSymbol(node.FirstChild.Next.Value);
         if (pinParameter != null){
             if (pinParameter.DataType == Symbol.SymbolType.PIN){
@@ -431,7 +432,7 @@ public class StaticSemanticsChecker {
     // Allowed combinations:
     //   Digital: Flip, Constant
     //   Analog: Range
-    private void CheckPinAndFilterCombination(Symbol symbol, Node node) {
+    private void CheckPinAndFilterCombination(Symbol symbol, Node node) throws SemanticsException{
         Node.NodeType pinType = symbol.ReferenceNode.Type;
         Node.NodeType filterType = node.FirstChild.Next.Next.Type;
 
@@ -444,7 +445,7 @@ public class StaticSemanticsChecker {
     }
 
     // Checks the parameters of the GetValue() function
-    private void CheckGetValueCall(Node node){
+    private void CheckGetValueCall(Node node) throws SemanticsException{
         Symbol parameter = CurrentScope.RetrieveSymbol(node.FirstChild.Next.Value);
         if (parameter != null) {
             if (parameter.DataType == Symbol.SymbolType.PIN) {
@@ -463,7 +464,7 @@ public class StaticSemanticsChecker {
     }
 
     // Checks the parameters of the Write() function
-    private void CheckWriteCall(Node node){
+    private void CheckWriteCall(Node node) throws SemanticsException{
         Symbol pinParameter = CurrentScope.RetrieveSymbol(node.FirstChild.Next.Value);
         Node intParameter = node.FirstChild.Next.Next;
 
@@ -487,7 +488,7 @@ public class StaticSemanticsChecker {
     }
 
     // Checks the parameters of the CreateEvent() function
-    private void CheckCreateEventCall(Node node){
+    private void CheckCreateEventCall(Node node) throws SemanticsException{
         CheckExpression(node.FirstChild.Next);
         if (node.FirstChild.Next.DataType == Symbol.SymbolType.INT) {
             node.DataType = Symbol.SymbolType.EVENT;
@@ -499,7 +500,7 @@ public class StaticSemanticsChecker {
 
     // Check that the Pin declaration was performed correctly and inputs the Pin into the symbol table
     // PWM is only for output
-    private void CheckCreatePinCall(Node node) {
+    private void CheckCreatePinCall(Node node) throws SemanticsException{
         int pinNumber = Integer.parseInt(node.FirstChild.Next.Next.Next.Value);
 
         if (node.FirstChild.Next.Type != Node.NodeType.PWM || node.FirstChild.Next.Next.Type != Node.NodeType.Input) {
@@ -517,7 +518,7 @@ public class StaticSemanticsChecker {
     }
 
     // Checks which node type the node is and then checks the node as that type
-    private void CheckExpression(Node node) {
+    private void CheckExpression(Node node) throws SemanticsException{
         switch (node.Type){
             case Expression:
                 CheckExpressionNode(node);
@@ -541,7 +542,7 @@ public class StaticSemanticsChecker {
     }
 
     // Checks that the identifier has been previously declared.
-    private void CheckIdentifier(Node node) {
+    private void CheckIdentifier(Node node) throws SemanticsException{
         Symbol identifier = CurrentScope.RetrieveSymbol(node.Value);
         if (identifier != null){
             node.DataType = identifier.DataType;
@@ -551,7 +552,8 @@ public class StaticSemanticsChecker {
         }
     }
 
-    private void CheckExpressionNode(Node node) {
+    // Checks the expression node
+    private void CheckExpressionNode(Node node) throws SemanticsException{
         CheckExpression(node.FirstChild);
         CheckExpression(node.FirstChild.Next.Next);
         if (node.FirstChild.DataType == node.FirstChild.Next.Next.DataType){
@@ -563,7 +565,7 @@ public class StaticSemanticsChecker {
     }
 
     // Checks that the operator type and operand data type are compatible
-    private void CheckOperator(Node node) {
+    private void CheckOperator(Node node) throws SemanticsException{
         switch (node.FirstChild.Next.Type){
             case Modulo:
                 if (node.FirstChild.DataType == Symbol.SymbolType.INT){
@@ -616,10 +618,8 @@ public class StaticSemanticsChecker {
 
 //endregion
 
-//TODO: håndter fejl
-
     // Displays error message and terminates semantic analysis
-    private void MakeError(Node node, String name, ErrorType errorType){
+    private void MakeError(Node node, String name, ErrorType errorType) throws SemanticsException{
         String message = "";
 
         switch (errorType){
@@ -636,12 +636,10 @@ public class StaticSemanticsChecker {
                 message = "Line " + node.LineNumber + ": " + name + ": error";
         }
 
-        System.err.println(message);
-        //System.exit(0);
+        throw new SemanticsException(message);
     }
 
-    private void MakeError(Node node, String message){
-        System.err.println("Line " + node.LineNumber + ": " + message);
-        //System.exit(0);
+    private void MakeError(Node node, String message) throws SemanticsException{
+        throw new SemanticsException("Line " + node.LineNumber + ": " + message);
     }
 }
