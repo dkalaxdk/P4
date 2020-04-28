@@ -26,8 +26,9 @@ public class StaticSemanticsChecker {
 
 //region Done
     // Starts the process of scope and type checking the AST and decorating its nodes with datatypes
-    public void Run(Node node){
+    public SymbolTable Run(Node node){
         CheckProg(node);
+        return CurrentScope.GetGlobalScope();
     }
 
     // Checks the Prog node
@@ -46,7 +47,7 @@ public class StaticSemanticsChecker {
 
     // Checks the Master node
     private void CheckMaster(Node node){
-        CurrentScope.OpenScope();
+        CurrentScope = CurrentScope.OpenScope();
         Node child = node.FirstChild;
         CheckInitiate(child);
         child = child.Next;
@@ -54,7 +55,7 @@ public class StaticSemanticsChecker {
             CheckListener(child);
             child = child.Next;
         }
-        CurrentScope.CloseScope();
+        CurrentScope = CurrentScope.CloseScope();
     }
 
     // Checks the Slave node
@@ -62,7 +63,7 @@ public class StaticSemanticsChecker {
         if (!CurrentScope.DeclaredLocally(node.FirstChild.Value)) {
             CurrentScope.EnterSymbol(node.FirstChild.Value, Symbol.SymbolType.SLAVE);
 
-            CurrentScope.OpenScope();
+            CurrentScope = CurrentScope.OpenScope();
             Node child = node.FirstChild.Next;
             CheckInitiate(child);
             child = child.Next;
@@ -70,7 +71,7 @@ public class StaticSemanticsChecker {
                 CheckEventHandler(child);
                 child = child.Next;
             }
-            CurrentScope.CloseScope();
+            CurrentScope = CurrentScope.CloseScope();
         }
         else {
             MakeError(node, node.FirstChild.Value, ErrorType.AlreadyDeclared);
@@ -88,7 +89,7 @@ public class StaticSemanticsChecker {
     private void CheckListener(Node node) {
         Symbol symbol = CurrentScope.RetrieveSymbol(node.FirstChild.Value);
         if (symbol != null){
-            if (symbol.Type == Symbol.SymbolType.PIN){
+            if (symbol.DataType == Symbol.SymbolType.PIN){
                 node.FirstChild.DefinitionReference = symbol.ReferenceNode;
                 CheckBlock(node.FirstChild.Next);
             }
@@ -105,7 +106,7 @@ public class StaticSemanticsChecker {
     private void CheckEventHandler(Node node) {
         Symbol symbol = CurrentScope.RetrieveSymbol(node.FirstChild.Value);
         if (symbol != null){
-            if (symbol.Type == Symbol.SymbolType.EVENT){
+            if (symbol.DataType == Symbol.SymbolType.EVENT){
                 CheckBlock(node.FirstChild.Next);
             }
             else {
@@ -124,14 +125,14 @@ public class StaticSemanticsChecker {
             CheckInitiateBlock(node);
         }
         else if (InEventHandler){
-            CurrentScope.OpenScope();
+            CurrentScope = CurrentScope.OpenScope();
             CheckEventHandlerBlock(node);
-            CurrentScope.CloseScope();
+            CurrentScope = CurrentScope.CloseScope();
         }
         else {
-            CurrentScope.OpenScope();
+            CurrentScope = CurrentScope.OpenScope();
             CheckListenerBlock(node);
-            CurrentScope.CloseScope();
+            CurrentScope = CurrentScope.CloseScope();
         }
     }
 
@@ -209,6 +210,7 @@ public class StaticSemanticsChecker {
                 default:
                     MakeError(child, "No pin or event declarations allowed in EventHandler");
             }
+            child = child.Next;
         }
     }
 
@@ -241,7 +243,7 @@ public class StaticSemanticsChecker {
             if (expression.Type == Node.NodeType.Call) {
                 CheckCall(expression);
                 if (expression.DataType == Symbol.SymbolType.EVENT){
-                    CurrentScope.EnterSymbol(node.Value, Symbol.SymbolType.EVENT, expression.FirstChild.Next.DataType);
+                    CurrentScope.EnterSymbolAtRoot(node.FirstChild.Value, Symbol.SymbolType.EVENT, expression.FirstChild.Next.DataType);
                 }
                 else {
                     MakeError(node, "Expression", ErrorType.WrongType);
@@ -266,7 +268,7 @@ public class StaticSemanticsChecker {
                     MakeError(node, node.FirstChild.Value, ErrorType.WrongType);
                 }
             }
-            CurrentScope.EnterSymbol(node.Value, Symbol.SymbolType.FLOAT);
+            CurrentScope.EnterSymbol(node.FirstChild.Value, Symbol.SymbolType.FLOAT);
         }
         else {
             MakeError(node, node.FirstChild.Value, ErrorType.AlreadyDeclared);
@@ -283,7 +285,7 @@ public class StaticSemanticsChecker {
                     MakeError(node, node.FirstChild.Value, ErrorType.WrongType);
                 }
             }
-            CurrentScope.EnterSymbol(node.Value, Symbol.SymbolType.INT);
+            CurrentScope.EnterSymbol(node.FirstChild.Value, Symbol.SymbolType.INT);
         }
         else {
             MakeError(node, node.FirstChild.Value, ErrorType.AlreadyDeclared);
@@ -300,7 +302,7 @@ public class StaticSemanticsChecker {
                     MakeError(node, node.FirstChild.Value, ErrorType.WrongType);
                 }
             }
-            CurrentScope.EnterSymbol(node.Value, Symbol.SymbolType.BOOL);
+            CurrentScope.EnterSymbol(node.FirstChild.Value, Symbol.SymbolType.BOOL);
         }
         else {
             MakeError(node, node.FirstChild.Value, ErrorType.AlreadyDeclared);
@@ -313,7 +315,7 @@ public class StaticSemanticsChecker {
         Node expression = node.FirstChild.Next;
         if(identifier != null) {
             CheckExpression(expression);
-            if (identifier.Type != expression.DataType) {
+            if (identifier.DataType != expression.DataType) {
                 MakeError(node, node.FirstChild.Value, ErrorType.WrongType);
             }
             else if (expression.DataType == Symbol.SymbolType.PIN){
@@ -396,7 +398,7 @@ public class StaticSemanticsChecker {
     private void CheckBroadcastCall(Node node){
         Symbol parameter = CurrentScope.RetrieveSymbol(node.FirstChild.Next.Value);
         if (parameter != null) {
-            if (parameter.Type == Symbol.SymbolType.EVENT) {
+            if (parameter.DataType == Symbol.SymbolType.EVENT) {
                 node.DataType = Symbol.SymbolType.VOID;
             } else {
                 MakeError(node, node.FirstChild.Next.DataType.toString(), ErrorType.WrongType);
@@ -411,7 +413,7 @@ public class StaticSemanticsChecker {
     private void CheckFilterNoiseCall(Node node){
         Symbol pinParameter = CurrentScope.RetrieveSymbol(node.FirstChild.Next.Value);
         if (pinParameter != null){
-            if (pinParameter.Type == Symbol.SymbolType.PIN){
+            if (pinParameter.DataType == Symbol.SymbolType.PIN){
                 CheckPinAndFilterCombination(pinParameter, node);
                 node.DataType = Symbol.SymbolType.INT;
             }
@@ -445,10 +447,10 @@ public class StaticSemanticsChecker {
     private void CheckGetValueCall(Node node){
         Symbol parameter = CurrentScope.RetrieveSymbol(node.FirstChild.Next.Value);
         if (parameter != null) {
-            if (parameter.Type == Symbol.SymbolType.PIN) {
+            if (parameter.DataType == Symbol.SymbolType.PIN) {
                 node.DataType = Symbol.SymbolType.INT;
             }
-            else if (parameter.Type == Symbol.SymbolType.EVENT){
+            else if (parameter.DataType == Symbol.SymbolType.EVENT){
                 node.DataType = parameter.ValueType;
             }
             else {
@@ -466,7 +468,7 @@ public class StaticSemanticsChecker {
         Node intParameter = node.FirstChild.Next.Next;
 
         if (pinParameter != null) {
-            if (pinParameter.Type == Symbol.SymbolType.PIN) {
+            if (pinParameter.DataType == Symbol.SymbolType.PIN) {
                 CheckExpression(intParameter);
                 if (intParameter.DataType == Symbol.SymbolType.INT) {
                     node.DataType = Symbol.SymbolType.VOID;
@@ -542,7 +544,7 @@ public class StaticSemanticsChecker {
     private void CheckIdentifier(Node node) {
         Symbol identifier = CurrentScope.RetrieveSymbol(node.Value);
         if (identifier != null){
-            node.DataType = identifier.Type;
+            node.DataType = identifier.DataType;
         }
         else {
             MakeError(node, node.Value, ErrorType.NotDeclared);
@@ -564,35 +566,57 @@ public class StaticSemanticsChecker {
     private void CheckOperator(Node node) {
         switch (node.FirstChild.Next.Type){
             case Modulo:
-                if (node.FirstChild.DataType == Symbol.SymbolType.FLOAT){
-                    MakeError(node, "Type error: cannot be float");
+                if (node.FirstChild.DataType == Symbol.SymbolType.INT){
+                    node.DataType = Symbol.SymbolType.INT;
                 }
-                //bool float
-            case LessThan:
-            case GreaterThan:
-            case GreaterOrEqual:
-            case LessOrEqual:
+                else {
+                    MakeError(node, "Type error: must be int");
+                }
+                break;
             case Plus:
             case Minus:
             case Times:
             case Divide:
-                if (node.FirstChild.DataType == Symbol.SymbolType.BOOL){
+                if (node.FirstChild.DataType != Symbol.SymbolType.BOOL){
+                    node.DataType = node.FirstChild.DataType;
+                }
+                else {
                     MakeError(node, "Type error: cannot be boolean");
                 }
                 break;
+
+            case LessThan:
+            case GreaterThan:
+            case GreaterOrEqual:
+            case LessOrEqual:
+
+                if (node.FirstChild.DataType != Symbol.SymbolType.BOOL){
+                    node.DataType = Symbol.SymbolType.BOOL;
+                }
+                else {
+                    MakeError(node, "Type error: cannot be boolean");
+                }
+                break;
+
             case And:
             case Or:
-                if (node.FirstChild.DataType != Symbol.SymbolType.BOOL){
+                if (node.FirstChild.DataType == Symbol.SymbolType.BOOL){
+                    node.DataType = Symbol.SymbolType.BOOL;
+                }
+                else {
                     MakeError(node, "Type error: must be boolean");
                 }
+                break;
+            case Equals:
+            case NotEqual:
+                node.DataType = Symbol.SymbolType.BOOL;
                 break;
         }
     }
 
-    // TODO: ved code gen: sæt parantes om expressions
-
 //endregion
 
+//TODO: håndter fejl
 
     // Displays error message and terminates semantic analysis
     private void MakeError(Node node, String name, ErrorType errorType){
@@ -613,11 +637,11 @@ public class StaticSemanticsChecker {
         }
 
         System.err.println(message);
-        System.exit(0);
+        //System.exit(0);
     }
 
     private void MakeError(Node node, String message){
         System.err.println("Line " + node.LineNumber + ": " + message);
-        System.exit(0);
+        //System.exit(0);
     }
 }

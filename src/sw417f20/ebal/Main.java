@@ -1,8 +1,11 @@
 package sw417f20.ebal;
 
+import sw417f20.ebal.ContextAnalysis.HashSymbolTable;
+import sw417f20.ebal.ContextAnalysis.StaticSemanticsChecker;
 import sw417f20.ebal.Exceptions.SyntaxException;
 import sw417f20.ebal.SyntaxAnalysis.*;
 import sw417f20.ebal.SyntaxAnalysis.Reader;
+import sw417f20.ebal.Visitors.HashSymbolTablePrinter;
 
 import java.io.*;
 
@@ -10,7 +13,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 //       ScannerStuff();
-        ParserStuff();
+//        ParserStuff();
+        SemanticsStuff();
     }
 
     public static void ParserStuff() throws FileNotFoundException {
@@ -116,8 +120,30 @@ public class Main {
         return filePath + file;
     }
 
-//    public static void SymbolTableStuff (AST ast){
-//        Visitor visitor = new SemanticVisitor();
-//        visitor.Visit(ast.Root);
-//    }
+    public static void SemanticsStuff() throws FileNotFoundException{
+        Node root;
+        try {
+            String filePath = new File("").getAbsolutePath();
+            String fileInput = filePath + "/TestFiles/SemanticsErrorTest.txt";
+
+            FileReader fileReader = new FileReader(fileInput);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            Reader reader = new Reader(bufferedReader);
+            Scanner scanner = new Scanner(reader);
+
+            Parser parser = new Parser(scanner, fileInput);
+
+            long start = System.currentTimeMillis();
+            root = parser.Parse(false);
+            System.out.println("Runtime: " + (System.currentTimeMillis() - start) + " ms \n");
+
+            StaticSemanticsChecker checker = new StaticSemanticsChecker();
+            HashSymbolTable table = (HashSymbolTable)checker.Run(root);
+            HashSymbolTablePrinter printer = new HashSymbolTablePrinter();
+            printer.PrintTable(table);
+        }
+        catch (SyntaxException e) {
+            System.err.println(e.getMessage());
+        }
+    }
 }

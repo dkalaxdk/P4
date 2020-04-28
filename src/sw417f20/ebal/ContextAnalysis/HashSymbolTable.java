@@ -7,10 +7,10 @@ import java.util.HashMap;
 
 public class HashSymbolTable extends SymbolTable{
 
-    private HashSymbolTable GlobalScope = this;
-    private HashSymbolTable Parent;
-    private ArrayList<HashSymbolTable> Children = new ArrayList<>();
-    private HashMap<String, Symbol> hashtable = new HashMap<>();
+    public HashSymbolTable GlobalScope = this;
+    public HashSymbolTable Parent;
+    public ArrayList<HashSymbolTable> Children = new ArrayList<>();
+    public HashMap<String, Symbol> Hashtable = new HashMap<>();
 
     @Override
     public HashSymbolTable OpenScope() {
@@ -27,59 +27,34 @@ public class HashSymbolTable extends SymbolTable{
     }
 
     @Override
-    public boolean EnterSymbol(String name, Symbol.SymbolType type) {
+    public void EnterSymbol(String name, Symbol.SymbolType type) {
         // Checks that symbol is not already in hashtable
         if (!DeclaredLocally(name)) {
-            hashtable.put(name, new Symbol(name, type));
-            return true;
-        }
-        else {
-            return false;
+            Hashtable.put(name, new Symbol(name, type));
         }
     }
 
     @Override
-    public boolean EnterSymbol(String name, Symbol.SymbolType type, Node reference) {
+    public void EnterSymbol(String name, Symbol.SymbolType type, Node reference) {
         // Checks that symbol is not already in hashtable
         if (!DeclaredLocally(name)) {
-            hashtable.put(name, new Symbol(name, type, reference));
-            return true;
-        }
-        else {
-            return false;
+            Hashtable.put(name, new Symbol(name, type, reference));
         }
     }
 
     @Override
-    public boolean EnterSymbol(String name, Symbol.SymbolType type, Symbol.SymbolType valueType) {
+    public void EnterSymbol(String name, Symbol.SymbolType type, Symbol.SymbolType valueType) {
         // Checks  that symbol is not already in hashtable
         if (!DeclaredLocally(name)) {
-            hashtable.put(name, new Symbol(name, type, valueType));
-            return true;
-        }
-        else {
-            return false;
+            Hashtable.put(name, new Symbol(name, type, valueType));
         }
     }
-    //TODO:lav tilføj til root metode
-
-//    @Override
-//    public boolean EnterSymbol(String name, Symbol.SymbolType type, PinSymbol.PinType pinType, PinSymbol.IOType ioType, int pinNumber) {
-//        // Checks that name is not null and that symbol is not already in hashtable
-//        if (!DeclaredLocally(name)) {
-//            hashtable.put(name, new PinSymbol(name, type, pinType, ioType, pinNumber));
-//            return true;
-//        }
-//        else {
-//            return false;
-//        }
-//    }
 
     @Override
     public Symbol RetrieveSymbol(String name) {
         HashSymbolTable symTab = this;
         if (DeclaredLocally(name)) {
-            return hashtable.get(name);
+            return Hashtable.get(name);
         }
         else if (symTab.Parent != null){
                 symTab = symTab.Parent;
@@ -90,11 +65,23 @@ public class HashSymbolTable extends SymbolTable{
 
     @Override
     public boolean DeclaredLocally(String name) {
-        return hashtable.containsKey(name);
+        return Hashtable.containsKey(name);
     }
 
     @Override
     public HashSymbolTable GetGlobalScope (){
         return GlobalScope;
+    }
+
+    @Override
+    public void EnterSymbolAtRoot(String name, Symbol.SymbolType type, Symbol.SymbolType valueType){
+        GlobalScope.EnterSymbol(name, type, valueType);
+    }
+
+
+    @Override
+    public String toString(){
+
+        return "";
     }
 }

@@ -126,7 +126,7 @@ Listener(Instantiation) {
 END MASTER
 
 
-BEGIN SLAVE
+BEGIN SLAVE : noget
 
 Initiate {
 
