@@ -59,6 +59,35 @@ class StaticSemanticsCheckerTest {
 
         fail();
     }
+
+
+    public String createProgramOneSlave(String masterIni, String listeners,
+                                        String slaveIni, String eventHandlers) {
+
+        return "BEGIN MASTER Initiate { " + masterIni +
+                   " } " + listeners +
+                   "END MASTER " +
+                   "BEGIN SLAVE : test Initiate { " + slaveIni +
+                   " } " + eventHandlers +
+                   "END SLAVE ";
+    }
+
+    public String createProgramTwoSlaves(String masterIni, String listeners,
+                                         String slaveOneIni, String slaveOneEventHandlers,
+                                         String slaveTwoIni, String slaveTwoEventHandlers) {
+
+        return "BEGIN MASTER Initiate { " + masterIni +
+                " } " + listeners +
+                "END MASTER " +
+                "BEGIN SLAVE : test Initiate { " + slaveOneIni +
+                " } " + slaveOneEventHandlers +
+                "END SLAVE " +
+                "BEGIN SLAVE : test2 Initiate { " + slaveTwoIni +
+                " } " + slaveTwoEventHandlers +
+                "END SLAVE ";
+    }
+
+
 }
 
 /* Throws error:
