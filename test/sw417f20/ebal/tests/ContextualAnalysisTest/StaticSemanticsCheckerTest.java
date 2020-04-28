@@ -40,27 +40,6 @@ class StaticSemanticsCheckerTest {
         return ast;
     }
 
-    @Test
-    void run_n_ThrowSemanticsException() {
-        // Arrange
-        String program = "";
-        Node ast = runParser(program);
-        StaticSemanticsChecker checker = new StaticSemanticsChecker();
-
-        // Act
-        try {
-            checker.Run(ast);
-        }
-        // Assert
-        catch (SemanticsException e) {
-            assertTrue(true);
-            return;
-        }
-
-        fail();
-    }
-
-
     public String createProgramOneSlave(String masterIni, String listeners,
                                         String slaveIni, String eventHandlers) {
 
@@ -87,6 +66,50 @@ class StaticSemanticsCheckerTest {
                 "END SLAVE ";
     }
 
+    @Test
+    void run_Example_ThrowSemanticsException() {
+        // Arrange
+        String masterIni = "";
+        String listeners = "";
+        String slaveIni = "";
+        String eventHandlers = "";
+        String program = createProgramOneSlave(masterIni, listeners, slaveIni, eventHandlers);
+        Node ast = runParser(program);
+        StaticSemanticsChecker checker = new StaticSemanticsChecker();
+
+        // Act
+        try {
+            checker.Run(ast);
+        }
+        // Assert
+        catch (SemanticsException e) {
+            assertTrue(true);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    void run_OnlyPinDeclarationsInMasterInitiate_DoNotThrowSemanticsException() {
+        // Arrange
+        String masterIni = "pin test = createPin(digital, input, 4);";
+        String listeners = "";
+        String slaveIni = "";
+        String eventHandlers = "";
+        String program = createProgramOneSlave(masterIni, listeners, slaveIni, eventHandlers);
+        Node ast = runParser(program);
+        StaticSemanticsChecker checker = new StaticSemanticsChecker();
+
+        // Act
+        try {
+            checker.Run(ast);
+        }
+        // Assert
+        catch (SemanticsException e) {
+            fail();
+        }
+    }
 
 }
 
