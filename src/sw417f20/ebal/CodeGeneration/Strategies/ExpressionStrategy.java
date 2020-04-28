@@ -8,10 +8,9 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 public class ExpressionStrategy extends CodeGenerationStrategy {
     @Override
     public String GenerateCode(Node node) {
-        String content = "";
+
         // Generate code for child nodes.
         // Child nodes should be: Operand, Operator and Expression
-        content += "(" + GenerateCodeForLinkedList(node.FirstChild) + ")";
-        return content;
+        return "(" + GenerateCodeForLinkedList(node.FirstChild) + ")";
     }
 }

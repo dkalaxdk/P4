@@ -12,10 +12,7 @@ public class ProgStrategy extends CodeGenerationStrategy {
         eventDictionary = new EventDictionary(node);
         slaveDictionary = new SlaveDictionary(node);
 
-        String content = "";
-
         //Generates code for the the master and all the slaves
-        content += GenerateCodeForLinkedList(node.FirstChild);
-        return content;
+        return GenerateCodeForLinkedList(node.FirstChild);
     }
 }

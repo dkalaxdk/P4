@@ -24,9 +24,8 @@ public class EventDeclarationStrategy extends CodeGenerationStrategy {
         }
         else {
             //Declare the identifier, the event is represented as a char array
-            content += content += "char " + node.FirstChild.Value + "[4];";
+            content += content += "char " + node.FirstChild.Value + "[4];\n";
         }
-        content += "\n";
         return content;
     }
 }

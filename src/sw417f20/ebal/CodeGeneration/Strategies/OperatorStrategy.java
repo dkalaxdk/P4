@@ -5,51 +5,37 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 public class OperatorStrategy extends CodeGenerationStrategy {
     @Override
     public String GenerateCode(Node node) {
-        String content = "";
 
         switch (node.Type){
             case LessThan:
-                content += " < ";
-                break;
+                return " < ";
             case GreaterThan:
-                content += " > ";
-                break;
+                return " > ";
             case NotEqual:
-                content += " != ";
-                break;
+                return " != ";
             case Equals:
-                content += " == ";
-                break;
+                return " == ";
             case GreaterOrEqual:
-                content += " >= ";
-                break;
+                return " >= ";
             case LessOrEqual:
-                content += " <= ";
-                break;
+                return " <= ";
             case And:
-                content += " && ";
-                break;
+                return " && ";
             case Or:
-                content += " || ";
-                break;
+                return " || ";
             case Plus:
-                content += " + ";
-                break;
+                return " + ";
             case Minus:
-                content += " - ";
-                break;
+                return " - ";
             case Times:
-                content += " * ";
-                break;
+                return " * ";
             case Divide:
                 //TODO find ud af hvordan man smider en fejl hvis man dividere med 0.
-                content += " / ";
-                break;
+                return " / ";
             case Modulo:
-                content += " % ";
-                break;
+                return " % ";
+            default:
+                return "ERROR";
         }
-
-        return content;
     }
 }

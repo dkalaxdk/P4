@@ -6,7 +6,7 @@ public class IdentifierStrategy extends CodeGenerationStrategy {
     @Override
     public String GenerateCode(Node node) {
         String content = "";
-        String prefix = node.FirstChild.GenerateCode();
+        String prefix = (node.FirstChild != null) ? node.FirstChild.GenerateCode() : "";
 
         //If there is a prefix it is added to content before the value in expressions.
         content += prefix;

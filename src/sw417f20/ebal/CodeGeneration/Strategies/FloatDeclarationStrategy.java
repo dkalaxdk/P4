@@ -18,11 +18,8 @@ public class FloatDeclarationStrategy extends CodeGenerationStrategy {
             content += " = ";
             content += nextChild.GenerateCode();
         }
-        else {
-            //Declare the identifier.
-            content += ";";
-        }
-        content += "\n";
+
+        content += ";\n";
         return content;
     }
 }

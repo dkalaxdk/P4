@@ -5,15 +5,15 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 public class PrefixStrategy extends CodeGenerationStrategy {
     @Override
     public String GenerateCode(Node node) {
-        String content = "";
 
         if (node.Type == Node.NodeType.PrefixNot){
-            content = "!";
+            return "!";
         }
         else if (node.Type == Node.NodeType.PrefixMinus){
-            content = "-";
+            return "-";
         }
-
-        return content;
+        else {
+            return "ERROR";
+        }
     }
 }

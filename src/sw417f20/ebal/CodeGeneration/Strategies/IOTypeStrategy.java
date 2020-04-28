@@ -5,15 +5,15 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 public class IOTypeStrategy extends CodeGenerationStrategy {
     @Override
     public String GenerateCode(Node node) {
-        String content = "";
 
         if (node.Type == Node.NodeType.Input){
-            content = "INPUT";
+            return "INPUT";
         }
         else if (node.Type == Node.NodeType.Output){
-            content = "OUTPUT";
+            return "OUTPUT";
         }
-
-        return content;
+        else {
+            return "ERROR";
+        }
     }
 }

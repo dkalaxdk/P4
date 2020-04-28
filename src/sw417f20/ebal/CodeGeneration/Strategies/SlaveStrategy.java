@@ -17,7 +17,7 @@ public class SlaveStrategy extends CodeGenerationStrategy {
 
         content += "void setup(){\n";
         content += "Wire.begin(" + slaveID + ");\n";
-        content += "Serial.begin(9600);\n";
+//        content += "Serial.begin(9600);\n";
         content += "Wire.onReceive(receiveEvent);\n";
         //generate code for the initiate block
         content += node.FirstChild.Next.GenerateCode();

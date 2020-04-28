@@ -27,8 +27,8 @@ public class PrintVisitor extends Visitor {
         for (int i = 0; i <= indent; i++) {
             System.out.print("\t");
         }
-        System.out.print(node);
+        System.out.println(node);
 
-        System.out.println();
+//        System.out.println();
     }
 }

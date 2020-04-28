@@ -15,13 +15,10 @@ public class BoolDeclarationStrategy extends CodeGenerationStrategy {
         //Initialization if there is an expression as the next node.
         if(!nextChild.IsEmpty()) {
             content += " = ";
-            content += nextChild.GenerateCode() + ";";
+            content += nextChild.GenerateCode();
         }
-        else {
-            //Declare the identifier.
-            content += ";";
-        }
-        content += "\n";
+
+        content += ";\n";
         return content;
     }
 }
