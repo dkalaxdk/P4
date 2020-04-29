@@ -4,11 +4,13 @@ import sw417f20.ebal.ContextAnalysis.HashSymbolTable;
 import sw417f20.ebal.ContextAnalysis.StaticSemanticsChecker;
 import sw417f20.ebal.Exceptions.SemanticsException;
 import sw417f20.ebal.Exceptions.SyntaxException;
+import sw417f20.ebal.CodeGeneration.OutputFileGenerator;
 import sw417f20.ebal.SyntaxAnalysis.*;
 import sw417f20.ebal.SyntaxAnalysis.Reader;
 import sw417f20.ebal.Visitors.HashSymbolTablePrinter;
 
 import java.io.*;
+import java.util.ArrayList;
 
 public class Main {
 
@@ -16,6 +18,8 @@ public class Main {
 //       ScannerStuff();
 //        ParserStuff();
         SemanticsStuff();
+        //ParserStuff();
+        CodeGenStuff();
     }
 
     public static void ParserStuff() throws FileNotFoundException {
@@ -145,6 +149,19 @@ public class Main {
         }
         catch (SyntaxException | SemanticsException e) {
             System.err.println(e.getMessage());
+        }
+    }
+
+    public static void CodeGenStuff() {
+        ArrayList<String> fileContents = new ArrayList<String>();
+        fileContents.add("This is the Master file");
+        fileContents.add("This is the first Slave file");
+        fileContents.add("This is the second Slave file");
+
+        try {
+            OutputFileGenerator outGen = new OutputFileGenerator(fileContents);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
