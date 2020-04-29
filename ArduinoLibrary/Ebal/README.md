@@ -1,2 +1,0 @@
-# Arduino Ebal library
-
