@@ -1,5 +1,7 @@
 package sw417f20.ebal.SyntaxAnalysis;
 
+import sw417f20.ebal.ContextAnalysis.Symbol;
+
 import sw417f20.ebal.CodeGeneration.Strategies.CodeGenerationStrategy;
 
 // This class is inspired by the data structure
@@ -9,6 +11,7 @@ public class Node {
     public String Value;
     public int LineNumber = -1;
     public Node DefinitionReference;
+    public Symbol.SymbolType DataType;
 
     // The next element in the linked list of siblings
     public Node Next;

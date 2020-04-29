@@ -8,7 +8,7 @@ public class PrintVisitor extends Visitor {
 
     @Override
     public void Visit(Node node) {
-//        if (node.Type != AST.NodeType.Empty) {
+//        if (node.Type != Node.NodeType.Empty) {
 //            PrintNode(node);
 //        }
 
