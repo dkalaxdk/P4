@@ -1,5 +1,7 @@
 package sw417f20.ebal.SyntaxAnalysis;
 
+import sw417f20.ebal.CodeGeneration.Strategies.CodeGenerationStrategy;
+
 // This class is inspired by the data structure
 // outlined in Crafting a Compiler by Fischer et. al.
 public class Node {
@@ -8,10 +10,16 @@ public class Node {
     public int LineNumber = -1;
     public Node DefinitionReference;
 
+    // The next element in the linked list of siblings
     public Node Next;
+    // Reference to head of singly linked list of siblings
     public Node FirstSibling;
+    // The first child node.
+    // Acts as head of a singly linked list of children.
     public Node FirstChild;
     public Node Parent;
+    //TODO: Make private?
+    public CodeGenerationStrategy CodeGenerationStrategy;
 
     private Node(NodeType type) {
         this.Type = type;
@@ -205,5 +213,21 @@ public class Node {
         PrefixNot, PrefixMinus,
 
         Error, Empty
+    }
+
+    // Just makes checks for empty nodes shorter.
+    public boolean IsEmpty() {
+        return this.Type == Node.NodeType.Empty;
+    }
+
+    // Calls the provided codeGen strategy, and returns the result.
+    // Is the common interface for code generation.
+    public String GenerateCode() {
+        if(CodeGenerationStrategy != null) {
+            return CodeGenerationStrategy.GenerateCode(this);
+        }
+        else {
+            return "";
+        }
     }
 }
