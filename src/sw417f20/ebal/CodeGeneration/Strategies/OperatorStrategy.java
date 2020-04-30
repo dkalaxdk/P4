@@ -33,6 +33,7 @@ public class OperatorStrategy extends CodeGenerationStrategy {
                 //TODO find ud af hvordan man smider en fejl hvis man dividere med 0.
                 return " / ";
             case Modulo:
+                //TODO modulo 0 er undefined
                 return " % ";
             default:
                 return "ERROR";
