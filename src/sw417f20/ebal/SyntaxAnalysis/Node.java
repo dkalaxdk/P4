@@ -1,8 +1,10 @@
 package sw417f20.ebal.SyntaxAnalysis;
 
+import sw417f20.ebal.ContextAnalysis.Strategies.SemanticsCheckerStrategy;
 import sw417f20.ebal.ContextAnalysis.Symbol;
 
 import sw417f20.ebal.CodeGeneration.Strategies.CodeGenerationStrategy;
+import sw417f20.ebal.Exceptions.SemanticsException;
 
 // This class is inspired by the data structure
 // outlined in Crafting a Compiler by Fischer et. al.
@@ -22,6 +24,7 @@ public class Node {
     public Node FirstChild;
     public Node Parent;
     //TODO: Make private?
+    public SemanticsCheckerStrategy SemanticsCheckerStrategy;
     public CodeGenerationStrategy CodeGenerationStrategy;
 
     private Node(NodeType type) {
@@ -223,6 +226,14 @@ public class Node {
         return this.Type == Node.NodeType.Empty;
     }
 
+    // Calls the provided semantics checker strategy.
+    // Is the common interface for code generation.
+    public void CheckSemantics() throws SemanticsException {
+        if(SemanticsCheckerStrategy != null) {
+            SemanticsCheckerStrategy.CheckSemantics(this);
+        }
+    }
+
     // Calls the provided codeGen strategy, and returns the result.
     // Is the common interface for code generation.
     public String GenerateCode() {
@@ -233,4 +244,6 @@ public class Node {
             return "";
         }
     }
+
+
 }

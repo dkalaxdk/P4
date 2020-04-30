@@ -1,13 +1,13 @@
 package sw417f20.ebal;
 
 import sw417f20.ebal.ContextAnalysis.HashSymbolTable;
-import sw417f20.ebal.ContextAnalysis.StaticSemanticsChecker;
 import sw417f20.ebal.Exceptions.SemanticsException;
 import sw417f20.ebal.Exceptions.SyntaxException;
 import sw417f20.ebal.CodeGeneration.OutputFileGenerator;
 import sw417f20.ebal.SyntaxAnalysis.*;
 import sw417f20.ebal.SyntaxAnalysis.Reader;
 import sw417f20.ebal.Visitors.HashSymbolTablePrinter;
+import sw417f20.ebal.Visitors.SemanticsStrategiesVisitor;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class Main {
 //        ParserStuff();
         SemanticsStuff();
         //ParserStuff();
-        CodeGenStuff();
+        //CodeGenStuff();
     }
 
     public static void ParserStuff() throws FileNotFoundException {
@@ -126,7 +126,8 @@ public class Main {
     }
 
     public static void SemanticsStuff() throws FileNotFoundException{
-        Node root;
+        Node root = null;
+        HashSymbolTable symbolTable = null;
         try {
             String filePath = new File("").getAbsolutePath();
             String fileInput = filePath + "/TestFiles/SemanticsErrorTest.txt";
@@ -141,15 +142,29 @@ public class Main {
             long start = System.currentTimeMillis();
             root = parser.Parse(false);
             System.out.println("Runtime: " + (System.currentTimeMillis() - start) + " ms \n");
-
-            StaticSemanticsChecker checker = new StaticSemanticsChecker();
-            HashSymbolTable table = (HashSymbolTable)checker.Run(root);
-            HashSymbolTablePrinter printer = new HashSymbolTablePrinter();
-            printer.PrintTable(table);
         }
-        catch (SyntaxException | SemanticsException e) {
+        catch (SyntaxException e) {
+
             System.err.println(e.getMessage());
         }
+        SemanticsStrategiesVisitor visitor = new SemanticsStrategiesVisitor();
+        symbolTable = visitor.Run(root);
+        try {
+            root.CheckSemantics();
+//            HashSymbolTablePrinter printer = new HashSymbolTablePrinter();
+//            printer.PrintTable(symbolTable);
+
+//            StaticSemanticsChecker checker = new StaticSemanticsChecker();
+//            HashSymbolTable table = (HashSymbolTable)checker.Run(root);
+//            HashSymbolTablePrinter printer = new HashSymbolTablePrinter();
+//            printer.PrintTable(table);
+        }
+        catch (SemanticsException e) {
+
+            System.err.println(e.getMessage());
+        }
+        HashSymbolTablePrinter printer = new HashSymbolTablePrinter();
+        printer.PrintTable(symbolTable);
     }
 
     public static void CodeGenStuff() {

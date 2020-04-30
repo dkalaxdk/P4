@@ -20,7 +20,7 @@ BEGIN MASTER
         }
         else {
             event button2Pressed = createEvent(filteredInput);
-            broadcast(button1Pressed);
+            broadcast(button2Pressed);
         }
     }
 

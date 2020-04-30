@@ -20,11 +20,15 @@ public class HashSymbolTablePrinter {
 
     private void PrintSymbols (HashSymbolTable table){
         for (String name : table.Hashtable.keySet()){
-            Symbol symbol = table.RetrieveSymbol(name);
+            Symbol symbol = table.Hashtable.get(name);
+
+               //     RetrieveSymbol(name);
             for (int i = 0; i <= indent; i++) {
                 System.out.print("\t");
             }
-            System.out.println(symbol.toString());
+            if (symbol != null){
+                System.out.println(symbol.toString());
+            }
         }
     }
 }
