@@ -1,28 +1,34 @@
 package sw417f20.ebal.CodeGeneration.Utility;
 
+import sw417f20.ebal.SyntaxAnalysis.Node;
+
 import java.util.ArrayList;
 import java.util.Dictionary;
 
 /**
  * Class that represents a slave during code generation.
  */
-public class Slave {
-    // Global
-    public ArrayList<String>  PinDeclarations;
-    public ArrayList<String>  EventDeclarations;
-
-
-    // Setup
-    public ArrayList<String> PinInstantiations; //createPin
-    public ArrayList<String> EventInstantiations; // Set id
-
+public class Slave extends ArduinoBoard{
 
     private int eventHandlerCount = 0;
     public ArrayList<String> EventHandlers; // Name: event + EventHandler + eventHandlerCount
 
     public ArrayList<String> ReceiveEvent;
 
-    public ArrayList<String> Loop; // Read all pins
+    @Override
+    public void AddBlock(Node node) {
+
+    }
+
+    @Override
+    public void AddPinDeclaration(Node node) {
+
+    }
+
+    @Override
+    public void AddEventDeclaration(Node node) {
+
+    }
 
 
     private String Name;
@@ -69,4 +75,6 @@ public class Slave {
     public void setID(int id) {
         this.ID = id;
     }
+
+
 }

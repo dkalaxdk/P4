@@ -354,6 +354,7 @@ public class Parser extends RecursiveDescent {
     public Node Expr() throws SyntaxException {
         Node Expr = Node.MakeNode(Node.NodeType.Expression, getLineNumber());
 
+        // TODO: Alle identifiers bør have Empty som deres FirstChild hvis de ikke har et prefix. Hvis det bliver rettet, prik til Michelle
         if (Peek().type == Token.Type.IDENTIFIER || CheckForLiteral()) {
             Node value = Value();
             Node afterExpr = AfterExpr();
@@ -455,6 +456,9 @@ public class Parser extends RecursiveDescent {
                 return Node.MakeNode(Node.NodeType.Error);
         }
     }
+
+
+    // Put IDENTIFIER og LITERAL i deres egne metoder, så de kan få line numbers og sådan noget.
 
     // AfterExpr 	-> 	Operator Expr
     //	             | 	LogicOp Expr
