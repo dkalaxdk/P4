@@ -1,8 +1,5 @@
 package sw417f20.ebal.SyntaxAnalysis;
 
-import sw417f20.ebal.SyntaxAnalysis.Reader;
-import sw417f20.ebal.SyntaxAnalysis.Token;
-
 import java.io.IOException;
 
 public class Tokenizer {
@@ -83,8 +80,8 @@ public class Tokenizer {
             case "pwm":
                 token.type = Token.Type.PWM;
                 break;
-            case "flip":
-                token.type = Token.Type.FLIP;
+            case "debounce":
+                token.type = Token.Type.DEBOUNCE;
                 break;
             case "constant":
                 token.type = Token.Type.CONSTANT;
@@ -121,6 +118,11 @@ public class Tokenizer {
                 break;
             case "event":
                 token.type = Token.Type.EVENT;
+                break;
+            case "HIGH":
+            case "LOW":
+                token.type = Token.Type.LIT_Int;
+                token.content = token.content.equals("HIGH") ? "1" : "0";
                 break;
             case "TRUE":
             case "true":

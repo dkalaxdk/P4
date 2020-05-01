@@ -101,7 +101,7 @@ class ParserTest {
     void Start_MinimumProgram_ReturnProgNode() {
         // Arrange
         String program = "BEGIN MASTER Initiate { } END MASTER " +
-                         "BEGIN SLAVE Initiate { } END SLAVE";
+                         "BEGIN SLAVE : n Initiate { } END SLAVE";
         Parser parser = createParser(program);
         Node node;
 
@@ -122,7 +122,7 @@ class ParserTest {
     void Start_MinimumProgram_ReturnedNodeFirstChildIsMaster() {
         // Arrange
         String program = "BEGIN MASTER Initiate { } END MASTER " +
-                "BEGIN SLAVE Initiate { } END SLAVE";
+                "BEGIN SLAVE : n Initiate { } END SLAVE";
         Parser parser = createParser(program);
         Node node;
 
@@ -143,8 +143,8 @@ class ParserTest {
     void Start_MinimalProgram_TwoSlaves_ReturnedNodeThirdChildIsSlave() {
         // Arrange
         String program = "BEGIN MASTER Initiate { } END MASTER " +
-                "BEGIN SLAVE Initiate { } END SLAVE " +
-                "BEGIN SLAVE Initiate { } END SLAVE ";
+                "BEGIN SLAVE : a Initiate { } END SLAVE " +
+                "BEGIN SLAVE : b Initiate { } END SLAVE ";
         Parser parser = createParser(program);
         Node node;
 
@@ -381,7 +381,7 @@ class ParserTest {
     @Test
     void Slaves_OneSlave_ReturnSlaveNode() {
         // Arrange
-        String program = "BEGIN SLAVE Initiate { } END SLAVE";
+        String program = "BEGIN SLAVE : n Initiate { } END SLAVE";
         Parser parser = createParser(program);
         Node node;
 
@@ -401,7 +401,7 @@ class ParserTest {
     @Test
     void Slaves_TwoSlaves_ReturnSlaveNode() {
         // Arrange
-        String program = "BEGIN SLAVE Initiate { } END SLAVE " + "BEGIN SLAVE Initiate { } END SLAVE";
+        String program = "BEGIN SLAVE : a Initiate { } END SLAVE " + "BEGIN SLAVE : b Initiate { } END SLAVE";
         Parser parser = createParser(program);
         Node node;
 
@@ -421,7 +421,7 @@ class ParserTest {
     @Test
     void Slaves_TwoSlaves_ReturnedNodeNextSiblingIsSlave() {
         // Arrange
-        String program = "BEGIN SLAVE Initiate { } END SLAVE " + "BEGIN SLAVE Initiate { } END SLAVE";
+        String program = "BEGIN SLAVE : a Initiate { } END SLAVE BEGIN SLAVE : a Initiate { } END SLAVE";
         Parser parser = createParser(program);
         Node node;
 
@@ -576,7 +576,7 @@ class ParserTest {
     @Test
     void Slave_MinimumProgram_ReturnSlaveNode() {
         // Arrange
-        String program = "BEGIN SLAVE Initiate { } END SLAVE";
+        String program = "BEGIN SLAVE : n Initiate { } END SLAVE";
         Parser parser = createParser(program);
         Node node;
 
@@ -596,7 +596,7 @@ class ParserTest {
     @Test
     void Slave_MinimalProgram_ReturnedNodeFirstChildIsInitiate() {
         // Arrange
-        String program = "BEGIN SLAVE Initiate { } EventHandler(id) { } END SLAVE";
+        String program = "BEGIN SLAVE : n Initiate { } EventHandler(id) { } END SLAVE";
         Parser parser = createParser(program);
         Node node;
 
@@ -616,7 +616,7 @@ class ParserTest {
     @Test
     void Slave_MinimalProgram_ReturnedNodeSecondChildIsEventHandler() {
         // Arrange
-        String program = "BEGIN SLAVE Initiate { } EventHandler(id) { } END SLAVE";
+        String program = "BEGIN SLAVE : n Initiate { } EventHandler(id) { } END SLAVE";
         Parser parser = createParser(program);
         Node node;
 
@@ -715,25 +715,6 @@ class ParserTest {
     void Initiate_NoBlock_ThrowSyntaxException() {
         // Arrange
         String program = "Initiate";
-        Parser parser = createParser(program);
-
-        // Act
-        try {
-            parser.Initiate();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            assertTrue(true);
-            return;
-        }
-
-        fail();
-    }
-
-    @Test
-    void Initiate_Declaration_ThrowSyntaxException() {
-        // Arrange
-        String program = "Initiate { int a = 5; }";
         Parser parser = createParser(program);
 
         // Act
@@ -3958,7 +3939,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Next.Type, Node.NodeType.Flip);
+        assertSame(node.FirstChild.Next.Next.Type, Node.NodeType.Debounce);
     }
 
 
@@ -4704,7 +4685,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, Node.NodeType.Flip);
+        assertSame(node.Type, Node.NodeType.Debounce);
     }
 
     @Test

@@ -10,6 +10,7 @@ BEGIN MASTER
         int c = (1 + (2 + (3 + 4)));
         int d = (((1 + 2) + 3) + 4);
         int e = 1 + (2 + 3) + 4;
+        int f = (1 + 2) + (3 + 4);
     }
 
 END MASTER
@@ -21,7 +22,7 @@ BEGIN SLAVE : TestSlave1
     }
 
     EventHandler (noget) {
-        //int a = filterNoise(noget, flip) + 3;
+        //int a = filterNoise(noget, debounce) + 3;
 
         if (a == 3) {
             if (b == 3) {

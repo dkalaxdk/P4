@@ -1,9 +1,13 @@
 package sw417f20.ebal;
 
+import sw417f20.ebal.ContextAnalysis.HashSymbolTable;
+import sw417f20.ebal.ContextAnalysis.StaticSemanticsChecker;
+import sw417f20.ebal.Exceptions.SemanticsException;
 import sw417f20.ebal.Exceptions.SyntaxException;
 import sw417f20.ebal.CodeGeneration.OutputFileGenerator;
 import sw417f20.ebal.SyntaxAnalysis.*;
 import sw417f20.ebal.SyntaxAnalysis.Reader;
+import sw417f20.ebal.Visitors.HashSymbolTablePrinter;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -11,9 +15,10 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-//       ScannerStuff();
-        //ParserStuff();
-        CodeGenStuff();
+//        ScannerStuff();
+        ParserStuff();
+//        SemanticsStuff();
+//        CodeGenStuff();
     }
 
     public static void ParserStuff() throws FileNotFoundException {
@@ -117,6 +122,33 @@ public class Main {
     public static String GetFullPath(String file) {
         String filePath = new File("").getAbsolutePath();
         return filePath + file;
+    }
+
+    public static void SemanticsStuff() throws FileNotFoundException{
+        Node root;
+        try {
+            String filePath = new File("").getAbsolutePath();
+            String fileInput = filePath + "/TestFiles/SemanticsErrorTest.txt";
+
+            FileReader fileReader = new FileReader(fileInput);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            Reader reader = new Reader(bufferedReader);
+            Scanner scanner = new Scanner(reader);
+
+            Parser parser = new Parser(scanner, fileInput);
+
+            long start = System.currentTimeMillis();
+            root = parser.Parse(false);
+            System.out.println("Runtime: " + (System.currentTimeMillis() - start) + " ms \n");
+
+            StaticSemanticsChecker checker = new StaticSemanticsChecker();
+            HashSymbolTable table = (HashSymbolTable)checker.Run(root);
+            HashSymbolTablePrinter printer = new HashSymbolTablePrinter();
+            printer.PrintTable(table);
+        }
+        catch (SyntaxException | SemanticsException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     public static void CodeGenStuff() {
