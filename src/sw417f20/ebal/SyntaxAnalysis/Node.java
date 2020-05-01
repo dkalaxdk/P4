@@ -203,7 +203,7 @@ public class Node {
         Input, Output,
 
         // Filter types
-        Constant, Flip, Range,
+        Constant, Debounce, Range,
 
         // Function
         Broadcast, Write, GetValue, FilterNoise, CreateEvent, CreatePin,

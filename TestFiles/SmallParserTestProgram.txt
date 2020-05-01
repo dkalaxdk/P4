@@ -22,7 +22,7 @@ BEGIN SLAVE : TestSlave1
     }
 
     EventHandler (noget) {
-        //int a = filterNoise(noget, flip) + 3;
+        //int a = filterNoise(noget, debounce) + 3;
 
         if (a == 3) {
             if (b == 3) {

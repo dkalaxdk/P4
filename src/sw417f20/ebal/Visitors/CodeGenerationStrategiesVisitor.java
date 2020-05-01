@@ -87,7 +87,7 @@ public class CodeGenerationStrategiesVisitor extends Visitor {
                 AssignStrategy(node, strategies.GetIOTypeStrategy());
                 break;
             case Constant:
-            case Flip:
+            case Debounce:
             case Range:
                 AssignStrategy(node, strategies.GetFilterNoiseStrategy());
                 break;

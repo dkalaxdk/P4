@@ -646,15 +646,15 @@ public class Parser extends RecursiveDescent {
         }
     }
 
-    // FilterType -> 	flip
+    // FilterType -> 	debounce
     //	           | 	constant
     //	           | 	range.
     public Node FilterType() throws SyntaxException {
 
         switch (Peek().type) {
-            case FLIP:
-                Expect(Token.Type.FLIP);
-                return Node.MakeNode(Node.NodeType.Flip);
+            case DEBOUNCE:
+                Expect(Token.Type.DEBOUNCE);
+                return Node.MakeNode(Node.NodeType.Debounce);
 
             case CONSTANT:
                 Expect(Token.Type.CONSTANT);
@@ -665,7 +665,7 @@ public class Parser extends RecursiveDescent {
                 return Node.MakeNode(Node.NodeType.Range);
 
             default:
-                MakeError("Expected FLIP, CONSTANT, or RANGE");
+                MakeError("Expected debounce, constant, or range");
                 return Node.MakeNode(Node.NodeType.Error);
         }
     }

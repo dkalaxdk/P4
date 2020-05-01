@@ -15,11 +15,10 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-//       ScannerStuff();
-//        ParserStuff();
-        SemanticsStuff();
-        //ParserStuff();
-        CodeGenStuff();
+//        ScannerStuff();
+        ParserStuff();
+//        SemanticsStuff();
+//        CodeGenStuff();
     }
 
     public static void ParserStuff() throws FileNotFoundException {

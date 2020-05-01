@@ -11,7 +11,7 @@ BEGIN MASTER
 
     Listener (button1)
     {
-        int filteredInput = filterNoise(button1, flip);
+        int filteredInput = filterNoise(button1, debounce);
 
         if (filteredInput == HIGH)
         {
