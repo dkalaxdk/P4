@@ -4,12 +4,24 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 
 public class Master {
-    // Name
-    public ArrayList<String> PinList;
+    // Global
+    public ArrayList<String>  PinDeclarations;
+    public ArrayList<String>  EventDeclarations;
 
-    // Name, event type
-    public Dictionary<String, String> EventList;
 
-    public ArrayList<String> Listeners;
-    public ArrayList<String> Loop;
+    // Setup
+    public ArrayList<String> PinInstantiations; //createPin
+    public ArrayList<String> EventInstantiations; // Set id
+
+    public ArrayList<String> AssociatedSlaves;
+
+    private int listenerCount = 0;
+    public ArrayList<String> Listeners; // Copy EBAL listeners. Name: pin + Listener + listenerCount
+
+    public ArrayList<String> Loop; // Call listeners, read all pins
+
+
+
+
+
 }
