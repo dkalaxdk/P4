@@ -40,20 +40,26 @@ public class Node {
         LineNumber = lineNumber;
     }
 
-    public static Node MakeNode(Token token) {
+    private Node(NodeType type, Token token, int lineNumber) {
+        this.Type = type;
+        this.Value = token.content;
+        this.LineNumber = lineNumber;
+    }
+
+    public static Node MakeNode(Token token, int lineNumber) {
 
         switch (token.type) {
             case IDENTIFIER:
-                return new Node(NodeType.Identifier, token);
+                return new Node(NodeType.Identifier, token, lineNumber);
 
             case LIT_Bool:
-                return new Node(NodeType.BoolLiteral, token);
+                return new Node(NodeType.BoolLiteral, token, lineNumber);
 
             case LIT_Int:
-                return new Node(NodeType.IntLiteral, token);
+                return new Node(NodeType.IntLiteral, token, lineNumber);
 
             case LIT_Float:
-                return new Node(NodeType.FloatLiteral, token);
+                return new Node(NodeType.FloatLiteral, token, lineNumber);
 
             default:
                 return new Node(NodeType.Error);
