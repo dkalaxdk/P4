@@ -1,10 +1,11 @@
 package sw417f20.ebal.CodeGeneration.Strategies;
 
+import sw417f20.ebal.CodeGeneration.Utility.ArduinoSystem;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class OperatorStrategy extends CodeGenerationStrategy {
     @Override
-    public String GenerateCode(Node node) {
+    public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
 
         switch (node.Type){
             case LessThan:
@@ -30,7 +31,7 @@ public class OperatorStrategy extends CodeGenerationStrategy {
             case Times:
                 return " * ";
             case Divide:
-                //TODO find ud af hvordan man smider en fejl hvis man dividere med 0.
+                //TODO find ud af hvordan man smider en fejl hvis man dividerer med 0.
                 return " / ";
             case Modulo:
                 //TODO modulo 0 er undefined

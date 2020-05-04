@@ -45,6 +45,7 @@ public class StrategyFactory {
     //      private RangeStrategy rangeStrategy;
     private ExpressionStrategy expressionStrategy;
     private IdentifierStrategy identifierStrategy;
+    private OperatorStrategy operatorStrategy;
     private PrefixStrategy prefixStrategy;
     //      private PrefixNotStrategy prefixNotStrategy;
     //      private PrefixMinusStrategy prefixMinusStrategy;
@@ -367,4 +368,19 @@ public class StrategyFactory {
     }
 
 
+    public OperatorStrategy GetOperatorStrategy() {
+        if(operatorStrategy == null) {
+            operatorStrategy = new OperatorStrategy();
+        }
+
+        return operatorStrategy;
+    }
+
+    public FilterTypeStrategy GetFilterTypeStrategy() {
+        if (filterTypeStrategy == null) {
+            filterTypeStrategy = new FilterTypeStrategy();
+        }
+
+        return filterTypeStrategy;
+    }
 }

@@ -22,44 +22,44 @@ public class EventDictionary {
      */
     public EventDictionary(Node node) {
         eventDictionary = new Hashtable<>();
-        MakeEventDictionary(node);
+//        MakeEventDictionary(node);
     }
 
     /**
      * Method that links events and slaves in an AST.
      * @param node          The root node of the AST whose events and slaves should be linked.
      */
-    public void MakeEventDictionary(Node node) {
-        NodeList nodeList = new NodeList();
-        int slaveID = 0;
-        int eventID = 0;
-
-        //Visit slaves.
-        Node currentSlaveNode = node.FirstChild.Next;
-        while (!currentSlaveNode.IsEmpty()) {
-            nodeList.Visit(currentSlaveNode);
-            currentSlaveNode = currentSlaveNode.Next;
-        }
-
-        for (Node slaveNode : nodeList.GetList()) {
-            Slave slave = new Slave(slaveNode.FirstChild.Value, slaveID++);
-
-            //If There are no EventHandlers, continue to the next slave
-            if (slaveNode.FirstChild.Next.Next.IsEmpty()) continue;
-
-            Node eventNode = slaveNode.FirstChild.Next.Next;
-            Event event = new Event(eventNode.FirstChild.Value, eventID++, "" + 0);
-            event.AddSlave(slave);
-            AddEvent(event.GetName(), event);
-
-            while (!eventNode.Next.IsEmpty()) {
-                eventNode = eventNode.Next;
-                event = new Event(eventNode.FirstChild.Value, eventID++, "" + 0);
-                event.AddSlave(slave);
-                AddEvent(event.GetName(), event);
-            }
-        }
-    }
+//    public void MakeEventDictionary(Node node) {
+//        NodeList nodeList = new NodeList();
+//        int slaveID = 0;
+//        int eventID = 0;
+//
+//        //Visit slaves.
+//        Node currentSlaveNode = node.FirstChild.Next;
+//        while (!currentSlaveNode.IsEmpty()) {
+//            nodeList.Visit(currentSlaveNode);
+//            currentSlaveNode = currentSlaveNode.Next;
+//        }
+//
+//        for (Node slaveNode : nodeList.GetList()) {
+//            Slave slave = new Slave(slaveNode.FirstChild.Value, slaveID++, slaveNode);
+//
+//            //If There are no EventHandlers, continue to the next slave
+//            if (slaveNode.FirstChild.Next.Next.IsEmpty()) continue;
+//
+//            Node eventNode = slaveNode.FirstChild.Next.Next;
+//            Event event = new Event(eventNode.FirstChild.Value, eventID++);
+//            event.AddSlave(slave);
+//            AddEvent(event.GetName(), event);
+//
+//            while (!eventNode.Next.IsEmpty()) {
+//                eventNode = eventNode.Next;
+//                event = new Event(eventNode.FirstChild.Value, eventID++);
+//                event.AddSlave(slave);
+//                AddEvent(event.GetName(), event);
+//            }
+//        }
+//    }
 
     /**
      * Method that puts an existing event into the dictionary.
@@ -76,7 +76,7 @@ public class EventDictionary {
      * @param eventValue    The value the events value should be changed to.
      */
     public void EditEventValue(String eventName, String eventValue) {
-        eventDictionary.get(eventName).SetValue(eventValue);
+        eventDictionary.get(eventName).SetType(eventValue);
     }
 
     /**
@@ -94,7 +94,7 @@ public class EventDictionary {
      * @return              Returns a string representing the events value.
      */
     public String GetEventValue(String eventName) {
-        return eventDictionary.get(eventName).GetValue();
+        return eventDictionary.get(eventName).GetType();
     }
 
     /**
@@ -102,7 +102,7 @@ public class EventDictionary {
      * @param eventName     Name of the event to get from (Key).
      * @return              Returns an ArrayList of slaves that has an EventHandler for the event.
      */
-    public ArrayList<Slave> GetEventAssociatedSlaves(String eventName) {
-        return eventDictionary.get(eventName).GetAssociatedSlaves();
-    }
+//    public ArrayList<Slave> GetEventAssociatedSlaves(String eventName) {
+//        return eventDictionary.get(eventName).GetAssociatedSlaves();
+//    }
 }
