@@ -39,4 +39,14 @@ public abstract class CodeGenerationStrategy {
         }
         return content;
     }
+
+    protected String addIndentation(int indent) {
+        StringBuilder tabs = new StringBuilder();
+
+        for (int i = 0; i < indent; i++) {
+            tabs.append("\t");
+        }
+
+        return tabs.toString();
+    }
 }

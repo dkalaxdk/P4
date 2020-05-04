@@ -28,17 +28,8 @@ public class CodeGenerationStrategiesVisitor extends Visitor {
                 AssignStrategy(node, strategies.GetSlaveStrategy());
                 arduinoID++;
                 break;
-            case Initiate:
-                AssignStrategy(node, strategies.GetInitiateStrategy());
-                break;
             case Block:
                 AssignStrategy(node, strategies.GetBlockStrategy());
-                break;
-            case Listener:
-                AssignStrategy(node, strategies.GetListenerStrategy());
-                break;
-            case EventHandler:
-                AssignStrategy(node, strategies.GetEventHandlerStrategy());
                 break;
             case PinDeclaration:
                 AssignStrategy(node, strategies.GetPinDeclarationStrategy());
@@ -75,12 +66,6 @@ public class CodeGenerationStrategiesVisitor extends Visitor {
                 break;
             case FilterNoise:
                 AssignStrategy(node, strategies.GetFilterNoiseStrategy());
-                break;
-            case CreateEvent:
-                AssignStrategy(node, strategies.GetCreateEventStrategy());
-                break;
-            case CreatePin:
-                AssignStrategy(node, strategies.GetCreatePinStrategy());
                 break;
             case Digital:
             case Analog:
@@ -126,6 +111,11 @@ public class CodeGenerationStrategiesVisitor extends Visitor {
             case Modulo:
                 AssignStrategy(node, strategies.GetOperatorStrategy());
                 break;
+            case CreateEvent:
+            case CreatePin:
+            case EventHandler:
+            case Listener:
+            case Initiate:
             case Empty:
                 AssignStrategy(node, strategies.GetEmptyStrategy());
                 break;

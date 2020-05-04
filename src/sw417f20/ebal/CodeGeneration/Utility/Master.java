@@ -27,7 +27,7 @@ public class Master extends ArduinoBoard {
 
         this.Listeners.add("void " + listenerName + "() " + block);
 
-        this.Loop.add(listenerName + "();");
+        this.Loop.add(listenerName + "();\n");
     }
 
     @Override
@@ -48,21 +48,30 @@ public class Master extends ArduinoBoard {
         masterBuilder.append(libraries);
 
         masterBuilder.append(AddArray(PinDeclarations));
+        masterBuilder.append("\n");
         masterBuilder.append(AddArray(EventDeclarations));
+        masterBuilder.append("\n");
 
         masterBuilder.append("void setup() {\n");
+        indentation++;
         masterBuilder.append(AddArray(PinInstantiations));
+        masterBuilder.append("\n");
         masterBuilder.append(AddArray(EventInstantiations));
+        masterBuilder.append("\n");
         masterBuilder.append(AddArray(AssociatedSlaves));
-        masterBuilder.append("Wire.begin();\n");
-        masterBuilder.append("\n}\n");
+        masterBuilder.append("\n");
+        masterBuilder.append("\tWire.begin();");
+        masterBuilder.append("\n}\n\n");
+        indentation--;
 
         masterBuilder.append(AddArray(Listeners));
+        masterBuilder.append("\n");
 
+        indentation++;
         masterBuilder.append("void loop() {\n");
         masterBuilder.append(AddArray(Loop));
-        masterBuilder.append("\n}\n");
-
+        masterBuilder.append("}\n");
+        indentation--;
 
         return masterBuilder.toString();
     }

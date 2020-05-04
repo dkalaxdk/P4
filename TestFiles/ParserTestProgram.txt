@@ -24,6 +24,30 @@ BEGIN MASTER
         }
     }
 
+    Listener (button2) {
+        if (1 > 2) {
+            int a = 3;
+        }
+        else if (2 > 3) {
+            int a = 4;
+        }
+        else {
+            int a = 5;
+        }
+
+        if (1 > 2) {
+            if (5 > 4) {
+
+            }
+        }
+        else if (2 > 3) {
+            int a = 4;
+        }
+        else {
+            int a = 5;
+        }
+    }
+
 END MASTER
 
 

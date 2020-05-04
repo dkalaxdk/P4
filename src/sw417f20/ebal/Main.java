@@ -31,6 +31,8 @@ public class Main {
         Node AST = null;
 
         try {
+            long start = System.currentTimeMillis();
+
             String filePath = new File("").getAbsolutePath();
             String fileInput = filePath + "/TestFiles/ParserTestProgram.txt";
 
@@ -41,9 +43,8 @@ public class Main {
 
             Parser parser = new Parser(scanner, fileInput);
 
-            long start = System.currentTimeMillis();
+
             AST = parser.Parse(debug);
-            System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms \n");
 
             StaticSemanticsChecker checker = new StaticSemanticsChecker();
             HashSymbolTable table = (HashSymbolTable)checker.Run(AST);
@@ -60,6 +61,8 @@ public class Main {
 
             ArduinoSystem system = new ArduinoSystem(AST);
             system.Generate();
+
+            System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms \n");
         }
 
         catch (SyntaxException | SemanticsException e) {

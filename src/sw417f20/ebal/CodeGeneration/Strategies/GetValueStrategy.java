@@ -20,6 +20,6 @@ public class GetValueStrategy extends CodeGenerationStrategy {
 
         String name = node.Next.Value;
 
-        return name + ".getValue();";
+        return name + ".getValue()";
     }
 }

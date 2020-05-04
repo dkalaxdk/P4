@@ -17,6 +17,7 @@ public abstract class ArduinoBoard {
     public ArrayList<String> Loop; // Read all pins
 
     protected String libraries = "#include <ebal.h> \n#include <ebalEvent.h> \n#include <ebalPin.h>\n\n";
+    int indentation = 0;
 
     public ArduinoBoard() {
         PinDeclarations = new ArrayList<>();
@@ -56,6 +57,9 @@ public abstract class ArduinoBoard {
         StringBuilder stringBuilder = new StringBuilder();
 
         for (String str : list) {
+            for (int i = 0; i < indentation; i++) {
+                stringBuilder.append("\t");
+            }
             stringBuilder.append(str);
         }
 

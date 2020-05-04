@@ -31,6 +31,6 @@ public class EventDeclarationStrategy extends CodeGenerationStrategy {
         String eventName = node.FirstChild.Value;
         String expression = node.FirstChild.Next.FirstChild.Next.GenerateCode(arduinoSystem);
 
-        return eventName + ".createEvent(" + expression + ");";
+        return addIndentation(arduinoSystem.Indentation) + eventName + ".createEvent(" + expression + ");\n";
     }
 }

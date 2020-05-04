@@ -9,6 +9,6 @@ public class FilterNoiseStrategy extends CodeGenerationStrategy {
         String pinName = node.Next.Value;
         String filterType = node.Next.Next.GenerateCode(arduinoSystem);
 
-        return pinName + ".filterNoise(" + filterType + ");";
+        return pinName + ".filterNoise(" + filterType + ")";
     }
 }

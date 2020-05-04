@@ -21,6 +21,6 @@ public class IntDeclarationStrategy extends CodeGenerationStrategy {
 
         content += ";\n";
 
-        return content;
+        return addIndentation(arduinoSystem.Indentation) + content;
     }
 }

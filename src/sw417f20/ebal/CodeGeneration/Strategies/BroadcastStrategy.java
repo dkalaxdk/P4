@@ -23,6 +23,6 @@ public class BroadcastStrategy extends CodeGenerationStrategy {
 
         String eventName = node.Next.Value;
 
-        return eventName + ".broadcast();";
+        return addIndentation(arduinoSystem.Indentation) + eventName + ".broadcast();\n";
     }
 }

@@ -27,16 +27,16 @@ public class Slave extends ArduinoBoard{
         this.EventHandlers.add("void " + eventHandlerName + "() " + block);
 
         this.ReceiveEvent.add("if (eventID == " + event.GetName() + ".getID()) {\n" +
-                event.GetName() + ".createEvent();\n" +
-                eventHandlerName + "();\n" +
-                "}\n");
+                "\t\t" + event.GetName() + ".createEvent();\n" +
+                "\t\t" + eventHandlerName + "();\n" +
+                "\t}\n");
     }
 
     @Override
     public void AddEventDeclaration(Event event) {
-        this.EventDeclarations.add(event.GetType() + " " + event.GetName() + ";");
+        this.EventDeclarations.add(event.GetType() + " " + event.GetName() + ";\n");
 
-        this.EventInstantiations.add(event.GetName() + ".setID(" + event.GetID() + ");");
+        this.EventInstantiations.add(event.GetName() + ".setID(" + event.GetID() + ");\n");
     }
 
     @Override
@@ -46,25 +46,34 @@ public class Slave extends ArduinoBoard{
         slaveBuilder.append(libraries);
 
         slaveBuilder.append(AddArray(PinDeclarations));
+        slaveBuilder.append("\n");
         slaveBuilder.append(AddArray(EventDeclarations));
+        slaveBuilder.append("\n");
 
         slaveBuilder.append("void setup() {\n");
+        indentation++;
         slaveBuilder.append(AddArray(PinInstantiations));
+        slaveBuilder.append("\n");
         slaveBuilder.append(AddArray(EventInstantiations));
-        slaveBuilder.append("Wire.begin(").append(ID).append(");\n");
-        slaveBuilder.append("Wire.onReceive(receiveEvent);\n");
-        slaveBuilder.append("\n}\n");
+        slaveBuilder.append("\n");
+        indentation--;
+        slaveBuilder.append("\tWire.begin(").append(ID).append(");\n");
+        slaveBuilder.append("\tWire.onReceive(receiveEvent);\n");
+        slaveBuilder.append("}\n\n");
 
         slaveBuilder.append(AddArray(EventHandlers));
+        slaveBuilder.append("\n");
 
+        indentation++;
         slaveBuilder.append("void receiveEvent(int howMany) {\n");
-        slaveBuilder.append("char eventID = Wire.read();\n");
+        slaveBuilder.append("\tchar eventID = Wire.read();\n\n");
         slaveBuilder.append(AddArray(ReceiveEvent));
-        slaveBuilder.append("\n}\n");
+        slaveBuilder.append("}\n\n");
 
         slaveBuilder.append("void loop() {\n");
         slaveBuilder.append(AddArray(Loop));
-        slaveBuilder.append("\n}\n");
+        slaveBuilder.append("}\n");
+        indentation--;
 
         return slaveBuilder.toString();
     }

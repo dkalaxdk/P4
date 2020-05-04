@@ -16,6 +16,8 @@ public class ArduinoSystem {
 
     public Dictionary<String, Event> eventDictionary;
 
+    public int Indentation = 0;
+
     public ArduinoSystem(Node root) {
         master = new Master();
         slaveList = new ArrayList<Slave>();
