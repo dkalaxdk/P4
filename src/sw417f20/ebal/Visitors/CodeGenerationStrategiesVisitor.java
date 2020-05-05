@@ -114,8 +114,6 @@ public class CodeGenerationStrategiesVisitor extends Visitor {
             case Modulo:
                 AssignStrategy(node, strategies.GetOperatorStrategy());
                 break;
-            case CreateEvent:
-            case CreatePin:
             case EventHandler:
                 AssignStrategy(node, strategies.GetEventHandlerStrategy());
                 break;
@@ -125,6 +123,8 @@ public class CodeGenerationStrategiesVisitor extends Visitor {
             case Initiate:
                 AssignStrategy(node, strategies.GetInitiateStrategy());
                 break;
+            case CreateEvent:
+            case CreatePin:
             case Empty:
                 AssignStrategy(node, strategies.GetEmptyStrategy());
                 break;

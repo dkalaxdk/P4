@@ -33,11 +33,13 @@ void button1PressedEventHandler0() {
 		int b = 4;
 	}
 }
+
 void button2PressedEventHandler1() {
 	light1.write(1);
 	light2.write(1);
 	light3.write(1);
 }
+
 
 void receiveEvent(int howMany) {
 	char eventID = Wire.read();

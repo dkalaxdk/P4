@@ -20,6 +20,6 @@ public class BoolDeclarationStrategy extends CodeGenerationStrategy {
         }
 
         decl.append(";\n");
-        return addIndentation(arduinoSystem.Indentation) + decl.toString();
+        return addIndent(arduinoSystem.Indent) + decl.toString();
     }
 }

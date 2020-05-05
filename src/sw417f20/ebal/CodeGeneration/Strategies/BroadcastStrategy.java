@@ -8,6 +8,6 @@ public class BroadcastStrategy extends CodeGenerationStrategy {
     public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
         String eventName = node.Next.Value;
 
-        return addIndentation(arduinoSystem.Indentation) + eventName + ".broadcast();\n";
+        return addIndent(arduinoSystem.Indent) + eventName + ".broadcast();\n";
     }
 }

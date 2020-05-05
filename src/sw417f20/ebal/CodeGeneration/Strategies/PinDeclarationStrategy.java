@@ -19,19 +19,28 @@ public class PinDeclarationStrategy extends CodeGenerationStrategy {
 
         String pinName = node.FirstChild.Value;
 
-        board.PinDeclarations.add("ebalPin " + pinName + ";\n");
+        board.PinDeclarations
+                .append("ebalPin ")
+                .append(pinName)
+                .append(";\n");
 
         Node call = node.FirstChild.Next;
         Node pinType = call.FirstChild.Next;
         Node ioType = pinType.Next;
         Node pinNumber = ioType.Next;
 
-        board.PinInstantiations.add(pinName + ".createPin("
-                + pinType.GenerateCode(arduinoSystem) + ", "
-                + ioType.GenerateCode(arduinoSystem) + ", "
-                + pinNumber.GenerateCode(arduinoSystem) + ");\n");
+        board.PinInstantiations
+                .append("\t")
+                .append(pinName).append(".createPin(")
+                .append(pinType.GenerateCode(arduinoSystem)).append(", ")
+                .append(ioType.GenerateCode(arduinoSystem)).append(", ")
+                .append(pinNumber.GenerateCode(arduinoSystem))
+                .append(");\n");
 
-        board.Loop.add(pinName + ".readPin();\n");
+        board.Loop
+                .append("\t")
+                .append(pinName)
+                .append(".readPin();\n");
 
         return "";
     }

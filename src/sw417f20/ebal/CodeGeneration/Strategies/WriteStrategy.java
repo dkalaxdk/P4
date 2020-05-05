@@ -10,6 +10,6 @@ public class WriteStrategy extends CodeGenerationStrategy {
         String pinName = node.Next.Value;
         String value = node.Next.Next.Value;
 
-        return addIndentation(arduinoSystem.Indentation) + pinName + ".write(" + value + ");\n";
+        return addIndent(arduinoSystem.Indent) + pinName + ".write(" + value + ");\n";
     }
 }

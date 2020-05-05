@@ -38,9 +38,11 @@ void button1Listener0() {
 		button2Pressed.broadcast();
 	}
 }
+
 void button1Listener1() {
 	int a = 3;
 }
+
 void button2Listener2() {
 	if ((1 > 2)) {
 		int a = 3;
@@ -74,6 +76,7 @@ void button2Listener2() {
 		int a = 5;
 	}
 }
+
 void button3Listener3() {
 	int TEST = -1;
 	int a = (1 + (2 + 3));
@@ -83,12 +86,14 @@ void button3Listener3() {
 	int e = (1 + ((2 + 3) + 4));
 	int f = ((1 + 2) + (3 + 4));
 }
+
 void button4Listener4() {
 	int a = 1;
 	int b = 2;
 	int c = (a / b);
 	c = (a % b);
 }
+
 
 void loop() {
 	button1.readPin();

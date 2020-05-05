@@ -21,6 +21,6 @@ public class IntDeclarationStrategy extends CodeGenerationStrategy {
 
         decl.append(";\n");
 
-        return addIndentation(arduinoSystem.Indentation) + decl.toString();
+        return addIndent(arduinoSystem.Indent) + decl.toString();
     }
 }

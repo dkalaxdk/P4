@@ -19,12 +19,17 @@ public class EventHandlerStrategy extends CodeGenerationStrategy {
 
         String block = node.FirstChild.Next.GenerateCode(arduinoSystem);
 
-        slave.EventHandlers.add("void " + eventHandlerName + "() " + block);
+        slave.EventHandlers
+                .append("void ")
+                .append(eventHandlerName)
+                .append("() ")
+                .append(block)
+                .append("\n");
 
-        slave.ReceiveEvent.add("if (eventID == " + event.GetName() + ".getID()) {\n" +
-                "\t\t" + event.GetName() + ".createEvent();\n" +
-                "\t\t" + eventHandlerName + "();\n" +
-                "\t}\n");
+        slave.ReceiveEvent.append("\tif (eventID == ").append(event.GetName()).append(".getID()) {\n")
+                .append("\t\t").append(event.GetName()).append(".createEvent();\n")
+                .append("\t\t").append(eventHandlerName).append("();\n")
+                .append("\t}\n");
 
         return "";
     }

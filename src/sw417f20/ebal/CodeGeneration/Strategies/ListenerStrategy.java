@@ -13,9 +13,17 @@ public class ListenerStrategy extends CodeGenerationStrategy {
 
         String block = node.FirstChild.Next.GenerateCode(arduinoSystem);
 
-        arduinoSystem.Master.Listeners.add("void " + listenerName + "() " + block);
+        arduinoSystem.Master.Listeners
+                .append("void ")
+                .append(listenerName)
+                .append("() ")
+                .append(block)
+                .append("\n");
 
-        arduinoSystem.Master.Loop.add(listenerName + "();\n");
+        arduinoSystem.Master.Loop
+                .append("\t")
+                .append(listenerName)
+                .append("();\n");
 
         return "";
     }

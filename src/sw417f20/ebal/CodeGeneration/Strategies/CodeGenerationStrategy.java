@@ -36,7 +36,7 @@ public abstract class CodeGenerationStrategy {
         return content.toString();
     }
 
-    protected String addIndentation(int indent) {
+    protected String addIndent(int indent) {
         StringBuilder tabs = new StringBuilder();
 
         for (int i = 0; i < indent; i++) {

@@ -16,14 +16,14 @@ public class IfStrategy extends CodeGenerationStrategy {
         StringBuilder ifStmt = new StringBuilder();
 
         if (node.Parent.Type != Node.NodeType.If) {
-            ifStmt.append(addIndentation(arduinoSystem.Indentation));
+            ifStmt.append(addIndent(arduinoSystem.Indent));
         }
 
         ifStmt.append("if (").append(expression).append(") ");
         ifStmt.append(block);
 
         if (elseBlock != null && !elseBlock.IsEmpty()) {
-            afterIf = addIndentation(arduinoSystem.Indentation) + "else " + elseBlock.GenerateCode(arduinoSystem);
+            afterIf = addIndent(arduinoSystem.Indent) + "else " + elseBlock.GenerateCode(arduinoSystem);
         }
 
         ifStmt.append(afterIf);

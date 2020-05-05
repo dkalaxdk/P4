@@ -8,30 +8,27 @@ import java.util.*;
 
 public class ArduinoSystem {
 
-    private Node root;
+    private final Node root;
 
     public Master Master;
-
     public ArrayList<Slave> SlaveList;
-
     public Dictionary<String, Event> EventDictionary;
 
-    public int Indentation = 0;
+    public int Indent = 0;
 
     public ArduinoSystem(Node root) {
         Master = new Master();
-        SlaveList = new ArrayList<Slave>();
+        SlaveList = new ArrayList<>();
         this.root = root;
 
         EventDictionary = new Hashtable<>();
 
         FindSlaves(root);
-        FindEvents(root);
+        FindHandledEvents(root);
     }
 
     public void Generate() {
         root.GenerateCode(this);
-
         Print();
     }
 
@@ -40,12 +37,12 @@ public class ArduinoSystem {
         int counter = 0;
 
         while (!slaves.IsEmpty()) {
-            SlaveList.add(new Slave(slaves.FirstChild.Value, counter++, slaves));
+            SlaveList.add(new Slave(slaves.FirstChild.Value, counter++));
             slaves = slaves.Next;
         }
     }
 
-    private void FindEvents(Node root) {
+    private void FindHandledEvents(Node root) {
         Node slaves = root.FirstChild.Next;
         int eventCounter = 0;
         int slaveCounter = 0;
@@ -73,8 +70,7 @@ public class ArduinoSystem {
         }
     }
 
-
-    public void Print() {
+    private void Print() {
         OutputFileGenerator generator = new OutputFileGenerator();
 
         System.out.println();
@@ -89,7 +85,5 @@ public class ArduinoSystem {
         catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 }

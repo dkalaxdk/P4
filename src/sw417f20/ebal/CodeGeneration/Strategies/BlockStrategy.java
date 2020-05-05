@@ -11,11 +11,11 @@ public class BlockStrategy extends CodeGenerationStrategy {
 
         block.append("{\n");
 
-        arduinoSystem.Indentation++;
+        arduinoSystem.Indent++;
         block.append(GenerateCodeForLinkedList(node.FirstChild, arduinoSystem));
-        arduinoSystem.Indentation--;
+        arduinoSystem.Indent--;
 
-        block.append(addIndentation(arduinoSystem.Indentation));
+        block.append(addIndent(arduinoSystem.Indent));
         block.append("}\n");
 
 
