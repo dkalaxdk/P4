@@ -1,6 +1,6 @@
 package sw417f20.ebal;
 
-import sw417f20.ebal.ContextAnalysis.HashSymbolTable;
+import sw417f20.ebal.ContextAnalysis.ISymbolTable;
 import sw417f20.ebal.Exceptions.SemanticsException;
 import sw417f20.ebal.Exceptions.SyntaxException;
 import sw417f20.ebal.CodeGeneration.OutputFileGenerator;
@@ -127,7 +127,7 @@ public class Main {
 
     public static void SemanticsStuff() throws FileNotFoundException{
         Node root = null;
-        HashSymbolTable symbolTable = null;
+        ISymbolTable symbolTable = null;
         try {
             String filePath = new File("").getAbsolutePath();
             String fileInput = filePath + "/TestFiles/SemanticsErrorTest.txt";
@@ -150,7 +150,9 @@ public class Main {
         SemanticsStrategiesVisitor visitor = new SemanticsStrategiesVisitor();
         symbolTable = visitor.Run(root);
         try {
-            root.CheckSemantics();
+            if (root != null) {
+                root.CheckSemantics();
+            }
 //            HashSymbolTablePrinter printer = new HashSymbolTablePrinter();
 //            printer.PrintTable(symbolTable);
 

@@ -9,5 +9,10 @@ public class SemanticsFloatLiteralStrategy extends SemanticsCheckerStrategy{
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {
         node.DataType = Symbol.SymbolType.FLOAT;
+        if (node.FirstChild != null){
+            if (node.FirstChild.Type != Node.NodeType.PrefixMinus){
+                MakeError(node, "Only minus prefix applicable to float data type.");
+            }
+        }
     }
 }
