@@ -5,7 +5,7 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class HashSymbolTable extends SymbolTable{
+public class HashSymbolTable implements ISymbolTable {
 
     public HashSymbolTable GlobalScope;
     public HashSymbolTable CurrentScope;
@@ -44,6 +44,15 @@ public class HashSymbolTable extends SymbolTable{
     }
 
     @Override
+    public void EnterSymbol(String name, Symbol.SymbolType type, boolean hasBeenInstantiated) {
+        // Checks that symbol is not already in hashtable
+        if (!DeclaredLocally(name)) {
+            GlobalScope.CurrentScope.Hashtable.put(name, new Symbol(name, type, hasBeenInstantiated));
+        }
+    }
+
+    //TODO: Er den her nødvendig ift codegen?
+    @Override
     public void EnterSymbol(String name, Symbol.SymbolType type, Node reference) {
         // Checks that symbol is not already in hashtable
         if (!DeclaredLocally(name)) {
@@ -80,11 +89,6 @@ public class HashSymbolTable extends SymbolTable{
     public boolean DeclaredLocally(String name) {
         return GlobalScope.CurrentScope.Hashtable.containsKey(name);
     }
-
-//    @Override
-//    public HashSymbolTable GetGlobalScope (){
-//        return GlobalScope;
-//    }
 
     @Override
     public void EnterGlobalSymbol(Symbol symbol){

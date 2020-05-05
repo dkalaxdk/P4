@@ -1,6 +1,7 @@
 package sw417f20.ebal.Visitors;
 
 import sw417f20.ebal.ContextAnalysis.HashSymbolTable;
+import sw417f20.ebal.ContextAnalysis.ISymbolTable;
 import sw417f20.ebal.ContextAnalysis.Strategies.SemanticsCheckerStrategy;
 import sw417f20.ebal.ContextAnalysis.Strategies.SemanticsStrategyFactory;
 import sw417f20.ebal.ContextAnalysis.Symbol;
@@ -10,9 +11,10 @@ import java.util.ArrayList;
 
 public class SemanticsStrategiesVisitor {
 
-    public HashSymbolTable SymbolTable;
+    public ISymbolTable SymbolTable;
     public ArrayList<Integer> UsedPinNumbers;
     public ArrayList<Symbol> LocalEvents;
+    public ArrayList<Symbol> BroadcastEvents;
 
     private SemanticsStrategyFactory strategies;
     private boolean inSlave;
@@ -22,7 +24,8 @@ public class SemanticsStrategiesVisitor {
         SymbolTable = new HashSymbolTable();
         UsedPinNumbers = new ArrayList<>();
         LocalEvents = new ArrayList<>();
-        strategies = new SemanticsStrategyFactory(SymbolTable, UsedPinNumbers, LocalEvents);
+        BroadcastEvents = new ArrayList<>();
+        strategies = new SemanticsStrategyFactory(SymbolTable, UsedPinNumbers, LocalEvents, BroadcastEvents);
         inSlave = false;
         inInitiate = false;
     }
@@ -32,7 +35,7 @@ public class SemanticsStrategiesVisitor {
     }
 
     // Starts the process of assigning semantics strategies to the nodes of the AST with node (parameter) as its root
-    public HashSymbolTable Run(Node node) {
+    public ISymbolTable Run(Node node) {
         AssignStrategyProg(node);
         return SymbolTable;
     }

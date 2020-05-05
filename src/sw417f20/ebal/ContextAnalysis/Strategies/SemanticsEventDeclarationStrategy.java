@@ -4,7 +4,11 @@ import sw417f20.ebal.ContextAnalysis.Symbol;
 import sw417f20.ebal.Exceptions.SemanticsException;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
+import java.util.ArrayList;
+
 public class SemanticsEventDeclarationStrategy extends SemanticsCheckerStrategy{
+
+    public ArrayList<Symbol> LocalEvents;
 
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {

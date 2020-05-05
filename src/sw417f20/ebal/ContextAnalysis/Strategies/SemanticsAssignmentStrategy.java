@@ -21,6 +21,7 @@ public class SemanticsAssignmentStrategy extends SemanticsCheckerStrategy {
             else if (expression.DataType == Symbol.SymbolType.EVENT){
                 MakeError(node, "expression cannot be of type Event");
             }
+            identifier.HasBeenInstantiated = true;
         }
         else {
             MakeError(node, node.FirstChild.Value, ErrorType.NotDeclared);

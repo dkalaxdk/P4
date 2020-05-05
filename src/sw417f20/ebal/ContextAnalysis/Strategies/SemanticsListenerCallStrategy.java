@@ -4,7 +4,11 @@ import sw417f20.ebal.ContextAnalysis.Symbol;
 import sw417f20.ebal.Exceptions.SemanticsException;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
+import java.util.ArrayList;
+
 public class SemanticsListenerCallStrategy extends SemanticsCheckerStrategy{
+
+    public ArrayList<Symbol> BroadcastEvents;
 
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {
@@ -32,6 +36,9 @@ public class SemanticsListenerCallStrategy extends SemanticsCheckerStrategy{
         if (parameter != null) {
             if (parameter.DataType == Symbol.SymbolType.EVENT) {
                 node.DataType = Symbol.SymbolType.VOID;
+                if (!InBroadcastEvents(parameter.Name)){
+                    BroadcastEvents.add(parameter);
+                }
             } else {
                 MakeError(node, node.FirstChild.Next.DataType.toString(), ErrorType.WrongType);
             }
@@ -39,6 +46,15 @@ public class SemanticsListenerCallStrategy extends SemanticsCheckerStrategy{
         else {
             MakeError(node, node.FirstChild.Next.Value, ErrorType.NotDeclared);
         }
+    }
+
+    private boolean InBroadcastEvents(String name) {
+        for (Symbol symbol : BroadcastEvents){
+            if (symbol.Name.equals(name)){
+                return true;
+            }
+        }
+        return false;
     }
 
     private void CheckGetValue(Node node) throws SemanticsException {

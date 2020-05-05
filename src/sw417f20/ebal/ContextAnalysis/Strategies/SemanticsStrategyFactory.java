@@ -1,15 +1,16 @@
 package sw417f20.ebal.ContextAnalysis.Strategies;
 
-import sw417f20.ebal.ContextAnalysis.HashSymbolTable;
+import sw417f20.ebal.ContextAnalysis.ISymbolTable;
 import sw417f20.ebal.ContextAnalysis.Symbol;
 
 import java.util.ArrayList;
 
 public class SemanticsStrategyFactory {
 
-    public HashSymbolTable SymbolTable;
+    public ISymbolTable SymbolTable;
     public ArrayList<Integer> UsedPinNumbers;
     public ArrayList<Symbol> LocalEvents;
+    public ArrayList<Symbol> BroadcastEvents;
 
     private SemanticsProgStrategy progStrategy;
     private SemanticsMasterStrategy masterStrategy;
@@ -43,10 +44,12 @@ public class SemanticsStrategyFactory {
     private SemanticsFloatLiteralStrategy floatLiteralStrategy;
     private SemanticsBoolLiteralStrategy boolLiteralStrategy;
 
-    public SemanticsStrategyFactory(HashSymbolTable symbolTable, ArrayList<Integer> usedPinNumbers, ArrayList<Symbol> localEvents){
+    public SemanticsStrategyFactory(ISymbolTable symbolTable, ArrayList<Integer> usedPinNumbers,
+                                    ArrayList<Symbol> localEvents, ArrayList<Symbol> broadcastEvents){
         SymbolTable = symbolTable;
         UsedPinNumbers = usedPinNumbers;
         LocalEvents = localEvents;
+        BroadcastEvents = broadcastEvents;
     }
 
 
@@ -62,7 +65,7 @@ public class SemanticsStrategyFactory {
         if (masterStrategy == null){
             masterStrategy = new SemanticsMasterStrategy();
             masterStrategy.SymbolTable = SymbolTable;
-            masterStrategy.LocalEvents = LocalEvents;
+            masterStrategy.BroadcastEvents = BroadcastEvents;
         }
         return masterStrategy;
     }
@@ -146,6 +149,7 @@ public class SemanticsStrategyFactory {
         if (listenerCallStrategy == null){
             listenerCallStrategy = new SemanticsListenerCallStrategy();
             listenerCallStrategy.SymbolTable = SymbolTable;
+            listenerCallStrategy.BroadcastEvents = BroadcastEvents;
         }
         return listenerCallStrategy;
     }
