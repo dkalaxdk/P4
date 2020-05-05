@@ -6,11 +6,14 @@ BEGIN MASTER
         // så vi ikke har tonsvis af dem.
 
         pin button1 = createPin(digital, input, 4);
-        pin button2 = createPin(pwm, input, 5);
+        pin button2 = createPin(analog, input, 5);
     }
 
     Listener (button1)
     {
+        //int b;
+        //b = b;
+
         int filteredInput = filterNoise(button1, flip);
 
         if (filteredInput == HIGH)
@@ -20,8 +23,14 @@ BEGIN MASTER
         }
         else {
             event button2Pressed = createEvent(filteredInput);
-            broadcast(button1Pressed);
+            broadcast(button2Pressed);
         }
+
+        event test = createEvent(2);
+        if (true){
+            broadcast(test);
+        }
+
     }
 
     Listener (button1)
@@ -34,12 +43,12 @@ BEGIN MASTER
             broadcast(button3Pressed);
         }
         else if (true){
-            event button3Pressed = createEvent(filteredInput);
-            broadcast(button1Pressed);
+            event button4Pressed = createEvent(filteredInput);
+            broadcast(button4Pressed);
         }
         else {
-            event button2Pressed = createEvent(filteredInput);
-            broadcast(button1Pressed);
+            event button5Pressed = createEvent(filteredInput);
+            broadcast(button5Pressed);
         }
     }
 
@@ -47,19 +56,35 @@ BEGIN MASTER
     {
         int filteredInput = filterNoise(button1, range);
 
-        event hat;
+        event hat = createEvent(2);
 
         if (filteredInput == HIGH)
         {
-            hat = createEvent(0.2);
             broadcast(hat);
         }
         else {
-            hat = createEvent(filteredInput);
             broadcast(hat);
         }
 
     }
+
+    Listener (button1)
+        {
+            int filteredInput = filterNoise(button1, range);
+
+            int b;
+
+            if (filteredInput == HIGH)
+            {
+                b = -2;
+            }
+            else {
+                b = 4;
+            }
+
+            event kat = createEvent(b);
+            broadcast(kat);
+        }
 
 END MASTER
 
@@ -70,10 +95,8 @@ BEGIN SLAVE : TestSlave1
     Initiate
     {
         pin light1 = createPin(digital, output, 4);
-        pin light2 = createPin(digital, output, 5);
-        pin light3 = createPin(digital, output, 6);
-        event noget = createEvent(1);
-        pin fisk = createEvent(2);
+        pin light2 = createPin(pwm, output, 5);
+        pin light3 = createPin(analog, output, 6);
     }
 
     EventHandler(button1Pressed)
@@ -82,7 +105,7 @@ BEGIN SLAVE : TestSlave1
 
         if (value == HIGH)
         {
-            write(light1, LOW);
+            write(light1, 2+3);
         }
         else if (value == LOW)
         {
@@ -92,8 +115,6 @@ BEGIN SLAVE : TestSlave1
         {
             int b = 4;
         }
-
-        event hund = createEvent(4);
     }
 
     EventHandler(button2Pressed)
@@ -102,6 +123,11 @@ BEGIN SLAVE : TestSlave1
         write(light2, HIGH);
         write(light3, HIGH);
     }
+
+    EventHandler(test)
+        {
+            int a = getValue(test);
+        }
 
 END SLAVE
 
