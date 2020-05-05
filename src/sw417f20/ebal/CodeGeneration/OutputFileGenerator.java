@@ -7,6 +7,8 @@ import java.util.ArrayList;
 public class OutputFileGenerator {
     public ArrayList<File> Files;
 
+    private String filePath;
+
     /**
      * Use this constructor, if the content or path of the files
      * is not known, when creating this class.
@@ -15,6 +17,7 @@ public class OutputFileGenerator {
      */
     public OutputFileGenerator() {
         Files = new ArrayList<File>();
+        filePath = getFilePath();
     }
 
     //TODO: Refactor to use a stream/StreamWriter, then make wrapper class
@@ -77,6 +80,6 @@ public class OutputFileGenerator {
      * @return String containing the resulting path
      */
     private String getFilePath() {
-        return new File("").getAbsolutePath() + "/TestFiles/";
+        return new File("").getAbsolutePath() + "/TestFiles/Arduino/";
     }
 }

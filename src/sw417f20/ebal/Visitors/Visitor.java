@@ -7,6 +7,10 @@ public abstract class Visitor {
     public abstract void Visit(Node node);
 
     public void VisitChildren(Node node) {
+        if (node.FirstChild == null) {
+            return;
+        }
+
         Visit(node.FirstChild);
 
         Node children = node.FirstChild;
@@ -18,6 +22,10 @@ public abstract class Visitor {
     }
 
     public void VisitSiblings(Node node) {
+        if (node.FirstSibling == null) {
+            return;
+        }
+
         Visit(node.FirstSibling);
 
         Node siblings = node.FirstSibling;

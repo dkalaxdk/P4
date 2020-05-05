@@ -1,5 +1,7 @@
 package sw417f20.ebal;
 
+import sw417f20.ebal.CodeGeneration.Strategies.StrategyFactory;
+import sw417f20.ebal.CodeGeneration.Utility.ArduinoSystem;
 import sw417f20.ebal.ContextAnalysis.HashSymbolTable;
 import sw417f20.ebal.ContextAnalysis.StaticSemanticsChecker;
 import sw417f20.ebal.Exceptions.SemanticsException;
@@ -7,6 +9,7 @@ import sw417f20.ebal.Exceptions.SyntaxException;
 import sw417f20.ebal.CodeGeneration.OutputFileGenerator;
 import sw417f20.ebal.SyntaxAnalysis.*;
 import sw417f20.ebal.SyntaxAnalysis.Reader;
+import sw417f20.ebal.Visitors.CodeGenerationStrategiesVisitor;
 import sw417f20.ebal.Visitors.HashSymbolTablePrinter;
 
 import java.io.*;
@@ -16,9 +19,59 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 //        ScannerStuff();
-        ParserStuff();
+//        ParserStuff();
 //        SemanticsStuff();
 //        CodeGenStuff();
+
+        RealMain();
+    }
+
+    public static void RealMain() throws FileNotFoundException {
+        boolean debug = true;
+        Node AST = null;
+
+        try {
+            long start = System.currentTimeMillis();
+
+            String filePath = new File("").getAbsolutePath();
+            String fileInput = filePath + "/TestFiles/ParserTestProgram.txt";
+
+            FileReader fileReader = new FileReader(fileInput);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            Reader reader = new Reader(bufferedReader);
+            Scanner scanner = new Scanner(reader);
+
+            Parser parser = new Parser(scanner, fileInput);
+
+
+            AST = parser.Parse(debug);
+
+            StaticSemanticsChecker checker = new StaticSemanticsChecker();
+            HashSymbolTable table = (HashSymbolTable)checker.Run(AST);
+
+            if (debug) {
+                HashSymbolTablePrinter printer = new HashSymbolTablePrinter();
+                printer.PrintTable(table);
+            }
+
+            StrategyFactory codeGenFactory = new StrategyFactory();
+            CodeGenerationStrategiesVisitor codeGenVisitor = new CodeGenerationStrategiesVisitor(codeGenFactory);
+
+            codeGenVisitor.Visit(AST);
+
+            ArduinoSystem system = new ArduinoSystem(AST);
+            system.Generate();
+
+            System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms \n");
+        }
+
+        catch (SyntaxException | SemanticsException e) {
+            System.err.println(e.getMessage());
+        }
+
+        int TEST = 1;
+
+
     }
 
     public static void ParserStuff() throws FileNotFoundException {
@@ -26,7 +79,7 @@ public class Main {
 
         try {
             String filePath = new File("").getAbsolutePath();
-            String fileInput = filePath + "/TestFiles/SmallParserTestProgram.txt";
+            String fileInput = filePath + "/TestFiles/ParserTestProgram.txt";
 
             FileReader fileReader = new FileReader(fileInput);
             BufferedReader bufferedReader = new BufferedReader(fileReader);

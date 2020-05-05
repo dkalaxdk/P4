@@ -38,8 +38,8 @@ public class SlaveDictionary {
 
         for (Node slaveNode : nodeList.GetList()) {
             String slaveName = slaveNode.FirstChild.Value;
-            Slave slave = new Slave(slaveName, slaveID++);
-            AddSlave(slave);
+//            Slave slave = new Slave(slaveName, slaveID++);
+//            AddSlave(slave);
         }
     }
 

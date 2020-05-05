@@ -8,19 +8,19 @@ import java.util.ArrayList;
 public class Event {
     private String Name;
     private int ID;
-    private String Value;
-    private ArrayList<Slave> AssociatedSlaves;
+    private String Type;
+//    private ArrayList<Slave> AssociatedSlaves;
+
+    public ArrayList<Integer> AssociatedSlaves;
 
     /**
      * Constructor of an event.
      * @param name  The name the event should have.
      * @param id    The ID the event should have.
-     * @param value The value the event should have (Usually none when the event is made).
      */
-    public Event(String name, int id, String value) {
+    public Event(String name, int id) {
         this.Name = name;
         this.ID = id;
-        this.Value = value;
         AssociatedSlaves = new ArrayList<>();
     }
 
@@ -60,16 +60,16 @@ public class Event {
      * Getter for the events value.
      * @return      Returns the value of the event.
      */
-    public String GetValue() {
-        return Value;
+    public String GetType() {
+        return Type;
     }
 
     /**
      * Setter for the events value.
-     * @param value The value the events value should be set to.
+     * @param type The value the events value should be set to.
      */
-    public void SetValue(String value) {
-        this.Value = value;
+    public void SetType(String type) {
+        this.Type = type;
     }
 
     /**
@@ -79,15 +79,15 @@ public class Event {
      * </p>
      * @return      Returns the events list of associated slaves.
      */
-    public ArrayList<Slave> GetAssociatedSlaves() {
-        return AssociatedSlaves;
-    }
+//    public ArrayList<Slave> GetAssociatedSlaves() {
+//        return AssociatedSlaves;
+//    }
 
     /**
      * Method for adding a slaves to the events associatedSlaves list.
      * @param slave The slaves to be added to the list.
      */
-    public void AddSlave(Slave slave) {
-        AssociatedSlaves.add(slave);
-    }
+//    public void AddSlave(Slave slave) {
+//        AssociatedSlaves.add(slave);
+//    }
 }

@@ -1,5 +1,6 @@
 package sw417f20.ebal.SyntaxAnalysis;
 
+import sw417f20.ebal.CodeGeneration.Utility.ArduinoSystem;
 import sw417f20.ebal.ContextAnalysis.Symbol;
 
 import sw417f20.ebal.CodeGeneration.Strategies.CodeGenerationStrategy;
@@ -12,6 +13,7 @@ public class Node {
     public int LineNumber = -1;
     public Node DefinitionReference;
     public Symbol.SymbolType DataType;
+    public int ArduinoID;
 
     // The next element in the linked list of siblings
     public Node Next;
@@ -231,9 +233,9 @@ public class Node {
 
     // Calls the provided codeGen strategy, and returns the result.
     // Is the common interface for code generation.
-    public String GenerateCode() {
+    public String GenerateCode(ArduinoSystem arduinoSystem) {
         if(CodeGenerationStrategy != null) {
-            return CodeGenerationStrategy.GenerateCode(this);
+            return CodeGenerationStrategy.GenerateCode(this, arduinoSystem);
         }
         else {
             return "";

@@ -33,21 +33,12 @@ public class StrategyFactory {
     private EventDeclarationStrategy eventDeclarationStrategy;
     // Parameter Strategies
     private PinTypeStrategy pinTypeStrategy;
-    //      private DigitalStrategy digitalStrategy;
-    //      private AnalogStrategy analogStrategy;
-    //      private PwmStrategy pwmStrategy;
     private IOTypeStrategy ioTypeStrategy;
-    //      private InputStrategy inputStrategy;
-    //      private OutputStrategy outputStrategy;
     private FilterTypeStrategy filterTypeStrategy;
-    //      private ConstantStrategy constantStrategy;
-    //      private FlipStrategy flipStrategy;
-    //      private RangeStrategy rangeStrategy;
     private ExpressionStrategy expressionStrategy;
     private IdentifierStrategy identifierStrategy;
+    private OperatorStrategy operatorStrategy;
     private PrefixStrategy prefixStrategy;
-    //      private PrefixNotStrategy prefixNotStrategy;
-    //      private PrefixMinusStrategy prefixMinusStrategy;
     private LiteralStrategy literalStrategy;
     private EmptyStrategy emptyStrategy;
 
@@ -228,36 +219,6 @@ public class StrategyFactory {
         return pinTypeStrategy;
     }
 
-    /*
-    public DigitalStrategy GetDigitalStrategy() {
-        if(digitalStrategy == null) {
-            digitalStrategy = new DigitalStrategy();
-        }
-
-        return digitalStrategy;
-    }
-     */
-
-    /*
-    public AnalogStrategy GetAnalogStrategy() {
-        if(analogStrategy == null) {
-            analogStrategy = new AnalogStrategy();
-        }
-
-        return analogStrategy;
-    }
-     */
-
-    /*
-    public PwmStrategy GetPwmStrategy() {
-        if(pwmStrategy == null) {
-            pwmStrategy = new PwmStrategy();
-        }
-
-        return pwmStrategy;
-    }
-     */
-
     public IOTypeStrategy GetIOTypeStrategy() {
         if(ioTypeStrategy == null) {
             ioTypeStrategy = new IOTypeStrategy();
@@ -265,66 +226,6 @@ public class StrategyFactory {
 
         return ioTypeStrategy;
     }
-
-    /*
-    public InputStrategy GetInputStrategy() {
-        if(inputStrategy == null) {
-            inputStrategy = new InputStrategy();
-        }
-
-        return inputStrategy;
-    }
-     */
-
-    /*
-    public OutputStrategy GetOutputStrategy() {
-        if(outputStrategy == null) {
-            outputStrategy = new OutputStrategy();
-        }
-
-        return outputStrategy;
-    }
-     */
-
-    /*
-    public FilterTypeStrategy GetFilterTypeStrategy() {
-        if(filterTypeStrategy == null) {
-            filterTypeStrategy = new FilterTypeStrategy();
-        }
-
-        return filterTypeStrategy;
-    }
-     */
-
-    /*
-    public ConstantStrategy GetConstantStrategy() {
-        if(constantStrategy == null) {
-            constantStrategy = new ConstantStrategy();
-        }
-
-        return constantStrategy;
-    }
-     */
-
-    /*
-    public FlipStrategy GetFlipStrategy() {
-        if(flipStrategy == null) {
-            flipStrategy = new FlipStrategy();
-        }
-
-        return flipStrategy;
-    }
-     */
-
-    /*
-    public RangeStrategy GetRangeStrategy() {
-        if(rangeStrategy == null) {
-            rangeStrategy = new RangeStrategy();
-        }
-
-        return rangeStrategy;
-    }
-     */
 
     public ExpressionStrategy GetExpressionStrategy() {
         if(expressionStrategy == null) {
@@ -367,4 +268,19 @@ public class StrategyFactory {
     }
 
 
+    public OperatorStrategy GetOperatorStrategy() {
+        if(operatorStrategy == null) {
+            operatorStrategy = new OperatorStrategy();
+        }
+
+        return operatorStrategy;
+    }
+
+    public FilterTypeStrategy GetFilterTypeStrategy() {
+        if (filterTypeStrategy == null) {
+            filterTypeStrategy = new FilterTypeStrategy();
+        }
+
+        return filterTypeStrategy;
+    }
 }

@@ -9,6 +9,7 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
  */
 public class CodeGenerationStrategiesVisitor extends Visitor {
     private StrategyFactory strategies;
+    private int arduinoID = -1;
 
     public CodeGenerationStrategiesVisitor(StrategyFactory strategyFactory) {
         strategies = strategyFactory;
@@ -25,18 +26,10 @@ public class CodeGenerationStrategiesVisitor extends Visitor {
                 break;
             case Slave:
                 AssignStrategy(node, strategies.GetSlaveStrategy());
-                break;
-            case Initiate:
-                AssignStrategy(node, strategies.GetInitiateStrategy());
+                arduinoID++;
                 break;
             case Block:
                 AssignStrategy(node, strategies.GetBlockStrategy());
-                break;
-            case Listener:
-                AssignStrategy(node, strategies.GetListenerStrategy());
-                break;
-            case EventHandler:
-                AssignStrategy(node, strategies.GetEventHandlerStrategy());
                 break;
             case PinDeclaration:
                 AssignStrategy(node, strategies.GetPinDeclarationStrategy());
@@ -74,9 +67,6 @@ public class CodeGenerationStrategiesVisitor extends Visitor {
             case FilterNoise:
                 AssignStrategy(node, strategies.GetFilterNoiseStrategy());
                 break;
-            case CreateEvent:
-                AssignStrategy(node, strategies.GetCreateEventStrategy());
-                break;
             case Digital:
             case Analog:
             case PWM:
@@ -89,7 +79,7 @@ public class CodeGenerationStrategiesVisitor extends Visitor {
             case Constant:
             case Debounce:
             case Range:
-                AssignStrategy(node, strategies.GetFilterNoiseStrategy());
+                AssignStrategy(node, strategies.GetFilterTypeStrategy());
                 break;
             case Expression:
                 AssignStrategy(node, strategies.GetExpressionStrategy());
@@ -106,6 +96,26 @@ public class CodeGenerationStrategiesVisitor extends Visitor {
             case FloatLiteral:
                 AssignStrategy(node, strategies.GetLiteralStrategy());
                 break;
+            case LessThan:
+            case GreaterThan:
+            case NotEqual:
+            case Equals:
+            case GreaterOrEqual:
+            case LessOrEqual:
+            case And:
+            case Or:
+            case Plus:
+            case Minus:
+            case Times:
+            case Divide:
+            case Modulo:
+                AssignStrategy(node, strategies.GetOperatorStrategy());
+                break;
+            case CreateEvent:
+            case CreatePin:
+            case EventHandler:
+            case Listener:
+            case Initiate:
             case Empty:
                 AssignStrategy(node, strategies.GetEmptyStrategy());
                 break;
@@ -113,6 +123,7 @@ public class CodeGenerationStrategiesVisitor extends Visitor {
                 System.err.println("Node type not found");
         }
 
+        node.ArduinoID = arduinoID;
         VisitChildren(node);
     }
 
