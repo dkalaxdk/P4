@@ -28,8 +28,24 @@ public class IfStrategy extends CodeGenerationStrategy {
 
         String expression = node.FirstChild.GenerateCode(arduinoSystem);
         String block = node.FirstChild.Next.GenerateCode(arduinoSystem);
-        String afterIf = node.FirstChild.Next.Next.GenerateCode(arduinoSystem);
 
-        return "";
+        Node n = node.FirstChild.Next.Next;
+        String afterIf = "";
+
+        if (n == null || n.IsEmpty()) {
+            afterIf = "";
+        }
+
+        else {
+            afterIf += addIndentation(arduinoSystem.Indentation) + "else " + node.FirstChild.Next.Next.GenerateCode(arduinoSystem);
+        }
+
+        StringBuilder ifStmt = new StringBuilder();
+
+        ifStmt.append("if (").append(expression).append(") ");
+        ifStmt.append(block);
+        ifStmt.append(afterIf);
+
+        return ifStmt.toString();
     }
 }

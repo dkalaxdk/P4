@@ -7,9 +7,6 @@ public class InitiateStrategy extends CodeGenerationStrategy {
     @Override
     public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
 
-        // Generate code for a block
-//        return node.FirstChild.GenerateCode(arduinoSystem);
-
         return "";
     }
 }

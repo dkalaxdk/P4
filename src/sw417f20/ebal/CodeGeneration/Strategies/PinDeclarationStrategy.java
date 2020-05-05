@@ -9,9 +9,6 @@ public class PinDeclarationStrategy extends CodeGenerationStrategy {
 
         arduinoSystem.AddPinDeclaration(node);
 
-        //Makes code for the createPin function.
-//        return node.FirstChild.Next.GenerateCode(arduinoSystem);
-
         return "";
     }
 }

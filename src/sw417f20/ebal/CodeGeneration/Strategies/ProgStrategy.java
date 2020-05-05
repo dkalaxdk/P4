@@ -7,10 +7,6 @@ public class ProgStrategy extends CodeGenerationStrategy {
 
     @Override
     public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
-        //Generates lists with event and slave information
-//        eventDictionary = new EventDictionary(node);
-//        slaveDictionary = new SlaveDictionary(node);
-
         //Generates code for the the master and all the slaves
         GenerateCodeForLinkedList(node.FirstChild, arduinoSystem);
 
