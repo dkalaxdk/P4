@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class SemanticsStrategiesVisitor {
 
     public ISymbolTable SymbolTable;
-    public ArrayList<Integer> UsedPinNumbers;
+    public ArrayList<String> UsedPinNumbers;
     public ArrayList<Symbol> LocalEvents;
     public ArrayList<Symbol> BroadcastEvents;
 
