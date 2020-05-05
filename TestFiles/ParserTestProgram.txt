@@ -5,7 +5,7 @@ BEGIN MASTER
         // Gøres til globale variable af compileren/preprocessor,
         // så vi ikke har tonsvis af dem.
 
-        pin button1 = createPin(digital, input, 4);
+        pin button1 = createPin(analog, input, A4);
         pin button2 = createPin(digital, input, 5);
     }
 

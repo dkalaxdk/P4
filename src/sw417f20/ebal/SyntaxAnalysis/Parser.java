@@ -574,7 +574,18 @@ public class Parser extends RecursiveDescent {
             Expect(Token.Type.COMMA);
             FunctionCall.AddChild(IOType());
             Expect(Token.Type.COMMA);
-            FunctionCall.AddChild(getLeaf(Token.Type.LIT_Int));
+
+            // Support for analog pins (A0 - A15);
+            if (Peek().type == Token.Type.LIT_Int) {
+                FunctionCall.AddChild(getLeaf(Token.Type.LIT_Int));
+            }
+            else if (Peek().type == Token.Type.IDENTIFIER) {
+                FunctionCall.AddChild(getLeaf(Token.Type.IDENTIFIER));
+            }
+            else {
+                MakeError("Expected analog or digital pin number");
+            }
+
             Expect(Token.Type.RPAREN);
         }
         else {
