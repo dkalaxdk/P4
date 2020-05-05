@@ -137,7 +137,7 @@ public class ArduinoSystem {
             generator.AddFile("master", master.toString());
 
             for (Slave slave : slaveList) {
-                generator.AddFile("slave" + slave.getID(), slave.toString());
+                generator.AddFile("slave_" + slave.GetName(), slave.toString());
             }
         }
         catch (IOException e) {

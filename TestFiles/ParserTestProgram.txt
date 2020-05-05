@@ -7,11 +7,15 @@ BEGIN MASTER
 
         pin button1 = createPin(digital, input, 4);
         pin button2 = createPin(digital, input, 5);
+        pin button3 = createPin(digital, input, 6);
+        pin button4 = createPin(digital, input, 7);
     }
 
     Listener (button1)
     {
-        int filteredInput = filterNoise(button1, debounce);
+        int filteredInput = 1 / filterNoise(button1, debounce);
+
+        int a = 1 / getValue(button1);
 
         if (filteredInput == HIGH)
         {
@@ -37,7 +41,18 @@ BEGIN MASTER
 
         if (1 > 2) {
             if (5 > 4) {
-
+                int a = 1;
+            }
+            else {
+                if (true) {
+                    int a = 3;
+                }
+                else if (false) {
+                    int a = 2;
+                }
+                else {
+                    int a = 1;
+                }
             }
         }
         else if (2 > 3) {
@@ -46,6 +61,25 @@ BEGIN MASTER
         else {
             int a = 5;
         }
+    }
+
+    Listener (button3) {
+        int TEST = -1;
+        int a = 1 + (2 + 3);
+        int b = (1 + 2) + 3;
+        int c = (1 + (2 + (3 + 4)));
+        int d = (((1 + 2) + 3) + 4);
+        int e = 1 + (2 + 3) + 4;
+        int f = (1 + 2) + (3 + 4);
+    }
+
+    Listener (button4) {
+        int a = 1;
+        int b = 2;
+
+        int c = a / b;
+        c = a % b;
+
     }
 
 END MASTER

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Slave extends ArduinoBoard{
 
     private int eventHandlerCount = 0;
-    public ArrayList<String> EventHandlers; // Name: event + EventHandler + eventHandlerCount
+    public ArrayList<String> EventHandlers;
 
     public ArrayList<String> ReceiveEvent;
 

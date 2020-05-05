@@ -23,7 +23,7 @@ void setup() {
 
 void button1PressedEventHandler0() {
 	int value = light1.getValue();
-if ((value == 1)) {
+	if ((value == 1)) {
 		light1.write(0);
 	}
 	else if ((value == 0)) {

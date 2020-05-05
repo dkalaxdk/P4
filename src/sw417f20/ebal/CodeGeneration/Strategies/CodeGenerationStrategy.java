@@ -1,13 +1,8 @@
 package sw417f20.ebal.CodeGeneration.Strategies;
-
-import sw417f20.ebal.CodeGeneration.Utility.EventDictionary;
-import sw417f20.ebal.CodeGeneration.Utility.SlaveDictionary;
 import sw417f20.ebal.CodeGeneration.Utility.ArduinoSystem;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public abstract class CodeGenerationStrategy {
-    public EventDictionary eventDictionary;
-    public SlaveDictionary slaveDictionary;
     /**
      * Abstract method that all strategies must implement.
      * Generated code for the given node.

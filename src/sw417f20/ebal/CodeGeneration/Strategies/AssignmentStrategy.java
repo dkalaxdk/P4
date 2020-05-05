@@ -10,6 +10,6 @@ public class AssignmentStrategy extends CodeGenerationStrategy {
         String identifier = node.FirstChild.Value;
         String expression = node.FirstChild.Next.GenerateCode(arduinoSystem);
 
-        return addIndentation(arduinoSystem.Indentation) + identifier + " = " + expression + ";";
+        return addIndentation(arduinoSystem.Indentation) + identifier + " = " + expression + ";\n";
     }
 }

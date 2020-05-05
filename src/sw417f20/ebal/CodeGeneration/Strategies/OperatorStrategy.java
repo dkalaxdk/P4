@@ -31,10 +31,8 @@ public class OperatorStrategy extends CodeGenerationStrategy {
             case Times:
                 return " * ";
             case Divide:
-                //TODO find ud af hvordan man smider en fejl hvis man dividerer med 0.
                 return " / ";
             case Modulo:
-                //TODO modulo 0 er undefined
                 return " % ";
             default:
                 return "ERROR";
