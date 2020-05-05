@@ -10,8 +10,6 @@ public class ExpressionStrategy extends CodeGenerationStrategy {
     @Override
     public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
 
-        // Generate code for child nodes.
-        // Child nodes should be: Operand, Operator and Expression
         return "(" + GenerateCodeForLinkedList(node.FirstChild, arduinoSystem) + ")";
     }
 }

@@ -9,28 +9,10 @@ import java.util.ArrayList;
  */
 public class Slave extends ArduinoBoard{
 
-    private int eventHandlerCount = 0;
+    public int EventHandlerCount = 0;
     public ArrayList<String> EventHandlers;
 
     public ArrayList<String> ReceiveEvent;
-
-    @Override
-    public void AddBlock(Node node, ArduinoSystem arduinoSystem) {
-        String eventName = node.FirstChild.Value;
-
-        Event event = arduinoSystem.eventDictionary.get(eventName);
-
-        String eventHandlerName = eventName + "EventHandler" + eventHandlerCount++;
-
-        String block = node.FirstChild.Next.GenerateCode(arduinoSystem);
-
-        this.EventHandlers.add("void " + eventHandlerName + "() " + block);
-
-        this.ReceiveEvent.add("if (eventID == " + event.GetName() + ".getID()) {\n" +
-                "\t\t" + event.GetName() + ".createEvent();\n" +
-                "\t\t" + eventHandlerName + "();\n" +
-                "\t}\n");
-    }
 
     @Override
     public void AddEventDeclaration(Event event) {

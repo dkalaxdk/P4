@@ -27,7 +27,7 @@ public class Main {
     }
 
     public static void RealMain() throws FileNotFoundException {
-        boolean debug = true;
+        boolean debug = false;
         Node AST = null;
 
         try {
@@ -65,7 +65,7 @@ public class Main {
             ArduinoSystem system = new ArduinoSystem(AST);
             system.Generate();
 
-            System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms \n");
+            System.out.println("\nRuntime: " + (System.currentTimeMillis()-start) + " ms \n");
         }
 
         catch (SyntaxException | SemanticsException e) {

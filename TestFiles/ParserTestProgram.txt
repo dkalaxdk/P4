@@ -13,9 +13,9 @@ BEGIN MASTER
 
     Listener (button1)
     {
-        int filteredInput = 1 / filterNoise(button1, debounce);
+        int filteredInput = filterNoise(button1, debounce);
 
-        int a = 1 / getValue(button1);
+        int a = getValue(button1);
 
         if (filteredInput == HIGH)
         {
@@ -26,6 +26,10 @@ BEGIN MASTER
             event button2Pressed = createEvent(filteredInput);
             broadcast(button2Pressed);
         }
+    }
+
+    Listener (button1) {
+        int a = 3;
     }
 
     Listener (button2) {
@@ -119,6 +123,19 @@ BEGIN SLAVE : TestSlave1
         write(light2, HIGH);
         write(light3, HIGH);
     }
+
+END SLAVE
+
+
+BEGIN SLAVE : TestSlave2
+
+Initiate {
+    pin noget = createPin(digital, output, 1);
+}
+
+EventHandler (button1Pressed) {
+    int a = 3;
+}
 
 END SLAVE
 

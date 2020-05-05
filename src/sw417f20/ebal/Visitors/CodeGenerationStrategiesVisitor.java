@@ -17,6 +17,9 @@ public class CodeGenerationStrategiesVisitor extends Visitor {
 
     @Override
     public void Visit(Node node) {
+
+        node.ArduinoID = arduinoID;
+
         switch(node.Type) {
             case Prog:
                 AssignStrategy(node, strategies.GetProgStrategy());
@@ -114,8 +117,14 @@ public class CodeGenerationStrategiesVisitor extends Visitor {
             case CreateEvent:
             case CreatePin:
             case EventHandler:
+                AssignStrategy(node, strategies.GetEventHandlerStrategy());
+                break;
             case Listener:
+                AssignStrategy(node, strategies.GetListenerStrategy());
+                break;
             case Initiate:
+                AssignStrategy(node, strategies.GetInitiateStrategy());
+                break;
             case Empty:
                 AssignStrategy(node, strategies.GetEmptyStrategy());
                 break;
@@ -123,7 +132,6 @@ public class CodeGenerationStrategiesVisitor extends Visitor {
                 System.err.println("Node type not found");
         }
 
-        node.ArduinoID = arduinoID;
         VisitChildren(node);
     }
 

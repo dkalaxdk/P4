@@ -30,7 +30,7 @@ public abstract class RecursiveDescent {
             PrintTree(root);
         }
 
-        System.out.println("======== Parse successful ========\n");
+        System.out.println("======== Parse successful ========");
 
         return root;
     }

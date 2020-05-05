@@ -10,6 +10,8 @@ public class ProgStrategy extends CodeGenerationStrategy {
         //Generates code for the the master and all the slaves
         GenerateCodeForLinkedList(node.FirstChild, arduinoSystem);
 
+        System.out.println("======= CodeGen successful =======");
+
         return "";
     }
 }

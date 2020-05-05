@@ -6,28 +6,14 @@ import java.util.ArrayList;
 
 public class Master extends ArduinoBoard {
 
-    public ArrayList<String> AssociatedSlaves;
+    public int ListenerCount = 0;
+    public ArrayList<String> Listeners;
 
-    private int listenerCount = 0;
-    public ArrayList<String> Listeners; // Copy EBAL listeners. Name: pin + Listener + listenerCount
+    public ArrayList<String> AssociatedSlaves;
 
     public Master() {
         AssociatedSlaves = new ArrayList<>();
         Listeners = new ArrayList<>();
-    }
-
-
-    @Override
-    public void AddBlock(Node node, ArduinoSystem arduinoSystem) {
-        String pinName = node.FirstChild.Value;
-
-        String listenerName = pinName + "Listener" + listenerCount++;
-
-        String block = node.FirstChild.Next.GenerateCode(arduinoSystem);
-
-        this.Listeners.add("void " + listenerName + "() " + block);
-
-        this.Loop.add(listenerName + "();\n");
     }
 
     @Override

@@ -11,7 +11,7 @@ intEvent button1Pressed;
 intEvent button2Pressed;
 
 void setup() {
-	button1.createPin(digital, input, 4);
+	button1.createPin(analog, input, A4);
 	button2.createPin(digital, input, 5);
 	button3.createPin(digital, input, 6);
 	button4.createPin(digital, input, 7);
@@ -20,24 +20,28 @@ void setup() {
 	button2Pressed.setID(1);
 
 	button1Pressed.addSlave(0);
+	button1Pressed.addSlave(1);
 	button2Pressed.addSlave(0);
 
 	Wire.begin();
 }
 
 void button1Listener0() {
-	int filteredInput = (1 / button1.filterNoise(debounce));
-	int a = (1 / button1.getValue());
+	int filteredInput = button1.filterNoise(debounce);
+	int a = button1.getValue();
 	if ((filteredInput == 1)) {
 		button1Pressed.createEvent(filteredInput);
 		button1Pressed.broadcast();
 	}
 	else {
 		button2Pressed.createEvent(filteredInput);
-		button1Pressed.broadcast();
+		button2Pressed.broadcast();
 	}
 }
-void button2Listener1() {
+void button1Listener1() {
+	int a = 3;
+}
+void button2Listener2() {
 	if ((1 > 2)) {
 		int a = 3;
 	}
@@ -70,7 +74,7 @@ void button2Listener1() {
 		int a = 5;
 	}
 }
-void button3Listener2() {
+void button3Listener3() {
 	int TEST = -1;
 	int a = (1 + (2 + 3));
 	int b = ((1 + 2) + 3);
@@ -79,7 +83,7 @@ void button3Listener2() {
 	int e = (1 + ((2 + 3) + 4));
 	int f = ((1 + 2) + (3 + 4));
 }
-void button4Listener3() {
+void button4Listener4() {
 	int a = 1;
 	int b = 2;
 	int c = (a / b);
@@ -92,7 +96,8 @@ void loop() {
 	button3.readPin();
 	button4.readPin();
 	button1Listener0();
-	button2Listener1();
-	button3Listener2();
-	button4Listener3();
+	button1Listener1();
+	button2Listener2();
+	button3Listener3();
+	button4Listener4();
 }

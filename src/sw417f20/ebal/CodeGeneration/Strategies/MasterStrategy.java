@@ -9,20 +9,10 @@ public class MasterStrategy extends CodeGenerationStrategy {
     public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
 
         Node initiate = node.FirstChild;
-
-        Node pinDeclarations = initiate.FirstChild.FirstChild;
-
-        while (!pinDeclarations.IsEmpty()) {
-            arduinoSystem.AddPinDeclaration(pinDeclarations);
-            pinDeclarations = pinDeclarations.Next;
-        }
+        initiate.GenerateCode(arduinoSystem);
 
         Node listeners = node.FirstChild.Next;
-
-        while(!listeners.IsEmpty()) {
-            arduinoSystem.AddListener(listeners);
-            listeners = listeners.Next;
-        }
+        GenerateCodeForLinkedList(listeners, arduinoSystem);
 
         return "";
     }

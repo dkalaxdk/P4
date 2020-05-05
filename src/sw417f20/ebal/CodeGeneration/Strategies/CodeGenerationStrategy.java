@@ -20,19 +20,20 @@ public abstract class CodeGenerationStrategy {
      * @return String containing the resulting code
      */
     public String GenerateCodeForLinkedList(Node headNode, ArduinoSystem arduinoSystem) {
-        String content = "";
-        if(headNode.IsEmpty()) {
-            return content;
+        StringBuilder content = new StringBuilder();
+
+        if (headNode.IsEmpty()) {
+            return "";
         }
 
         Node node = headNode;
 
         //TODO: Tree traversal should maybe be handled by a separate class
         while(node != null && !node.IsEmpty()) {
-            content += node.GenerateCode(arduinoSystem);
+            content.append(node.GenerateCode(arduinoSystem));
             node = node.Next;
         }
-        return content;
+        return content.toString();
     }
 
     protected String addIndentation(int indent) {
