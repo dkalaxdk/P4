@@ -1,4 +1,4 @@
-package sw417f20.ebal.Visitors;
+package sw417f20.ebal.Printers;
 
 import sw417f20.ebal.ContextAnalysis.HashSymbolTable;
 import sw417f20.ebal.ContextAnalysis.ISymbolTable;

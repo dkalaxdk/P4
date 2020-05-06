@@ -1,8 +1,8 @@
-package sw417f20.ebal.Visitors;
+package sw417f20.ebal.Printers;
 
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
-public class PrintVisitor extends Visitor {
+public class ASTPrinter extends Visitor {
 
     private int indent = -1;
 

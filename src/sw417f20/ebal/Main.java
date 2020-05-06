@@ -9,7 +9,7 @@ import sw417f20.ebal.CodeGeneration.OutputFileGenerator;
 import sw417f20.ebal.SyntaxAnalysis.*;
 import sw417f20.ebal.SyntaxAnalysis.Reader;
 import sw417f20.ebal.CodeGeneration.CodeGenerationStrategyAssigner;
-import sw417f20.ebal.Visitors.HashSymbolTablePrinter;
+import sw417f20.ebal.Printers.HashSymbolTablePrinter;
 import sw417f20.ebal.ContextAnalysis.SemanticsStrategyAssigner;
 
 import java.io.*;

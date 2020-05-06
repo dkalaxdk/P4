@@ -3,7 +3,7 @@ package sw417f20.ebal.CodeGeneration;
 import sw417f20.ebal.CodeGeneration.Strategies.CodeGenerationStrategy;
 import sw417f20.ebal.CodeGeneration.Strategies.StrategyFactory;
 import sw417f20.ebal.SyntaxAnalysis.Node;
-import sw417f20.ebal.Visitors.Visitor;
+import sw417f20.ebal.Printers.Visitor;
 
 /**
  * Assigns the appropriate Code Generation Strategy to nodes
