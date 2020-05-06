@@ -60,14 +60,19 @@ public class SemanticsListenerCallStrategy extends SemanticsCheckerStrategy{
     private void CheckGetValue(Node node) throws SemanticsException {
         Symbol parameter = SymbolTable.RetrieveSymbol(node.FirstChild.Next.Value);
         if (parameter != null) {
-            if (parameter.DataType == Symbol.SymbolType.PIN) {
-                node.DataType = Symbol.SymbolType.INT;
-            }
-            else if (parameter.DataType == Symbol.SymbolType.EVENT){
-                node.DataType = parameter.ValueType;
+            if (parameter.DataType != Symbol.SymbolType.PIN || parameter.Name.equals(AvailablePinOrEvent)) {
+                if (parameter.DataType == Symbol.SymbolType.PIN) {
+                    node.DataType = Symbol.SymbolType.INT;
+                }
+                else if (parameter.DataType == Symbol.SymbolType.EVENT){
+                    node.DataType = parameter.ValueType;
+                }
+                else {
+                    MakeError(node, node.FirstChild.Next.Value, ErrorType.WrongType);
+                }
             }
             else {
-                MakeError(node, node.FirstChild.Next.Value, ErrorType.WrongType);
+                MakeError(node, "Pin unavailable to Listener");
             }
         }
         else {
@@ -76,18 +81,21 @@ public class SemanticsListenerCallStrategy extends SemanticsCheckerStrategy{
     }
 
     private void CheckFilterNoise(Node node) throws SemanticsException {
-        Symbol pinParameter = SymbolTable.RetrieveSymbol(node.FirstChild.Next.Value);
-        if (pinParameter != null){
-            if (pinParameter.DataType == Symbol.SymbolType.PIN){
-                CheckPinAndFilterCombination(pinParameter, node);
-                node.DataType = Symbol.SymbolType.INT;
-            }
-            else {
-                MakeError(node, node.FirstChild.Next.Value, ErrorType.WrongType);
+        if (node.FirstChild.Next.Value.equals(AvailablePinOrEvent)) {
+            Symbol pinParameter = SymbolTable.RetrieveSymbol(node.FirstChild.Next.Value);
+            if (pinParameter != null) {
+                if (pinParameter.DataType == Symbol.SymbolType.PIN) {
+                    CheckPinAndFilterCombination(pinParameter, node);
+                    node.DataType = Symbol.SymbolType.INT;
+                } else {
+                    MakeError(node, node.FirstChild.Next.Value, ErrorType.WrongType);
+                }
+            } else {
+                MakeError(node, node.FirstChild.Next.Value, ErrorType.NotDeclared);
             }
         }
         else {
-            MakeError(node, node.FirstChild.Next.Value, ErrorType.NotDeclared);
+            MakeError(node, "Pin unavailable to Listener");
         }
     }
 

@@ -16,6 +16,8 @@ BEGIN MASTER
 
         int filteredInput = filterNoise(button1, flip);
 
+        int b = getValue(button1);
+
         if (filteredInput == HIGH)
         {
             event button1Pressed = createEvent(filteredInput);
@@ -33,13 +35,14 @@ BEGIN MASTER
 
     }
 
-    Listener (button1)
+    Listener (button2)
     {
-        int filteredInput = filterNoise(button1, range);
+        int filteredInput = filterNoise(button2, range);
 
         if (filteredInput == HIGH)
         {
             event button3Pressed = createEvent(0.2);
+            float value = getValue(button3Pressed);
             broadcast(button3Pressed);
         }
         else if (true){
@@ -68,9 +71,9 @@ BEGIN MASTER
 
     }
 
-    Listener (button1)
+    Listener (button2)
         {
-            int filteredInput = filterNoise(button1, range);
+            int filteredInput = filterNoise(button2, range);
 
             int b;
 
@@ -102,6 +105,8 @@ BEGIN SLAVE : TestSlave1
     EventHandler(button1Pressed)
     {
         int value = getValue(light1);
+
+        int a = getValue(button1Pressed);
 
         if (value == HIGH)
         {

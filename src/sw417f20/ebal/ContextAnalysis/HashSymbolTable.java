@@ -51,15 +51,6 @@ public class HashSymbolTable implements ISymbolTable {
         }
     }
 
-    //TODO: Er den her nødvendig ift codegen?
-    @Override
-    public void EnterSymbol(String name, Symbol.SymbolType type, Node reference) {
-        // Checks that symbol is not already in hashtable
-        if (!DeclaredLocally(name)) {
-            GlobalScope.CurrentScope.Hashtable.put(name, new Symbol(name, type, reference));
-        }
-    }
-
     @Override
     public void EnterSymbol(String name, Symbol.SymbolType type, Symbol.SymbolType valueType) {
         // Checks that symbol is not already in hashtable

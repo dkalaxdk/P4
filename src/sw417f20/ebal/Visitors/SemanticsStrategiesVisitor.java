@@ -19,6 +19,7 @@ public class SemanticsStrategiesVisitor {
     private SemanticsStrategyFactory strategies;
     private boolean inSlave;
     private boolean inInitiate;
+    private String AvailablePinOrEvent;
 
     public SemanticsStrategiesVisitor(){
         SymbolTable = new HashSymbolTable();
@@ -94,6 +95,7 @@ public class SemanticsStrategiesVisitor {
     // Assigns a strategy to the Listener node
     private void AssignStrategyListener(Node node){
         AssignStrategy(node, strategies.getListenerStrategy());
+        AvailablePinOrEvent = new String(node.FirstChild.Value);
 
         AssignStrategyBlock(node.FirstChild.Next);
 
@@ -102,6 +104,7 @@ public class SemanticsStrategiesVisitor {
     // Assigns a strategy to the EventHandler node
     private void AssignStrategyEventHandler(Node node){
         AssignStrategy(node, strategies.getEventHandlerStrategy());
+        AvailablePinOrEvent = new String(node.FirstChild.Value);
 
         AssignStrategyBlock(node.FirstChild.Next);
     }
@@ -207,12 +210,14 @@ public class SemanticsStrategiesVisitor {
         }
         else if (inSlave){
             AssignStrategy(node, strategies.getEventHandlerCallStrategy());
+            node.SemanticsCheckerStrategy.AvailablePinOrEvent = new String(AvailablePinOrEvent);
             if (node.FirstChild.Type == Node.NodeType.Write){
                 AssignStrategyExpression(node.FirstChild.Next.Next);
             }
         }
         else {
             AssignStrategy(node, strategies.getListenerCallStrategy());
+            node.SemanticsCheckerStrategy.AvailablePinOrEvent = new String(AvailablePinOrEvent);
             if (node.FirstChild.Type == Node.NodeType.CreateEvent){
                 AssignStrategyExpression(node.FirstChild.Next);
             }

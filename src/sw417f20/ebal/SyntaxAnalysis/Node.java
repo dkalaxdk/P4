@@ -12,9 +12,8 @@ public class Node {
     public NodeType Type;
     public String Value;
     public int LineNumber = -1;
-    public Node DefinitionReference;
     public Symbol.SymbolType DataType;
-    public int ArduinoID; //TODO: implementer (master = -1)(slave2 = 0....)
+    public int ArduinoID;
 
     // The next element in the linked list of siblings
     public Node Next;

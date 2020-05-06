@@ -11,7 +11,6 @@ public class SemanticsListenerStrategy extends SemanticsCheckerStrategy{
         Symbol symbol = SymbolTable.RetrieveSymbol(node.FirstChild.Value);
         if (symbol != null) {
             if (symbol.DataType == Symbol.SymbolType.PIN) {
-                node.FirstChild.DefinitionReference = symbol.ReferenceNode;
                 node.FirstChild.Next.CheckSemantics();
             } else {
                 MakeError(node, symbol.Name, ErrorType.WrongType);
