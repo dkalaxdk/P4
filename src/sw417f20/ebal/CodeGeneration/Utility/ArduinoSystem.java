@@ -29,7 +29,6 @@ public class ArduinoSystem {
 
     public void Generate() {
         root.GenerateCode(this);
-        Print();
     }
 
     private void FindSlaves(Node root) {
@@ -70,20 +69,30 @@ public class ArduinoSystem {
         }
     }
 
-    private void Print() {
-        OutputFileGenerator generator = new OutputFileGenerator();
+    public HashMap<String, String> Print() {
+//        OutputFileGenerator generator = new OutputFileGenerator();
+//
+//        System.out.println();
+//
+//        try {
+//            generator.AddFile("master", Master.toString());
+//
+//            for (Slave slave : SlaveList) {
+//                generator.AddFile("slave_" + slave.GetName(), slave.toString());
+//            }
+//        }
+//        catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
-        System.out.println();
+        HashMap<String, String> files = new HashMap<>();
 
-        try {
-            generator.AddFile("master", Master.toString());
+        files.put("master", Master.toString());
 
-            for (Slave slave : SlaveList) {
-                generator.AddFile("slave_" + slave.GetName(), slave.toString());
-            }
+        for (Slave slave : SlaveList) {
+            files.put("slave_" + slave.GetName(), slave.toString());
         }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        return files;
     }
 }

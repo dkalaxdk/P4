@@ -56,6 +56,7 @@ public class Slave extends ArduinoBoard{
                 .append(EventInstantiations.toString())
                 .append("\n")
                 .append("\tWire.begin(").append(ID).append(");\n")
+                .append("\tSerial.begin(9600);\n")
                 .append("\tWire.onReceive(receiveEvent);\n")
                 .append("}\n\n");
 

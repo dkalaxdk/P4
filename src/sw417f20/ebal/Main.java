@@ -14,6 +14,8 @@ import sw417f20.ebal.Visitors.SemanticsStrategiesVisitor;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
 
 public class Main {
 
@@ -23,10 +25,11 @@ public class Main {
 //        SemanticsStuff();
 //        CodeGenStuff();
 
-        RealMain();
+        String[] a = {"/TestFiles/CompilerTest.txt"};
+        RealMain(a);
     }
 
-    public static void RealMain() throws FileNotFoundException {
+    public static void RealMain(String[] args) throws FileNotFoundException {
         boolean debug = false;
         Node AST = null;
 
@@ -35,7 +38,7 @@ public class Main {
 
             // Parsing
             String filePath = new File("").getAbsolutePath();
-            String fileInput = filePath + "/TestFiles/ParserTestProgram.txt";
+            String fileInput = filePath + args[0];
 
             FileReader fileReader = new FileReader(fileInput);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -64,6 +67,21 @@ public class Main {
 
             ArduinoSystem system = new ArduinoSystem(AST);
             system.Generate();
+            HashMap<String, String> files = system.Print();
+
+            String[] n = args[0].split("/");
+
+            String sourceFile;
+
+            if (n[n.length - 1].contains(".")) {
+                String[] m = n[n.length - 1].split("\\.");
+                sourceFile = m[m.length - 2];
+            }
+            else {
+                sourceFile = n[n.length - 1];
+            }
+
+            OutputFileGenerator generator = new OutputFileGenerator(files, sourceFile);
 
             System.out.println("\nRuntime: " + (System.currentTimeMillis()-start) + " ms \n");
         }
@@ -220,16 +238,16 @@ public class Main {
         printer.PrintTable(symbolTable);
     }
 
-    public static void CodeGenStuff() {
-        ArrayList<String> fileContents = new ArrayList<String>();
-        fileContents.add("This is the Master file");
-        fileContents.add("This is the first Slave file");
-        fileContents.add("This is the second Slave file");
-
-        try {
-            OutputFileGenerator outGen = new OutputFileGenerator(fileContents);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void CodeGenStuff() {
+//        ArrayList<String> fileContents = new ArrayList<String>();
+//        fileContents.add("This is the Master file");
+//        fileContents.add("This is the first Slave file");
+//        fileContents.add("This is the second Slave file");
+//
+//        try {
+//            OutputFileGenerator outGen = new OutputFileGenerator(fileContents);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

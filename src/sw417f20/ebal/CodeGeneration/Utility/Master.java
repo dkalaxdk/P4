@@ -35,8 +35,9 @@ public class Master extends ArduinoBoard {
                 .append("\n")
                 .append(AssociatedSlaves.toString())
                 .append("\n")
-                .append("\tWire.begin();")
-                .append("\n}\n\n");
+                .append("\tWire.begin();\n")
+                .append("\tSerial.begin(9600);\n")
+                .append("}\n\n");
 
         // Listeners
         masterBuilder

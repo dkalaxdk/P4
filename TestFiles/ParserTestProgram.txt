@@ -15,8 +15,6 @@ BEGIN MASTER
     {
         int filteredInput = filterNoise(button1, debounce);
 
-        int a = getValue(button1);
-
         if (filteredInput == HIGH)
         {
             event button1Pressed = createEvent(filteredInput);

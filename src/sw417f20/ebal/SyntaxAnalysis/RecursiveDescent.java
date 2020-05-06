@@ -62,9 +62,8 @@ public abstract class RecursiveDescent {
     protected void MakeError(String message) throws SyntaxException {
         throw new SyntaxException(message +
                             " on line: " + PScanner.nextToken.lineNumber +
-                            " : " + PScanner.nextToken.offSet + ", got [" + PScanner.nextToken.type + "] with content < " + PScanner.nextToken.content + " > " +
-                            "(Current is [" + PScanner.currentToken.type + "] with content < " + PScanner.currentToken.content + " >) \n" +
-                            "Current file is " + currentFile);
+                            " : " + PScanner.nextToken.offSet + ". Got [" + PScanner.nextToken.type + "] with content \"" + PScanner.nextToken.content + "\" "); /*+
+                            "(Current is [" + PScanner.currentToken.type + "] with content \"" + PScanner.currentToken.content + "\" ) \n");*/
     }
 
     protected int getLineNumber() {
