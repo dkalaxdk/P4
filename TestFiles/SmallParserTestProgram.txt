@@ -5,6 +5,7 @@ BEGIN MASTER
     }
 
     Listener (noget) {
+        int TEST = -a;
         int a = 1 + (2 + 3);
         int b = (1 + 2) + 3;
         int c = (1 + (2 + (3 + 4)));
@@ -22,7 +23,7 @@ BEGIN SLAVE : TestSlave1
     }
 
     EventHandler (noget) {
-        //int a = filterNoise(noget, flip) + 3;
+        //int a = filterNoise(noget, debounce) + 3;
 
         if (a == 3) {
             if (b == 3) {

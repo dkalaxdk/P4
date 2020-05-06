@@ -3939,7 +3939,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Next.Type, Node.NodeType.Flip);
+        assertSame(node.FirstChild.Next.Next.Type, Node.NodeType.Debounce);
     }
 
 
@@ -4685,7 +4685,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.Type, Node.NodeType.Flip);
+        assertSame(node.Type, Node.NodeType.Debounce);
     }
 
     @Test

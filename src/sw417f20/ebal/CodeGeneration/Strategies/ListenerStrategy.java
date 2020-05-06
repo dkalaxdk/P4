@@ -1,24 +1,30 @@
 package sw417f20.ebal.CodeGeneration.Strategies;
 
+import sw417f20.ebal.CodeGeneration.Utility.ArduinoSystem;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class ListenerStrategy extends CodeGenerationStrategy {
     @Override
-    public String GenerateCode(Node node) {
-        String content = "";
+    public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
+
         String pinName = node.FirstChild.Value;
-        //Finding the pinType through definitionReference.
-        Node pinType = node.FirstChild.DefinitionReference.FirstChild.Next.FirstChild.Next;
-        //Finding the pinNumber through definitionReference.
-        String pinNumber = node.FirstChild.DefinitionReference.FirstChild.Next.FirstChild.Next.Next.Next.GenerateCode();
 
-        //Instantiating a pinName with corresponding pin number.
-        content += "int " + pinName + " = " + pinNumber +";\n";
+        String listenerName = pinName + "Listener" + arduinoSystem.Master.ListenerCount++;
 
-        content += "pinValue" + " = " + pinType.GenerateCode() +"Read(" + pinName + ");\n";
+        String block = node.FirstChild.Next.GenerateCode(arduinoSystem);
 
-        // Generate code for block
-        content += node.FirstChild.Next.GenerateCode();
-        return content;
+        arduinoSystem.Master.Listeners
+                .append("void ")
+                .append(listenerName)
+                .append("() ")
+                .append(block)
+                .append("\n");
+
+        arduinoSystem.Master.Loop
+                .append("\t")
+                .append(listenerName)
+                .append("();\n");
+
+        return "";
     }
 }

@@ -1,18 +1,17 @@
 package sw417f20.ebal.CodeGeneration.Strategies;
 
-import sw417f20.ebal.CodeGeneration.Utility.EventDictionary;
-import sw417f20.ebal.CodeGeneration.Utility.SlaveDictionary;
+import sw417f20.ebal.CodeGeneration.Utility.ArduinoSystem;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class ProgStrategy extends CodeGenerationStrategy {
 
     @Override
-    public String GenerateCode(Node node) {
-        //Generates lists with event and slave information
-        eventDictionary = new EventDictionary(node);
-        slaveDictionary = new SlaveDictionary(node);
-
+    public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
         //Generates code for the the master and all the slaves
-        return GenerateCodeForLinkedList(node.FirstChild);
+        GenerateCodeForLinkedList(node.FirstChild, arduinoSystem);
+
+        System.out.println("======= CodeGen successful =======");
+
+        return "";
     }
 }
