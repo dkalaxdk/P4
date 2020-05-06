@@ -60,6 +60,14 @@ public class HashSymbolTable implements ISymbolTable {
     }
 
     @Override
+    public void EnterSymbol(String name, Symbol.SymbolType type, Node referenceNode) {
+        // Checks that symbol is not already in hashtable
+        if (!DeclaredLocally(name)) {
+            GlobalScope.CurrentScope.Hashtable.put(name, new Symbol(name, type, referenceNode));
+        }
+    }
+
+    @Override
     public Symbol RetrieveSymbol(String name) {
         if (DeclaredLocally(name)) {
             return GlobalScope.CurrentScope.Hashtable.get(name);

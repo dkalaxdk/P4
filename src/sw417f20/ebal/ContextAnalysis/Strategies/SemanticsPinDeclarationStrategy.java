@@ -12,7 +12,7 @@ public class SemanticsPinDeclarationStrategy extends SemanticsCheckerStrategy{
             Node expression = node.FirstChild.Next;
             if (expression.Type == Node.NodeType.Call && expression.FirstChild.Type == Node.NodeType.CreatePin){
                 expression.CheckSemantics();
-                SymbolTable.EnterSymbol(node.FirstChild.Value, Symbol.SymbolType.PIN, node);
+                SymbolTable.EnterSymbol(node.FirstChild.Value, Symbol.SymbolType.PIN, node.FirstChild.Next);
             }
             else {
                 MakeError(node, "Illegal declaration of pin.");
