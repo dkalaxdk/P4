@@ -45,14 +45,19 @@ public class SemanticsEventHandlerCallStrategy extends SemanticsCheckerStrategy{
     private void CheckGetValue(Node node) throws SemanticsException{
         Symbol parameter = SymbolTable.RetrieveSymbol(node.FirstChild.Next.Value);
         if (parameter != null) {
-            if (parameter.DataType == Symbol.SymbolType.PIN) {
-                node.DataType = Symbol.SymbolType.INT;
-            }
-            else if (parameter.DataType == Symbol.SymbolType.EVENT){
-                node.DataType = parameter.ValueType;
+            if (parameter.DataType != Symbol.SymbolType.EVENT || parameter.Name.equals(AvailablePinOrEvent)) {
+                if (parameter.DataType == Symbol.SymbolType.PIN) {
+                    node.DataType = Symbol.SymbolType.INT;
+                }
+                else if (parameter.DataType == Symbol.SymbolType.EVENT) {
+                    node.DataType = parameter.ValueType;
+                }
+                else {
+                    MakeError(node, node.FirstChild.Next.Value, ErrorType.WrongType);
+                }
             }
             else {
-                MakeError(node, node.FirstChild.Next.Value, ErrorType.WrongType);
+                MakeError(node, "Event unavailable to EventHandler");
             }
         }
         else {

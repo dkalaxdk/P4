@@ -146,19 +146,17 @@ public class SemanticsStrategyFactory {
     }
 
     public SemanticsListenerCallStrategy getListenerCallStrategy(){
-        if (listenerCallStrategy == null){
-            listenerCallStrategy = new SemanticsListenerCallStrategy();
-            listenerCallStrategy.SymbolTable = SymbolTable;
-            listenerCallStrategy.BroadcastEvents = BroadcastEvents;
-        }
+        listenerCallStrategy = new SemanticsListenerCallStrategy();
+        listenerCallStrategy.SymbolTable = SymbolTable;
+        listenerCallStrategy.BroadcastEvents = BroadcastEvents;
+
         return listenerCallStrategy;
     }
 
     public SemanticsEventHandlerCallStrategy getEventHandlerCallStrategy(){
-        if (eventHandlerCallStrategy == null){
-            eventHandlerCallStrategy = new SemanticsEventHandlerCallStrategy();
-            eventHandlerCallStrategy.SymbolTable = SymbolTable;
-        }
+        eventHandlerCallStrategy = new SemanticsEventHandlerCallStrategy();
+        eventHandlerCallStrategy.SymbolTable = SymbolTable;
+
         return eventHandlerCallStrategy;
     }
 

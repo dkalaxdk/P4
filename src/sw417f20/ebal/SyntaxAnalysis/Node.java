@@ -13,7 +13,6 @@ public class Node {
     public NodeType Type;
     public String Value;
     public int LineNumber = -1;
-    public Node DefinitionReference;
     public Symbol.SymbolType DataType;
     public int ArduinoID;
 
