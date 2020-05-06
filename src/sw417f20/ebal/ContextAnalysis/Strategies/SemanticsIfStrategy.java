@@ -12,7 +12,7 @@ public class SemanticsIfStrategy extends SemanticsCheckerStrategy{
         if(node.FirstChild.DataType == Symbol.SymbolType.BOOL){
             node.FirstChild.Next.CheckSemantics();
             Node elseStmt = node.FirstChild.Next.Next;
-            if (elseStmt.Type != Node.NodeType.Empty){
+            if (!elseStmt.IsEmpty()){
                 elseStmt.CheckSemantics();
             }
         }

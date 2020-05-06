@@ -12,7 +12,7 @@ public class SemanticsFloatDeclarationStrategy extends SemanticsCheckerStrategy{
     public void CheckSemantics(Node node) throws SemanticsException {
         if (!SymbolTable.DeclaredLocally(node.FirstChild.Value)){
             Node expression = node.FirstChild.Next;
-            if (expression.Type != Node.NodeType.Empty) {
+            if (!expression.IsEmpty()) {
                 expression.CheckSemantics();
                 hasBeenIdentified = true;
                 if (expression.DataType != Symbol.SymbolType.FLOAT){

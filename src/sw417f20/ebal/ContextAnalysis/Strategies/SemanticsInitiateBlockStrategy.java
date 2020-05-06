@@ -12,7 +12,7 @@ public class SemanticsInitiateBlockStrategy extends SemanticsCheckerStrategy{
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {
         Node child = node.FirstChild;
-        while (child.Type != Node.NodeType.Empty) {
+        while (!child.IsEmpty()) {
             if (child.Type == Node.NodeType.PinDeclaration) {
                 child.CheckSemantics();
             }

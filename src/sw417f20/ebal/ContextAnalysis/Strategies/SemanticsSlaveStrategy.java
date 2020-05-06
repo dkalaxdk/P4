@@ -15,7 +15,7 @@ public class SemanticsSlaveStrategy extends SemanticsCheckerStrategy {
             Node child = node.FirstChild.Next;
             child.CheckSemantics();
             child = child.Next;
-            while (child.Type != Node.NodeType.Empty) {
+            while (!child.IsEmpty()) {
                 child.CheckSemantics();
                 child = child.Next;
             }
