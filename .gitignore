@@ -6,6 +6,8 @@
 .idea/**/shelf
 .idea/**/codeStyles
 
+.ino
+
 # Generated files
 .idea/**/contentModel.xml
 

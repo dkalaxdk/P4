@@ -8,13 +8,11 @@ import sw417f20.ebal.Exceptions.SyntaxException;
 import sw417f20.ebal.CodeGeneration.OutputFileGenerator;
 import sw417f20.ebal.SyntaxAnalysis.*;
 import sw417f20.ebal.SyntaxAnalysis.Reader;
-import sw417f20.ebal.Visitors.CodeGenerationStrategiesVisitor;
+import sw417f20.ebal.CodeGeneration.CodeGenerationStrategyAssigner;
 import sw417f20.ebal.Visitors.HashSymbolTablePrinter;
-import sw417f20.ebal.Visitors.SemanticsStrategiesVisitor;
+import sw417f20.ebal.ContextAnalysis.SemanticsStrategyAssigner;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
 
 public class Main {
@@ -49,7 +47,7 @@ public class Main {
             AST = parser.Parse(debug);
 
             // Semantics
-            SemanticsStrategiesVisitor visitor = new SemanticsStrategiesVisitor();
+            SemanticsStrategyAssigner visitor = new SemanticsStrategyAssigner();
             ISymbolTable symbolTable = visitor.Run(AST);
 
             AST.CheckSemantics();
@@ -61,7 +59,7 @@ public class Main {
 
             // Codegeneration
             StrategyFactory codeGenFactory = new StrategyFactory();
-            CodeGenerationStrategiesVisitor codeGenVisitor = new CodeGenerationStrategiesVisitor(codeGenFactory);
+            CodeGenerationStrategyAssigner codeGenVisitor = new CodeGenerationStrategyAssigner(codeGenFactory);
 
             codeGenVisitor.Visit(AST);
 
@@ -216,7 +214,7 @@ public class Main {
 
             System.err.println(e.getMessage());
         }
-        SemanticsStrategiesVisitor visitor = new SemanticsStrategiesVisitor();
+        SemanticsStrategyAssigner visitor = new SemanticsStrategyAssigner();
         symbolTable = visitor.Run(root);
         try {
             if (root != null) {

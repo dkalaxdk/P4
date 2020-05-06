@@ -1,17 +1,18 @@
-package sw417f20.ebal.Visitors;
+package sw417f20.ebal.CodeGeneration;
 
 import sw417f20.ebal.CodeGeneration.Strategies.CodeGenerationStrategy;
 import sw417f20.ebal.CodeGeneration.Strategies.StrategyFactory;
 import sw417f20.ebal.SyntaxAnalysis.Node;
+import sw417f20.ebal.Visitors.Visitor;
 
 /**
  * Assigns the appropriate Code Generation Strategy to nodes
  */
-public class CodeGenerationStrategiesVisitor extends Visitor {
+public class CodeGenerationStrategyAssigner extends Visitor {
     private StrategyFactory strategies;
     private int arduinoID = -1;
 
-    public CodeGenerationStrategiesVisitor(StrategyFactory strategyFactory) {
+    public CodeGenerationStrategyAssigner(StrategyFactory strategyFactory) {
         strategies = strategyFactory;
     }
 

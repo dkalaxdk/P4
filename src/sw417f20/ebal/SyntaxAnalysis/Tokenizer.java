@@ -182,6 +182,7 @@ public class Tokenizer {
             case '!':
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.LOP_NOTEQUAL;
+                    token.content += reader.readChar();
                 } else token.type = Token.Type.OP_NOT;
                 break;
 

@@ -8,7 +8,7 @@ public class WriteStrategy extends CodeGenerationStrategy {
     public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
 
         String pinName = node.Next.Value;
-        String value = node.Next.Next.Value;
+        String value = node.Next.Next.GenerateCode(arduinoSystem);
 
         return addIndent(arduinoSystem.Indent) + pinName + ".write(" + value + ");\n";
     }

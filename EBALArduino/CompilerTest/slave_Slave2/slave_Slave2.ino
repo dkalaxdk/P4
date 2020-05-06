@@ -5,11 +5,13 @@
 ebalPin out;
 
 intEvent button2Pressed;
+intEvent potenTurned;
 
 void setup() {
-  out.createPin(digital, output, LED_BUILTIN);
+  out.createPin(analog, output, LED_BUILTIN);
 
   button2Pressed.setID(1);
+  potenTurned.setID(2);
 
   Wire.begin(1);
   Serial.begin(9600);
@@ -27,6 +29,11 @@ void button2PressedEventHandler0() {
   }
 }
 
+void potenTurnedEventHandler1() {
+  Serial.println(potenTurned.getValue());
+  out.write(potenTurned.getValue());
+}
+
 
 void receiveEvent(int howMany) {
   char eventID = Wire.read();
@@ -34,6 +41,10 @@ void receiveEvent(int howMany) {
   if (eventID == button2Pressed.getID()) {
     button2Pressed.createEvent();
     button2PressedEventHandler0();
+  }
+  if (eventID == potenTurned.getID()) {
+    potenTurned.createEvent();
+    potenTurnedEventHandler1();
   }
 }
 

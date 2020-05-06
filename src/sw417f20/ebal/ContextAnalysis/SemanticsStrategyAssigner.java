@@ -1,4 +1,4 @@
-package sw417f20.ebal.Visitors;
+package sw417f20.ebal.ContextAnalysis;
 
 import sw417f20.ebal.ContextAnalysis.HashSymbolTable;
 import sw417f20.ebal.ContextAnalysis.ISymbolTable;
@@ -9,7 +9,7 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 
 import java.util.ArrayList;
 
-public class SemanticsStrategiesVisitor {
+public class SemanticsStrategyAssigner {
 
     public ISymbolTable SymbolTable;
     public ArrayList<String> UsedPinNumbers;
@@ -20,7 +20,7 @@ public class SemanticsStrategiesVisitor {
     private boolean inSlave;
     private boolean inInitiate;
 
-    public SemanticsStrategiesVisitor(){
+    public SemanticsStrategyAssigner(){
         SymbolTable = new HashSymbolTable();
         UsedPinNumbers = new ArrayList<>();
         LocalEvents = new ArrayList<>();

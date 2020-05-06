@@ -1,9 +1,8 @@
 package sw417f20.ebal.SyntaxAnalysis;
 
 import sw417f20.ebal.Exceptions.SyntaxException;
-import sw417f20.ebal.Visitors.PrintVisitor;
+import sw417f20.ebal.Printers.ASTPrinter;
 
-import java.io.File;
 import java.io.IOException;
 
 public abstract class RecursiveDescent {
@@ -71,7 +70,7 @@ public abstract class RecursiveDescent {
     }
 
     private void PrintTree(Node tree) {
-        PrintVisitor printVisitor = new PrintVisitor();
-        printVisitor.Visit(tree);
+        ASTPrinter ASTPrinter = new ASTPrinter();
+        ASTPrinter.Visit(tree);
     }
 }

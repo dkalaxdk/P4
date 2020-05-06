@@ -3,6 +3,8 @@ BEGIN MASTER
 Initiate {
     pin button1 = createPin(digital, input, 7);
     pin button2 = createPin(digital, input, 8);
+
+    pin poten = createPin(analog, input, A0);
 }
 
 Listener (button1) {
@@ -23,6 +25,15 @@ Listener (button2) {
     }
 }
 
+Listener (poten) {
+    int filteredInput = filterNoise(poten, range);
+
+    if (filteredInput != -1) {
+        event potenTurned = createEvent(filteredInput);
+        broadcast(potenTurned);
+    }
+}
+
 END MASTER
 
 
@@ -34,7 +45,6 @@ Initiate {
 }
 
 EventHandler (button1Pressed) {
-
     if (getValue(button1Pressed) == 32000) {
         if (getValue(out) == HIGH) {
             write(out, LOW);
@@ -50,11 +60,10 @@ END SLAVE
 BEGIN SLAVE: Slave2
 
 Initiate {
-    pin out = createPin(digital, output, LED_BUILTIN);
+    pin out = createPin(pwm, output, LED_BUILTIN);
 }
 
 EventHandler (button2Pressed) {
-
     if (getValue(button2Pressed) == -32000) {
         if (getValue(out) == HIGH) {
             write(out, LOW);
@@ -63,6 +72,10 @@ EventHandler (button2Pressed) {
             write(out, HIGH);
         }
     }
+}
+
+EventHandler (potenTurned) {
+    write(out, getValue(potenTurned));
 }
 
 END SLAVE
