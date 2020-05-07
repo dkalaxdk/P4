@@ -70,20 +70,6 @@ public class ArduinoSystem {
     }
 
     public HashMap<String, String> Print() {
-//        OutputFileGenerator generator = new OutputFileGenerator();
-//
-//        System.out.println();
-//
-//        try {
-//            generator.AddFile("master", Master.toString());
-//
-//            for (Slave slave : SlaveList) {
-//                generator.AddFile("slave_" + slave.GetName(), slave.toString());
-//            }
-//        }
-//        catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
         HashMap<String, String> files = new HashMap<>();
 

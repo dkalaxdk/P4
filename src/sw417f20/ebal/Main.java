@@ -59,9 +59,10 @@ public class Main {
 
             // Codegeneration
             StrategyFactory codeGenFactory = new StrategyFactory();
-            CodeGenerationStrategyAssigner codeGenVisitor = new CodeGenerationStrategyAssigner(codeGenFactory);
+            CodeGenerationStrategyAssigner codeGenAssigner = new CodeGenerationStrategyAssigner(codeGenFactory);
 
-            codeGenVisitor.Visit(AST);
+            codeGenAssigner.Visit(AST);
+//            codeGenAssigner.Run(AST);
 
             ArduinoSystem system = new ArduinoSystem(AST);
             system.Generate();
