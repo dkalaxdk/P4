@@ -3,23 +3,22 @@ package sw417f20.ebal.tests.ContextualAnalysisTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import sw417f20.ebal.ContextAnalysis.HashSymbolTable;
+import sw417f20.ebal.ContextAnalysis.SemanticsStrategyAssigner;
 import sw417f20.ebal.ContextAnalysis.Strategies.*;
 import sw417f20.ebal.ContextAnalysis.Symbol;
 import sw417f20.ebal.Exceptions.SemanticsException;
 import sw417f20.ebal.SyntaxAnalysis.Node;
-import sw417f20.ebal.Visitors.SemanticsStrategiesVisitor;
 
 import java.util.ArrayList;
 
 public class SemanticsTester {
 
-    SemanticsStrategiesVisitor strategiesVisitor;
+    SemanticsStrategyAssigner strategiesVisitor;
 
     @BeforeEach
     void setup() {
-        strategiesVisitor = new SemanticsStrategiesVisitor();
+        strategiesVisitor = new SemanticsStrategyAssigner();
     }
 
     @Test
@@ -470,6 +469,7 @@ public class SemanticsTester {
     }
 
     @Test
+    // Still not done
     void EventHandlerCallStrategy() {
         Node EventHandlerNode = Node.MakeNode(Node.NodeType.EventHandler);
         Node WriteNode = Node.MakeNode(Node.NodeType.Write);
