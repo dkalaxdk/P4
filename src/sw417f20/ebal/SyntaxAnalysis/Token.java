@@ -23,7 +23,7 @@ public class Token {
 
         // Semi-types
         DIGITAL, ANALOG, PWM, INPUT, OUTPUT,
-        FLIP, CONSTANT, RANGE,
+        DEBOUNCE, CONSTANT, RANGE,
 
         // Keywords
         BEGIN, END, MASTER, SLAVE,

@@ -1,33 +1,15 @@
 package sw417f20.ebal.CodeGeneration.Strategies;
 
+import sw417f20.ebal.CodeGeneration.Utility.ArduinoSystem;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class AssignmentStrategy extends CodeGenerationStrategy {
     @Override
-    public String GenerateCode(Node node) {
-        String content = "";
-        //identifier will be the left part of the assignment.
+    public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
+
         String identifier = node.FirstChild.Value;
-        //expression will be the right side of the assignment.
-        String expression = node.FirstChild.Next.GenerateCode();
-        //If the right side of the assignment is the CreateEvent function, then this will be of the type CreateEvent node.
-        Node createEvent = node.FirstChild.FirstChild;
+        String expression = node.FirstChild.Next.GenerateCode(arduinoSystem);
 
-        //TODO find ud af hvordan events skal fungere.
-        //In case that the right side of the assignment contains CreateEvent function, Then it will be true.
-        if(createEvent.Type == Node.NodeType.CreateEvent){
-            //The value that is assigned to the event
-            String eventValue = createEvent.Next.Value;
-
-            //The event is represented as a char array.
-            content += "char " + identifier + "[4]";
-            content += " = \"" + eventValue + "\";\n";
-        }
-        else{
-            //add the assignment
-            content += identifier + " = " + expression + ";\n";
-        }
-
-        return content;
+        return addIndent(arduinoSystem.Indent) + identifier + " = " + expression + ";\n";
     }
 }

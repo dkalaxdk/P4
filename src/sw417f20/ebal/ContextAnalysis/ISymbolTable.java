@@ -8,8 +8,8 @@ public interface ISymbolTable {
     void CloseScope();
     void EnterSymbol(String name, Symbol.SymbolType type);
     void EnterSymbol(String name, Symbol.SymbolType type, boolean hasBeenInstantiated);
-    void EnterSymbol(String name, Symbol.SymbolType type, Node reference);
     void EnterSymbol(String name, Symbol.SymbolType type, Symbol.SymbolType valueType);
+    void EnterSymbol(String name, Symbol.SymbolType type, Node referenceNode);
     Symbol RetrieveSymbol(String name);
     boolean DeclaredLocally(String name);
     void EnterGlobalSymbol(Symbol symbol);

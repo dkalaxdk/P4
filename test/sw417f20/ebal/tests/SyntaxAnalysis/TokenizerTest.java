@@ -267,7 +267,7 @@ class TokenizerTest {
 
     @Test
     void findKeyword_TokenContentMatchesFlipKeyword_ReturnsTokenWithTypeFlip() {
-        Token.Type expected = Token.Type.FLIP;
+        Token.Type expected = Token.Type.DEBOUNCE;
 
         Token actual = new Token(Token.Type.NOTATOKEN, "flip");
         tokenizer.findKeyword(actual);

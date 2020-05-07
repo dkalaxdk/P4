@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class SemanticsStrategyFactory {
 
     public ISymbolTable SymbolTable;
-    public ArrayList<Integer> UsedPinNumbers;
+    public ArrayList<String> UsedPinNumbers;
     public ArrayList<Symbol> LocalEvents;
     public ArrayList<Symbol> BroadcastEvents;
 
@@ -44,7 +44,7 @@ public class SemanticsStrategyFactory {
     private SemanticsFloatLiteralStrategy floatLiteralStrategy;
     private SemanticsBoolLiteralStrategy boolLiteralStrategy;
 
-    public SemanticsStrategyFactory(ISymbolTable symbolTable, ArrayList<Integer> usedPinNumbers,
+    public SemanticsStrategyFactory(ISymbolTable symbolTable, ArrayList<String> usedPinNumbers,
                                     ArrayList<Symbol> localEvents, ArrayList<Symbol> broadcastEvents){
         SymbolTable = symbolTable;
         UsedPinNumbers = usedPinNumbers;
@@ -146,19 +146,17 @@ public class SemanticsStrategyFactory {
     }
 
     public SemanticsListenerCallStrategy getListenerCallStrategy(){
-        if (listenerCallStrategy == null){
-            listenerCallStrategy = new SemanticsListenerCallStrategy();
-            listenerCallStrategy.SymbolTable = SymbolTable;
-            listenerCallStrategy.BroadcastEvents = BroadcastEvents;
-        }
+        listenerCallStrategy = new SemanticsListenerCallStrategy();
+        listenerCallStrategy.SymbolTable = SymbolTable;
+        listenerCallStrategy.BroadcastEvents = BroadcastEvents;
+
         return listenerCallStrategy;
     }
 
     public SemanticsEventHandlerCallStrategy getEventHandlerCallStrategy(){
-        if (eventHandlerCallStrategy == null){
-            eventHandlerCallStrategy = new SemanticsEventHandlerCallStrategy();
-            eventHandlerCallStrategy.SymbolTable = SymbolTable;
-        }
+        eventHandlerCallStrategy = new SemanticsEventHandlerCallStrategy();
+        eventHandlerCallStrategy.SymbolTable = SymbolTable;
+
         return eventHandlerCallStrategy;
     }
 

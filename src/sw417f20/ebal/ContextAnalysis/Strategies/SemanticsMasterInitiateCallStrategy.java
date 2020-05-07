@@ -8,11 +8,11 @@ import java.util.ArrayList;
 
 public class SemanticsMasterInitiateCallStrategy extends SemanticsCheckerStrategy{
 
-    public ArrayList<Integer> UsedPinNumbers;
+    public ArrayList<String> UsedPinNumbers;
 
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {
-        int pinNumber = Integer.parseInt(node.FirstChild.Next.Next.Next.Value);
+        String pinNumber = node.FirstChild.Next.Next.Next.Value;
         if (node.FirstChild.Next.Next.Type == Node.NodeType.Input) {
             if (node.FirstChild.Next.Type != Node.NodeType.PWM) {
                 if (!UsedPinNumbers.contains(pinNumber)) {

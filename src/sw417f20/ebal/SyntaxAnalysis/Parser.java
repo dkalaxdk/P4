@@ -74,7 +74,7 @@ public class Parser extends RecursiveDescent {
             Expect(Token.Type.SLAVE);
             Expect(Token.Type.COLON);
 
-            Slave.AddChild(Node.MakeNode(Expect(Token.Type.IDENTIFIER)));
+            Slave.AddChild(getLeaf(Token.Type.IDENTIFIER));
             Slave.AddChild(Initiate());
             Slave.AddChild(EventHandlers());
 
@@ -142,7 +142,7 @@ public class Parser extends RecursiveDescent {
 
             Expect(Token.Type.LISTENER);
             Expect(Token.Type.LPAREN);
-            Listener.AddChild(Node.MakeNode(Expect(Token.Type.IDENTIFIER)));
+            Listener.AddChild(getLeaf(Token.Type.IDENTIFIER));
             Expect(Token.Type.RPAREN);
             Listener.AddChild(Block());
 
@@ -187,7 +187,7 @@ public class Parser extends RecursiveDescent {
 
             Expect(Token.Type.EVENTHANDLER);
             Expect(Token.Type.LPAREN);
-            EventHandler.AddChild(Node.MakeNode(Expect(Token.Type.IDENTIFIER)));
+            EventHandler.AddChild(getLeaf(Token.Type.IDENTIFIER));
             Expect(Token.Type.RPAREN);
             EventHandler.AddChild(Block());
 
@@ -279,7 +279,7 @@ public class Parser extends RecursiveDescent {
         if (Peek().type == Token.Type.IDENTIFIER) {
             Node Assignment = Node.MakeNode(Node.NodeType.Assignment, getLineNumber());
 
-            Assignment.AddChild(Node.MakeNode(Expect(Token.Type.IDENTIFIER)));
+            Assignment.AddChild(getLeaf(Token.Type.IDENTIFIER));
             Expect(Token.Type.ASSIGN);
             Assignment.AddChild(Expr());
 
@@ -324,7 +324,7 @@ public class Parser extends RecursiveDescent {
         Node Dcl = Node.MakeNode(nodeType, getLineNumber());
 
         Expect(tokenType);
-        Dcl.AddChild(Node.MakeNode(Expect(Token.Type.IDENTIFIER)));
+        Dcl.AddChild(getLeaf(Token.Type.IDENTIFIER));
         Dcl.AddChild(DclAssign());
 
         return Dcl;
@@ -354,6 +354,7 @@ public class Parser extends RecursiveDescent {
     public Node Expr() throws SyntaxException {
         Node Expr = Node.MakeNode(Node.NodeType.Expression, getLineNumber());
 
+        // TODO: Alle identifiers bør have Empty som deres FirstChild hvis de ikke har et prefix. Hvis det bliver rettet, prik til Michelle
         if (Peek().type == Token.Type.IDENTIFIER || CheckForLiteral()) {
             Node value = Value();
             Node afterExpr = AfterExpr();
@@ -385,6 +386,7 @@ public class Parser extends RecursiveDescent {
             Node prefix = Node.MakeNode(Node.NodeType.PrefixMinus);
             Node value = Value();
 
+            value.FirstChild = null;
             value.AddChild(prefix);
 
             Node afterExpr = AfterExpr();
@@ -399,8 +401,9 @@ public class Parser extends RecursiveDescent {
         else if (Peek().type == Token.Type.OP_NOT) {
             Expect(Token.Type.OP_NOT);
             Node prefix = Node.MakeNode(Node.NodeType.PrefixNot);
-            Node identifier = Node.MakeNode(Expect(Token.Type.IDENTIFIER));
+            Node identifier = getLeaf(Token.Type.IDENTIFIER);
 
+            identifier.FirstChild = null;
             identifier.AddChild(prefix);
 
             Node afterExpr = AfterExpr();
@@ -436,25 +439,23 @@ public class Parser extends RecursiveDescent {
     //	         | 	boolLiteral
     //	         | 	identifier.
     public Node Value() throws SyntaxException {
+        Token.Type type = Peek().type;
 
-        switch (Peek().type) {
+        switch (type) {
             case IDENTIFIER:
-                return Node.MakeNode(Expect(Token.Type.IDENTIFIER));
-
             case LIT_Int:
-                return Node.MakeNode(Expect(Token.Type.LIT_Int));
-
             case LIT_Float:
-                return Node.MakeNode(Expect(Token.Type.LIT_Float));
-
             case LIT_Bool:
-                return Node.MakeNode(Expect(Token.Type.LIT_Bool));
+                return getLeaf(type);
 
             default:
                 MakeError("Expected literal int, float, or bool or an identifier");
                 return Node.MakeNode(Node.NodeType.Error);
         }
     }
+
+
+    // Put IDENTIFIER og LITERAL i deres egne metoder, så de kan få line numbers og sådan noget.
 
     // AfterExpr 	-> 	Operator Expr
     //	             | 	LogicOp Expr
@@ -514,7 +515,7 @@ public class Parser extends RecursiveDescent {
             ProcedureCall.AddChild(Node.MakeNode(Node.NodeType.Broadcast));
 
             Expect(Token.Type.LPAREN);
-            ProcedureCall.AddChild(Node.MakeNode(Expect(Token.Type.IDENTIFIER)));
+            ProcedureCall.AddChild(getLeaf(Token.Type.IDENTIFIER));
             Expect(Token.Type.RPAREN);
         }
         else if (Peek().type == Token.Type.WRITE) {
@@ -522,7 +523,7 @@ public class Parser extends RecursiveDescent {
             ProcedureCall.AddChild(Node.MakeNode(Node.NodeType.Write));
 
             Expect(Token.Type.LPAREN);
-            ProcedureCall.AddChild(Node.MakeNode(Expect(Token.Type.IDENTIFIER)));
+            ProcedureCall.AddChild(getLeaf(Token.Type.IDENTIFIER));
             Expect(Token.Type.COMMA);
             ProcedureCall.AddChild(Expr());
             Expect(Token.Type.RPAREN);
@@ -547,7 +548,7 @@ public class Parser extends RecursiveDescent {
             FunctionCall.AddChild(Node.MakeNode(Node.NodeType.FilterNoise));
 
             Expect(Token.Type.LPAREN);
-            FunctionCall.AddChild(Node.MakeNode(Expect(Token.Type.IDENTIFIER)));
+            FunctionCall.AddChild(getLeaf(Token.Type.IDENTIFIER));
             Expect(Token.Type.COMMA);
             FunctionCall.AddChild(FilterType());
             Expect(Token.Type.RPAREN);
@@ -557,7 +558,7 @@ public class Parser extends RecursiveDescent {
             FunctionCall.AddChild(Node.MakeNode(Node.NodeType.GetValue));
 
             Expect(Token.Type.LPAREN);
-            FunctionCall.AddChild(Node.MakeNode(Expect(Token.Type.IDENTIFIER)));
+            FunctionCall.AddChild(getLeaf(Token.Type.IDENTIFIER));
             Expect(Token.Type.RPAREN);
         }
         else if (Peek().type == Token.Type.CREATEEVENT) {
@@ -577,7 +578,18 @@ public class Parser extends RecursiveDescent {
             Expect(Token.Type.COMMA);
             FunctionCall.AddChild(IOType());
             Expect(Token.Type.COMMA);
-            FunctionCall.AddChild(Node.MakeNode(Expect(Token.Type.LIT_Int)));
+
+            // Support for analog pins (A0 - A15);
+            if (Peek().type == Token.Type.LIT_Int) {
+                FunctionCall.AddChild(getLeaf(Token.Type.LIT_Int));
+            }
+            else if (Peek().type == Token.Type.IDENTIFIER) {
+                FunctionCall.AddChild(getLeaf(Token.Type.IDENTIFIER));
+            }
+            else {
+                MakeError("Expected analog or digital pin number");
+            }
+
             Expect(Token.Type.RPAREN);
         }
         else {
@@ -646,15 +658,15 @@ public class Parser extends RecursiveDescent {
         }
     }
 
-    // FilterType -> 	flip
+    // FilterType -> 	debounce
     //	           | 	constant
     //	           | 	range.
     public Node FilterType() throws SyntaxException {
 
         switch (Peek().type) {
-            case FLIP:
-                Expect(Token.Type.FLIP);
-                return Node.MakeNode(Node.NodeType.Flip);
+            case DEBOUNCE:
+                Expect(Token.Type.DEBOUNCE);
+                return Node.MakeNode(Node.NodeType.Debounce);
 
             case CONSTANT:
                 Expect(Token.Type.CONSTANT);
@@ -665,7 +677,7 @@ public class Parser extends RecursiveDescent {
                 return Node.MakeNode(Node.NodeType.Range);
 
             default:
-                MakeError("Expected FLIP, CONSTANT, or RANGE");
+                MakeError("Expected debounce, constant, or range");
                 return Node.MakeNode(Node.NodeType.Error);
         }
     }
@@ -795,6 +807,22 @@ public class Parser extends RecursiveDescent {
                 return Node.MakeNode(Node.NodeType.Error);
         }
     }
+
+    private Node getLeaf(Token.Type type) throws SyntaxException {
+        Node node = Node.MakeNode(Expect(type), getLineNumber());
+
+        addEmpty(node);
+
+        return node;
+    }
+
+    private void addEmpty(Node node) {
+        if (node.FirstChild == null) {
+            node.AddChild(Node.MakeNode(Node.NodeType.Empty));
+        }
+    }
+
+
 
     private boolean CheckForType() {
 

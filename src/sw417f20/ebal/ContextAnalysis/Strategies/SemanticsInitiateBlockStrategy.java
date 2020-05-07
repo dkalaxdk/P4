@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class SemanticsInitiateBlockStrategy extends SemanticsCheckerStrategy{
 
-    public ArrayList<Integer> UsedPinNumbers;
+    public ArrayList<String> UsedPinNumbers;
 
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {

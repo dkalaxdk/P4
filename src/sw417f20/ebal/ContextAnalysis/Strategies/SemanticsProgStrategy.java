@@ -16,5 +16,7 @@ public class SemanticsProgStrategy extends SemanticsCheckerStrategy{
                 child. CheckSemantics();
                 child = child.Next;
             }
+
+            System.out.println("======= Semantics accepted =======");
         }
 }

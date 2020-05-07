@@ -1,5 +1,6 @@
 package sw417f20.ebal.SyntaxAnalysis;
 
+import sw417f20.ebal.CodeGeneration.Utility.ArduinoSystem;
 import sw417f20.ebal.ContextAnalysis.Strategies.SemanticsCheckerStrategy;
 import sw417f20.ebal.ContextAnalysis.Symbol;
 
@@ -12,9 +13,8 @@ public class Node {
     public NodeType Type;
     public String Value;
     public int LineNumber = -1;
-    public Node DefinitionReference;
     public Symbol.SymbolType DataType;
-    public int ArduinoID; //TODO: implementer (master = -1)(slave2 = 0....)
+    public int ArduinoID;
 
     // The next element in the linked list of siblings
     public Node Next;
@@ -44,20 +44,26 @@ public class Node {
         LineNumber = lineNumber;
     }
 
-    public static Node MakeNode(Token token) {
+    private Node(NodeType type, Token token, int lineNumber) {
+        this.Type = type;
+        this.Value = token.content;
+        this.LineNumber = lineNumber;
+    }
+
+    public static Node MakeNode(Token token, int lineNumber) {
 
         switch (token.type) {
             case IDENTIFIER:
-                return new Node(NodeType.Identifier, token);
+                return new Node(NodeType.Identifier, token, lineNumber);
 
             case LIT_Bool:
-                return new Node(NodeType.BoolLiteral, token);
+                return new Node(NodeType.BoolLiteral, token, lineNumber);
 
             case LIT_Int:
-                return new Node(NodeType.IntLiteral, token);
+                return new Node(NodeType.IntLiteral, token, lineNumber);
 
             case LIT_Float:
-                return new Node(NodeType.FloatLiteral, token);
+                return new Node(NodeType.FloatLiteral, token, lineNumber);
 
             default:
                 return new Node(NodeType.Error);
@@ -207,7 +213,7 @@ public class Node {
         Input, Output,
 
         // Filter types
-        Constant, Flip, Range,
+        Constant, Debounce, Range,
 
         // Function
         Broadcast, Write, GetValue, FilterNoise, CreateEvent, CreatePin,
@@ -239,9 +245,9 @@ public class Node {
 
     // Calls the provided codeGen strategy, and returns the result.
     // Is the common interface for code generation.
-    public String GenerateCode() {
+    public String GenerateCode(ArduinoSystem arduinoSystem) {
         if(CodeGenerationStrategy != null) {
-            return CodeGenerationStrategy.GenerateCode(this);
+            return CodeGenerationStrategy.GenerateCode(this, arduinoSystem);
         }
         else {
             return "";

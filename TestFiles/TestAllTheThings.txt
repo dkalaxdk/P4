@@ -20,7 +20,7 @@ Listener(Instantiation) {
 
 Listener(FunctionCalls) {
     getValue(FunctionCalls);
-    filterNoise(FunctionsCalls, flip);
+    filterNoise(FunctionsCalls, debounce);
     createEvent(2);
     write(pin1, 1);
     broadcast(testEvent);

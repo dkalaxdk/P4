@@ -3,9 +3,15 @@ package sw417f20.ebal.CodeGeneration.Utility;
 /**
  * Class that represents a slave during code generation.
  */
-public class Slave {
-    private String Name;
-    private int ID;
+public class Slave extends ArduinoBoard{
+
+    public int EventHandlerCount = 0;
+    public StringBuilder EventHandlers;
+
+    public StringBuilder ReceiveEvent;
+
+    private final String Name;
+    private final int ID;
 
     /**
      * Constructor of a slave.
@@ -15,6 +21,9 @@ public class Slave {
     public Slave(String name, int id) {
         this.Name = name;
         this.ID = id;
+
+        EventHandlers = new StringBuilder();
+        ReceiveEvent = new StringBuilder();
     }
 
     /**
@@ -25,27 +34,50 @@ public class Slave {
         return Name;
     }
 
-    /**
-     * Setter for the slaves name.
-     * @param name  The name the slaves name should be set to.
-     */
-    public void SetName(String name) {
-        this.Name = name;
-    }
+    @Override
+    public String toString() {
+        StringBuilder slaveBuilder = new StringBuilder();
 
-    /**
-     * Getter for the slaves ID.
-     * @return      Returns the ID of a slave.
-     */
-    public int getID() {
-        return ID;
-    }
+        // EBAL libraries
+        slaveBuilder.append(libraries);
 
-    /**
-     * Setter for the slaves ID.
-     * @param id    The ID the slaves ID should be set to.
-     */
-    public void setID(int id) {
-        this.ID = id;
+        // Global variables
+        slaveBuilder
+                .append(PinDeclarations.toString())
+                .append("\n")
+                .append(EventDeclarations.toString())
+                .append("\n");
+
+        // Setup
+        slaveBuilder
+                .append("void setup() {\n")
+                .append(PinInstantiations.toString())
+                .append("\n")
+                .append(EventInstantiations.toString())
+                .append("\n")
+                .append("\tWire.begin(").append(ID).append(");\n")
+                .append("\tSerial.begin(9600);\n")
+                .append("\tWire.onReceive(receiveEvent);\n")
+                .append("}\n\n");
+
+        // EventHandlers
+        slaveBuilder
+                .append(EventHandlers.toString())
+                .append("\n");
+
+        // ReceiveEvent
+        slaveBuilder
+                .append("void receiveEvent(int howMany) {\n")
+                .append("\tchar eventID = Wire.read();\n\n")
+                .append(ReceiveEvent.toString())
+                .append("}\n\n");
+
+        // Loop
+        slaveBuilder
+                .append("void loop() {\n")
+                .append(Loop.toString())
+                .append("}\n");
+
+        return slaveBuilder.toString();
     }
 }

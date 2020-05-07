@@ -9,6 +9,7 @@ public abstract class SemanticsCheckerStrategy {
 
     public ISymbolTable SymbolTable;
     public enum ErrorType{ NotDeclared, AlreadyDeclared, WrongType, Default}
+    public String AvailablePinOrEvent;
 
     /**
      * Abstract method that all strategies must implement.
