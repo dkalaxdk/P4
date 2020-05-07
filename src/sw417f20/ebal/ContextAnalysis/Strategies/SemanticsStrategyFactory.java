@@ -25,8 +25,6 @@ public class SemanticsStrategyFactory {
 
     private SemanticsMasterInitiateCallStrategy masterInitiateCallStrategy;
     private SemanticsSlaveInitiateCallStrategy slaveInitiateCallStrategy;
-    private SemanticsListenerCallStrategy listenerCallStrategy;
-    private SemanticsEventHandlerCallStrategy eventHandlerCallStrategy;
 
     private SemanticsAssignmentStrategy assignmentStrategy;
     private SemanticsIfStrategy ifStrategy;
@@ -146,7 +144,7 @@ public class SemanticsStrategyFactory {
     }
 
     public SemanticsListenerCallStrategy getListenerCallStrategy(){
-        listenerCallStrategy = new SemanticsListenerCallStrategy();
+        SemanticsListenerCallStrategy listenerCallStrategy = new SemanticsListenerCallStrategy();
         listenerCallStrategy.SymbolTable = SymbolTable;
         listenerCallStrategy.BroadcastEvents = BroadcastEvents;
 
@@ -154,7 +152,7 @@ public class SemanticsStrategyFactory {
     }
 
     public SemanticsEventHandlerCallStrategy getEventHandlerCallStrategy(){
-        eventHandlerCallStrategy = new SemanticsEventHandlerCallStrategy();
+        SemanticsEventHandlerCallStrategy eventHandlerCallStrategy = new SemanticsEventHandlerCallStrategy();
         eventHandlerCallStrategy.SymbolTable = SymbolTable;
 
         return eventHandlerCallStrategy;

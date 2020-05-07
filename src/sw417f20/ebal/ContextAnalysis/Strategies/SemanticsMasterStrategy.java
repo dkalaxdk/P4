@@ -16,7 +16,7 @@ public class SemanticsMasterStrategy extends SemanticsCheckerStrategy{
         Node child = node.FirstChild;
         child.CheckSemantics();
         child = child.Next;
-        while (child.Type != Node.NodeType.Empty){
+        while (!child.IsEmpty()){
             child.CheckSemantics();
             child = child.Next;
         }

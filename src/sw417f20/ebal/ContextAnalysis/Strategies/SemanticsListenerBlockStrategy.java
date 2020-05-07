@@ -9,7 +9,7 @@ public class SemanticsListenerBlockStrategy extends SemanticsCheckerStrategy{
     public void CheckSemantics(Node node) throws SemanticsException {
         SymbolTable.OpenScope();
         Node child = node.FirstChild;
-        while (child.Type != Node.NodeType.Empty){
+        while (!child.IsEmpty()){
             if (child.Type != Node.NodeType.PinDeclaration){
                 child.CheckSemantics();
             }

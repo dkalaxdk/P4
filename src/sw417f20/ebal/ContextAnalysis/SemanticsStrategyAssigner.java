@@ -51,7 +51,7 @@ public class SemanticsStrategyAssigner {
         // Sets flag to help check that the slave cannot call broadcast()
         inSlave = true;
         child = child.Next;
-        while (child.Type != Node.NodeType.Empty){
+        while (!child.IsEmpty()){
             AssignStrategySlave(child);
             child = child.Next;
         }
@@ -64,7 +64,7 @@ public class SemanticsStrategyAssigner {
         Node child = node.FirstChild;
         AssignStrategyInitiate(child);
         child = child.Next;
-        while (child.Type != Node.NodeType.Empty){
+        while (!child.IsEmpty()){
             AssignStrategyListener(child);
             child = child.Next;
         }
@@ -77,7 +77,7 @@ public class SemanticsStrategyAssigner {
         Node child = node.FirstChild.Next;
         AssignStrategyInitiate(child);
         child = child.Next;
-        while (child.Type != Node.NodeType.Empty) {
+        while (!child.IsEmpty()) {
             AssignStrategyEventHandler(child);
             child = child.Next;
         }
@@ -95,7 +95,7 @@ public class SemanticsStrategyAssigner {
     // Assigns a strategy to the Listener node
     private void AssignStrategyListener(Node node){
         AssignStrategy(node, strategies.getListenerStrategy());
-        AvailablePinOrEvent = new String(node.FirstChild.Value);
+        AvailablePinOrEvent = node.FirstChild.Value;
 
         AssignStrategyBlock(node.FirstChild.Next);
 
@@ -104,7 +104,7 @@ public class SemanticsStrategyAssigner {
     // Assigns a strategy to the EventHandler node
     private void AssignStrategyEventHandler(Node node){
         AssignStrategy(node, strategies.getEventHandlerStrategy());
-        AvailablePinOrEvent = new String(node.FirstChild.Value);
+        AvailablePinOrEvent = node.FirstChild.Value;
 
         AssignStrategyBlock(node.FirstChild.Next);
     }
@@ -123,7 +123,7 @@ public class SemanticsStrategyAssigner {
         }
 
         Node child = node.FirstChild;
-        while (child.Type != Node.NodeType.Empty){
+        while (!child.IsEmpty()){
             switch (child.Type){
                 case BoolDeclaration:
                 case IntDeclaration:
@@ -187,7 +187,7 @@ public class SemanticsStrategyAssigner {
         AssignStrategyBlock(node.FirstChild.Next);
 
         Node elseStmt = node.FirstChild.Next.Next;
-        if (elseStmt.Type != Node.NodeType.Empty){
+        if (!elseStmt.IsEmpty()){
             if(elseStmt.Type == Node.NodeType.Block){
                 AssignStrategyBlock(elseStmt);
             }
@@ -210,14 +210,14 @@ public class SemanticsStrategyAssigner {
         }
         else if (inSlave){
             AssignStrategy(node, strategies.getEventHandlerCallStrategy());
-            node.SemanticsCheckerStrategy.AvailablePinOrEvent = new String(AvailablePinOrEvent);
+            node.SemanticsCheckerStrategy.AvailablePinOrEvent = AvailablePinOrEvent;
             if (node.FirstChild.Type == Node.NodeType.Write){
                 AssignStrategyExpression(node.FirstChild.Next.Next);
             }
         }
         else {
             AssignStrategy(node, strategies.getListenerCallStrategy());
-            node.SemanticsCheckerStrategy.AvailablePinOrEvent = new String(AvailablePinOrEvent);
+            node.SemanticsCheckerStrategy.AvailablePinOrEvent = AvailablePinOrEvent;
             if (node.FirstChild.Type == Node.NodeType.CreateEvent){
                 AssignStrategyExpression(node.FirstChild.Next);
             }

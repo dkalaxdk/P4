@@ -12,7 +12,7 @@ public class SemanticsProgStrategy extends SemanticsCheckerStrategy{
             child.CheckSemantics();
 
             child = child.Next;
-            while (child.Type != Node.NodeType.Empty){
+            while (!child.IsEmpty()){
                 child. CheckSemantics();
                 child = child.Next;
             }
