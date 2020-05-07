@@ -20,9 +20,7 @@ public class OutputFileGenerator {
         File directory = new File(filePath);
 
         // Try and make the necessary directories
-        if (!directory.mkdirs()) {
-            throw new IOException();
-        }
+        directory.mkdirs();
 
         for (String name : files.keySet()) {
             String content = files.get(name);
@@ -31,9 +29,7 @@ public class OutputFileGenerator {
             File file = new File(path);
 
             // Try and make the necessary directories
-            if (!file.mkdirs()) {
-                throw new IOException();
-            }
+            file.mkdirs();
 
             path += name;
 
