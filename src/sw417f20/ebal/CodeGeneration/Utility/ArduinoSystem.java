@@ -16,9 +16,9 @@ public class ArduinoSystem {
     public ArduinoSystem(Node root) {
         Master = new Master();
         SlaveList = new ArrayList<>();
-        this.root = root;
-
         EventMap = new HashMap<>();
+
+        this.root = root;
 
         FindSlaves(root);
         FindHandledEvents(root);
@@ -32,7 +32,7 @@ public class ArduinoSystem {
     }
 
     /**
-     *
+     * Uses the Master's and the Slaves' toString to make a HashMap that represents the system
      * @return HashMap with the system's master and slaves
      */
     public HashMap<String, String> Print() {
