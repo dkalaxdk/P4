@@ -92,6 +92,4 @@ public class ArduinoSystem {
             slaves = slaves.Next;
         }
     }
-
-
 }

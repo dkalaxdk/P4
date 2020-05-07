@@ -9,6 +9,7 @@ import sw417f20.ebal.Exceptions.SemanticsException;
 
 // This class is inspired by the data structure
 // outlined in Crafting a Compiler by Fischer et. al.
+
 public class Node {
     public NodeType Type;
     public String Value;

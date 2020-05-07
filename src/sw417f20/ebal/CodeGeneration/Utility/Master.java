@@ -1,5 +1,8 @@
 package sw417f20.ebal.CodeGeneration.Utility;
 
+/**
+ * Class that represents the master during code generation.
+ */
 public class Master extends ArduinoBoard {
 
     public int ListenerCount = 0;
