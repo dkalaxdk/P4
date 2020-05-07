@@ -7,7 +7,7 @@ import sw417f20.ebal.ContextAnalysis.Symbol;
 import sw417f20.ebal.CodeGeneration.Strategies.CodeGenerationStrategy;
 import sw417f20.ebal.Exceptions.SemanticsException;
 
-// This class is inspired by the data structure
+// This class iss inspired by the data structure
 // outlined in Crafting a Compiler by Fischer et. al.
 
 public class Node {
@@ -258,6 +258,8 @@ public class Node {
     public void CheckSemantics() throws SemanticsException {
         if(SemanticsCheckerStrategy != null) {
             SemanticsCheckerStrategy.CheckSemantics(this);
+        } else {
+            throw new NullPointerException("Semantics strategy not defined");
         }
     }
 
