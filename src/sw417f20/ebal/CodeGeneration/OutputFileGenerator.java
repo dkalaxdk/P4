@@ -18,14 +18,22 @@ public class OutputFileGenerator {
         String filePath = getFilePath() + sourceFile + "/";
 
         File directory = new File(filePath);
-        directory.mkdirs();
+
+        // Try and make the necessary directories
+        if (!directory.mkdirs()) {
+            throw new IOException();
+        }
 
         for (String name : files.keySet()) {
             String content = files.get(name);
 
             String path = filePath + name + "/";
             File file = new File(path);
-            file.mkdirs();
+
+            // Try and make the necessary directories
+            if (!file.mkdirs()) {
+                throw new IOException();
+            }
 
             path += name;
 
