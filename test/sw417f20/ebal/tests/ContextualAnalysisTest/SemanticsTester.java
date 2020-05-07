@@ -41,12 +41,13 @@ public class SemanticsTester {
         AssignmentNode.FirstChild.Next = ExpressionNode;
 
 
-        assignmentStrategy.SymbolTable.EnterSymbol(nodeIdentifier.Value,nodeIdentifier.DataType);
+        assignmentStrategy.SymbolTable.EnterSymbol(nodeIdentifier.Value, nodeIdentifier.DataType);
         AssignmentNode.SemanticsCheckerStrategy = assignmentStrategy;
         AssignmentNode.CheckSemantics();
 
         Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
+
     @Test
     void AssignmentStrategy_TypeFloat_Returns_NoErrorsThrown() throws SemanticsException {
         Node AssignmentNode = Node.MakeNode(Node.NodeType.Assignment);
@@ -67,7 +68,7 @@ public class SemanticsTester {
         AssignmentNode.FirstChild.Next = ExpressionNode;
 
 
-        assignmentStrategy.SymbolTable.EnterSymbol(nodeIdentifier.Value,nodeIdentifier.DataType);
+        assignmentStrategy.SymbolTable.EnterSymbol(nodeIdentifier.Value, nodeIdentifier.DataType);
         AssignmentNode.SemanticsCheckerStrategy = assignmentStrategy;
         AssignmentNode.CheckSemantics();
 
@@ -94,12 +95,13 @@ public class SemanticsTester {
         AssignmentNode.FirstChild.Next = ExpressionNode;
 
 
-        assignmentStrategy.SymbolTable.EnterSymbol(nodeIdentifier.Value,nodeIdentifier.DataType);
+        assignmentStrategy.SymbolTable.EnterSymbol(nodeIdentifier.Value, nodeIdentifier.DataType);
         AssignmentNode.SemanticsCheckerStrategy = assignmentStrategy;
         AssignmentNode.CheckSemantics();
 
         Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
+
     @Test
     void AssignmentStrategy_TypeInt_Returns_WrongTypeErrorThrown() {
         Node AssignmentNode = Node.MakeNode(Node.NodeType.Assignment);
@@ -123,9 +125,8 @@ public class SemanticsTester {
         AssignmentNode.FirstChild.Next = ExpressionNode;
 
 
-        assignmentStrategy.SymbolTable.EnterSymbol(nodeIdentifier.Value,nodeIdentifier.DataType);
+        assignmentStrategy.SymbolTable.EnterSymbol(nodeIdentifier.Value, nodeIdentifier.DataType);
         AssignmentNode.SemanticsCheckerStrategy = assignmentStrategy;
-
 
 
         Exception exception = Assertions.assertThrows(SemanticsException.class, AssignmentNode::CheckSemantics);
@@ -210,7 +211,7 @@ public class SemanticsTester {
         DeclarationNode.FirstChild.Next = ExpressionNode;
 
         DeclarationNode.SemanticsCheckerStrategy = boolDeclarationStrategy;
-        boolDeclarationStrategy.SymbolTable.EnterSymbol(IdentifierNode.Value,IdentifierNode.DataType);
+        boolDeclarationStrategy.SymbolTable.EnterSymbol(IdentifierNode.Value, IdentifierNode.DataType);
 
         Exception exception = Assertions.assertThrows(SemanticsException.class, DeclarationNode::CheckSemantics);
 
@@ -239,7 +240,6 @@ public class SemanticsTester {
         DeclarationNode.FirstChild.Next = ExpressionNode;
 
         DeclarationNode.SemanticsCheckerStrategy = boolDeclarationStrategy;
-
 
 
         Exception exception = Assertions.assertThrows(SemanticsException.class, DeclarationNode::CheckSemantics);
@@ -363,7 +363,7 @@ public class SemanticsTester {
         DeclarationNode.FirstChild = IdentifierNode;
         DeclarationNode.FirstChild.Next = ExpressionNode;
 
-        eventDeclarationStrategy.SymbolTable.EnterSymbol(IdentifierNode.Value,Symbol.SymbolType.EVENT,ExpressionChild.DataType);
+        eventDeclarationStrategy.SymbolTable.EnterSymbol(IdentifierNode.Value, Symbol.SymbolType.EVENT, ExpressionChild.DataType);
         eventDeclarationStrategy.LocalEvents.add(eventDeclarationStrategy.SymbolTable.RetrieveSymbol(IdentifierNode.Value));
 
         DeclarationNode.SemanticsCheckerStrategy = eventDeclarationStrategy;
@@ -469,30 +469,317 @@ public class SemanticsTester {
     }
 
     @Test
-    // Still not done
-    void EventHandlerCallStrategy() {
-        Node EventHandlerNode = Node.MakeNode(Node.NodeType.EventHandler);
+    void EventHandlerCallStrategy_WriteMethod_Returns_No_Errors() throws SemanticsException {
+        Node CallNode = Node.MakeNode(Node.NodeType.Call);
         Node WriteNode = Node.MakeNode(Node.NodeType.Write);
-        Node PinParameters = Node.MakeNode(Node.NodeType.Expression);
-
-        //The string expected as return from the error
-        String errorString = "No pin or event";
+        Node PinParameters = Node.MakeNode(Node.NodeType.Identifier);
+        Node IntParameters = Node.MakeNode(Node.NodeType.Identifier);
 
         WriteNode.SemanticsCheckerStrategy = new FakeStrategy();
+        PinParameters.SemanticsCheckerStrategy = new FakeStrategy();
+        IntParameters.SemanticsCheckerStrategy = new FakeStrategy();
 
-        SemanticsEventHandlerBlockStrategy eventDeclarationStrategy = new SemanticsEventHandlerBlockStrategy();
-        eventDeclarationStrategy.SymbolTable = new HashSymbolTable();
+        SemanticsEventHandlerCallStrategy CallHandlerStrategy = new SemanticsEventHandlerCallStrategy();
+        CallHandlerStrategy.SymbolTable = new HashSymbolTable();
 
-        EventHandlerNode.FirstChild = WriteNode;
+        PinParameters.Value = "Test";
 
-        EventHandlerNode.SemanticsCheckerStrategy = eventDeclarationStrategy;
+        IntParameters.DataType = Symbol.SymbolType.INT;
+        PinParameters.DataType = Symbol.SymbolType.PIN;
 
-        Exception exception = Assertions.assertThrows(SemanticsException.class, EventHandlerNode::CheckSemantics);
+        PinParameters.Next = IntParameters;
+        WriteNode.Next = PinParameters;
+        CallNode.FirstChild = WriteNode;
+
+        CallHandlerStrategy.SymbolTable.EnterSymbol(CallNode.FirstChild.Next.Value, CallNode.FirstChild.Next.DataType);
+        CallNode.SemanticsCheckerStrategy = CallHandlerStrategy;
+
+
+        CallNode.CheckSemantics();
+
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
+    }
+
+    @Test
+    void EventHandlerCallStrategy_WriteMethod_Returns_SecondParameter_Error() {
+        Node CallNode = Node.MakeNode(Node.NodeType.Call);
+        Node WriteNode = Node.MakeNode(Node.NodeType.Write);
+        Node PinParameters = Node.MakeNode(Node.NodeType.Identifier);
+        Node IntParameters = Node.MakeNode(Node.NodeType.Identifier);
+
+        // The string expected as return from the error
+        String errorString = "wrong type";
+
+        WriteNode.SemanticsCheckerStrategy = new FakeStrategy();
+        PinParameters.SemanticsCheckerStrategy = new FakeStrategy();
+        IntParameters.SemanticsCheckerStrategy = new FakeStrategy();
+
+        SemanticsEventHandlerCallStrategy CallHandlerStrategy = new SemanticsEventHandlerCallStrategy();
+        CallHandlerStrategy.SymbolTable = new HashSymbolTable();
+
+        PinParameters.Value = "Test";
+
+        IntParameters.DataType = Symbol.SymbolType.BOOL;
+        PinParameters.DataType = Symbol.SymbolType.PIN;
+
+        PinParameters.Next = IntParameters;
+        WriteNode.Next = PinParameters;
+        CallNode.FirstChild = WriteNode;
+
+        CallHandlerStrategy.SymbolTable.EnterSymbol(CallNode.FirstChild.Next.Value, CallNode.FirstChild.Next.DataType);
+        CallNode.SemanticsCheckerStrategy = CallHandlerStrategy;
+
+        Exception exception = Assertions.assertThrows(SemanticsException.class, CallNode::CheckSemantics);
         Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
+
+    @Test
+    void EventHandlerCallStrategy_WriteMethod_Returns_FirstParameter_Error() {
+        Node CallNode = Node.MakeNode(Node.NodeType.Call);
+        Node WriteNode = Node.MakeNode(Node.NodeType.Write);
+        Node PinParameters = Node.MakeNode(Node.NodeType.Identifier);
+        Node IntParameters = Node.MakeNode(Node.NodeType.Identifier);
+
+        // The string expected as return from the error
+        String errorString = "wrong type";
+
+        WriteNode.SemanticsCheckerStrategy = new FakeStrategy();
+        PinParameters.SemanticsCheckerStrategy = new FakeStrategy();
+        IntParameters.SemanticsCheckerStrategy = new FakeStrategy();
+
+        SemanticsEventHandlerCallStrategy CallHandlerStrategy = new SemanticsEventHandlerCallStrategy();
+        CallHandlerStrategy.SymbolTable = new HashSymbolTable();
+
+        PinParameters.Value = "Test";
+
+        IntParameters.DataType = Symbol.SymbolType.INT;
+        PinParameters.DataType = Symbol.SymbolType.BOOL;
+
+        PinParameters.Next = IntParameters;
+        WriteNode.Next = PinParameters;
+        CallNode.FirstChild = WriteNode;
+
+        CallHandlerStrategy.SymbolTable.EnterSymbol(CallNode.FirstChild.Next.Value, CallNode.FirstChild.Next.DataType);
+        CallNode.SemanticsCheckerStrategy = CallHandlerStrategy;
+
+        Exception exception = Assertions.assertThrows(SemanticsException.class, CallNode::CheckSemantics);
+        Assertions.assertTrue(exception.getMessage().contains(errorString));
+    }
+
+    @Test
+    void EventHandlerCallStrategy_WriteMethod_Returns_Not_Declared() {
+        Node CallNode = Node.MakeNode(Node.NodeType.Call);
+        Node WriteNode = Node.MakeNode(Node.NodeType.Write);
+        Node PinParameters = Node.MakeNode(Node.NodeType.Identifier);
+        Node IntParameters = Node.MakeNode(Node.NodeType.Identifier);
+
+        // The string expected as return from the error
+        String errorString = "not been declared";
+
+        WriteNode.SemanticsCheckerStrategy = new FakeStrategy();
+        PinParameters.SemanticsCheckerStrategy = new FakeStrategy();
+        IntParameters.SemanticsCheckerStrategy = new FakeStrategy();
+
+        SemanticsEventHandlerCallStrategy CallHandlerStrategy = new SemanticsEventHandlerCallStrategy();
+        CallHandlerStrategy.SymbolTable = new HashSymbolTable();
+
+        PinParameters.Value = "Test";
+
+        IntParameters.DataType = Symbol.SymbolType.INT;
+        PinParameters.DataType = Symbol.SymbolType.PIN;
+
+        PinParameters.Next = IntParameters;
+        WriteNode.Next = PinParameters;
+        CallNode.FirstChild = WriteNode;
+
+        CallNode.SemanticsCheckerStrategy = CallHandlerStrategy;
+
+        Exception exception = Assertions.assertThrows(SemanticsException.class, CallNode::CheckSemantics);
+        Assertions.assertTrue(exception.getMessage().contains(errorString));
+    }
+
+    @Test
+    void EventHandlerCallStrategy_GetValue_PinType_Returns_No_Errors() throws SemanticsException {
+        Node CallNode = Node.MakeNode(Node.NodeType.Call);
+        Node WriteNode = Node.MakeNode(Node.NodeType.GetValue);
+        Node PinParameters = Node.MakeNode(Node.NodeType.Identifier);
+
+        WriteNode.SemanticsCheckerStrategy = new FakeStrategy();
+        PinParameters.SemanticsCheckerStrategy = new FakeStrategy();
+
+        SemanticsEventHandlerCallStrategy CallHandlerStrategy = new SemanticsEventHandlerCallStrategy();
+        CallHandlerStrategy.SymbolTable = new HashSymbolTable();
+
+        PinParameters.Value = "Test";
+
+        PinParameters.DataType = Symbol.SymbolType.PIN;
+
+        WriteNode.Next = PinParameters;
+        CallNode.FirstChild = WriteNode;
+
+        CallHandlerStrategy.SymbolTable.EnterSymbol(CallNode.FirstChild.Next.Value, CallNode.FirstChild.Next.DataType);
+        CallNode.SemanticsCheckerStrategy = CallHandlerStrategy;
+
+        CallNode.CheckSemantics();
+
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
+
+    }
+
+    @Test
+    void EventHandlerCallStrategy_GetValue_EventType_Returns_No_Errors() throws SemanticsException {
+        Node CallNode = Node.MakeNode(Node.NodeType.Call);
+        Node WriteNode = Node.MakeNode(Node.NodeType.GetValue);
+        Node PinParameters = Node.MakeNode(Node.NodeType.Identifier);
+
+        WriteNode.SemanticsCheckerStrategy = new FakeStrategy();
+        PinParameters.SemanticsCheckerStrategy = new FakeStrategy();
+
+        SemanticsEventHandlerCallStrategy CallHandlerStrategy = new SemanticsEventHandlerCallStrategy();
+        CallHandlerStrategy.SymbolTable = new HashSymbolTable();
+
+        PinParameters.Value = "Test";
+        CallHandlerStrategy.AvailablePinOrEvent = PinParameters.Value;
+        PinParameters.DataType = Symbol.SymbolType.EVENT;
+
+
+        WriteNode.Next = PinParameters;
+        CallNode.FirstChild = WriteNode;
+
+        CallHandlerStrategy.SymbolTable.EnterSymbol(CallNode.FirstChild.Next.Value, CallNode.FirstChild.Next.DataType);
+        CallNode.SemanticsCheckerStrategy = CallHandlerStrategy;
+
+        CallNode.CheckSemantics();
+
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
+
+    }
+
+    @Test
+    void EventHandlerCallStrategy_GetValue_Integer_Returns_WrongType() {
+        Node CallNode = Node.MakeNode(Node.NodeType.Call);
+        Node WriteNode = Node.MakeNode(Node.NodeType.GetValue);
+        Node PinParameters = Node.MakeNode(Node.NodeType.Identifier);
+
+        // The string expected as return from the error
+        String errorString = "wrong type";
+
+        WriteNode.SemanticsCheckerStrategy = new FakeStrategy();
+        PinParameters.SemanticsCheckerStrategy = new FakeStrategy();
+
+        SemanticsEventHandlerCallStrategy CallHandlerStrategy = new SemanticsEventHandlerCallStrategy();
+        CallHandlerStrategy.SymbolTable = new HashSymbolTable();
+
+        PinParameters.Value = "Test";
+
+        PinParameters.DataType = Symbol.SymbolType.INT;
+
+        WriteNode.Next = PinParameters;
+        CallNode.FirstChild = WriteNode;
+
+        CallHandlerStrategy.SymbolTable.EnterSymbol(CallNode.FirstChild.Next.Value, CallNode.FirstChild.Next.DataType);
+        CallNode.SemanticsCheckerStrategy = CallHandlerStrategy;
+
+
+        Exception exception = Assertions.assertThrows(SemanticsException.class, CallNode::CheckSemantics);
+        Assertions.assertTrue(exception.getMessage().contains(errorString));
+
+    }
+
+    @Test
+    void EventHandlerCallStrategy_GetValue_PinType_Returns_NotDeclared() {
+        Node CallNode = Node.MakeNode(Node.NodeType.Call);
+        Node WriteNode = Node.MakeNode(Node.NodeType.GetValue);
+        Node PinParameters = Node.MakeNode(Node.NodeType.Identifier);
+
+        // The string expected as return from the error
+        String errorString = "has not been declared.";
+
+        WriteNode.SemanticsCheckerStrategy = new FakeStrategy();
+        PinParameters.SemanticsCheckerStrategy = new FakeStrategy();
+
+        SemanticsEventHandlerCallStrategy CallHandlerStrategy = new SemanticsEventHandlerCallStrategy();
+        CallHandlerStrategy.SymbolTable = new HashSymbolTable();
+
+        PinParameters.Value = "Test";
+
+        PinParameters.DataType = Symbol.SymbolType.PIN;
+
+        WriteNode.Next = PinParameters;
+        CallNode.FirstChild = WriteNode;
+
+        CallNode.SemanticsCheckerStrategy = CallHandlerStrategy;
+
+
+        Exception exception = Assertions.assertThrows(SemanticsException.class, CallNode::CheckSemantics);
+        Assertions.assertTrue(exception.getMessage().contains(errorString));
+
+    }
+
+    @Test
+    void EventHandlerCallStrategy_GetValue_EventType_Returns_Event_Not_Available() {
+        Node CallNode = Node.MakeNode(Node.NodeType.Call);
+        Node WriteNode = Node.MakeNode(Node.NodeType.GetValue);
+        Node PinParameters = Node.MakeNode(Node.NodeType.Identifier);
+
+        // The string expected as return from the error
+        String errorString = "Event unavailable";
+
+        WriteNode.SemanticsCheckerStrategy = new FakeStrategy();
+        PinParameters.SemanticsCheckerStrategy = new FakeStrategy();
+
+        SemanticsEventHandlerCallStrategy CallHandlerStrategy = new SemanticsEventHandlerCallStrategy();
+        CallHandlerStrategy.SymbolTable = new HashSymbolTable();
+
+        PinParameters.Value = "Test";
+        PinParameters.DataType = Symbol.SymbolType.EVENT;
+
+
+        WriteNode.Next = PinParameters;
+        CallNode.FirstChild = WriteNode;
+
+        CallHandlerStrategy.SymbolTable.EnterSymbol(CallNode.FirstChild.Next.Value, CallNode.FirstChild.Next.DataType);
+        CallNode.SemanticsCheckerStrategy = CallHandlerStrategy;
+
+        Exception exception = Assertions.assertThrows(SemanticsException.class, CallNode::CheckSemantics);
+        Assertions.assertTrue(exception.getMessage().contains(errorString));
+
+    }
+
+    @Test
+    void EventHandlerCallStrategy_GetValue_EventType_Returns_Event_Not_Declared() {
+        Node CallNode = Node.MakeNode(Node.NodeType.Call);
+        Node WriteNode = Node.MakeNode(Node.NodeType.GetValue);
+        Node PinParameters = Node.MakeNode(Node.NodeType.Identifier);
+
+        // The string expected as return from the error
+        String errorString = "not been declared";
+
+        WriteNode.SemanticsCheckerStrategy = new FakeStrategy();
+        PinParameters.SemanticsCheckerStrategy = new FakeStrategy();
+
+        SemanticsEventHandlerCallStrategy CallHandlerStrategy = new SemanticsEventHandlerCallStrategy();
+        CallHandlerStrategy.SymbolTable = new HashSymbolTable();
+
+        PinParameters.Value = "Test";
+        PinParameters.DataType = Symbol.SymbolType.EVENT;
+
+
+        WriteNode.Next = PinParameters;
+        CallNode.FirstChild = WriteNode;
+
+        CallNode.SemanticsCheckerStrategy = CallHandlerStrategy;
+
+        Exception exception = Assertions.assertThrows(SemanticsException.class, CallNode::CheckSemantics);
+        Assertions.assertTrue(exception.getMessage().contains(errorString));
+
+    }
+
+
+
 }
 
-class FakeStrategy extends SemanticsCheckerStrategy{
+class FakeStrategy extends SemanticsCheckerStrategy {
     @Override
     public void CheckSemantics(Node node) {
         // Do nothing
