@@ -16,15 +16,21 @@ public class Node {
     public Symbol.SymbolType DataType;
     public int ArduinoID;
 
-    // The next element in the linked list of siblings
+    // The next element in the linked list of siblings.
     public Node Next;
-    // Reference to head of singly linked list of siblings
+
+    // Reference to head of singly linked list of siblings.
     public Node FirstSibling;
-    // The first child node.
-    // Acts as head of a singly linked list of children.
+
+    // Reference to this node's first child.
+    // Can reach this node's other children through FirstChild's Next.
+    // Acts as the head of a singly linked list of children.
     public Node FirstChild;
+
+    // Reference to this node's parent.
     public Node Parent;
-    //TODO: Make private?
+
+    // TODO: Make private?
     public SemanticsCheckerStrategy SemanticsCheckerStrategy;
     public CodeGenerationStrategy CodeGenerationStrategy;
 
@@ -84,12 +90,17 @@ public class Node {
 
     @Override
     public String toString() {
-        return Type.toString() + (!Value.isEmpty() ? " : " + Value : "") + ((LineNumber != -1) ? " : " + LineNumber : "");
+        return Type.toString() +
+                (!Value.isEmpty() ? " : " + Value : "") +
+                ((LineNumber != -1) ? " : " + LineNumber : "");
     }
 
-    // Adds the input child to this node's list of children.
-    // Also sets the child's parent to be this, and its first sibling to be
-    // this node's first child.
+    /**
+     * Adds the input child to this node's list of children.
+     * Also sets the child's parent to be this, and its first sibling to be
+     * this node's first child.
+     * @param child The node that is added to this node's list of children
+     */
     public void AddChild(Node child) {
 
         // If the input child is null, do nothing
@@ -129,6 +140,11 @@ public class Node {
         }
     }
 
+    /**
+     * Makes this and this input node siblings, by changing the parent of the input node,
+     * and making the sibling of the input node, this node's siblings
+     * @param otherNode The node that is to be made siblings with this node
+     */
     public void MakeSiblings(Node otherNode) {
 
         // If the input node is null, do nothing
@@ -228,13 +244,16 @@ public class Node {
         Error, Empty
     }
 
-    // Just makes checks for empty nodes shorter.
+    /**
+     * Just makes checks for empty nodes shorter.
+     * @return True of the node if of type Empty
+     */
     public boolean IsEmpty() {
         return this.Type == Node.NodeType.Empty;
     }
 
     // Calls the provided semantics checker strategy.
-    // Is the common interface for code generation.
+    // Is the common interface for semantics checking.
     public void CheckSemantics() throws SemanticsException {
         if(SemanticsCheckerStrategy != null) {
             SemanticsCheckerStrategy.CheckSemantics(this);
@@ -251,6 +270,4 @@ public class Node {
             return "";
         }
     }
-
-
 }

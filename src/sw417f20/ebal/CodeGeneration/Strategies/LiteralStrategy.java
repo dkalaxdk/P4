@@ -15,10 +15,15 @@ public class LiteralStrategy extends CodeGenerationStrategy {
             Node operator = node.FirstSibling.Next;
 
             boolean a = operator.Type == Node.NodeType.Modulo || operator.Type == Node.NodeType.Divide;
+
+            if (!a) {
+                return prefix + node.Value;
+            }
+
             boolean b = node.DataType == Symbol.SymbolType.INT && Integer.parseInt(node.Value) == 0;
             boolean c = node.DataType == Symbol.SymbolType.FLOAT && Float.parseFloat(node.Value) == 0.0;
 
-            if (a && (b || c)) {
+            if (b || c) {
                 System.exit(666);
             }
         }

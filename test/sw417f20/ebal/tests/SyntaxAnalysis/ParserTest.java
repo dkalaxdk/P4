@@ -594,7 +594,7 @@ class ParserTest {
     }
 
     @Test
-    void Slave_MinimalProgram_ReturnedNodeFirstChildIsInitiate() {
+    void Slave_MinimalProgram_ReturnedNodeFirstChildIsIdentifier() {
         // Arrange
         String program = "BEGIN SLAVE : n Initiate { } EventHandler(id) { } END SLAVE";
         Parser parser = createParser(program);
@@ -610,11 +610,11 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, Node.NodeType.Initiate);
+        assertSame(node.FirstChild.Type, Node.NodeType.Identifier);
     }
 
     @Test
-    void Slave_MinimalProgram_ReturnedNodeSecondChildIsEventHandler() {
+    void Slave_MinimalProgram_ReturnedNodeSecondChildIsInitiate() {
         // Arrange
         String program = "BEGIN SLAVE : n Initiate { } EventHandler(id) { } END SLAVE";
         Parser parser = createParser(program);
@@ -630,7 +630,27 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Type, Node.NodeType.EventHandler);
+        assertSame(node.FirstChild.Next.Type, Node.NodeType.Initiate);
+    }
+
+    @Test
+    void Slave_MinimalProgram_ReturnedNodeThirdChildIsEventHandler() {
+        // Arrange
+        String program = "BEGIN SLAVE : n Initiate { } EventHandler(id) { } END SLAVE";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Slaves();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Next.Next.Type, Node.NodeType.EventHandler);
     }
 
 
@@ -751,7 +771,7 @@ class ParserTest {
     }
 
     @Test
-    void Initiate_MinimalProgram_ReturnedNodeFirstChildIsPinDeclaration() {
+    void Initiate_MinimalProgram_ReturnedNodeFirstChildIsBlock() {
         // Arrange
         String program = "Initiate { " +
                 "pin a = createPin(digital, input, 1); " +
@@ -770,30 +790,7 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, Node.NodeType.PinDeclaration);
-    }
-
-    @Test
-    void Initiate_MinimalProgram_ReturnedNodeSecondChildIsPinDeclaration() {
-        // Arrange
-        String program = "Initiate { " +
-                "pin a = createPin(digital, input, 1); " +
-                "pin b = createPin(digital, input, 2); " +
-                "}";
-        Parser parser = createParser(program);
-        Node node;
-
-        // Act
-        try {
-            node = parser.Initiate();
-        }
-        // Assert
-        catch (SyntaxException e) {
-            fail();
-            return;
-        }
-
-        assertSame(node.FirstChild.Next.Type, Node.NodeType.PinDeclaration);
+        assertSame(node.FirstChild.Type, Node.NodeType.Block);
     }
 
     @Test
@@ -3236,7 +3233,7 @@ class ParserTest {
     @Test
     void Call_ReturnsCall_CallIsFilterNoise_ReturnCallNode() {
         // Arrange
-        String program = "filterNoise(a, flip)";
+        String program = "filterNoise(a, debounce)";
         Parser parser = createParser(program);
         Node node;
 
@@ -3256,7 +3253,7 @@ class ParserTest {
     @Test
     void Call_ReturnsCall_CallIsFilterNoise_ReturnedNodeFirstChildIsFilterNoise() {
         // Arrange
-        String program = "filterNoise(a, flip)";
+        String program = "filterNoise(a, debounce)";
         Parser parser = createParser(program);
         Node node;
 
@@ -3751,7 +3748,7 @@ class ParserTest {
     @Test
     void ReturnsCall_FilterNoise_NoFilterNoise_ThrowSyntaxException() {
         // Arrange
-        String program = "(a, flip)";
+        String program = "(a, debounce)";
         Parser parser = createParser(program);
 
         // Act
@@ -3770,7 +3767,7 @@ class ParserTest {
     @Test
     void ReturnsCall_FilterNoise_NoLParen_ThrowSyntaxException() {
         // Arrange
-        String program = "filterNoise a, flip)";
+        String program = "filterNoise a, debounce)";
         Parser parser = createParser(program);
 
         // Act
@@ -3789,7 +3786,7 @@ class ParserTest {
     @Test
     void ReturnsCall_FilterNoise_NoIdentifier_ThrowSyntaxException() {
         // Arrange
-        String program = "filterNoise( , flip)";
+        String program = "filterNoise( , debounce)";
         Parser parser = createParser(program);
 
         // Act
@@ -3808,7 +3805,7 @@ class ParserTest {
     @Test
     void ReturnsCall_FilterNoise_NoComma_ThrowSyntaxException() {
         // Arrange
-        String program = "filterNoise(a flip)";
+        String program = "filterNoise(a debounce)";
         Parser parser = createParser(program);
 
         // Act
@@ -3846,7 +3843,7 @@ class ParserTest {
     @Test
     void ReturnsCall_FilterNoise_NoRParen_ThrowSyntaxException() {
         // Arrange
-        String program = "filterNoise(a, flip";
+        String program = "filterNoise(a, debounce";
         Parser parser = createParser(program);
 
         // Act
@@ -3865,7 +3862,7 @@ class ParserTest {
     @Test
     void ReturnsCall_FilterNoise_MinimumProgram_ReturnCallNode() {
         // Arrange
-        String program = "filterNoise(a, flip)";
+        String program = "filterNoise(a, debounce)";
         Parser parser = createParser(program);
         Node node;
 
@@ -3885,7 +3882,7 @@ class ParserTest {
     @Test
     void ReturnsCall_FilterNoise_MinimumProgram_ReturnedNodeFirstChildIsFilterNoise() {
         // Arrange
-        String program = "filterNoise(a, flip)";
+        String program = "filterNoise(a, debounce)";
         Parser parser = createParser(program);
         Node node;
 
@@ -3905,7 +3902,7 @@ class ParserTest {
     @Test
     void ReturnsCall_FilterNoise_MinimumProgram_ReturnedNodeFirstSecondChildIsIdentifier() {
         // Arrange
-        String program = "filterNoise(a, flip)";
+        String program = "filterNoise(a, debounce)";
         Parser parser = createParser(program);
         Node node;
 
@@ -3923,9 +3920,9 @@ class ParserTest {
     }
 
     @Test
-    void ReturnsCall_FilterNoise_MinimumProgram_FilterTypeIsFlip_ReturnedNodeFirstThirdChildIsFlip() {
+    void ReturnsCall_FilterNoise_MinimumProgram_FilterTypeIsdebounce_ReturnedNodeFirstThirdChildIsdebounce() {
         // Arrange
-        String program = "filterNoise(a, flip)";
+        String program = "filterNoise(a, debounce)";
         Parser parser = createParser(program);
         Node node;
 
@@ -4669,9 +4666,9 @@ class ParserTest {
     }
 
     @Test
-    void FilterType_Flip_ReturnFlipNode() {
+    void FilterType_debounce_ReturndebounceNode() {
         // Arrange
-        String program = "flip";
+        String program = "debounce";
         Parser parser = createParser(program);
         Node node;
 

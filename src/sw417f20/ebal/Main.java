@@ -68,26 +68,33 @@ public class Main {
             system.Generate();
             HashMap<String, String> files = system.Print();
 
-            String[] n = args[0].split("/");
-
-            String sourceFile;
-
-            if (n[n.length - 1].contains(".")) {
-                String[] m = n[n.length - 1].split("\\.");
-                sourceFile = m[m.length - 2];
-            }
-            else {
-                sourceFile = n[n.length - 1];
-            }
+            String sourceFile = getFileName(args[0]);
 
             OutputFileGenerator generator = new OutputFileGenerator(files, sourceFile);
 
             System.out.println("\nRuntime: " + (System.currentTimeMillis()-start) + " ms \n");
         }
 
-        catch (SyntaxException | SemanticsException e) {
+        catch (SyntaxException | SemanticsException | IOException e) {
             System.err.println(e.getMessage());
+            e.printStackTrace();
         }
+    }
+
+    private static String getFileName(String string) {
+        String[] n = string.split("/");
+
+        String sourceFile;
+
+        if (n[n.length - 1].contains(".")) {
+            String[] m = n[n.length - 1].split("\\.");
+            sourceFile = m[m.length - 2];
+        }
+        else {
+            sourceFile = n[n.length - 1];
+        }
+
+        return sourceFile;
     }
 
     public static void ParserStuff() throws FileNotFoundException {
@@ -236,17 +243,4 @@ public class Main {
         HashSymbolTablePrinter printer = new HashSymbolTablePrinter();
         printer.PrintTable(symbolTable);
     }
-
-//    public static void CodeGenStuff() {
-//        ArrayList<String> fileContents = new ArrayList<String>();
-//        fileContents.add("This is the Master file");
-//        fileContents.add("This is the first Slave file");
-//        fileContents.add("This is the second Slave file");
-//
-//        try {
-//            OutputFileGenerator outGen = new OutputFileGenerator(fileContents);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 }

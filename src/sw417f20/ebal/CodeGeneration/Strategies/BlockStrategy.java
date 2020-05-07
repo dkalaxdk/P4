@@ -18,7 +18,6 @@ public class BlockStrategy extends CodeGenerationStrategy {
         block.append(addIndent(arduinoSystem.Indent));
         block.append("}\n");
 
-
         return block.toString();
     }
 }

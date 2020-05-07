@@ -1,9 +1,6 @@
 package sw417f20.ebal.CodeGeneration.Utility;
 
-import sw417f20.ebal.CodeGeneration.OutputFileGenerator;
 import sw417f20.ebal.SyntaxAnalysis.Node;
-
-import java.io.IOException;
 import java.util.*;
 
 public class ArduinoSystem {
@@ -12,7 +9,7 @@ public class ArduinoSystem {
 
     public Master Master;
     public ArrayList<Slave> SlaveList;
-    public Dictionary<String, Event> EventDictionary;
+    public HashMap<String, Event> EventMap;
 
     public int Indent = 0;
 
@@ -21,54 +18,23 @@ public class ArduinoSystem {
         SlaveList = new ArrayList<>();
         this.root = root;
 
-        EventDictionary = new Hashtable<>();
+        EventMap = new HashMap<>();
 
         FindSlaves(root);
         FindHandledEvents(root);
     }
 
+    /**
+     * Generate code for the system
+     */
     public void Generate() {
         root.GenerateCode(this);
     }
 
-    private void FindSlaves(Node root) {
-        Node slaves = root.FirstChild.Next;
-        int counter = 0;
-
-        while (!slaves.IsEmpty()) {
-            SlaveList.add(new Slave(slaves.FirstChild.Value, counter++));
-            slaves = slaves.Next;
-        }
-    }
-
-    private void FindHandledEvents(Node root) {
-        Node slaves = root.FirstChild.Next;
-        int eventCounter = 0;
-        int slaveCounter = 0;
-
-        while (!slaves.IsEmpty()) {
-
-            Node eventHandlers = slaves.FirstChild.Next.Next;
-
-            while (!eventHandlers.IsEmpty()) {
-                String eventName = eventHandlers.FirstChild.Value;
-                Event n = EventDictionary.get(eventName);
-
-                // If we don't find an event
-                if (n == null) {
-                    EventDictionary.put(eventName, new Event(eventName, eventCounter++));
-                }
-
-                EventDictionary.get(eventName).AssociatedSlaves.add(slaveCounter);
-
-                eventHandlers = eventHandlers.Next;
-            }
-
-            slaveCounter++;
-            slaves = slaves.Next;
-        }
-    }
-
+    /**
+     *
+     * @return HashMap with the system's master and slaves
+     */
     public HashMap<String, String> Print() {
 
         HashMap<String, String> files = new HashMap<>();
@@ -81,4 +47,51 @@ public class ArduinoSystem {
 
         return files;
     }
+
+    // Find the slaves in the AST,
+    // add them to the system's list of slaves
+    // and give it an ID
+    private void FindSlaves(Node root) {
+        Node slaves = root.FirstChild.Next;
+        int counter = 0;
+
+        while (!slaves.IsEmpty()) {
+            SlaveList.add(new Slave(slaves.FirstChild.Value, counter++));
+            slaves = slaves.Next;
+        }
+    }
+
+    // Find the events that are handled in EventHandlers,
+    // add them to the system's list of events and give them a unique ID
+    private void FindHandledEvents(Node root) {
+        Node slaves = root.FirstChild.Next;
+        int eventCounter = 0;
+        int slaveCounter = 0;
+
+        while (!slaves.IsEmpty()) {
+
+            // Skip the name of the slave and Initiate
+            Node eventHandlers = slaves.FirstChild.Next.Next;
+
+            while (!eventHandlers.IsEmpty()) {
+                String eventName = eventHandlers.FirstChild.Value;
+                Event n = EventMap.get(eventName);
+
+                // If we don't already have the event in the system, add it
+                if (n == null) {
+                    EventMap.put(eventName, new Event(eventName, eventCounter++));
+                }
+
+                // Add the current slave to the event's list of associated slaves
+                EventMap.get(eventName).AssociatedSlaves.add(slaveCounter);
+
+                eventHandlers = eventHandlers.Next;
+            }
+
+            slaveCounter++;
+            slaves = slaves.Next;
+        }
+    }
+
+
 }
