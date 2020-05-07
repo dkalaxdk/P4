@@ -232,6 +232,8 @@ public class Node {
     public void CheckSemantics() throws SemanticsException {
         if(SemanticsCheckerStrategy != null) {
             SemanticsCheckerStrategy.CheckSemantics(this);
+        } else {
+            throw new NullPointerException("Semantics strategy not defined");
         }
     }
 
