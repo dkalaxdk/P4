@@ -9,6 +9,9 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 
 import java.util.ArrayList;
 
+/**
+ * The class that is responsible for assigning strategies to the nodes of an AST.
+ */
 public class SemanticsStrategyAssigner {
 
     public ISymbolTable SymbolTable;
@@ -35,20 +38,21 @@ public class SemanticsStrategyAssigner {
         node.SemanticsCheckerStrategy = strategy;
     }
 
-    // Starts the process of assigning semantics strategies to the nodes of the AST with node (parameter) as its root
+    // Starts the process of assigning semantics strategies to the nodes of the AST with node (parameter) as its root.
     public ISymbolTable Run(Node node) {
         AssignStrategyProg(node);
         return SymbolTable;
     }
 
-    // Assigns a strategy to the Prog node
+    // Assigns a strategy to the Prog node.
+    // Takes the root node of the AST, which has a master and a number of slaves as children.
     private void AssignStrategyProg(Node node){
         AssignStrategy(node,strategies.GetProgStrategy());
 
         Node child = node.FirstChild;
         AssignStrategyMaster(child);
 
-        // Sets flag to help check that the slave cannot call broadcast()
+        // Sets flag to help check for differences between master and slave.
         inSlave = true;
         child = child.Next;
         while (!child.IsEmpty()){
@@ -57,7 +61,8 @@ public class SemanticsStrategyAssigner {
         }
     }
 
-    // Assigns a strategy to the Master node
+    // Assigns a strategy to the Master node.
+    // Takes the Master node, which has an Initiate node and a number of Lister nodes as children.
     private void AssignStrategyMaster(Node node){
         AssignStrategy(node, strategies.GetMasterStrategy());
 
@@ -70,7 +75,8 @@ public class SemanticsStrategyAssigner {
         }
     }
 
-    // Assigns a strategy to the Slave node
+    // Assigns a strategy to the Slave node.
+    // Takes a Slave node, which has an Initiate node and a number of EventHandler nodes as children.
     private void AssignStrategySlave(Node node){
         AssignStrategy(node, strategies.GetSlaveStrategy());
 
@@ -83,7 +89,8 @@ public class SemanticsStrategyAssigner {
         }
     }
 
-    // Assigns a strategy to the Initiate node
+    // Assigns a strategy to the Initiate node.
+    // Takes an Initiate node, which has a Block node as its child.
     private void AssignStrategyInitiate(Node node){
         AssignStrategy(node, strategies. getInitiateStrategy());
 
@@ -92,16 +99,21 @@ public class SemanticsStrategyAssigner {
         inInitiate = false;
     }
 
-    // Assigns a strategy to the Listener node
+    // Assigns a strategy to the Listener node.
+    // Takes a Listener node, which has a Block node as its child.
     private void AssignStrategyListener(Node node){
         AssignStrategy(node, strategies.getListenerStrategy());
+
+        // Stores the Pin that the Listener is listening to,
+        // in order to check that it does not try to access any other pins.
         AvailablePinOrEvent = node.FirstChild.Value;
 
         AssignStrategyBlock(node.FirstChild.Next);
 
     }
 
-    // Assigns a strategy to the EventHandler node
+    // Assigns a strategy to the EventHandler node.
+    // Takes an EventHandler node, which has a Block node as its child.
     private void AssignStrategyEventHandler(Node node){
         AssignStrategy(node, strategies.getEventHandlerStrategy());
         AvailablePinOrEvent = node.FirstChild.Value;
@@ -109,9 +121,11 @@ public class SemanticsStrategyAssigner {
         AssignStrategyBlock(node.FirstChild.Next);
     }
 
-    // Assigns a strategy to the block node, depending on the context of the node
+    // Assigns a strategy to the block node, depending on the context of the node.
+    // Takes a Block node, which has a number of declaration, Assignment, If and Call nodes as children.
     private void AssignStrategyBlock(Node node){
 
+        //Assignes a strategy to node, if it is in an Initiate, an EventHandler or a Listener.
         if (inInitiate){
             AssignStrategy(node, strategies.getInitiateBlockStrategy());
         }
@@ -122,6 +136,7 @@ public class SemanticsStrategyAssigner {
             AssignStrategy(node, strategies.getListenerBlockStrategy());
         }
 
+        // Calls AssignStrategy methods on node's children depending on their node type.
         Node child = node.FirstChild;
         while (!child.IsEmpty()){
             switch (child.Type){
@@ -146,8 +161,10 @@ public class SemanticsStrategyAssigner {
         }
     }
 
-    // Assigns a strategy to the node, depending on the type of declaration
+    // Assigns a strategy to the node, depending on the type of declaration.
+    // Takes a type of declaration node, which has an identifier and possibly an expression as its children.
     private void AssignStrategyDeclaration(Node node) {
+        //Assigns a strategy to node depending on the type of the declaration.
         switch (node.Type){
             case BoolDeclaration:
                 AssignStrategy(node, strategies.getBoolDeclarationStrategy());
@@ -166,12 +183,14 @@ public class SemanticsStrategyAssigner {
                 break;
         }
 
+        // Assigns a strategy to the expression child of the declaration if it has one.
         if (!node.FirstChild.Next.IsEmpty()){
             AssignStrategyExpression(node.FirstChild.Next);
         }
     }
 
-    // Assigns a strategy to the Assignment node
+    // Assigns a strategy to the Assignment node.
+    //Takes an Assignment node, which has an Identifier and an expression node as children.
     private void AssignStrategyAssignment(Node node){
         AssignStrategy(node, strategies.getAssignmentStrategy());
 
@@ -179,7 +198,9 @@ public class SemanticsStrategyAssigner {
         AssignStrategyExpression(node.FirstChild.Next);
     }
 
-    // Assigns a strategy to the If node
+    // Assigns a strategy to the If node.
+    // Takes an If node, which has an expression, a Block and possibly a second
+    // Block or If node (representing the else statement) as its children.
     private void AssignStrategyIf(Node node){
         AssignStrategy(node, strategies.getIfStrategy());
 
@@ -197,7 +218,11 @@ public class SemanticsStrategyAssigner {
         }
     }
 
-    // Type checks the Call node depending on the function called
+    //TODO: kommentarer hertil, skift evt til summaries
+
+    // Assigns a strategy to the Call node, depending on its context in the AST.
+    // Takes a Call node, which has a function node (with the called function)
+    // and a number of expression nodes (representing function parameters).
     private void AssignStrategyCall(Node node){
 
         if (inInitiate){
