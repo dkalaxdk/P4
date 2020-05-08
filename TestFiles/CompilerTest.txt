@@ -16,6 +16,13 @@ BEGIN MASTER
             event button1Pressed = createEvent(32000);
             broadcast(button1Pressed);
         }
+        int a = 1;
+        float b = 2.3;
+        bool f = true;
+
+        bool q = f;
+
+
     }
 
     Listener (button2) {
