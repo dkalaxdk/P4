@@ -6,6 +6,7 @@ import java.util.ArrayList;
  * Class that represents an event during code generation.
  */
 public class Event {
+
     private final String Name;
     private final int ID;
     private String Type;

@@ -17,7 +17,7 @@ import java.util.HashMap;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 //        ScannerStuff();
 //        ParserStuff();
 //        SemanticsStuff();
@@ -27,8 +27,8 @@ public class Main {
         RealMain(a);
     }
 
-    public static void RealMain(String[] args) throws FileNotFoundException {
-        boolean debug = false;
+    public static void RealMain(String[] args) {
+        boolean debug = true;
         Node AST = null;
 
         try {
