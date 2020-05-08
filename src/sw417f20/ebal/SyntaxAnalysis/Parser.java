@@ -20,7 +20,7 @@ public class Parser extends RecursiveDescent {
         return Prog;
     }
 
-    // Master 	-> 	begin master Initiate Listeners end master.
+    // Master 	-> 	begin master Dcls Initiate Listeners end master.
     public Node Master() throws SyntaxException {
 
         if (Peek().type == Token.Type.BEGIN) {
@@ -29,6 +29,7 @@ public class Parser extends RecursiveDescent {
             Expect(Token.Type.BEGIN);
             Expect(Token.Type.MASTER);
 
+            Master.AddChild(Dcls());
             Master.AddChild(Initiate());
             Master.AddChild(Listeners());
 
@@ -75,6 +76,7 @@ public class Parser extends RecursiveDescent {
             Expect(Token.Type.COLON);
 
             Slave.AddChild(getLeaf(Token.Type.IDENTIFIER));
+            Slave.AddChild(Dcls());
             Slave.AddChild(Initiate());
             Slave.AddChild(EventHandlers());
 
@@ -287,6 +289,27 @@ public class Parser extends RecursiveDescent {
         }
         else {
             MakeError("Expected assignment");
+            return Node.MakeNode(Node.NodeType.Error);
+        }
+    }
+
+    // Dcls -> Dcl semi Dcls
+    //      |  .
+    public Node Dcls() throws SyntaxException {
+        if (CheckForType()) {
+            Node declaration = Dcl();
+            Expect(Token.Type.SEMI);
+            Node otherDeclarations = Dcls();
+
+            declaration.MakeSiblings(otherDeclarations);
+
+            return declaration;
+        }
+        else if (Peek().type == Token.Type.INITIATE) {
+            return Node.MakeNode(Node.NodeType.Empty);
+        }
+        else {
+            MakeError("Expected declaration or end of declarations");
             return Node.MakeNode(Node.NodeType.Error);
         }
     }

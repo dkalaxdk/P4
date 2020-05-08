@@ -12,13 +12,22 @@ public class SemanticsSlaveStrategy extends SemanticsCheckerStrategy {
             SymbolTable.EnterSymbol(node.FirstChild.Value, Symbol.SymbolType.SLAVE);
 
             SymbolTable.OpenScope();
+
             Node child = node.FirstChild.Next;
+            while (!child.IsEmpty()){
+                child.CheckSemantics();
+                child = child.Next;
+            }
+
+            child = child.Next;
             child.CheckSemantics();
             child = child.Next;
+
             while (!child.IsEmpty()) {
                 child.CheckSemantics();
                 child = child.Next;
             }
+
             SymbolTable.CloseScope();
         }
         else {
