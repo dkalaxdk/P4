@@ -1,5 +1,8 @@
 BEGIN MASTER
 
+    int a = 3;
+    int b = a;
+
     Initiate {
         pin button1 = createPin(digital, input, 7);
         pin button2 = createPin(digital, input, 8);
