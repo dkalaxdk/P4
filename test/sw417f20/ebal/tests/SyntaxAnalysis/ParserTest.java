@@ -317,7 +317,7 @@ class ParserTest {
     }
 
     @Test
-    void Master_MinimumProgram_ReturnedNodeFirstChildIsInitiate() {
+    void Master_MinimumProgram_ReturnedNodeFirstChildIsEmpty() {
         // Arrange
         String program = "BEGIN MASTER Initiate { } Listener(id) { } END MASTER";
         Parser parser = createParser(program);
@@ -333,11 +333,11 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Type, Node.NodeType.Initiate);
+        assertSame(node.FirstChild.Type, Node.NodeType.Empty);
     }
 
     @Test
-    void Master_MinimalProgram_ReturnedNodeSecondChildIsListener() {
+    void Master_MinimumProgram_ReturnedNodeSecondChildIsInitiate() {
         // Arrange
         String program = "BEGIN MASTER Initiate { } Listener(id) { } END MASTER";
         Parser parser = createParser(program);
@@ -353,7 +353,27 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Type, Node.NodeType.Listener);
+        assertSame(node.FirstChild.Next.Type, Node.NodeType.Initiate);
+    }
+
+    @Test
+    void Master_MinimalProgram_ReturnedNodeThirdChildIsListener() {
+        // Arrange
+        String program = "BEGIN MASTER Initiate { } Listener(id) { } END MASTER";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Master();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Next.Next.Type, Node.NodeType.Listener);
     }
 
 
@@ -614,7 +634,7 @@ class ParserTest {
     }
 
     @Test
-    void Slave_MinimalProgram_ReturnedNodeSecondChildIsInitiate() {
+    void Slave_MinimalProgram_ReturnedNodeSecondChildIsEmpty() {
         // Arrange
         String program = "BEGIN SLAVE : n Initiate { } EventHandler(id) { } END SLAVE";
         Parser parser = createParser(program);
@@ -630,11 +650,11 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Type, Node.NodeType.Initiate);
+        assertSame(node.FirstChild.Next.Type, Node.NodeType.Empty);
     }
 
     @Test
-    void Slave_MinimalProgram_ReturnedNodeThirdChildIsEventHandler() {
+    void Slave_MinimalProgram_ReturnedNodeThirdChildIsInitiate() {
         // Arrange
         String program = "BEGIN SLAVE : n Initiate { } EventHandler(id) { } END SLAVE";
         Parser parser = createParser(program);
@@ -650,7 +670,27 @@ class ParserTest {
             return;
         }
 
-        assertSame(node.FirstChild.Next.Next.Type, Node.NodeType.EventHandler);
+        assertSame(node.FirstChild.Next.Next.Type, Node.NodeType.Initiate);
+    }
+
+    @Test
+    void Slave_MinimalProgram_ReturnedNodeFourthChildIsEventHandler() {
+        // Arrange
+        String program = "BEGIN SLAVE : n Initiate { } EventHandler(id) { } END SLAVE";
+        Parser parser = createParser(program);
+        Node node;
+
+        // Act
+        try {
+            node = parser.Slaves();
+        }
+        // Assert
+        catch (SyntaxException e) {
+            fail();
+            return;
+        }
+
+        assertSame(node.FirstChild.Next.Next.Next.Type, Node.NodeType.EventHandler);
     }
 
 

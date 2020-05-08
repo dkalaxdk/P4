@@ -4,14 +4,21 @@ import sw417f20.ebal.CodeGeneration.Utility.ArduinoSystem;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class MasterStrategy extends CodeGenerationStrategy {
-    private final int debounce = 300;
     @Override
     public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
 
-        Node initiate = node.FirstChild;
+        Node child = node.FirstChild;
+
+        while (child.Type != Node.NodeType.Initiate) {
+            String declaration = child.GenerateCode(arduinoSystem);
+            arduinoSystem.Master.VariableDeclarations.append(declaration);
+            child = child.Next;
+        }
+
+        Node initiate = child;
         initiate.GenerateCode(arduinoSystem);
 
-        Node listeners = node.FirstChild.Next;
+        Node listeners = child.Next;
         GenerateCodeForLinkedList(listeners, arduinoSystem);
 
         return "";

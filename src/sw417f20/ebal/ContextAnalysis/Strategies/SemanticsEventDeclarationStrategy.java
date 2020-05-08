@@ -9,22 +9,28 @@ import java.util.ArrayList;
 public class SemanticsEventDeclarationStrategy extends SemanticsCheckerStrategy{
 
     public ArrayList<Symbol> LocalEvents;
+    boolean inGlobalScope;
 
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {
-        if (!InLocalEvents(node.FirstChild.Value)){
-            Node expression = node.FirstChild.Next;
-            if (expression.Type == Node.NodeType.Call && expression.FirstChild.Type == Node.NodeType.CreateEvent) {
-                expression.CheckSemantics();
-                SymbolTable.EnterSymbol(node.FirstChild.Value, Symbol.SymbolType.EVENT, expression.FirstChild.Next.DataType);
-                LocalEvents.add(SymbolTable.RetrieveSymbol(node.FirstChild.Value));
+        if (!inGlobalScope) {
+            if (!InLocalEvents(node.FirstChild.Value)) {
+                Node expression = node.FirstChild.Next;
+                if (expression.Type == Node.NodeType.Call && expression.FirstChild.Type == Node.NodeType.CreateEvent) {
+                    expression.CheckSemantics();
+                    SymbolTable.EnterSymbol(node.FirstChild.Value, Symbol.SymbolType.EVENT, expression.FirstChild.Next.DataType);
+                    LocalEvents.add(SymbolTable.RetrieveSymbol(node.FirstChild.Value));
+                }
+                else {
+                    MakeError(node, "Illegal declaration of event.");
+                }
             }
             else {
-                MakeError(node, "Illegal declaration of event.");
+                MakeError(node, node.FirstChild.Value, ErrorType.AlreadyDeclared);
             }
         }
         else {
-            MakeError(node, node.FirstChild.Value, ErrorType.AlreadyDeclared);
+            MakeError(node, "Events cannot be declared globally");
         }
     }
 

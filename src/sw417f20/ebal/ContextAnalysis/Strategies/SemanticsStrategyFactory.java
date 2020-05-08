@@ -174,11 +174,10 @@ public class SemanticsStrategyFactory {
         return ifStrategy;
     }
 
-    public SemanticsPinDeclarationStrategy getPinDeclarationStrategy(){
-        if (pinDeclarationStrategy == null){
-            pinDeclarationStrategy = new SemanticsPinDeclarationStrategy();
-            pinDeclarationStrategy.SymbolTable = SymbolTable;
-        }
+    public SemanticsPinDeclarationStrategy getPinDeclarationStrategy(boolean isGlobalDeclaration){
+        pinDeclarationStrategy = new SemanticsPinDeclarationStrategy();
+        pinDeclarationStrategy.SymbolTable = SymbolTable;
+        pinDeclarationStrategy.inGlobalScope = isGlobalDeclaration;
         return pinDeclarationStrategy;
     }
 
@@ -190,7 +189,7 @@ public class SemanticsStrategyFactory {
         return boolDeclarationStrategy;
     }
 
-    public SemanticsIntDeclarationStrategy getIntDeclarationStrategy(){
+    public SemanticsIntDeclarationStrategy getIntDeclarationStrategy() {
         if (intDeclarationStrategy == null){
             intDeclarationStrategy = new SemanticsIntDeclarationStrategy();
             intDeclarationStrategy.SymbolTable = SymbolTable;
@@ -199,19 +198,18 @@ public class SemanticsStrategyFactory {
     }
 
     public  SemanticsFloatDeclarationStrategy getFloatDeclarationStrategy(){
-        if (floatDeclarationStrategy == null){
+        if (floatDeclarationStrategy == null) {
             floatDeclarationStrategy = new SemanticsFloatDeclarationStrategy();
             floatDeclarationStrategy.SymbolTable = SymbolTable;
         }
         return floatDeclarationStrategy;
     }
 
-    public SemanticsEventDeclarationStrategy getEventDeclarationStrategy(){
-        if (eventDeclarationStrategy == null){
-            eventDeclarationStrategy = new SemanticsEventDeclarationStrategy();
-            eventDeclarationStrategy.SymbolTable = SymbolTable;
-            eventDeclarationStrategy.LocalEvents = LocalEvents;
-        }
+    public SemanticsEventDeclarationStrategy getEventDeclarationStrategy(boolean isGlobalDeclaration){
+        eventDeclarationStrategy = new SemanticsEventDeclarationStrategy();
+        eventDeclarationStrategy.SymbolTable = SymbolTable;
+        eventDeclarationStrategy.inGlobalScope = isGlobalDeclaration;
+        eventDeclarationStrategy.LocalEvents = LocalEvents;
         return eventDeclarationStrategy;
     }
 

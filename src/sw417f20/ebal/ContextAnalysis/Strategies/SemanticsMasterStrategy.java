@@ -13,13 +13,22 @@ public class SemanticsMasterStrategy extends SemanticsCheckerStrategy{
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {
         SymbolTable.OpenScope();
+
         Node child = node.FirstChild;
-        child.CheckSemantics();
-        child = child.Next;
         while (!child.IsEmpty()){
             child.CheckSemantics();
             child = child.Next;
         }
+
+        child = child.Next;
+        child.CheckSemantics();
+        child = child.Next;
+
+        while (!child.IsEmpty()){
+            child.CheckSemantics();
+            child = child.Next;
+        }
+
         MakeLocalEventsGlobal();
         SymbolTable.CloseScope();
     }
