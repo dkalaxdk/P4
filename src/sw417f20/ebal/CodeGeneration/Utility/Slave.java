@@ -46,6 +46,8 @@ public class Slave extends ArduinoBoard{
                 .append(PinDeclarations.toString())
                 .append("\n")
                 .append(EventDeclarations.toString())
+                .append("\n")
+                .append(VariableDeclarations.toString())
                 .append("\n");
 
         // Setup
