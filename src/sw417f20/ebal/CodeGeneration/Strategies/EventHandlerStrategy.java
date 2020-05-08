@@ -24,7 +24,7 @@ public class EventHandlerStrategy extends CodeGenerationStrategy {
         // Generate code for the EventHandler's block
         String block = node.FirstChild.Next.GenerateCode(arduinoSystem);
 
-        // Add the EventHandler to the slave's list EventHandlers with the correct signature
+        // Add the EventHandler to the slave's list of EventHandlers with the correct signature
         slave.EventHandlers
                 .append("void ")
                 .append(eventHandlerName)

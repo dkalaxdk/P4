@@ -210,6 +210,9 @@ public class Node {
         }
     }
 
+    /**
+     * Enum for all the types of nodes available
+     */
     public enum NodeType {
         Prog, Master, Slave, Initiate, Listener, EventHandler, Block,
 
