@@ -1,13 +1,10 @@
 package sw417f20.ebal.CodeGeneration.Utility;
 
-import sw417f20.ebal.SyntaxAnalysis.Node;
-
-import java.util.ArrayList;
-
 public abstract class ArduinoBoard {
     // Global
     public StringBuilder PinDeclarations;
     public StringBuilder EventDeclarations;
+    public StringBuilder VariableDeclarations;
 
     // Setup
     public StringBuilder PinInstantiations;
@@ -22,6 +19,7 @@ public abstract class ArduinoBoard {
     public ArduinoBoard() {
         PinDeclarations = new StringBuilder();
         EventDeclarations = new StringBuilder();
+        VariableDeclarations = new StringBuilder();
 
         PinInstantiations = new StringBuilder();
         EventInstantiations = new StringBuilder();
