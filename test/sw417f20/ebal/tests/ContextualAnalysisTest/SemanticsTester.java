@@ -1290,34 +1290,37 @@ public class SemanticsTester {
     @Test
     void SemanticsIfStrategy_Nested_If_Returns_No_Errors() throws SemanticsException {
         Node IfNode = Node.MakeNode(Node.NodeType.If);
-        Node BoolExpression = Node.MakeNode(Node.NodeType.Expression);
-        BoolExpression.DataType = Symbol.SymbolType.BOOL;
-        Node BoolNode = Node.MakeNode(Node.NodeType.BoolLiteral);
+        Node ExpressionNode = Node.MakeNode(Node.NodeType.Expression);
+        ExpressionNode.DataType = Symbol.SymbolType.BOOL;
+        Node BlockNode = Node.MakeNode(Node.NodeType.Block);
+        //Node BoolNode = Node.MakeNode(Node.NodeType.BoolLiteral);
 
         Node NestedIfNode = Node.MakeNode(Node.NodeType.If);
-
-        Node NestedBoolNode = Node.MakeNode(Node.NodeType.Expression);
-        NestedBoolNode.DataType = Symbol.SymbolType.BOOL;
+        Node NestedExpressionNode = Node.MakeNode(Node.NodeType.Expression);
+        NestedExpressionNode.DataType = Symbol.SymbolType.BOOL;
         Node NestedBlockNode = Node.MakeNode(Node.NodeType.Block);
+        Node NestedEmptyNode = Node.MakeNode(Node.NodeType.Empty);
 
 
-        BoolExpression.SemanticsCheckerStrategy = new FakeStrategy();
-        BoolNode.SemanticsCheckerStrategy = new FakeStrategy();
+        ExpressionNode.SemanticsCheckerStrategy = new FakeStrategy();
+        BlockNode.SemanticsCheckerStrategy = new FakeStrategy();
+        //BoolNode.SemanticsCheckerStrategy = new FakeStrategy();
         NestedIfNode.SemanticsCheckerStrategy = new SemanticsIfStrategy();
-        NestedBoolNode.SemanticsCheckerStrategy = new FakeStrategy();
+        NestedExpressionNode.SemanticsCheckerStrategy = new FakeStrategy();
         NestedBlockNode.SemanticsCheckerStrategy = new FakeStrategy();
 
         SemanticsIfStrategy ifStrategy = new SemanticsIfStrategy();
         ifStrategy.SymbolTable = new HashSymbolTable();
 
+        NestedBlockNode.Next = NestedEmptyNode;
+        NestedExpressionNode.Next = NestedBlockNode;
+        NestedIfNode.FirstChild = NestedExpressionNode;
 
-        NestedBoolNode.Next = NestedBlockNode;
-
-        NestedIfNode.FirstChild = NestedBoolNode;
-
-        BoolNode.Next = NestedIfNode;
-        BoolExpression.Next = BoolNode;
-        IfNode.FirstChild = BoolExpression;
+        BlockNode.Next = NestedIfNode;
+        ExpressionNode.Next = BlockNode;
+        //BoolNode.Next = NestedIfNode;
+        //ExpressionNode.Next = BoolNode;
+        IfNode.FirstChild = ExpressionNode;
 
         IfNode.SemanticsCheckerStrategy = ifStrategy;
 
@@ -1327,7 +1330,6 @@ public class SemanticsTester {
         IfNode.CheckSemantics();
 
         Assertions.assertDoesNotThrow(SemanticsTester::new);
-
     }
 
 
