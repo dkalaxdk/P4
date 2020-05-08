@@ -2,13 +2,23 @@ package sw417f20.ebal.ContextAnalysis;
 
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
+
 public class Symbol {
 
     public String Name;
     public SymbolType DataType;
+
+    // Used by pin symbols to save a reference to the node where a pin was declared
     public Node ReferenceNode = null;
+
+    // Used by event symbols to save the data type of the value the event was created with
     public SymbolType ValueType = null;
+
+    // used by symbols representing int, float and bool variables
+    // to mark whether or not the variable has been instantiated
     public boolean HasBeenInstantiated = false;
+
+    // The types a symbol can be. Represents data types, except void and slave.
     public enum SymbolType{
         EVENT, PIN, FLOAT, INT, BOOL, VOID, SLAVE
     }
