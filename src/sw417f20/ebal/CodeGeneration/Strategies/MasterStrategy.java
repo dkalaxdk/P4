@@ -5,21 +5,21 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class MasterStrategy extends CodeGenerationStrategy {
     @Override
-    public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
+    public String GenerateCode(Node node) {
 
         Node child = node.FirstChild;
 
         while (child.Type != Node.NodeType.Initiate) {
-            String declaration = child.GenerateCode(arduinoSystem);
+            String declaration = child.GenerateCode();
             arduinoSystem.Master.VariableDeclarations.append(declaration);
             child = child.Next;
         }
 
         Node initiate = child;
-        initiate.GenerateCode(arduinoSystem);
+        initiate.GenerateCode();
 
         Node listeners = child.Next;
-        GenerateCodeForLinkedList(listeners, arduinoSystem);
+        GenerateCodeForLinkedList(listeners);
 
         return "";
     }

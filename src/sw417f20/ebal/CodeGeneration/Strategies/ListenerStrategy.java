@@ -5,7 +5,7 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class ListenerStrategy extends CodeGenerationStrategy {
     @Override
-    public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
+    public String GenerateCode(Node node) {
 
         // Get the name of the pin that is listened to
         String pinName = node.FirstChild.Value;
@@ -14,7 +14,7 @@ public class ListenerStrategy extends CodeGenerationStrategy {
         String listenerName = pinName + "Listener" + arduinoSystem.Master.ListenerCount++;
 
         // Generate code for the Listener's block
-        String block = node.FirstChild.Next.GenerateCode(arduinoSystem);
+        String block = node.FirstChild.Next.GenerateCode();
 
         // Add the Listener to the system's master with the correct signature
         arduinoSystem.Master.Listeners

@@ -5,10 +5,10 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class InitiateStrategy extends CodeGenerationStrategy {
     @Override
-    public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
+    public String GenerateCode(Node node) {
 
         Node pinDeclarations = node.FirstChild.FirstChild;
-        GenerateCodeForLinkedList(pinDeclarations, arduinoSystem);
+        GenerateCodeForLinkedList(pinDeclarations);
 
         return "";
     }

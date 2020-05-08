@@ -6,7 +6,7 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class FloatDeclarationStrategy extends CodeGenerationStrategy {
     @Override
-    public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
+    public String GenerateCode(Node node) {
 
         // Add the type
         StringBuilder decl = new StringBuilder("float ");
@@ -19,7 +19,7 @@ public class FloatDeclarationStrategy extends CodeGenerationStrategy {
         // Initialization if there is an expression as the next node.
         if(!nextChild.IsEmpty()) {
             decl.append(" = ");
-            decl.append(nextChild.GenerateCode(arduinoSystem));
+            decl.append(nextChild.GenerateCode());
         }
 
         decl.append(";\n");

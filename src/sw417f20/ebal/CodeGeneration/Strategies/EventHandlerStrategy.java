@@ -7,7 +7,7 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class EventHandlerStrategy extends CodeGenerationStrategy {
     @Override
-    public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
+    public String GenerateCode(Node node) {
 
         // Get the slave that has this EventHandler from the system
         Slave slave = arduinoSystem.SlaveList.get(node.ArduinoID);
@@ -22,7 +22,7 @@ public class EventHandlerStrategy extends CodeGenerationStrategy {
         String eventHandlerName = eventName + "EventHandler" + slave.EventHandlerCount++;
 
         // Generate code for the EventHandler's block
-        String block = node.FirstChild.Next.GenerateCode(arduinoSystem);
+        String block = node.FirstChild.Next.GenerateCode();
 
         // Add the EventHandler to the slave's list of EventHandlers with the correct signature
         slave.EventHandlers

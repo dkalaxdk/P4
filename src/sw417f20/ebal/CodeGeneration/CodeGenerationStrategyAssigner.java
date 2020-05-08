@@ -2,6 +2,7 @@ package sw417f20.ebal.CodeGeneration;
 
 import sw417f20.ebal.CodeGeneration.Strategies.CodeGenerationStrategy;
 import sw417f20.ebal.CodeGeneration.Strategies.StrategyFactory;
+import sw417f20.ebal.CodeGeneration.Utility.ArduinoSystem;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 import sw417f20.ebal.Printers.Visitor;
 
@@ -9,11 +10,13 @@ import sw417f20.ebal.Printers.Visitor;
  * Assigns the appropriate Code Generation Strategy to nodes
  */
 public class CodeGenerationStrategyAssigner extends Visitor {
-    private StrategyFactory strategies;
+    private final StrategyFactory strategies;
     private int arduinoID = -1;
+    private ArduinoSystem arduinoSystem;
 
-    public CodeGenerationStrategyAssigner(StrategyFactory strategyFactory) {
+    public CodeGenerationStrategyAssigner(StrategyFactory strategyFactory, ArduinoSystem system) {
         strategies = strategyFactory;
+        this.arduinoSystem = system;
     }
 
     @Override
@@ -133,6 +136,7 @@ public class CodeGenerationStrategyAssigner extends Visitor {
         }
 
         node.ArduinoID = arduinoID;
+        node.CodeGenerationStrategy.setArduinoSystem(this.arduinoSystem);
 
         VisitChildren(node);
     }

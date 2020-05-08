@@ -5,10 +5,10 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class FilterNoiseStrategy extends CodeGenerationStrategy {
     @Override
-    public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
+    public String GenerateCode(Node node) {
 
         String pinName = node.Next.Value;
-        String filterType = node.Next.Next.GenerateCode(arduinoSystem);
+        String filterType = node.Next.Next.GenerateCode();
 
         return pinName + ".filterNoise(" + filterType + ")";
     }
