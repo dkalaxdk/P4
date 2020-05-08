@@ -12,8 +12,10 @@ public class SemanticsAssignmentStrategy extends SemanticsCheckerStrategy {
         Node expression = node.FirstChild.Next;
         if(identifier != null) {
             expression.CheckSemantics();
-            if (identifier.DataType != expression.DataType) {
-                MakeError(node, node.FirstChild.Value, ErrorType.WrongType);
+            if ((identifier.DataType == Symbol.SymbolType.BOOL && expression.DataType != Symbol.SymbolType.BOOL) ||
+                (expression.DataType == Symbol.SymbolType.BOOL && identifier.DataType != Symbol.SymbolType.BOOL)) {
+
+                MakeError(node, "Incompatible types");
             }
             else if (expression.DataType == Symbol.SymbolType.PIN){
                 MakeError(node, "expression cannot be of type Pin");

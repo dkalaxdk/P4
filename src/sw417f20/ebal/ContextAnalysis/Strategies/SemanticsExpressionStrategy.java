@@ -6,22 +6,36 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class SemanticsExpressionStrategy extends SemanticsCheckerStrategy{
 
+    Node FirstOperand;
+    Node Operator;
+    Node SecondOperand;
+
+
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {
-        node.FirstChild.CheckSemantics();
-        node.FirstChild.Next.Next.CheckSemantics();
-        if (node.FirstChild.DataType == node.FirstChild.Next.Next.DataType){
+        FirstOperand = node.FirstChild;
+        Operator = node.FirstChild.Next;
+        SecondOperand = node.FirstChild.Next.Next;
+
+        FirstOperand.CheckSemantics();
+        SecondOperand.CheckSemantics();
+
+        if (FirstOperand.DataType != Symbol.SymbolType.PIN &&
+            FirstOperand.DataType != Symbol.SymbolType.EVENT &&
+            SecondOperand.DataType != Symbol.SymbolType.PIN &&
+            SecondOperand.DataType != Symbol.SymbolType.EVENT){
+
             CheckOperator(node);
         }
         else {
-            MakeError(node, "Operators in expression must be of same data types");
+            MakeError(node, "Pin and Event data types not allowed in expression");
         }
     }
 
     private void CheckOperator(Node node) throws  SemanticsException{
-        switch (node.FirstChild.Next.Type){
+        switch (Operator.Type){
             case Modulo:
-                if (node.FirstChild.DataType == Symbol.SymbolType.INT){
+                if (FirstOperand.DataType == Symbol.SymbolType.INT && SecondOperand.DataType == Symbol.SymbolType.INT){
                     node.DataType = Symbol.SymbolType.INT;
                 }
                 else {
@@ -32,8 +46,13 @@ public class SemanticsExpressionStrategy extends SemanticsCheckerStrategy{
             case Minus:
             case Times:
             case Divide:
-                if (node.FirstChild.DataType != Symbol.SymbolType.BOOL){
-                    node.DataType = node.FirstChild.DataType;
+                if (FirstOperand.DataType != Symbol.SymbolType.BOOL){
+                    if (FirstOperand.DataType == Symbol.SymbolType.FLOAT || SecondOperand.DataType == Symbol.SymbolType.FLOAT){
+                        node.DataType = Symbol.SymbolType.FLOAT;
+                    }
+                    else {
+                        node.DataType = Symbol.SymbolType.INT;
+                    }
                 }
                 else {
                     MakeError(node, "Type error: cannot be boolean");
@@ -45,7 +64,7 @@ public class SemanticsExpressionStrategy extends SemanticsCheckerStrategy{
             case GreaterOrEqual:
             case LessOrEqual:
 
-                if (node.FirstChild.DataType != Symbol.SymbolType.BOOL){
+                if (FirstOperand.DataType != Symbol.SymbolType.BOOL && SecondOperand.DataType != Symbol.SymbolType.BOOL){
                     node.DataType = Symbol.SymbolType.BOOL;
                 }
                 else {
@@ -55,7 +74,7 @@ public class SemanticsExpressionStrategy extends SemanticsCheckerStrategy{
 
             case And:
             case Or:
-                if (node.FirstChild.DataType == Symbol.SymbolType.BOOL){
+                if (FirstOperand.DataType == Symbol.SymbolType.BOOL && SecondOperand.DataType == Symbol.SymbolType.BOOL){
                     node.DataType = Symbol.SymbolType.BOOL;
                 }
                 else {
@@ -64,7 +83,15 @@ public class SemanticsExpressionStrategy extends SemanticsCheckerStrategy{
                 break;
             case Equals:
             case NotEqual:
-                node.DataType = Symbol.SymbolType.BOOL;
+                if ((FirstOperand.DataType != Symbol.SymbolType.BOOL
+                    && SecondOperand.DataType != Symbol.SymbolType.BOOL) ||
+                    FirstOperand.DataType == SecondOperand.DataType) {
+
+                    node.DataType = Symbol.SymbolType.BOOL;
+                }
+                else {
+                    MakeError(node, "Incompatible data types");
+                }
                 break;
         }
     }

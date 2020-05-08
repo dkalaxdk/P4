@@ -31,6 +31,7 @@ public class Symbol {
         Name = name;
         DataType = type;
         ReferenceNode = reference;
+        HasBeenInstantiated = true;
     }
 
     // Constructor for Event symbols that need the type of the value they were created with
@@ -38,6 +39,7 @@ public class Symbol {
         Name = name;
         DataType = type;
         ValueType =valueType;
+        HasBeenInstantiated = true;
     }
 
     @Override
