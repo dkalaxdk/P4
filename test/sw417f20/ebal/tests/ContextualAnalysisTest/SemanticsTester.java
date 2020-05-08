@@ -2,6 +2,7 @@ package sw417f20.ebal.tests.ContextualAnalysisTest;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import sw417f20.ebal.ContextAnalysis.HashSymbolTable;
 import sw417f20.ebal.ContextAnalysis.SemanticsStrategyAssigner;
@@ -866,30 +867,467 @@ public class SemanticsTester {
     }
 
     @Test
-    void FloatDeclarationStrategy() throws SemanticsException {
-        Node EventHandlerNode = Node.MakeNode(Node.NodeType.EventHandler);
-        Node BlockNode = Node.MakeNode(Node.NodeType.Block);
+    void FloatDeclarationStrategy_Returns_NoErrors() throws SemanticsException {
+        Node FloatDeclaration = Node.MakeNode(Node.NodeType.FloatDeclaration);
         Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
+        Node FloatNode = Node.MakeNode(Node.NodeType.FloatLiteral);
 
 
-        BlockNode.SemanticsCheckerStrategy = new FakeStrategy();
         IdentifierNode.SemanticsCheckerStrategy = new FakeStrategy();
+        FloatNode.SemanticsCheckerStrategy = new FakeStrategy();
+
 
         SemanticsFloatDeclarationStrategy floatDeclarationStrategy = new SemanticsFloatDeclarationStrategy();
         floatDeclarationStrategy.SymbolTable = new HashSymbolTable();
 
-        IdentifierNode.Value = "Test";
-        BlockNode.DataType = Symbol.SymbolType.EVENT;
 
+        FloatNode.DataType = Symbol.SymbolType.FLOAT;
+        IdentifierNode.Next = FloatNode;
+        FloatDeclaration.FirstChild = IdentifierNode;
 
-        BlockNode.Next = IdentifierNode;
-        EventHandlerNode.FirstChild = BlockNode;
+        FloatDeclaration.SemanticsCheckerStrategy = floatDeclarationStrategy;
 
-        EventHandlerNode.SemanticsCheckerStrategy = floatDeclarationStrategy;
-
-        EventHandlerNode.CheckSemantics();
+        FloatDeclaration.CheckSemantics();
 
         Assertions.assertDoesNotThrow(SemanticsTester::new);
+    }
+
+    @Test
+    void FloatDeclarationStrategy_Returns_WrongType() {
+        Node FloatDeclaration = Node.MakeNode(Node.NodeType.FloatDeclaration);
+        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
+        Node FloatNode = Node.MakeNode(Node.NodeType.FloatLiteral);
+
+        // The string expected as return from the error
+        String errorString = "wrong type";
+
+
+        IdentifierNode.SemanticsCheckerStrategy = new FakeStrategy();
+        FloatNode.SemanticsCheckerStrategy = new FakeStrategy();
+
+
+        SemanticsFloatDeclarationStrategy floatDeclarationStrategy = new SemanticsFloatDeclarationStrategy();
+        floatDeclarationStrategy.SymbolTable = new HashSymbolTable();
+
+        FloatNode.DataType = Symbol.SymbolType.BOOL;
+        IdentifierNode.Next = FloatNode;
+        FloatDeclaration.FirstChild = IdentifierNode;
+
+        FloatDeclaration.SemanticsCheckerStrategy = floatDeclarationStrategy;
+
+        Exception exception = Assertions.assertThrows(SemanticsException.class, FloatDeclaration::CheckSemantics);
+        Assertions.assertTrue(exception.getMessage().contains(errorString));
+    }
+
+    @Test
+    void FloatDeclarationStrategy_Returns_Already_Declared() {
+        Node FloatDeclaration = Node.MakeNode(Node.NodeType.FloatDeclaration);
+        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
+        Node FloatNode = Node.MakeNode(Node.NodeType.FloatLiteral);
+
+        // The string expected as return from the error
+        String errorString = "already been declared";
+
+
+        IdentifierNode.SemanticsCheckerStrategy = new FakeStrategy();
+        FloatNode.SemanticsCheckerStrategy = new FakeStrategy();
+
+
+        SemanticsFloatDeclarationStrategy floatDeclarationStrategy = new SemanticsFloatDeclarationStrategy();
+        floatDeclarationStrategy.SymbolTable = new HashSymbolTable();
+
+        FloatNode.DataType = Symbol.SymbolType.BOOL;
+        IdentifierNode.Next = FloatNode;
+        FloatDeclaration.FirstChild = IdentifierNode;
+
+        FloatDeclaration.SemanticsCheckerStrategy = floatDeclarationStrategy;
+
+
+        floatDeclarationStrategy.SymbolTable.EnterSymbol(FloatDeclaration.FirstChild.Value, FloatDeclaration.FirstChild.DataType);
+
+        Exception exception = Assertions.assertThrows(SemanticsException.class, FloatDeclaration::CheckSemantics);
+        Assertions.assertTrue(exception.getMessage().contains(errorString));
+    }
+
+    @Test
+    void FloatLiteralStrategy_No_Prefix_Returns_No_Errors() throws SemanticsException {
+        Node FloatNode = Node.MakeNode(Node.NodeType.FloatLiteral);
+        Node PrefixNode = Node.MakeNode(Node.NodeType.Block);
+
+        PrefixNode.SemanticsCheckerStrategy = new FakeStrategy();
+
+
+        SemanticsFloatLiteralStrategy floatLiteralStrategy = new SemanticsFloatLiteralStrategy();
+        floatLiteralStrategy.SymbolTable = new HashSymbolTable();
+
+
+        PrefixNode.Type = Node.NodeType.Empty;
+        FloatNode.FirstChild = PrefixNode;
+
+        FloatNode.SemanticsCheckerStrategy = floatLiteralStrategy;
+
+
+        floatLiteralStrategy.SymbolTable.EnterSymbol(FloatNode.FirstChild.Value, FloatNode.FirstChild.DataType);
+
+
+        FloatNode.CheckSemantics();
+
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
+
+    }
+
+    @Test
+    void FloatLiteralStrategy_Correct_Prefix_Returns_No_Errors() throws SemanticsException {
+        Node FloatNode = Node.MakeNode(Node.NodeType.FloatLiteral);
+        Node PrefixNode = Node.MakeNode(Node.NodeType.Block);
+
+        PrefixNode.SemanticsCheckerStrategy = new FakeStrategy();
+
+
+        SemanticsFloatLiteralStrategy floatLiteralStrategy = new SemanticsFloatLiteralStrategy();
+        floatLiteralStrategy.SymbolTable = new HashSymbolTable();
+
+
+        PrefixNode.Type = Node.NodeType.PrefixMinus;
+        FloatNode.FirstChild = PrefixNode;
+
+        FloatNode.SemanticsCheckerStrategy = floatLiteralStrategy;
+
+
+        floatLiteralStrategy.SymbolTable.EnterSymbol(FloatNode.FirstChild.Value, FloatNode.FirstChild.DataType);
+
+
+        FloatNode.CheckSemantics();
+
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
+
+    }
+
+    @Test
+    void FloatLiteralStrategy_Wrong_Prefix_Returns_Wrong_Prefix() {
+        Node FloatNode = Node.MakeNode(Node.NodeType.FloatLiteral);
+        Node PrefixNode = Node.MakeNode(Node.NodeType.Block);
+
+        // The string expected as return from the error
+        String errorString = "Only minus prefix";
+
+        PrefixNode.SemanticsCheckerStrategy = new FakeStrategy();
+
+
+        SemanticsFloatLiteralStrategy floatLiteralStrategy = new SemanticsFloatLiteralStrategy();
+        floatLiteralStrategy.SymbolTable = new HashSymbolTable();
+
+
+        PrefixNode.Type = Node.NodeType.PrefixNot;
+        FloatNode.FirstChild = PrefixNode;
+
+        FloatNode.SemanticsCheckerStrategy = floatLiteralStrategy;
+
+
+        floatLiteralStrategy.SymbolTable.EnterSymbol(FloatNode.FirstChild.Value, FloatNode.FirstChild.DataType);
+
+
+        Exception exception = Assertions.assertThrows(SemanticsException.class, FloatNode::CheckSemantics);
+        Assertions.assertTrue(exception.getMessage().contains(errorString));
+
+    }
+
+    @Test
+    void SemanticsIdentifierStrategy_No_Prefix_Returns_No_Errors() throws SemanticsException {
+        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
+        IdentifierNode.Value = "Test";
+        Node Prefix = Node.MakeNode(Node.NodeType.Empty);
+
+        Prefix.SemanticsCheckerStrategy = new FakeStrategy();
+
+
+        SemanticsIdentifierStrategy identifierStrategy = new SemanticsIdentifierStrategy();
+        identifierStrategy.SymbolTable = new HashSymbolTable();
+
+        IdentifierNode.FirstChild = Prefix;
+
+        IdentifierNode.SemanticsCheckerStrategy = identifierStrategy;
+
+
+        identifierStrategy.SymbolTable.EnterSymbol(IdentifierNode.Value, IdentifierNode.DataType,true);
+
+
+        IdentifierNode.CheckSemantics();
+
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
+
+    }
+
+    @Test
+    void SemanticsIdentifierStrategy_PrefixMinus_IntType_Returns_No_Errors() throws SemanticsException {
+        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
+        IdentifierNode.Value = "Test";
+        IdentifierNode.DataType = Symbol.SymbolType.INT;
+        Node PrefixNode = Node.MakeNode(Node.NodeType.PrefixMinus);
+
+        PrefixNode.SemanticsCheckerStrategy = new FakeStrategy();
+
+
+        SemanticsIdentifierStrategy identifierStrategy = new SemanticsIdentifierStrategy();
+        identifierStrategy.SymbolTable = new HashSymbolTable();
+
+        IdentifierNode.FirstChild = PrefixNode;
+
+        IdentifierNode.SemanticsCheckerStrategy = identifierStrategy;
+
+
+        identifierStrategy.SymbolTable.EnterSymbol(IdentifierNode.Value, IdentifierNode.DataType,true);
+
+
+        IdentifierNode.CheckSemantics();
+
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
+
+    }
+
+    @Test
+    void SemanticsIdentifierStrategy_PrefixNot_BoolType_Returns_No_Errors() throws SemanticsException {
+        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
+        IdentifierNode.Value = "Test";
+        IdentifierNode.DataType = Symbol.SymbolType.BOOL;
+        Node PrefixNode = Node.MakeNode(Node.NodeType.PrefixNot);
+
+        PrefixNode.SemanticsCheckerStrategy = new FakeStrategy();
+
+
+        SemanticsIdentifierStrategy identifierStrategy = new SemanticsIdentifierStrategy();
+        identifierStrategy.SymbolTable = new HashSymbolTable();
+
+        IdentifierNode.FirstChild = PrefixNode;
+
+        IdentifierNode.SemanticsCheckerStrategy = identifierStrategy;
+
+
+        identifierStrategy.SymbolTable.EnterSymbol(IdentifierNode.Value, IdentifierNode.DataType,true);
+
+
+        IdentifierNode.CheckSemantics();
+
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
+
+    }
+
+    @Test
+    void SemanticsIdentifierStrategy_PrefixNot_IntType_Returns_Not_Only_Applicable_For_Boolean() {
+        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
+        IdentifierNode.Value = "Test";
+        IdentifierNode.DataType = Symbol.SymbolType.INT;
+        Node PrefixNode = Node.MakeNode(Node.NodeType.PrefixNot);
+
+        // The string expected as return from the error
+        String errorString = "only applicable to boolean";
+
+        PrefixNode.SemanticsCheckerStrategy = new FakeStrategy();
+
+
+        SemanticsIdentifierStrategy identifierStrategy = new SemanticsIdentifierStrategy();
+        identifierStrategy.SymbolTable = new HashSymbolTable();
+
+        IdentifierNode.FirstChild = PrefixNode;
+
+        IdentifierNode.SemanticsCheckerStrategy = identifierStrategy;
+
+
+        identifierStrategy.SymbolTable.EnterSymbol(IdentifierNode.Value, IdentifierNode.DataType,true);
+
+        Exception exception = Assertions.assertThrows(SemanticsException.class, IdentifierNode::CheckSemantics);
+        Assertions.assertTrue(exception.getMessage().contains(errorString));
+
+    }
+
+    @Test
+    void SemanticsIdentifierStrategy_PrefixMinus_BoolType_Returns_Minus_Not_Applicable_For_Boolean() {
+        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
+        IdentifierNode.Value = "Test";
+        IdentifierNode.DataType = Symbol.SymbolType.BOOL;
+        Node PrefixNode = Node.MakeNode(Node.NodeType.PrefixMinus);
+
+        // The string expected as return from the error
+        String errorString = " not applicable to boolean";
+
+        PrefixNode.SemanticsCheckerStrategy = new FakeStrategy();
+
+
+        SemanticsIdentifierStrategy identifierStrategy = new SemanticsIdentifierStrategy();
+        identifierStrategy.SymbolTable = new HashSymbolTable();
+
+        IdentifierNode.FirstChild = PrefixNode;
+
+        IdentifierNode.SemanticsCheckerStrategy = identifierStrategy;
+
+
+        identifierStrategy.SymbolTable.EnterSymbol(IdentifierNode.Value, IdentifierNode.DataType,true);
+
+        Exception exception = Assertions.assertThrows(SemanticsException.class, IdentifierNode::CheckSemantics);
+        Assertions.assertTrue(exception.getMessage().contains(errorString));
+
+    }
+
+    @Test
+    void SemanticsIdentifierStrategy_No_Prefix_BoolType_Returns_Not_Declared() {
+        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
+        IdentifierNode.Value = "Test";
+        IdentifierNode.DataType = Symbol.SymbolType.BOOL;
+        Node PrefixNode = Node.MakeNode(Node.NodeType.Empty);
+
+        // The string expected as return from the error
+        String errorString = " not been declared";
+
+        PrefixNode.SemanticsCheckerStrategy = new FakeStrategy();
+
+
+        SemanticsIdentifierStrategy identifierStrategy = new SemanticsIdentifierStrategy();
+        identifierStrategy.SymbolTable = new HashSymbolTable();
+
+        IdentifierNode.FirstChild = PrefixNode;
+
+        IdentifierNode.SemanticsCheckerStrategy = identifierStrategy;
+
+
+        Exception exception = Assertions.assertThrows(SemanticsException.class, IdentifierNode::CheckSemantics);
+        Assertions.assertTrue(exception.getMessage().contains(errorString));
+
+    }
+
+    @Test
+    void SemanticsIdentifierStrategy_No_Prefix_BoolType_Returns_Not_Instantiated() {
+        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
+        IdentifierNode.Value = "Test";
+        IdentifierNode.DataType = Symbol.SymbolType.BOOL;
+        Node PrefixNode = Node.MakeNode(Node.NodeType.Empty);
+
+        // The string expected as return from the error
+        String errorString = "must be instantiated";
+
+        PrefixNode.SemanticsCheckerStrategy = new FakeStrategy();
+
+
+        SemanticsIdentifierStrategy identifierStrategy = new SemanticsIdentifierStrategy();
+        identifierStrategy.SymbolTable = new HashSymbolTable();
+
+        IdentifierNode.FirstChild = PrefixNode;
+
+        IdentifierNode.SemanticsCheckerStrategy = identifierStrategy;
+
+        identifierStrategy.SymbolTable.EnterSymbol(IdentifierNode.Value, IdentifierNode.DataType,false);
+
+
+        Exception exception = Assertions.assertThrows(SemanticsException.class, IdentifierNode::CheckSemantics);
+        Assertions.assertTrue(exception.getMessage().contains(errorString));
+
+    }
+
+    @Test
+    void SemanticsIfStrategy_If_Statement_With_Block_Returns_No_Errors() throws SemanticsException {
+        Node IfNode = Node.MakeNode(Node.NodeType.If);
+        Node BoolExpression = Node.MakeNode(Node.NodeType.Expression);
+        BoolExpression.DataType = Symbol.SymbolType.BOOL;
+        Node BoolNode = Node.MakeNode(Node.NodeType.BoolLiteral);
+        Node BlockNode = Node.MakeNode(Node.NodeType.Block);
+
+        BoolExpression.SemanticsCheckerStrategy = new FakeStrategy();
+        BoolNode.SemanticsCheckerStrategy = new FakeStrategy();
+        BlockNode.SemanticsCheckerStrategy = new FakeStrategy();
+
+
+        SemanticsIfStrategy ifStrategy = new SemanticsIfStrategy();
+        ifStrategy.SymbolTable = new HashSymbolTable();
+
+        BoolNode.Next = BlockNode;
+        BoolExpression.Next = BoolNode;
+        IfNode.FirstChild = BoolExpression;
+
+        IfNode.SemanticsCheckerStrategy = ifStrategy;
+
+
+        ifStrategy.SymbolTable.EnterSymbol(IfNode.Value, IfNode.DataType);
+
+
+        IfNode.CheckSemantics();
+
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
+
+    }
+
+    @Test
+    void SemanticsIfStrategy_No_Boolean_Returns_Boolean_Error() {
+        Node IfNode = Node.MakeNode(Node.NodeType.If);
+        Node BoolExpression = Node.MakeNode(Node.NodeType.Expression);
+        BoolExpression.DataType = Symbol.SymbolType.INT;
+        Node BoolNode = Node.MakeNode(Node.NodeType.BoolLiteral);
+        Node BlockNode = Node.MakeNode(Node.NodeType.Block);
+
+        // The string expected as return from the error
+        String errorString = "If statement";
+
+        BoolExpression.SemanticsCheckerStrategy = new FakeStrategy();
+        BoolNode.SemanticsCheckerStrategy = new FakeStrategy();
+        BlockNode.SemanticsCheckerStrategy = new FakeStrategy();
+
+
+        SemanticsIfStrategy ifStrategy = new SemanticsIfStrategy();
+        ifStrategy.SymbolTable = new HashSymbolTable();
+
+        BoolNode.Next = BlockNode;
+        BoolExpression.Next = BoolNode;
+        IfNode.FirstChild = BoolExpression;
+
+        IfNode.SemanticsCheckerStrategy = ifStrategy;
+
+
+        ifStrategy.SymbolTable.EnterSymbol(IfNode.Value, IfNode.DataType);
+
+        Exception exception = Assertions.assertThrows(SemanticsException.class, IfNode::CheckSemantics);
+        Assertions.assertTrue(exception.getMessage().contains(errorString));
+
+    }
+
+    @Test
+    void SemanticsIfStrategy_Nested_If_Returns_No_Errors() throws SemanticsException {
+        Node IfNode = Node.MakeNode(Node.NodeType.If);
+        Node BoolExpression = Node.MakeNode(Node.NodeType.Expression);
+        BoolExpression.DataType = Symbol.SymbolType.BOOL;
+        Node BoolNode = Node.MakeNode(Node.NodeType.BoolLiteral);
+
+        Node NestedIfNode = Node.MakeNode(Node.NodeType.If);
+
+        Node NestedBoolNode = Node.MakeNode(Node.NodeType.Expression);
+        NestedBoolNode.DataType = Symbol.SymbolType.BOOL;
+        Node NestedBlockNode = Node.MakeNode(Node.NodeType.Block);
+
+
+        BoolExpression.SemanticsCheckerStrategy = new FakeStrategy();
+        BoolNode.SemanticsCheckerStrategy = new FakeStrategy();
+        NestedIfNode.SemanticsCheckerStrategy = new SemanticsIfStrategy();
+        NestedBoolNode.SemanticsCheckerStrategy = new FakeStrategy();
+        NestedBlockNode.SemanticsCheckerStrategy = new FakeStrategy();
+
+        SemanticsIfStrategy ifStrategy = new SemanticsIfStrategy();
+        ifStrategy.SymbolTable = new HashSymbolTable();
+
+
+        NestedBoolNode.Next = NestedBlockNode;
+
+        NestedIfNode.FirstChild = NestedBoolNode;
+
+        BoolNode.Next = NestedIfNode;
+        BoolExpression.Next = BoolNode;
+        IfNode.FirstChild = BoolExpression;
+
+        IfNode.SemanticsCheckerStrategy = ifStrategy;
+
+
+        ifStrategy.SymbolTable.EnterSymbol(IfNode.Value, IfNode.DataType);
+
+        IfNode.CheckSemantics();
+
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
+
     }
 
 
