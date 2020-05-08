@@ -19,7 +19,6 @@ public class CodeGenerationStrategyAssigner extends Visitor {
     @Override
     public void Visit(Node node) {
 
-        node.ArduinoID = arduinoID;
 
         switch(node.Type) {
             case Prog:
@@ -132,6 +131,8 @@ public class CodeGenerationStrategyAssigner extends Visitor {
             default:
                 System.err.println("Node type not found");
         }
+
+        node.ArduinoID = arduinoID;
 
         VisitChildren(node);
     }

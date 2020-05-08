@@ -10,6 +10,8 @@ intEvent button1Pressed;
 intEvent button2Pressed;
 intEvent potenTurned;
 
+int a;
+
 void setup() {
 	button1.createPin(digital, input, 7);
 	button2.createPin(digital, input, 8);

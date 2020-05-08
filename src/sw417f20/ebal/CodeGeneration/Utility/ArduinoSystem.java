@@ -70,8 +70,15 @@ public class ArduinoSystem {
 
         while (!slaves.IsEmpty()) {
 
-            // Skip the name of the slave and Initiate
-            Node eventHandlers = slaves.FirstChild.Next.Next;
+            Node eventHandlers = slaves.FirstChild;
+
+            // Skip past declarations
+            while (eventHandlers.Type != Node.NodeType.Initiate) {
+                eventHandlers = eventHandlers.Next;
+            }
+
+            // Skip past Initiate
+            eventHandlers = eventHandlers.Next;
 
             while (!eventHandlers.IsEmpty()) {
                 String eventName = eventHandlers.FirstChild.Value;
