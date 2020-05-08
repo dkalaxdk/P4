@@ -2,6 +2,10 @@ BEGIN MASTER
 
     int a = 3;
     int b = a;
+    bool f;
+    float B;
+    //pin bla;
+    //event blabla = createEvent(a);
 
     Initiate {
         pin button1 = createPin(digital, input, 7);

@@ -1,10 +1,7 @@
 package sw417f20.ebal.ContextAnalysis;
 
-import sw417f20.ebal.ContextAnalysis.HashSymbolTable;
-import sw417f20.ebal.ContextAnalysis.ISymbolTable;
 import sw417f20.ebal.ContextAnalysis.Strategies.SemanticsCheckerStrategy;
 import sw417f20.ebal.ContextAnalysis.Strategies.SemanticsStrategyFactory;
-import sw417f20.ebal.ContextAnalysis.Symbol;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
 import java.util.ArrayList;
@@ -20,6 +17,7 @@ public class SemanticsStrategyAssigner {
     private boolean inSlave;
     private boolean inInitiate;
     private String AvailablePinOrEvent;
+    private boolean IsGlobalDeclaration;
 
     public SemanticsStrategyAssigner(){
         SymbolTable = new HashSymbolTable();
@@ -29,6 +27,7 @@ public class SemanticsStrategyAssigner {
         strategies = new SemanticsStrategyFactory(SymbolTable, UsedPinNumbers, LocalEvents, BroadcastEvents);
         inSlave = false;
         inInitiate = false;
+        IsGlobalDeclaration = false;
     }
 
     private void AssignStrategy (Node node, SemanticsCheckerStrategy strategy){
@@ -62,8 +61,17 @@ public class SemanticsStrategyAssigner {
         AssignStrategy(node, strategies.GetMasterStrategy());
 
         Node child = node.FirstChild;
+        IsGlobalDeclaration = true;
+        while (!child.IsEmpty()){
+            AssignStrategyDeclaration(child);
+            child = child.Next;
+        }
+        IsGlobalDeclaration = false;
+
+        child = child.Next;
         AssignStrategyInitiate(child);
         child = child.Next;
+
         while (!child.IsEmpty()){
             AssignStrategyListener(child);
             child = child.Next;
@@ -75,8 +83,17 @@ public class SemanticsStrategyAssigner {
         AssignStrategy(node, strategies.GetSlaveStrategy());
 
         Node child = node.FirstChild.Next;
+        IsGlobalDeclaration = true;
+        while (!child.IsEmpty()){
+            AssignStrategyDeclaration(child);
+            child = child.Next;
+        }
+        IsGlobalDeclaration = false;
+
+        child = child.Next;
         AssignStrategyInitiate(child);
         child = child.Next;
+
         while (!child.IsEmpty()) {
             AssignStrategyEventHandler(child);
             child = child.Next;
@@ -159,10 +176,10 @@ public class SemanticsStrategyAssigner {
                 AssignStrategy(node, strategies.getFloatDeclarationStrategy());
                 break;
             case PinDeclaration:
-                AssignStrategy(node, strategies.getPinDeclarationStrategy());
+                AssignStrategy(node, strategies.getPinDeclarationStrategy(IsGlobalDeclaration));
                 break;
             case EventDeclaration:
-                AssignStrategy(node, strategies.getEventDeclarationStrategy());
+                AssignStrategy(node, strategies.getEventDeclarationStrategy(IsGlobalDeclaration));
                 break;
         }
 
