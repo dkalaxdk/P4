@@ -5,7 +5,7 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class FilterTypeStrategy extends CodeGenerationStrategy {
     @Override
-    public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
+    public String GenerateCode(Node node) {
 
         switch (node.Type) {
             case Range:

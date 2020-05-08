@@ -5,7 +5,7 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class GetValueStrategy extends CodeGenerationStrategy {
     @Override
-    public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
+    public String GenerateCode(Node node) {
 
         String name = node.Next.Value;
 

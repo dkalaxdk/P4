@@ -5,11 +5,11 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class IfStrategy extends CodeGenerationStrategy {
     @Override
-    public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
+    public String GenerateCode(Node node) {
 
         // Get the expression from the if statement and the block
-        String expression = node.FirstChild.GenerateCode(arduinoSystem);
-        String block = node.FirstChild.Next.GenerateCode(arduinoSystem);
+        String expression = node.FirstChild.GenerateCode();
+        String block = node.FirstChild.Next.GenerateCode();
 
         // Get the else block
         Node elseBlock = node.FirstChild.Next.Next;
@@ -28,7 +28,7 @@ public class IfStrategy extends CodeGenerationStrategy {
 
         // If there is an else block, generate code for it (this method again)
         if (elseBlock != null && !elseBlock.IsEmpty()) {
-            afterIf = addIndent(arduinoSystem.Indent) + "else " + elseBlock.GenerateCode(arduinoSystem);
+            afterIf = addIndent(arduinoSystem.Indent) + "else " + elseBlock.GenerateCode();
         }
 
         // Add the else block or just the empty string to the if statement

@@ -9,7 +9,7 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class EventDeclarationStrategy extends CodeGenerationStrategy {
     @Override
-    public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
+    public String GenerateCode(Node node) {
 
         // Get the event from the system
         String eventName = node.FirstChild.Value;
@@ -54,7 +54,7 @@ public class EventDeclarationStrategy extends CodeGenerationStrategy {
         }
 
         // Get the expression that is the input of createEvent
-        String expression = node.FirstChild.Next.FirstChild.Next.GenerateCode(arduinoSystem);
+        String expression = node.FirstChild.Next.FirstChild.Next.GenerateCode();
 
         return addIndent(arduinoSystem.Indent) + eventName + ".createEvent(" + expression + ");\n";
     }

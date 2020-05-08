@@ -58,13 +58,13 @@ public class Main {
             }
 
             // Codegeneration
+            ArduinoSystem system = new ArduinoSystem(AST);
             StrategyFactory codeGenFactory = new StrategyFactory();
-            CodeGenerationStrategyAssigner codeGenAssigner = new CodeGenerationStrategyAssigner(codeGenFactory);
+            CodeGenerationStrategyAssigner codeGenAssigner = new CodeGenerationStrategyAssigner(codeGenFactory, system);
 
             codeGenAssigner.Visit(AST);
 //            codeGenAssigner.Run(AST);
 
-            ArduinoSystem system = new ArduinoSystem(AST);
             system.Generate();
             HashMap<String, String> files = system.Print();
 

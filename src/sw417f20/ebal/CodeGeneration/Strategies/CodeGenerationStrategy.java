@@ -3,6 +3,13 @@ import sw417f20.ebal.CodeGeneration.Utility.ArduinoSystem;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public abstract class CodeGenerationStrategy {
+
+    protected ArduinoSystem arduinoSystem;
+
+    public void setArduinoSystem(ArduinoSystem system) {
+        this.arduinoSystem = system;
+    }
+
     /**
      * Abstract method that all strategies must implement.
      * Generated code for the given node.
@@ -10,7 +17,7 @@ public abstract class CodeGenerationStrategy {
      * @param node Node that should be generated code for
      * @return String containing the generated code
      */
-    public abstract String GenerateCode(Node node, ArduinoSystem arduinoSystem);
+    public abstract String GenerateCode(Node node);
 
     /**
      * Generates code for all elements in a given linked list of nodes.
@@ -19,7 +26,7 @@ public abstract class CodeGenerationStrategy {
      * @param headNode Head of the linked list of nodes
      * @return String containing the resulting code
      */
-    public String GenerateCodeForLinkedList(Node headNode, ArduinoSystem arduinoSystem) {
+    public String GenerateCodeForLinkedList(Node headNode) {
         StringBuilder content = new StringBuilder();
 
         if (headNode.IsEmpty()) {
@@ -30,7 +37,7 @@ public abstract class CodeGenerationStrategy {
 
         //TODO: Tree traversal should maybe be handled by a separate class
         while(node != null && !node.IsEmpty()) {
-            content.append(node.GenerateCode(arduinoSystem));
+            content.append(node.GenerateCode());
             node = node.Next;
         }
         return content.toString();

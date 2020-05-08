@@ -5,10 +5,10 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class WriteStrategy extends CodeGenerationStrategy {
     @Override
-    public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
+    public String GenerateCode(Node node) {
 
         String pinName = node.Next.Value;
-        String value = node.Next.Next.GenerateCode(arduinoSystem);
+        String value = node.Next.Next.GenerateCode();
 
         return addIndent(arduinoSystem.Indent) + pinName + ".write(" + value + ");\n";
     }

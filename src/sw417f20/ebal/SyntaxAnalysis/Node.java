@@ -268,9 +268,9 @@ public class Node {
 
     // Calls the provided codeGen strategy, and returns the result.
     // Is the common interface for code generation.
-    public String GenerateCode(ArduinoSystem arduinoSystem) {
+    public String GenerateCode() {
         if(CodeGenerationStrategy != null) {
-            return CodeGenerationStrategy.GenerateCode(this, arduinoSystem);
+            return CodeGenerationStrategy.GenerateCode(this);
         }
         else {
             return "";

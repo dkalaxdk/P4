@@ -5,7 +5,7 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class IOTypeStrategy extends CodeGenerationStrategy {
     @Override
-    public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
+    public String GenerateCode(Node node) {
 
         if (node.Type == Node.NodeType.Input){
             return "input";
