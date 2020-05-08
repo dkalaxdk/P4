@@ -28,7 +28,7 @@ public class ArduinoSystem {
      * Generate code for the system
      */
     public void Generate() {
-        root.GenerateCode(this);
+        root.GenerateCode();
     }
 
     /**
@@ -50,7 +50,7 @@ public class ArduinoSystem {
 
     // Find the slaves in the AST,
     // add them to the system's list of slaves
-    // and give it an ID
+    // and give them an ID
     private void FindSlaves(Node root) {
         Node slaves = root.FirstChild.Next;
         int counter = 0;

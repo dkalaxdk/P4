@@ -5,9 +5,9 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class IdentifierStrategy extends CodeGenerationStrategy {
     @Override
-    public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
+    public String GenerateCode(Node node) {
 
-        String prefix = node.FirstChild.GenerateCode(arduinoSystem);
+        String prefix = node.FirstChild.GenerateCode();
 
         return prefix + node.Value;
     }

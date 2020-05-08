@@ -6,23 +6,23 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class SlaveStrategy extends CodeGenerationStrategy {
     @Override
-    public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
+    public String GenerateCode(Node node) {
 
         Node child = node.FirstChild.Next;
 
         Slave slave = arduinoSystem.SlaveList.get(node.ArduinoID);
 
         while (child.Type != Node.NodeType.Initiate) {
-            String declaration = child.GenerateCode(arduinoSystem);
+            String declaration = child.GenerateCode();
             slave.VariableDeclarations.append(declaration);
             child = child.Next;
         }
 
         Node initiate = child;
-        initiate.GenerateCode(arduinoSystem);
+        initiate.GenerateCode();
 
         Node eventHandlers = child.Next;
-        GenerateCodeForLinkedList(eventHandlers, arduinoSystem);
+        GenerateCodeForLinkedList(eventHandlers);
 
         return "";
     }

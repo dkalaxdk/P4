@@ -5,14 +5,14 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class BlockStrategy extends CodeGenerationStrategy {
     @Override
-    public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
+    public String GenerateCode(Node node) {
 
         StringBuilder block = new StringBuilder();
 
         block.append("{\n");
 
         arduinoSystem.Indent++;
-        block.append(GenerateCodeForLinkedList(node.FirstChild, arduinoSystem));
+        block.append(GenerateCodeForLinkedList(node.FirstChild));
         arduinoSystem.Indent--;
 
         block.append(addIndent(arduinoSystem.Indent));

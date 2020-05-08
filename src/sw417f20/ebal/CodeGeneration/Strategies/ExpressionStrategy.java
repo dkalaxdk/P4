@@ -8,8 +8,8 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
  */
 public class ExpressionStrategy extends CodeGenerationStrategy {
     @Override
-    public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
+    public String GenerateCode(Node node) {
 
-        return "(" + GenerateCodeForLinkedList(node.FirstChild, arduinoSystem) + ")";
+        return "(" + GenerateCodeForLinkedList(node.FirstChild) + ")";
     }
 }

@@ -6,10 +6,10 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 public class ProgStrategy extends CodeGenerationStrategy {
 
     @Override
-    public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
+    public String GenerateCode(Node node) {
 
         //Generates code for the the master and all the slaves
-        GenerateCodeForLinkedList(node.FirstChild, arduinoSystem);
+        GenerateCodeForLinkedList(node.FirstChild);
 
         System.out.println("======= CodeGen successful =======");
 

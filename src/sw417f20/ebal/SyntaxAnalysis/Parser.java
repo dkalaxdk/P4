@@ -830,7 +830,8 @@ public class Parser extends RecursiveDescent {
     }
 
     private Node getLeaf(Token.Type type) throws SyntaxException {
-        Node node = Node.MakeNode(Expect(type), getLineNumber());
+        int line = getLineNumber();
+        Node node = Node.MakeNode(Expect(type), line);
 
         addEmpty(node);
 

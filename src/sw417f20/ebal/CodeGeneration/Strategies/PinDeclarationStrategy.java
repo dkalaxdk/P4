@@ -6,7 +6,7 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class PinDeclarationStrategy extends CodeGenerationStrategy {
     @Override
-    public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
+    public String GenerateCode(Node node) {
 
         ArduinoBoard board;
 
@@ -39,9 +39,9 @@ public class PinDeclarationStrategy extends CodeGenerationStrategy {
         board.PinInstantiations
                 .append("\t")
                 .append(pinName).append(".createPin(")
-                .append(pinType.GenerateCode(arduinoSystem)).append(", ")
-                .append(ioType.GenerateCode(arduinoSystem)).append(", ")
-                .append(pinNumber.GenerateCode(arduinoSystem))
+                .append(pinType.GenerateCode()).append(", ")
+                .append(ioType.GenerateCode()).append(", ")
+                .append(pinNumber.GenerateCode())
                 .append(");\n");
 
         // Add the pin to the loop so it's value is constantly updated
