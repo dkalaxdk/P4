@@ -775,6 +775,122 @@ public class SemanticsTester {
 
     }
 
+    @Test
+    void EventHandlerStrategy_Returns_NoErrors() throws SemanticsException {
+        Node EventHandlerNode = Node.MakeNode(Node.NodeType.EventHandler);
+        Node BlockNode = Node.MakeNode(Node.NodeType.Block);
+        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
+
+
+        BlockNode.SemanticsCheckerStrategy = new FakeStrategy();
+        IdentifierNode.SemanticsCheckerStrategy = new FakeStrategy();
+
+        SemanticsEventHandlerStrategy eventHandlerStrategy = new SemanticsEventHandlerStrategy();
+        eventHandlerStrategy.SymbolTable = new HashSymbolTable();
+
+        IdentifierNode.Value = "Test";
+        BlockNode.DataType = Symbol.SymbolType.EVENT;
+
+
+        BlockNode.Next = IdentifierNode;
+        EventHandlerNode.FirstChild = BlockNode;
+
+        EventHandlerNode.SemanticsCheckerStrategy = eventHandlerStrategy;
+        eventHandlerStrategy.SymbolTable.EnterSymbol(EventHandlerNode.FirstChild.Value, EventHandlerNode.FirstChild.DataType);
+
+        EventHandlerNode.CheckSemantics();
+
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
+
+    }
+
+    @Test
+    void EventHandlerStrategy_WrongType_Returns_WrongType() {
+        Node EventHandlerNode = Node.MakeNode(Node.NodeType.EventHandler);
+        Node BlockNode = Node.MakeNode(Node.NodeType.Block);
+        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
+
+
+        // The string expected as return from the error
+        String errorString = "wrong type";
+
+        BlockNode.SemanticsCheckerStrategy = new FakeStrategy();
+        IdentifierNode.SemanticsCheckerStrategy = new FakeStrategy();
+
+        SemanticsEventHandlerStrategy eventHandlerStrategy = new SemanticsEventHandlerStrategy();
+        eventHandlerStrategy.SymbolTable = new HashSymbolTable();
+
+        IdentifierNode.Value = "Test";
+        BlockNode.DataType = Symbol.SymbolType.INT;
+
+
+        BlockNode.Next = IdentifierNode;
+        EventHandlerNode.FirstChild = BlockNode;
+
+        EventHandlerNode.SemanticsCheckerStrategy = eventHandlerStrategy;
+        eventHandlerStrategy.SymbolTable.EnterSymbol(EventHandlerNode.FirstChild.Value, EventHandlerNode.FirstChild.DataType);
+
+        Exception exception = Assertions.assertThrows(SemanticsException.class, EventHandlerNode::CheckSemantics);
+        Assertions.assertTrue(exception.getMessage().contains(errorString));
+
+    }
+
+    @Test
+    void EventHandlerStrategy_WrongType_Returns_Not_Declared() {
+        Node EventHandlerNode = Node.MakeNode(Node.NodeType.EventHandler);
+        Node BlockNode = Node.MakeNode(Node.NodeType.Block);
+        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
+
+
+        // The string expected as return from the error
+        String errorString = "not been declared";
+
+        BlockNode.SemanticsCheckerStrategy = new FakeStrategy();
+        IdentifierNode.SemanticsCheckerStrategy = new FakeStrategy();
+
+        SemanticsEventHandlerStrategy eventHandlerStrategy = new SemanticsEventHandlerStrategy();
+        eventHandlerStrategy.SymbolTable = new HashSymbolTable();
+
+        IdentifierNode.Value = "Test";
+        BlockNode.DataType = Symbol.SymbolType.EVENT;
+
+
+        BlockNode.Next = IdentifierNode;
+        EventHandlerNode.FirstChild = BlockNode;
+
+        EventHandlerNode.SemanticsCheckerStrategy = eventHandlerStrategy;
+
+        Exception exception = Assertions.assertThrows(SemanticsException.class, EventHandlerNode::CheckSemantics);
+        Assertions.assertTrue(exception.getMessage().contains(errorString));
+
+    }
+
+    @Test
+    void FloatDeclarationStrategy() throws SemanticsException {
+        Node EventHandlerNode = Node.MakeNode(Node.NodeType.EventHandler);
+        Node BlockNode = Node.MakeNode(Node.NodeType.Block);
+        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
+
+
+        BlockNode.SemanticsCheckerStrategy = new FakeStrategy();
+        IdentifierNode.SemanticsCheckerStrategy = new FakeStrategy();
+
+        SemanticsFloatDeclarationStrategy floatDeclarationStrategy = new SemanticsFloatDeclarationStrategy();
+        floatDeclarationStrategy.SymbolTable = new HashSymbolTable();
+
+        IdentifierNode.Value = "Test";
+        BlockNode.DataType = Symbol.SymbolType.EVENT;
+
+
+        BlockNode.Next = IdentifierNode;
+        EventHandlerNode.FirstChild = BlockNode;
+
+        EventHandlerNode.SemanticsCheckerStrategy = floatDeclarationStrategy;
+
+        EventHandlerNode.CheckSemantics();
+
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
+    }
 
 
 }
