@@ -8,9 +8,6 @@ public class ASTPrinter extends Visitor {
 
     @Override
     public void Visit(Node node) {
-//        if (node.Type != Node.NodeType.Empty) {
-//            PrintNode(node);
-//        }
 
         PrintNode(node);
 
@@ -19,7 +16,6 @@ public class ASTPrinter extends Visitor {
             VisitChildren(node);
             indent--;
         }
-
     }
 
     // Prints the input node with the correct amount of indent
@@ -28,7 +24,5 @@ public class ASTPrinter extends Visitor {
             System.out.print("\t");
         }
         System.out.println(node);
-
-//        System.out.println();
     }
 }

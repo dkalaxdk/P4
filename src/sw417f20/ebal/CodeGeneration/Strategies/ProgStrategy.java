@@ -7,6 +7,7 @@ public class ProgStrategy extends CodeGenerationStrategy {
 
     @Override
     public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
+
         //Generates code for the the master and all the slaves
         GenerateCodeForLinkedList(node.FirstChild, arduinoSystem);
 

@@ -10,7 +10,7 @@ public class HashSymbolTablePrinter {
 
     public void PrintTable(ISymbolTable table){
         PrintSymbols((HashSymbolTable) table);
-        System.out.println("");
+        System.out.println("------");
 
         indent++;
         for (HashSymbolTable child : ((HashSymbolTable)table).Children){

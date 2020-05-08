@@ -354,7 +354,6 @@ public class Parser extends RecursiveDescent {
     public Node Expr() throws SyntaxException {
         Node Expr = Node.MakeNode(Node.NodeType.Expression, getLineNumber());
 
-        // TODO: Alle identifiers bør have Empty som deres FirstChild hvis de ikke har et prefix. Hvis det bliver rettet, prik til Michelle
         if (Peek().type == Token.Type.IDENTIFIER || CheckForLiteral()) {
             Node value = Value();
             Node afterExpr = AfterExpr();
@@ -366,7 +365,6 @@ public class Parser extends RecursiveDescent {
             Expr.AddChild(value);
             Expr.AddChild(afterExpr);
         }
-        // TODO: Er ikke sikker på den her
         else if (Peek().type == Token.Type.LPAREN) {
             Expect(Token.Type.LPAREN);
             Node expr = Expr();
@@ -821,8 +819,6 @@ public class Parser extends RecursiveDescent {
             node.AddChild(Node.MakeNode(Node.NodeType.Empty));
         }
     }
-
-
 
     private boolean CheckForType() {
 

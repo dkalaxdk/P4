@@ -16,6 +16,7 @@ public abstract class ArduinoBoard {
     // Loop
     public StringBuilder Loop;
 
+    // Include the EBAL c++ libraries
     protected String libraries = "#include <ebal.h> \n#include <ebalEvent.h> \n#include <ebalPin.h>\n\n";
 
     public ArduinoBoard() {

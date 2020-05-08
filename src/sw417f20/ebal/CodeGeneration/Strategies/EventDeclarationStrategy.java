@@ -11,19 +11,25 @@ public class EventDeclarationStrategy extends CodeGenerationStrategy {
     @Override
     public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
 
+        // Get the event from the system
         String eventName = node.FirstChild.Value;
-        Event event = arduinoSystem.EventDictionary.get(eventName);
+        Event event = arduinoSystem.EventMap.get(eventName);
 
+        // If the event wasn't in the system, add it with an ID of -1,
+        // because it is never handled by a slave
         if (event == null) {
             event = new Event(eventName, -1);
-            arduinoSystem.EventDictionary.put(eventName, event);
+            arduinoSystem.EventMap.put(eventName, event);
         }
 
+        // Get a reference to the createEvent call,
+        // and the type of that function's input
         Node call = node.FirstChild.Next;
         Symbol.SymbolType type = call.FirstChild.Next.DataType;
 
         String eventType = "";
 
+        // Get the correct event type based on the type of the parameter of createEvent
         switch (type) {
             case FLOAT:
                 eventType = "floatEvent";
@@ -36,26 +42,34 @@ public class EventDeclarationStrategy extends CodeGenerationStrategy {
                 break;
         }
 
+        // Give the event the found type
         event.SetType(eventType);
 
-        addEventToMaster(arduinoSystem.Master, event, arduinoSystem);
+        // Add the event to the master
+        addEventToMaster(arduinoSystem.Master, event);
 
+        // Add the event to the slaves that handle it
         for (int i : event.AssociatedSlaves) {
-            addEventToSlave(arduinoSystem.SlaveList.get(i), event, arduinoSystem);
+            addEventToSlave(arduinoSystem.SlaveList.get(i), event);
         }
 
+        // Get the expression that is the input of createEvent
         String expression = node.FirstChild.Next.FirstChild.Next.GenerateCode(arduinoSystem);
 
         return addIndent(arduinoSystem.Indent) + eventName + ".createEvent(" + expression + ");\n";
     }
 
-    private void addEventToMaster(Master master, Event event, ArduinoSystem arduinoSystem) {
+    // Adds the input event to the master
+    private void addEventToMaster(Master master, Event event) {
+
+        // Add the event to the master's event declarations
         master.EventDeclarations
                 .append(event.GetType())
                 .append(" ")
                 .append(event.GetName())
                 .append(";\n");
 
+        // Instantiate the event with an ID
         master.EventInstantiations
                 .append("\t")
                 .append(event.GetName())
@@ -63,6 +77,7 @@ public class EventDeclarationStrategy extends CodeGenerationStrategy {
                 .append(event.GetID())
                 .append(");\n");
 
+        // Add the associated slaves to the event
         for (int i : event.AssociatedSlaves) {
             master.AssociatedSlaves
                     .append("\t")
@@ -73,13 +88,17 @@ public class EventDeclarationStrategy extends CodeGenerationStrategy {
         }
     }
 
-    private void addEventToSlave(Slave slave, Event event, ArduinoSystem arduinoSystem) {
+    // Adds the input event to the slave
+    private void addEventToSlave(Slave slave, Event event) {
+
+        // Add the event to the slave's event declarations
         slave.EventDeclarations
                 .append(event.GetType())
                 .append(" ")
                 .append(event.GetName())
                 .append(";\n");
 
+        // Instantiate the event with an ID
         slave.EventInstantiations
                 .append("\t")
                 .append(event.GetName())

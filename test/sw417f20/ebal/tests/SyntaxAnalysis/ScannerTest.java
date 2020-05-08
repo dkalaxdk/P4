@@ -43,7 +43,8 @@ class ScannerTest {
         // The buffered reader needed to be mocked as well, to ensure the reader did not get a nullStream.
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
 
-        Mockito.when(mockReader.read()).thenReturn((int) 'M', (int) 'A', (int) 'S', (int) 'T', (int) 'E', (int) 'R', (int) ' ', (int) 'i', (int) 'n', (int) 't',(int) ' ');
+        Mockito.when(mockReader.read()).thenReturn((int) 'M', (int) 'A', (int) 'S', (int) 'T', (int) 'E', (int) 'R', (int) ' ', (int) 'i'
+                , (int) 'n', (int) 't', (int) ' ');
         Reader reader = new Reader(mockReader);
         Scanner scanner = new Scanner(reader);
         Token first = scanner.Peek();

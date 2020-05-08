@@ -22,8 +22,6 @@ public class StrategyFactory {
     private WriteStrategy writeStrategy;
     private GetValueStrategy getValueStrategy;
     private FilterNoiseStrategy filterNoiseStrategy;
-    private CreateEventStrategy createEventStrategy;
-    private CreatePinStrategy createPinStrategy;
     private AssignmentStrategy assignmentStrategy;
     private IfStrategy ifStrategy;
     private PinDeclarationStrategy pinDeclarationStrategy;
@@ -137,22 +135,6 @@ public class StrategyFactory {
         }
 
         return filterNoiseStrategy;
-    }
-
-    public CreateEventStrategy GetCreateEventStrategy() {
-        if(createEventStrategy == null) {
-            createEventStrategy = new CreateEventStrategy();
-        }
-
-        return createEventStrategy;
-    }
-
-    public CreatePinStrategy GetCreatePinStrategy() {
-        if(createPinStrategy == null) {
-            createPinStrategy = new CreatePinStrategy();
-        }
-
-        return createPinStrategy;
     }
 
     public AssignmentStrategy GetAssignmentStrategy() {

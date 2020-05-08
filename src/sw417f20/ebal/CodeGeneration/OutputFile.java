@@ -35,13 +35,16 @@ public class OutputFile {
         if(!filepath.contains(".ino")) {
             if(filepath.contains(".")) {
                 //TODO: Handle that filepath has a different file extension than ".ino"
+                String[] a = filepath.split("\\.");
+
+                filepath = a[a.length - 1];
             }
-            else {
-                filepath += ".ino";
-            }
+
+            filepath += ".ino";
         }
         outputFile = new File(filepath);
         boolean fileCreated = outputFile.createNewFile();
+
         if(fileCreated) {
             System.out.println("File: " + filepath + " created");
         }
@@ -49,6 +52,7 @@ public class OutputFile {
             // This does not currently have any effect, but could be used to check if user truly wants to overwrite
             System.out.println("File: " + filepath + " already exists");
         }
+
         return outputFile;
     }
 }

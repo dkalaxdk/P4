@@ -7,12 +7,16 @@ public class ListenerStrategy extends CodeGenerationStrategy {
     @Override
     public String GenerateCode(Node node, ArduinoSystem arduinoSystem) {
 
+        // Get the name of the pin that is listened to
         String pinName = node.FirstChild.Value;
 
+        // Create the unique Listener name for the Arduino
         String listenerName = pinName + "Listener" + arduinoSystem.Master.ListenerCount++;
 
+        // Generate code for the Listener's block
         String block = node.FirstChild.Next.GenerateCode(arduinoSystem);
 
+        // Add the Listener to the system's master with the correct signature
         arduinoSystem.Master.Listeners
                 .append("void ")
                 .append(listenerName)
@@ -20,6 +24,7 @@ public class ListenerStrategy extends CodeGenerationStrategy {
                 .append(block)
                 .append("\n");
 
+        // Call the Listener in the master's loop
         arduinoSystem.Master.Loop
                 .append("\t")
                 .append(listenerName)

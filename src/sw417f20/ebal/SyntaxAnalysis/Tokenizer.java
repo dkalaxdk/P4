@@ -9,7 +9,6 @@ public class Tokenizer {
         this.reader = reader;
     }
 
-    // Could maybe move back to scanner
     public Token getToken() throws IOException {
         Token token = new Token(Token.Type.NOTATOKEN, "");
         token.lineNumber = reader.currentLine;

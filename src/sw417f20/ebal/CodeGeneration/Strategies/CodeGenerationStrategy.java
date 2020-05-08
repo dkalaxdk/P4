@@ -36,6 +36,12 @@ public abstract class CodeGenerationStrategy {
         return content.toString();
     }
 
+
+    /**
+     * Returns an appropriate amount of indentation
+     * @param indent How much to indent
+     * @return The indentation
+     */
     protected String addIndent(int indent) {
         StringBuilder tabs = new StringBuilder();
 
