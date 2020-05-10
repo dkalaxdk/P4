@@ -24,7 +24,7 @@ public class Node {
     // Acts as head of a singly linked list of children.
     public Node FirstChild;
     public Node Parent;
-    //TODO: Make private?
+
     public SemanticsCheckerStrategy SemanticsCheckerStrategy;
     public CodeGenerationStrategy CodeGenerationStrategy;
 

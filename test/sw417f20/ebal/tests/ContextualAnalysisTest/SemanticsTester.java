@@ -3,7 +3,6 @@ package sw417f20.ebal.tests.ContextualAnalysisTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import sw417f20.ebal.ContextAnalysis.HashSymbolTable;
 import sw417f20.ebal.ContextAnalysis.Strategies.*;
 import sw417f20.ebal.ContextAnalysis.Symbol;
@@ -14,8 +13,121 @@ import sw417f20.ebal.Visitors.SemanticsStrategiesVisitor;
 import java.util.ArrayList;
 
 public class SemanticsTester {
-
     SemanticsStrategiesVisitor strategiesVisitor;
+
+    private class TestNode {
+        public Node node;
+
+        public TestNode(Node node) {
+            this.node = node;
+        }
+
+        public void addStrategy(SemanticsCheckerStrategy strategy) {
+            strategy.SymbolTable = new HashSymbolTable();
+            node.SemanticsCheckerStrategy = strategy;
+        }
+
+        public void addSymbol(Node symbol) {
+            node.SemanticsCheckerStrategy.SymbolTable.EnterSymbol(symbol.Value, symbol.DataType);
+        }
+
+        // Simplified addChild method
+        public void addChild(Node child) {
+            // Adds a fake strategy to all children
+            child.SemanticsCheckerStrategy = new FakeStrategy();
+
+            if(node.FirstChild == null) {
+                node.FirstChild = child;
+            }
+            else {
+                Node currentChild = node.FirstChild;
+                // Find last child in linked list
+                while (currentChild.Next != null) {
+                    currentChild = currentChild.Next;
+                }
+                currentChild.Next = child;
+            }
+        }
+    }
+
+    private TestNode setupAssignmentNodeWithSymbols(Symbol.SymbolType expressionType, Symbol.SymbolType identifierType) {
+        TestNode testNode = setupAssignmentNodeWithoutSymbols(expressionType, identifierType);
+
+        // Add identifier symbol to symbol table of strategy
+        testNode.addSymbol(testNode.node.FirstChild);
+
+        return testNode;
+    }
+
+    private TestNode setupAssignmentNodeWithoutSymbols(Symbol.SymbolType expressionType, Symbol.SymbolType identifierType) {
+        Node AssignmentNode = Node.MakeNode(Node.NodeType.Assignment);
+
+        SemanticsAssignmentStrategy assignmentStrategy = new SemanticsAssignmentStrategy();
+
+        TestNode testNode = setupNode(AssignmentNode, assignmentStrategy);
+
+        Node IdentifierNode = createNode(Node.NodeType.Identifier, identifierType, "TestVar");
+        Node ExpressionNode = createNode(Node.NodeType.Expression, expressionType);
+        testNode.addChild(IdentifierNode);
+        testNode.addChild(ExpressionNode);
+
+        return testNode;
+    }
+
+    private TestNode setupBoolDeclNodeWithoutSymbols(Symbol.SymbolType expressionType, Symbol.SymbolType identifierType) {
+        Node DeclarationNode = Node.MakeNode(Node.NodeType.BoolDeclaration);
+
+        SemanticsBoolDeclarationStrategy boolDeclarationStrategy = new SemanticsBoolDeclarationStrategy();
+        TestNode testNode = setupNode(DeclarationNode, boolDeclarationStrategy);
+
+        // One liner construction
+        //TestNode testNode = setupNode(Node.MakeNode(Node.NodeType.BoolDeclaration), new SemanticsBoolDeclarationStrategy());
+
+        Node IdentifierNode = createNode(Node.NodeType.Identifier, identifierType, "TestVar");
+        Node ExpressionNode = createNode(Node.NodeType.Expression, expressionType);
+        testNode.addChild(IdentifierNode);
+        testNode.addChild(ExpressionNode);
+
+        return testNode;
+    }
+
+    private TestNode setupBoolLiteralNode(Node prefixNode) {
+        Node BoolNode = Node.MakeNode(Node.NodeType.BoolDeclaration);
+        SemanticsBoolLiteralStrategy boolLiteralStrategy = new SemanticsBoolLiteralStrategy();
+
+        TestNode testNode = setupNode(BoolNode, boolLiteralStrategy);
+
+        testNode.addChild(prefixNode);
+        return testNode;
+    }
+
+    private TestNode setupEventDeclNode() {
+        Node DeclarationNode = Node.MakeNode(Node.NodeType.EventDeclaration);
+        SemanticsEventDeclarationStrategy eventDeclarationStrategy = new SemanticsEventDeclarationStrategy();
+        eventDeclarationStrategy.LocalEvents = new ArrayList<Symbol>();
+
+        return setupNode(DeclarationNode, eventDeclarationStrategy);
+    }
+
+    //TODO: Determine if obsolete
+    private TestNode setupNode(Node rootNode, SemanticsCheckerStrategy strategy) {
+        TestNode testNode = new TestNode(rootNode);
+        testNode.addStrategy(strategy);
+
+        return testNode;
+    }
+
+    private Node createNode(Node.NodeType nodeType, Symbol.SymbolType dataType, String value) {
+        Node node = createNode(nodeType, dataType);
+        node.Value = value;
+        return node;
+    }
+
+    private Node createNode(Node.NodeType nodeType, Symbol.SymbolType dataType) {
+        Node node = Node.MakeNode(nodeType);
+        node.DataType = dataType;
+        return node;
+    }
 
     @BeforeEach
     void setup() {
@@ -24,317 +136,142 @@ public class SemanticsTester {
 
     @Test
     void AssignmentStrategy_TypeInt_Returns_NoErrorsThrown() throws SemanticsException {
-        Node AssignmentNode = Node.MakeNode(Node.NodeType.Assignment);
-        Node ExpressionNode = Node.MakeNode(Node.NodeType.Expression);
-        Node nodeIdentifier = Node.MakeNode(Node.NodeType.Identifier);
+        TestNode AssignmentNode = setupAssignmentNodeWithSymbols(Symbol.SymbolType.INT, Symbol.SymbolType.INT);
 
-        ExpressionNode.SemanticsCheckerStrategy = new FakeStrategy();
-
-        SemanticsAssignmentStrategy assignmentStrategy = new SemanticsAssignmentStrategy();
-        assignmentStrategy.SymbolTable = new HashSymbolTable();
-
-        ExpressionNode.DataType = Symbol.SymbolType.INT;
-        nodeIdentifier.DataType = Symbol.SymbolType.INT;
-
-
-        nodeIdentifier.Value = "TestVar";
-        AssignmentNode.FirstChild = nodeIdentifier;
-        AssignmentNode.FirstChild.Next = ExpressionNode;
-
-
-        assignmentStrategy.SymbolTable.EnterSymbol(nodeIdentifier.Value,nodeIdentifier.DataType);
-        AssignmentNode.SemanticsCheckerStrategy = assignmentStrategy;
-        AssignmentNode.CheckSemantics();
+        AssignmentNode.node.CheckSemantics();
 
         Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
     @Test
     void AssignmentStrategy_TypeFloat_Returns_NoErrorsThrown() throws SemanticsException {
-        Node AssignmentNode = Node.MakeNode(Node.NodeType.Assignment);
-        Node ExpressionNode = Node.MakeNode(Node.NodeType.Expression);
-        Node nodeIdentifier = Node.MakeNode(Node.NodeType.Identifier);
+        TestNode AssignmentNode = setupAssignmentNodeWithSymbols(Symbol.SymbolType.FLOAT, Symbol.SymbolType.FLOAT);
 
-        ExpressionNode.SemanticsCheckerStrategy = new FakeStrategy();
-
-        SemanticsAssignmentStrategy assignmentStrategy = new SemanticsAssignmentStrategy();
-        assignmentStrategy.SymbolTable = new HashSymbolTable();
-
-        ExpressionNode.DataType = Symbol.SymbolType.FLOAT;
-        nodeIdentifier.DataType = Symbol.SymbolType.FLOAT;
-
-
-        nodeIdentifier.Value = "TestVar";
-        AssignmentNode.FirstChild = nodeIdentifier;
-        AssignmentNode.FirstChild.Next = ExpressionNode;
-
-
-        assignmentStrategy.SymbolTable.EnterSymbol(nodeIdentifier.Value,nodeIdentifier.DataType);
-        AssignmentNode.SemanticsCheckerStrategy = assignmentStrategy;
-        AssignmentNode.CheckSemantics();
+        AssignmentNode.node.CheckSemantics();
 
         Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
 
     @Test
     void AssignmentStrategy_TypeBool_Returns_NoErrorsThrown() throws SemanticsException {
-        Node AssignmentNode = Node.MakeNode(Node.NodeType.Assignment);
-        Node ExpressionNode = Node.MakeNode(Node.NodeType.Expression);
-        Node nodeIdentifier = Node.MakeNode(Node.NodeType.Identifier);
+        TestNode AssignmentNode = setupAssignmentNodeWithSymbols(Symbol.SymbolType.BOOL, Symbol.SymbolType.BOOL);
 
-        ExpressionNode.SemanticsCheckerStrategy = new FakeStrategy();
-
-        SemanticsAssignmentStrategy assignmentStrategy = new SemanticsAssignmentStrategy();
-        assignmentStrategy.SymbolTable = new HashSymbolTable();
-
-        ExpressionNode.DataType = Symbol.SymbolType.BOOL;
-        nodeIdentifier.DataType = Symbol.SymbolType.BOOL;
-
-
-        nodeIdentifier.Value = "TestVar";
-        AssignmentNode.FirstChild = nodeIdentifier;
-        AssignmentNode.FirstChild.Next = ExpressionNode;
-
-
-        assignmentStrategy.SymbolTable.EnterSymbol(nodeIdentifier.Value,nodeIdentifier.DataType);
-        AssignmentNode.SemanticsCheckerStrategy = assignmentStrategy;
-        AssignmentNode.CheckSemantics();
+        AssignmentNode.node.CheckSemantics();
 
         Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
     @Test
     void AssignmentStrategy_TypeInt_Returns_WrongTypeErrorThrown() {
-        Node AssignmentNode = Node.MakeNode(Node.NodeType.Assignment);
-        Node ExpressionNode = Node.MakeNode(Node.NodeType.Expression);
-        Node nodeIdentifier = Node.MakeNode(Node.NodeType.Identifier);
-
         //The string expected as return from the error
         String errorString = "wrong type";
 
-        ExpressionNode.SemanticsCheckerStrategy = new FakeStrategy();
+        TestNode AssignmentNode = setupAssignmentNodeWithSymbols(Symbol.SymbolType.INT, Symbol.SymbolType.BOOL);
 
-        SemanticsAssignmentStrategy assignmentStrategy = new SemanticsAssignmentStrategy();
-        assignmentStrategy.SymbolTable = new HashSymbolTable();
-
-        ExpressionNode.DataType = Symbol.SymbolType.INT;
-        nodeIdentifier.DataType = Symbol.SymbolType.BOOL;
-
-
-        nodeIdentifier.Value = "TestVar";
-        AssignmentNode.FirstChild = nodeIdentifier;
-        AssignmentNode.FirstChild.Next = ExpressionNode;
-
-
-        assignmentStrategy.SymbolTable.EnterSymbol(nodeIdentifier.Value,nodeIdentifier.DataType);
-        AssignmentNode.SemanticsCheckerStrategy = assignmentStrategy;
-
-
-
-        Exception exception = Assertions.assertThrows(SemanticsException.class, AssignmentNode::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, AssignmentNode.node::CheckSemantics);
 
         Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
 
     @Test
     void AssignmentStrategy_TypeInt_Returns_Error_NotDeclared() {
-        Node AssignmentNode = Node.MakeNode(Node.NodeType.Assignment);
-        Node ExpressionNode = Node.MakeNode(Node.NodeType.Expression);
-        Node nodeIdentifier = Node.MakeNode(Node.NodeType.Identifier);
         //The string expected as return from the error
         String errorString = "not been declared";
 
-        ExpressionNode.SemanticsCheckerStrategy = new FakeStrategy();
-
-        SemanticsAssignmentStrategy assignmentStrategy = new SemanticsAssignmentStrategy();
-        assignmentStrategy.SymbolTable = new HashSymbolTable();
-
-        ExpressionNode.DataType = Symbol.SymbolType.INT;
-        nodeIdentifier.DataType = Symbol.SymbolType.INT;
-
-
-        nodeIdentifier.Value = "TestVar";
-        AssignmentNode.FirstChild = nodeIdentifier;
-        AssignmentNode.FirstChild.Next = ExpressionNode;
+        TestNode AssignmentNode = setupAssignmentNodeWithoutSymbols(Symbol.SymbolType.INT, Symbol.SymbolType.INT);
 
         //In this test, the symbol has not been added to the symbol table, and therefor it should fail.
-        AssignmentNode.SemanticsCheckerStrategy = assignmentStrategy;
-
-
-        Exception exception = Assertions.assertThrows(SemanticsException.class, AssignmentNode::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, AssignmentNode.node::CheckSemantics);
 
         Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
 
     @Test
     void BoolDeclarationStrategy_Correct_Returns_NoErrors() throws SemanticsException {
-        Node DeclarationNode = Node.MakeNode(Node.NodeType.BoolDeclaration);
-        Node ExpressionNode = Node.MakeNode(Node.NodeType.Expression);
-        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
+        TestNode DeclarationNode = setupBoolDeclNodeWithoutSymbols(Symbol.SymbolType.BOOL, Symbol.SymbolType.BOOL);
 
-        ExpressionNode.SemanticsCheckerStrategy = new FakeStrategy();
-
-        SemanticsBoolDeclarationStrategy boolDeclarationStrategy = new SemanticsBoolDeclarationStrategy();
-        boolDeclarationStrategy.SymbolTable = new HashSymbolTable();
-
-        ExpressionNode.DataType = Symbol.SymbolType.BOOL;
-        IdentifierNode.DataType = Symbol.SymbolType.BOOL;
-
-
-        IdentifierNode.Value = "TestVar";
-        DeclarationNode.FirstChild = IdentifierNode;
-        DeclarationNode.FirstChild.Next = ExpressionNode;
-
-        DeclarationNode.SemanticsCheckerStrategy = boolDeclarationStrategy;
-        DeclarationNode.CheckSemantics();
+        DeclarationNode.node.CheckSemantics();
 
         Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
 
     @Test
     void BoolDeclarationStrategy_Correct_Returns_AllReadyDefined() {
-        Node DeclarationNode = Node.MakeNode(Node.NodeType.BoolDeclaration);
-        Node ExpressionNode = Node.MakeNode(Node.NodeType.Expression);
-        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
         //The string expected as return from the error
         String errorString = "has already been declared";
 
-        ExpressionNode.SemanticsCheckerStrategy = new FakeStrategy();
+        TestNode DeclarationNode = setupBoolDeclNodeWithoutSymbols(Symbol.SymbolType.BOOL, Symbol.SymbolType.BOOL);
 
-        SemanticsBoolDeclarationStrategy boolDeclarationStrategy = new SemanticsBoolDeclarationStrategy();
-        boolDeclarationStrategy.SymbolTable = new HashSymbolTable();
+        // Add identifier (which is the first child) to symbolTable
+        DeclarationNode.addSymbol(DeclarationNode.node.FirstChild);
 
-        ExpressionNode.DataType = Symbol.SymbolType.BOOL;
-        IdentifierNode.DataType = Symbol.SymbolType.BOOL;
-
-
-        IdentifierNode.Value = "TestVar";
-        DeclarationNode.FirstChild = IdentifierNode;
-        DeclarationNode.FirstChild.Next = ExpressionNode;
-
-        DeclarationNode.SemanticsCheckerStrategy = boolDeclarationStrategy;
-        boolDeclarationStrategy.SymbolTable.EnterSymbol(IdentifierNode.Value,IdentifierNode.DataType);
-
-        Exception exception = Assertions.assertThrows(SemanticsException.class, DeclarationNode::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, DeclarationNode.node::CheckSemantics);
 
         Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
 
     @Test
     void BoolDeclarationStrategy_Correct_Returns_WrongTypeDeclared() {
-        Node DeclarationNode = Node.MakeNode(Node.NodeType.BoolDeclaration);
-        Node ExpressionNode = Node.MakeNode(Node.NodeType.Expression);
-        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
         //The string expected as return from the error
         String errorString = "wrong type";
 
-        ExpressionNode.SemanticsCheckerStrategy = new FakeStrategy();
+        TestNode DeclarationNode = setupBoolDeclNodeWithoutSymbols(Symbol.SymbolType.INT, Symbol.SymbolType.BOOL);
 
-        SemanticsBoolDeclarationStrategy boolDeclarationStrategy = new SemanticsBoolDeclarationStrategy();
-        boolDeclarationStrategy.SymbolTable = new HashSymbolTable();
-
-        ExpressionNode.DataType = Symbol.SymbolType.INT;
-        IdentifierNode.DataType = Symbol.SymbolType.BOOL;
-
-
-        IdentifierNode.Value = "TestVar";
-        DeclarationNode.FirstChild = IdentifierNode;
-        DeclarationNode.FirstChild.Next = ExpressionNode;
-
-        DeclarationNode.SemanticsCheckerStrategy = boolDeclarationStrategy;
-
-
-
-        Exception exception = Assertions.assertThrows(SemanticsException.class, DeclarationNode::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, DeclarationNode.node::CheckSemantics);
         Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
 
     @Test
     void BoolLiteralStrategy_No_Prefix_Returns_NoErrors() throws SemanticsException {
-        Node BoolNode = Node.MakeNode(Node.NodeType.BoolDeclaration);
-        Node PrefixNode = Node.MakeNode(Node.NodeType.Empty);
+        // Empty prefix node
+        Node PrefixNode = createNode(Node.NodeType.Empty, Symbol.SymbolType.INT);
 
+        TestNode BoolNode = setupBoolLiteralNode(PrefixNode);
 
-        PrefixNode.SemanticsCheckerStrategy = new FakeStrategy();
-
-        SemanticsBoolLiteralStrategy boolLiteralStrategy = new SemanticsBoolLiteralStrategy();
-        boolLiteralStrategy.SymbolTable = new HashSymbolTable();
-
-        PrefixNode.DataType = Symbol.SymbolType.INT;
-
-        BoolNode.FirstChild = PrefixNode;
-
-        BoolNode.SemanticsCheckerStrategy = boolLiteralStrategy;
-
-        BoolNode.CheckSemantics();
+        BoolNode.node.CheckSemantics();
         Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
 
     @Test
     void BoolLiteralStrategy_Correct_Prefix_Returns_NoErrors() throws SemanticsException {
-        Node BoolNode = Node.MakeNode(Node.NodeType.BoolDeclaration);
-        Node PrefixNode = Node.MakeNode(Node.NodeType.PrefixNot);
+        // PrefixNot
+        Node PrefixNode = createNode(Node.NodeType.PrefixNot, Symbol.SymbolType.INT);
 
+        TestNode BoolNode = setupBoolLiteralNode(PrefixNode);
 
-        PrefixNode.SemanticsCheckerStrategy = new FakeStrategy();
-
-        SemanticsBoolLiteralStrategy boolLiteralStrategy = new SemanticsBoolLiteralStrategy();
-        boolLiteralStrategy.SymbolTable = new HashSymbolTable();
-
-        PrefixNode.DataType = Symbol.SymbolType.INT;
-
-        BoolNode.FirstChild = PrefixNode;
-
-        BoolNode.SemanticsCheckerStrategy = boolLiteralStrategy;
-
-        BoolNode.CheckSemantics();
+        BoolNode.node.CheckSemantics();
         Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
 
     @Test
     void BoolLiteralStrategy_Wrong_Prefix_Returns_Errors() {
-        Node BoolNode = Node.MakeNode(Node.NodeType.BoolDeclaration);
-        Node PrefixNode = Node.MakeNode(Node.NodeType.PrefixMinus);
-
         //The string expected as return from the error
         String errorString = "Only not prefix";
 
+        // PrefixMinus
+        Node PrefixNode = createNode(Node.NodeType.PrefixMinus, Symbol.SymbolType.INT);
 
-        PrefixNode.SemanticsCheckerStrategy = new FakeStrategy();
+        TestNode BoolNode = setupBoolLiteralNode(PrefixNode);
 
-        SemanticsBoolLiteralStrategy boolLiteralStrategy = new SemanticsBoolLiteralStrategy();
-        boolLiteralStrategy.SymbolTable = new HashSymbolTable();
-
-        PrefixNode.DataType = Symbol.SymbolType.INT;
-
-        BoolNode.FirstChild = PrefixNode;
-
-        BoolNode.SemanticsCheckerStrategy = boolLiteralStrategy;
-
-        Exception exception = Assertions.assertThrows(SemanticsException.class, BoolNode::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, BoolNode.node::CheckSemantics);
         Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
 
     @Test
     void EventDeclaration_Correct_Returns_NoErrors() throws SemanticsException {
-        Node DeclarationNode = Node.MakeNode(Node.NodeType.EventDeclaration);
+        TestNode DeclarationNode = setupEventDeclNode();
+
         Node ExpressionNode = Node.MakeNode(Node.NodeType.Call);
         Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
         Node CreateEventNode = Node.MakeNode(Node.NodeType.CreateEvent);
         Node ExpressionChild = Node.MakeNode(Node.NodeType.Expression);
 
-        ExpressionNode.SemanticsCheckerStrategy = new FakeStrategy();
-
-        SemanticsEventDeclarationStrategy eventDeclarationStrategy = new SemanticsEventDeclarationStrategy();
-        eventDeclarationStrategy.SymbolTable = new HashSymbolTable();
-        eventDeclarationStrategy.LocalEvents = new ArrayList<Symbol>();
-
         ExpressionNode.FirstChild = CreateEventNode;
         ExpressionNode.FirstChild.Next = ExpressionChild;
         IdentifierNode.Value = "TestVar";
-        DeclarationNode.FirstChild = IdentifierNode;
-        DeclarationNode.FirstChild.Next = ExpressionNode;
 
-        DeclarationNode.SemanticsCheckerStrategy = eventDeclarationStrategy;
-        DeclarationNode.CheckSemantics();
+        DeclarationNode.addChild(IdentifierNode);
+        DeclarationNode.addChild(ExpressionNode);
+
+        DeclarationNode.node.CheckSemantics();
 
         Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
@@ -375,49 +312,38 @@ public class SemanticsTester {
 
     @Test
     void EventDeclaration_InCorrect_Returns_IllegalDeclaration() {
-        Node DeclarationNode = Node.MakeNode(Node.NodeType.EventDeclaration);
+        //The string expected as return from the error
+        String errorString = "Illegal declaration";
+
+        TestNode DeclarationNode = setupEventDeclNode();
+
         Node ExpressionNode = Node.MakeNode(Node.NodeType.Identifier);
         Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
         Node CreateEventNode = Node.MakeNode(Node.NodeType.CreateEvent);
         Node ExpressionChild = Node.MakeNode(Node.NodeType.Expression);
 
-        //The string expected as return from the error
-        String errorString = "Illegal declaration";
-
-        ExpressionNode.SemanticsCheckerStrategy = new FakeStrategy();
-
-        SemanticsEventDeclarationStrategy eventDeclarationStrategy = new SemanticsEventDeclarationStrategy();
-        eventDeclarationStrategy.SymbolTable = new HashSymbolTable();
-        eventDeclarationStrategy.LocalEvents = new ArrayList<Symbol>();
-
         ExpressionNode.FirstChild = CreateEventNode;
         ExpressionNode.FirstChild.Next = ExpressionChild;
         IdentifierNode.Value = "TestVar";
-        DeclarationNode.FirstChild = IdentifierNode;
-        DeclarationNode.FirstChild.Next = ExpressionNode;
 
-        DeclarationNode.SemanticsCheckerStrategy = eventDeclarationStrategy;
+        DeclarationNode.addChild(IdentifierNode);
+        DeclarationNode.addChild(ExpressionNode);
 
-
-        Exception exception = Assertions.assertThrows(SemanticsException.class, DeclarationNode::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, DeclarationNode.node::CheckSemantics);
         Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
 
     @Test
     void EventHandlerBlockStrategy_Returns_No_Errors() throws SemanticsException {
+        // TODO: Refactor by creating setupEventHandler
         Node EventHandlerNode = Node.MakeNode(Node.NodeType.EventHandler);
-        Node BlockNode = Node.MakeNode(Node.NodeType.Block);
-
-
-        BlockNode.SemanticsCheckerStrategy = new FakeStrategy();
-
         SemanticsEventHandlerBlockStrategy eventDeclarationStrategy = new SemanticsEventHandlerBlockStrategy();
-        eventDeclarationStrategy.SymbolTable = new HashSymbolTable();
 
-        EventHandlerNode.FirstChild = BlockNode;
+        TestNode testNode = setupNode(EventHandlerNode, eventDeclarationStrategy);
 
-        EventHandlerNode.SemanticsCheckerStrategy = eventDeclarationStrategy;
-
+        Node BlockNode = Node.MakeNode(Node.NodeType.Block);
+        testNode.addChild(BlockNode);
+        BlockNode.SemanticsCheckerStrategy = new FakeStrategy();
 
         EventHandlerNode.CheckSemantics();
 
