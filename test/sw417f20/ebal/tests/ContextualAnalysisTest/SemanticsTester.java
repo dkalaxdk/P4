@@ -36,10 +36,9 @@ public class SemanticsTester {
             // Adds a fake strategy to all children
             child.SemanticsCheckerStrategy = new FakeStrategy();
 
-            if(node.FirstChild == null) {
+            if (node.FirstChild == null) {
                 node.FirstChild = child;
-            }
-            else {
+            } else {
                 Node currentChild = node.FirstChild;
                 // Find last child in linked list
                 while (currentChild.Next != null) {
@@ -164,7 +163,7 @@ public class SemanticsTester {
     @Test
     void AssignmentStrategy_TypeInt_Returns_WrongTypeErrorThrown() {
         //The string expected as return from the error
-        String errorString = "wrong type";
+        String errorString = "Incompatible types";
 
         TestNode AssignmentNode = setupAssignmentNodeWithSymbols(Symbol.SymbolType.INT, Symbol.SymbolType.BOOL);
 
@@ -196,7 +195,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void BoolDeclarationStrategy_Correct_Returns_AllReadyDefined() {
+    void BoolDeclarationStrategy_Correct_Returns_AlreadyDefined() {
         //The string expected as return from the error
         String errorString = "has already been declared";
 
@@ -398,7 +397,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void EventHandlerCallStrategy() {
+    void EventHandlerCallStrategy_Returns_NoErrors() {
         Node EventHandlerNode = Node.MakeNode(Node.NodeType.EventHandler);
         Node WriteNode = Node.MakeNode(Node.NodeType.Write);
         Node PinParameters = Node.MakeNode(Node.NodeType.Expression);
@@ -855,7 +854,6 @@ public class SemanticsTester {
         Node NestedBlockNode = Node.MakeNode(Node.NodeType.Block);
         Node NestedEmptyNode = Node.MakeNode(Node.NodeType.Empty);
 
-
         ExpressionNode.SemanticsCheckerStrategy = new FakeStrategy();
         BlockNode.SemanticsCheckerStrategy = new FakeStrategy();
         //BoolNode.SemanticsCheckerStrategy = new FakeStrategy();
@@ -885,8 +883,243 @@ public class SemanticsTester {
         Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
 
-    //@Test
-    //void SemanticsInitiateBlockStrategy_
+    //region SemanticsInitiateBlockStrategy tests
+    @Test
+    void SemanticsInitiateBlockStrategy_Returns_NoErrors() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsInitiateBlockStrategy_Returns_NotPinDeclError() throws SemanticsException {
+        assert(false);
+    }
+    //endregion
+
+    //region SemanticsInitiateStrategy tests
+    @Test
+    void SemanticsInitiateStrategy_Returns_NoErrors() throws SemanticsException {
+        assert(false);
+    }
+    //endregion
+
+    //region SemanticsIntDeclarationStrategy tests
+    @Test
+    void SemanticsIntDeclarationStrategy_Returns_NoErrors() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsIntDeclarationStrategy_Returns_WrongTypeError() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsIntDeclarationStrategy_Returns_AlreadyDeclaredError() throws SemanticsException {
+        assert(false);
+    }
+    //endregion
+
+    //region SemanticsIntLiteralStrategy tests
+    @Test
+    void SemanticsIntLiteralStrategy_Returns_NoErrors() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsIntLiteralStrategy_Returns_NotMinusPrefixError() throws SemanticsException {
+        assert(false);
+    }
+    //endregion
+
+    //region SemanticsListenerBlockStrategy tests
+    @Test
+    void SemanticsListenerBlockStrategy_Returns_NoErrors() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsListenerBlockStrategy_Returns_IsPinDeclError() throws SemanticsException {
+        assert(false);
+    }
+    //endregion
+
+    //region SemanticsListenerCallStrategy tests
+    @Test
+    void SemanticsListenerCallStrategy_CheckBroadcast_Returns_NoErrors() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsListenerCallStrategy_CheckBroadcast_Returns_WrongTypeError() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsListenerCallStrategy_CheckBroadcast_Returns_NotDeclaredError() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsListenerCallStrategy_CheckGetValue_Returns_NoErrors() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsListenerCallStrategy_CheckGetValue_Returns_WrongTypeError() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsListenerCallStrategy_CheckGetValue_Returns_PinUnavailableError() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsListenerCallStrategy_CheckGetValue_Returns_NotDeclaredError() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsListenerCallStrategy_CheckFilterNoise_Returns_NoErrors() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsListenerCallStrategy_CheckFilterNoise_Returns_WrongTypeError() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsListenerCallStrategy_CheckFilterNoise_Returns_NotDeclaredError() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsListenerCallStrategy_CheckFilterNoise_Returns_PinUnavailableError() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsListenerCallStrategy_CheckCreateEvent_Returns_NoErrors() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsListenerCallStrategy_CheckCreateEvent_Returns_WrongTypeError() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsListenerCallStrategy_Returns_IllegalFuncCallError() throws SemanticsException {
+        assert(false);
+    }
+    //endregion
+
+    //region SemanticsListenerStrategy tests
+    @Test
+    void SemanticsListenerStrategy_Returns_NoErrors() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsListenerStrategy_Returns_WrongTypeError() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsListenerStrategy_Returns_NotDeclaredError() throws SemanticsException {
+        assert(false);
+    }
+    //endregion
+
+    //region SemanticsMasterInitiateCallStrategy tests
+    @Test
+    void SemanticsMasterInitiateCallStrategy_Returns_NoErrors() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsMasterInitiateCallStrategy_Returns_PinAlreadyUsedError() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsMasterInitiateCallStrategy_Returns_MasterPinPWMError() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsMasterInitiateCallStrategy_Returns_MasterPinNotInputError() throws SemanticsException {
+        assert(false);
+    }
+    //endregion
+
+    //region SemanticsMasterStrategy tests
+    @Test
+    void SemanticsMasterStrategy_Returns_NoErrors() throws SemanticsException {
+        assert(false);
+    }
+    //endregion
+
+    //region SemanticsPinDeclarationStrategy tests
+    @Test
+    void SemanticsPinDeclarationStrategy_Returns_NoErrors() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsPinDeclarationStrategy_Returns_IllegalDeclError() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsPinDeclarationStrategy_Returns_AlreadyDeclaredError() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsPinDeclarationStrategy_Returns_GlobalPinError() throws SemanticsException {
+        assert(false);
+    }
+    //endregion
+
+    //region SemanticsProgStrategy tests
+    @Test
+    void SemanticsProgStrategy_Returns_NoErrors() throws SemanticsException {
+        assert(false);
+    }
+    //endregion
+
+    //region SemanticsSlaveInitiateCallStrategy tests
+    @Test
+    void SemanticsSlaveInitiateCallStrategy_Returns_NoErrors() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsSlaveInitiateCallStrategy_Returns_PinAlreadyUsedError() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsSlaveInitiateCallStrategy_Returns_SlavePinNotOutputError() throws SemanticsException {
+        assert(false);
+    }
+    //endregion
+
+    //region SemanticsSlaveStrategy tests
+    @Test
+    void SemanticsSlaveStrategy_Returns_NoErrors() throws SemanticsException {
+        assert(false);
+    }
+
+    @Test
+    void SemanticsSlaveStrategy_Returns_AlreadyDeclaredError() throws SemanticsException {
+        assert(false);
+    }
+    //endregion
+
+    //todo SemanticsStrategyFactory test? Jeg vil rigtig gerne sige nej.
 }
 
 class FakeStrategy extends SemanticsCheckerStrategy {
