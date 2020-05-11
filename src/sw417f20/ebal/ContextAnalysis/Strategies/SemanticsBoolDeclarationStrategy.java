@@ -10,6 +10,7 @@ public class SemanticsBoolDeclarationStrategy extends SemanticsCheckerStrategy{
 
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {
+        // Check if identifier has already been declared
         if (!SymbolTable.DeclaredLocally(node.FirstChild.Value)){
             Node expression = node.FirstChild.Next;
             if (!expression.IsEmpty()) {
@@ -19,6 +20,7 @@ public class SemanticsBoolDeclarationStrategy extends SemanticsCheckerStrategy{
                     MakeError(node, "Expression", ErrorType.WrongType);
                 }
             }
+            // Put the variable in the symbol table
             SymbolTable.EnterSymbol(node.FirstChild.Value, Symbol.SymbolType.BOOL, hasBeenInstantiated);
             hasBeenInstantiated = false;
         }

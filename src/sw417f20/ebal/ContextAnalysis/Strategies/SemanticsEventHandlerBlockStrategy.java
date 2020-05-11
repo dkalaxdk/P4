@@ -8,9 +8,11 @@ public class SemanticsEventHandlerBlockStrategy extends SemanticsCheckerStrategy
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {
         SymbolTable.OpenScope();
+        // Check semantics for the statements in the block
         Node child = node.FirstChild;
         while (child != null && !child.IsEmpty()) {
 
+            // Check for illegal declarations
             if (child.Type != Node.NodeType.PinDeclaration && child.Type != Node.NodeType.EventDeclaration){
                 child.CheckSemantics();
             }

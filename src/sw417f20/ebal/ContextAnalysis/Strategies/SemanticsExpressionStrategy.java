@@ -17,6 +17,7 @@ public class SemanticsExpressionStrategy extends SemanticsCheckerStrategy{
         Operator = node.FirstChild.Next;
         SecondOperand = node.FirstChild.Next.Next;
 
+        // Check semantics for operands
         FirstOperand.CheckSemantics();
         SecondOperand.CheckSemantics();
 
@@ -25,6 +26,7 @@ public class SemanticsExpressionStrategy extends SemanticsCheckerStrategy{
             SecondOperand.DataType != Symbol.SymbolType.PIN &&
             SecondOperand.DataType != Symbol.SymbolType.EVENT){
 
+            // Check semantics for the operator
             CheckOperator(node);
         }
         else {
@@ -33,8 +35,10 @@ public class SemanticsExpressionStrategy extends SemanticsCheckerStrategy{
     }
 
     private void CheckOperator(Node node) throws  SemanticsException{
+        // Determine type of the operator and check the semantics
         switch (Operator.Type){
             case Modulo:
+                // both operands must be integers
                 if (FirstOperand.DataType == Symbol.SymbolType.INT && SecondOperand.DataType == Symbol.SymbolType.INT){
                     node.DataType = Symbol.SymbolType.INT;
                 }
@@ -47,6 +51,7 @@ public class SemanticsExpressionStrategy extends SemanticsCheckerStrategy{
             case Times:
             case Divide:
                 if (FirstOperand.DataType != Symbol.SymbolType.BOOL){
+                    // If either operand is float, the result is a float
                     if (FirstOperand.DataType == Symbol.SymbolType.FLOAT || SecondOperand.DataType == Symbol.SymbolType.FLOAT){
                         node.DataType = Symbol.SymbolType.FLOAT;
                     }
@@ -63,7 +68,7 @@ public class SemanticsExpressionStrategy extends SemanticsCheckerStrategy{
             case GreaterThan:
             case GreaterOrEqual:
             case LessOrEqual:
-
+                // Neither operand can be a bool
                 if (FirstOperand.DataType != Symbol.SymbolType.BOOL && SecondOperand.DataType != Symbol.SymbolType.BOOL){
                     node.DataType = Symbol.SymbolType.BOOL;
                 }
@@ -74,6 +79,7 @@ public class SemanticsExpressionStrategy extends SemanticsCheckerStrategy{
 
             case And:
             case Or:
+                // Both operands must be bools
                 if (FirstOperand.DataType == Symbol.SymbolType.BOOL && SecondOperand.DataType == Symbol.SymbolType.BOOL){
                     node.DataType = Symbol.SymbolType.BOOL;
                 }

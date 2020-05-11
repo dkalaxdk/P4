@@ -12,6 +12,7 @@ public class SemanticsListenerCallStrategy extends SemanticsCheckerStrategy{
 
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {
+        // Determine what function is called
         switch (node.FirstChild.Type){
             case Broadcast:
                 CheckBroadcast(node);
@@ -32,11 +33,14 @@ public class SemanticsListenerCallStrategy extends SemanticsCheckerStrategy{
     }
 
     private void CheckBroadcast(Node node) throws SemanticsException {
+        // Retrieve symbol for parameter from symbol table
         Symbol parameter = SymbolTable.RetrieveSymbol(node.FirstChild.Next.Value);
         if (parameter != null) {
+            // Parameter must be an event
             if (parameter.DataType == Symbol.SymbolType.EVENT) {
                 node.DataType = Symbol.SymbolType.VOID;
                 if (!InBroadcastEvents(parameter.Name)){
+                    // Add event to list of BroadcastEvents
                     BroadcastEvents.add(parameter);
                 }
             } else {
@@ -48,6 +52,7 @@ public class SemanticsListenerCallStrategy extends SemanticsCheckerStrategy{
         }
     }
 
+    // Determines if a symbol with the given name is in the BroadcastEvents list
     private boolean InBroadcastEvents(String name) {
         for (Symbol symbol : BroadcastEvents){
             if (symbol.Name.equals(name)){
@@ -58,12 +63,15 @@ public class SemanticsListenerCallStrategy extends SemanticsCheckerStrategy{
     }
 
     private void CheckGetValue(Node node) throws SemanticsException {
+        // Retrieve parameter form symbol table
         Symbol parameter = SymbolTable.RetrieveSymbol(node.FirstChild.Next.Value);
         if (parameter != null) {
+            // Check that pin or event is available
             if (parameter.DataType != Symbol.SymbolType.PIN || parameter.Name.equals(AvailablePinOrEvent)) {
                 if (parameter.DataType == Symbol.SymbolType.PIN) {
                     node.DataType = Symbol.SymbolType.INT;
                 }
+                // If parameter is event, return type is the type of the event
                 else if (parameter.DataType == Symbol.SymbolType.EVENT){
                     node.DataType = parameter.ValueType;
                 }
@@ -81,10 +89,13 @@ public class SemanticsListenerCallStrategy extends SemanticsCheckerStrategy{
     }
 
     private void CheckFilterNoise(Node node) throws SemanticsException {
+        // Check that pin is available
         if (node.FirstChild.Next.Value.equals(AvailablePinOrEvent)) {
+            // Retrieve symbol for pin
             Symbol pinParameter = SymbolTable.RetrieveSymbol(node.FirstChild.Next.Value);
             if (pinParameter != null) {
                 if (pinParameter.DataType == Symbol.SymbolType.PIN) {
+                    // Check that filterType matches the type of the pin
                     CheckPinAndFilterCombination(pinParameter, node);
                     node.DataType = Symbol.SymbolType.INT;
                 } else {
@@ -117,7 +128,9 @@ public class SemanticsListenerCallStrategy extends SemanticsCheckerStrategy{
 
     private void CheckCreateEvent(Node node) throws SemanticsException {
         Node parameter = node.FirstChild.Next;
+        // Check semantics for parameter
         parameter.CheckSemantics();
+        // Check that parameter has a legal type
         if (parameter.DataType == Symbol.SymbolType.INT ||
                 parameter.DataType == Symbol.SymbolType.FLOAT ||
                 parameter.DataType == Symbol.SymbolType.BOOL) {

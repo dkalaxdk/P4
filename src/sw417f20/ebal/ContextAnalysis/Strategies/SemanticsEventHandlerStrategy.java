@@ -8,9 +8,11 @@ public class SemanticsEventHandlerStrategy extends SemanticsCheckerStrategy{
 
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {
+        // Retrieve event from symbol table
         Symbol symbol = SymbolTable.RetrieveSymbol(node.FirstChild.Value);
         if (symbol != null){
             if (symbol.DataType == Symbol.SymbolType.EVENT){
+                // Check semantics for the block of the EventHandler
                 node.FirstChild.Next.CheckSemantics();
             }
             else {

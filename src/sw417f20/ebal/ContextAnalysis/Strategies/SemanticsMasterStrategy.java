@@ -8,31 +8,39 @@ import java.util.ArrayList;
 
 public class SemanticsMasterStrategy extends SemanticsCheckerStrategy{
 
+    // List of events that are broadcast to slaves
+    // Is assigned when strategy is created
     public ArrayList<Symbol> BroadcastEvents;
 
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {
         SymbolTable.OpenScope();
 
+        // Check semantics for variables global to the master
         Node child = node.FirstChild;
         while (!child.IsEmpty()){
             child.CheckSemantics();
             child = child.Next;
         }
 
+        // Check semantics for Initiate
         child = child.Next;
         child.CheckSemantics();
         child = child.Next;
 
+        // Check semantics for listeners
         while (!child.IsEmpty()){
             child.CheckSemantics();
             child = child.Next;
         }
 
+        // Make events that are broadcast available to slaves
+        // by putting them in the global scope
         MakeLocalEventsGlobal();
         SymbolTable.CloseScope();
     }
 
+    // Put local events into the global scope
     private void MakeLocalEventsGlobal() {
         for(Symbol symbol : BroadcastEvents){
             SymbolTable.EnterGlobalSymbol(symbol);

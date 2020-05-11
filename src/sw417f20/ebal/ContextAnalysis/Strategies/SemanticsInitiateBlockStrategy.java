@@ -7,10 +7,13 @@ import java.util.ArrayList;
 
 public class SemanticsInitiateBlockStrategy extends SemanticsCheckerStrategy{
 
+    // List containing the pin numbers already used
+    // This is assigned by the strategy factory
     public ArrayList<String> UsedPinNumbers;
 
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {
+        // Check semantics for pin declarations
         Node child = node.FirstChild;
         while (!child.IsEmpty()) {
             if (child.Type == Node.NodeType.PinDeclaration) {

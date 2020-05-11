@@ -8,6 +8,7 @@ public class SemanticsEventHandlerCallStrategy extends SemanticsCheckerStrategy{
 
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {
+        // Determine what function is called, then check semantics
         if (node.FirstChild.Type == Node.NodeType.Write) {
             CheckWrite(node);
         }
@@ -24,6 +25,7 @@ public class SemanticsEventHandlerCallStrategy extends SemanticsCheckerStrategy{
         Node intParameter = node.FirstChild.Next.Next;
 
         if (pinParameter != null) {
+            // Check semantics for pin and integer parameter
             if (pinParameter.DataType == Symbol.SymbolType.PIN) {
                 intParameter.CheckSemantics();
                 if (intParameter.DataType == Symbol.SymbolType.INT) {
@@ -45,6 +47,7 @@ public class SemanticsEventHandlerCallStrategy extends SemanticsCheckerStrategy{
     private void CheckGetValue(Node node) throws SemanticsException{
         Symbol parameter = SymbolTable.RetrieveSymbol(node.FirstChild.Next.Value);
         if (parameter != null) {
+            // Check that parameter is an available pin or event
             if (parameter.DataType != Symbol.SymbolType.EVENT || parameter.Name.equals(AvailablePinOrEvent)) {
                 if (parameter.DataType == Symbol.SymbolType.PIN) {
                     node.DataType = Symbol.SymbolType.INT;
