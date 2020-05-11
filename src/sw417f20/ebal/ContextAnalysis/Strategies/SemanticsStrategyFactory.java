@@ -17,8 +17,11 @@ import java.util.ArrayList;
 public class SemanticsStrategyFactory {
 
     public ISymbolTable SymbolTable;
+    // Pin numbers that are in use
     public ArrayList<String> UsedPinNumbers;
+    // Events in a local scope
     public ArrayList<Symbol> LocalEvents;
+    // List of events that are broadcast from master to slaves
     public ArrayList<Symbol> BroadcastEvents;
 
     private SemanticsProgStrategy progStrategy;

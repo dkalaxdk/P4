@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 public class SemanticsMasterStrategy extends SemanticsCheckerStrategy{
 
+    // List of events that are broadcast to slaves
+    // Is assigned when strategy is created
     public ArrayList<Symbol> BroadcastEvents;
 
     @Override
@@ -32,10 +34,13 @@ public class SemanticsMasterStrategy extends SemanticsCheckerStrategy{
             child = child.Next;
         }
 
+        // Make events that are broadcast available to slaves
+        // by putting them in the global scope
         MakeLocalEventsGlobal();
         SymbolTable.CloseScope();
     }
 
+    // Put local events into the global scope
     private void MakeLocalEventsGlobal() {
         for(Symbol symbol : BroadcastEvents){
             SymbolTable.EnterGlobalSymbol(symbol);

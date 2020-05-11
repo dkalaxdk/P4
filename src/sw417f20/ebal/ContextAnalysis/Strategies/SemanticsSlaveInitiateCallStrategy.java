@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 public class SemanticsSlaveInitiateCallStrategy extends SemanticsCheckerStrategy{
 
+    // List of pin numbers already in use
+    // Assigned by strategy factory
     public ArrayList<String> UsedPinNumbers;
 
     @Override
@@ -15,7 +17,9 @@ public class SemanticsSlaveInitiateCallStrategy extends SemanticsCheckerStrategy
         // The pin is the third parameter, which is the fourth child node
         String pinNumber = node.FirstChild.Next.Next.Next.Value;
 
+        // Check that IO type is output
         if (node.FirstChild.Next.Next.Type == Node.NodeType.Output) {
+            // Check that pin is not already in use
             if (!UsedPinNumbers.contains(pinNumber)) {
                 node.DataType = Symbol.SymbolType.PIN;
                 UsedPinNumbers.add(pinNumber);

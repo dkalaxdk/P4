@@ -8,8 +8,10 @@ public class SemanticsListenerBlockStrategy extends SemanticsCheckerStrategy{
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {
         SymbolTable.OpenScope();
+        // Check semantics for the statements in the block
         Node child = node.FirstChild;
         while (!child.IsEmpty()){
+            // Check statements are not PinDeclarations
             if (child.Type != Node.NodeType.PinDeclaration){
                 child.CheckSemantics();
             }

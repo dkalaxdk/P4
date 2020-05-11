@@ -10,15 +10,19 @@ public class SemanticsFloatDeclarationStrategy extends SemanticsCheckerStrategy{
 
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {
+        // Check if float is already declared
         if (!SymbolTable.DeclaredLocally(node.FirstChild.Value)){
             Node expression = node.FirstChild.Next;
+            // Check semantics for the expression
             if (!expression.IsEmpty()) {
                 expression.CheckSemantics();
                 hasBeenInstantiated = true;
+                // Check that expression has correct type
                 if (expression.DataType != Symbol.SymbolType.FLOAT && expression.DataType != Symbol.SymbolType.INT){
                     MakeError(node, "Expression", ErrorType.WrongType);
                 }
             }
+            // Enter variable into symbol table
             SymbolTable.EnterSymbol(node.FirstChild.Value, Symbol.SymbolType.FLOAT, hasBeenInstantiated);
             hasBeenInstantiated = false;
         }
