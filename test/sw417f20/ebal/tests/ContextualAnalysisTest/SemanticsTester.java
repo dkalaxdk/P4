@@ -110,7 +110,7 @@ public class SemanticsTester {
         Node nodeIdentifier = Node.MakeNode(Node.NodeType.Identifier);
 
         //The string expected as return from the error
-        String errorString = "wrong type";
+        String errorString = "Incompatible types";
 
         ExpressionNode.SemanticsCheckerStrategy = new FakeStrategy();
 
@@ -1324,7 +1324,6 @@ public class SemanticsTester {
 
         IfNode.SemanticsCheckerStrategy = ifStrategy;
 
-
         ifStrategy.SymbolTable.EnterSymbol(IfNode.Value, IfNode.DataType);
 
         IfNode.CheckSemantics();
@@ -1332,7 +1331,8 @@ public class SemanticsTester {
         Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
 
-
+    //@Test
+    //void SemanticsInitiateBlockStrategy_
 }
 
 class FakeStrategy extends SemanticsCheckerStrategy {
