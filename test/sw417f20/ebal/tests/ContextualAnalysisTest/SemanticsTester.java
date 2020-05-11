@@ -133,6 +133,7 @@ public class SemanticsTester {
         strategyAssigner = new SemanticsStrategyAssigner();
     }
 
+    //region AssignmentStrategy tests
     @Test
     void AssignmentStrategy_TypeInt_Returns_NoErrorsThrown() throws SemanticsException {
         TestNode AssignmentNode = setupAssignmentNodeWithSymbols(Symbol.SymbolType.INT, Symbol.SymbolType.INT);
@@ -184,7 +185,9 @@ public class SemanticsTester {
 
         Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
+    //endregion
 
+    //region BoolDeclarationStrategy tests
     @Test
     void BoolDeclarationStrategy_Correct_Returns_NoErrors() throws SemanticsException {
         TestNode DeclarationNode = setupBoolDeclNodeWithoutSymbols(Symbol.SymbolType.BOOL, Symbol.SymbolType.BOOL);
@@ -219,7 +222,9 @@ public class SemanticsTester {
         Exception exception = Assertions.assertThrows(SemanticsException.class, DeclarationNode.node::CheckSemantics);
         Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
+    //endregion
 
+    //region BoolLiteralStrategy tests
     @Test
     void BoolLiteralStrategy_No_Prefix_Returns_NoErrors() throws SemanticsException {
         // Empty prefix node
@@ -255,6 +260,7 @@ public class SemanticsTester {
         Exception exception = Assertions.assertThrows(SemanticsException.class, BoolNode.node::CheckSemantics);
         Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
+    //endregion
 
     @Test
     void EventDeclaration_Correct_Returns_NoErrors() throws SemanticsException {
@@ -586,7 +592,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void SemanticsIdentifierStrategy_No_Prefix_Returns_No_Errors() throws SemanticsException {
+    void IdentifierStrategy_No_Prefix_Returns_No_Errors() throws SemanticsException {
         Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
         IdentifierNode.Value = "Test";
         Node Prefix = Node.MakeNode(Node.NodeType.Empty);
@@ -612,7 +618,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void SemanticsIdentifierStrategy_PrefixMinus_IntType_Returns_No_Errors() throws SemanticsException {
+    void IdentifierStrategy_PrefixMinus_IntType_Returns_No_Errors() throws SemanticsException {
         Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
         IdentifierNode.Value = "Test";
         IdentifierNode.DataType = Symbol.SymbolType.INT;
@@ -639,7 +645,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void SemanticsIdentifierStrategy_PrefixNot_BoolType_Returns_No_Errors() throws SemanticsException {
+    void IdentifierStrategy_PrefixNot_BoolType_Returns_No_Errors() throws SemanticsException {
         Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
         IdentifierNode.Value = "Test";
         IdentifierNode.DataType = Symbol.SymbolType.BOOL;
@@ -666,7 +672,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void SemanticsIdentifierStrategy_PrefixNot_IntType_Returns_Not_Only_Applicable_For_Boolean() {
+    void IdentifierStrategy_PrefixNot_IntType_Returns_Not_Only_Applicable_For_Boolean() {
         Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
         IdentifierNode.Value = "Test";
         IdentifierNode.DataType = Symbol.SymbolType.INT;
@@ -694,7 +700,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void SemanticsIdentifierStrategy_PrefixMinus_BoolType_Returns_Minus_Not_Applicable_For_Boolean() {
+    void IdentifierStrategy_PrefixMinus_BoolType_Returns_Minus_Not_Applicable_For_Boolean() {
         Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
         IdentifierNode.Value = "Test";
         IdentifierNode.DataType = Symbol.SymbolType.BOOL;
@@ -722,7 +728,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void SemanticsIdentifierStrategy_No_Prefix_BoolType_Returns_Not_Declared() {
+    void IdentifierStrategy_No_Prefix_BoolType_Returns_Not_Declared() {
         Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
         IdentifierNode.Value = "Test";
         IdentifierNode.DataType = Symbol.SymbolType.BOOL;
@@ -748,7 +754,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void SemanticsIdentifierStrategy_No_Prefix_BoolType_Returns_Not_Instantiated() {
+    void IdentifierStrategy_No_Prefix_BoolType_Returns_Not_Instantiated() {
         Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
         IdentifierNode.Value = "Test";
         IdentifierNode.DataType = Symbol.SymbolType.BOOL;
@@ -776,7 +782,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void SemanticsIfStrategy_If_Statement_With_Block_Returns_No_Errors() throws SemanticsException {
+    void IfStrategy_If_Statement_With_Block_Returns_No_Errors() throws SemanticsException {
         Node IfNode = Node.MakeNode(Node.NodeType.If);
         Node BoolExpression = Node.MakeNode(Node.NodeType.Expression);
         BoolExpression.DataType = Symbol.SymbolType.BOOL;
@@ -808,7 +814,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void SemanticsIfStrategy_No_Boolean_Returns_Boolean_Error() {
+    void IfStrategy_No_Boolean_Returns_Boolean_Error() {
         Node IfNode = Node.MakeNode(Node.NodeType.If);
         Node BoolExpression = Node.MakeNode(Node.NodeType.Expression);
         BoolExpression.DataType = Symbol.SymbolType.INT;
@@ -841,7 +847,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void SemanticsIfStrategy_Nested_If_Returns_No_Errors() throws SemanticsException {
+    void IfStrategy_Nested_If_Returns_No_Errors() throws SemanticsException {
         Node IfNode = Node.MakeNode(Node.NodeType.If);
         Node ExpressionNode = Node.MakeNode(Node.NodeType.Expression);
         ExpressionNode.DataType = Symbol.SymbolType.BOOL;
@@ -885,236 +891,236 @@ public class SemanticsTester {
 
     //region SemanticsInitiateBlockStrategy tests
     @Test
-    void SemanticsInitiateBlockStrategy_Returns_NoErrors() throws SemanticsException {
+    void InitiateBlockStrategy_Returns_NoErrors() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsInitiateBlockStrategy_Returns_NotPinDeclError() throws SemanticsException {
+    void InitiateBlockStrategy_Returns_NotPinDeclError() throws SemanticsException {
         assert(false);
     }
     //endregion
 
     //region SemanticsInitiateStrategy tests
     @Test
-    void SemanticsInitiateStrategy_Returns_NoErrors() throws SemanticsException {
+    void InitiateStrategy_Returns_NoErrors() throws SemanticsException {
         assert(false);
     }
     //endregion
 
     //region SemanticsIntDeclarationStrategy tests
     @Test
-    void SemanticsIntDeclarationStrategy_Returns_NoErrors() throws SemanticsException {
+    void IntDeclarationStrategy_Returns_NoErrors() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsIntDeclarationStrategy_Returns_WrongTypeError() throws SemanticsException {
+    void IntDeclarationStrategy_Returns_WrongTypeError() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsIntDeclarationStrategy_Returns_AlreadyDeclaredError() throws SemanticsException {
+    void IntDeclarationStrategy_Returns_AlreadyDeclaredError() throws SemanticsException {
         assert(false);
     }
     //endregion
 
     //region SemanticsIntLiteralStrategy tests
     @Test
-    void SemanticsIntLiteralStrategy_Returns_NoErrors() throws SemanticsException {
+    void IntLiteralStrategy_Returns_NoErrors() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsIntLiteralStrategy_Returns_NotMinusPrefixError() throws SemanticsException {
+    void IntLiteralStrategy_Returns_NotMinusPrefixError() throws SemanticsException {
         assert(false);
     }
     //endregion
 
     //region SemanticsListenerBlockStrategy tests
     @Test
-    void SemanticsListenerBlockStrategy_Returns_NoErrors() throws SemanticsException {
+    void ListenerBlockStrategy_Returns_NoErrors() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsListenerBlockStrategy_Returns_IsPinDeclError() throws SemanticsException {
+    void ListenerBlockStrategy_Returns_IsPinDeclError() throws SemanticsException {
         assert(false);
     }
     //endregion
 
     //region SemanticsListenerCallStrategy tests
     @Test
-    void SemanticsListenerCallStrategy_CheckBroadcast_Returns_NoErrors() throws SemanticsException {
+    void ListenerCallStrategy_CheckBroadcast_Returns_NoErrors() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsListenerCallStrategy_CheckBroadcast_Returns_WrongTypeError() throws SemanticsException {
+    void ListenerCallStrategy_CheckBroadcast_Returns_WrongTypeError() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsListenerCallStrategy_CheckBroadcast_Returns_NotDeclaredError() throws SemanticsException {
+    void ListenerCallStrategy_CheckBroadcast_Returns_NotDeclaredError() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsListenerCallStrategy_CheckGetValue_Returns_NoErrors() throws SemanticsException {
+    void ListenerCallStrategy_CheckGetValue_Returns_NoErrors() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsListenerCallStrategy_CheckGetValue_Returns_WrongTypeError() throws SemanticsException {
+    void ListenerCallStrategy_CheckGetValue_Returns_WrongTypeError() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsListenerCallStrategy_CheckGetValue_Returns_PinUnavailableError() throws SemanticsException {
+    void ListenerCallStrategy_CheckGetValue_Returns_PinUnavailableError() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsListenerCallStrategy_CheckGetValue_Returns_NotDeclaredError() throws SemanticsException {
+    void ListenerCallStrategy_CheckGetValue_Returns_NotDeclaredError() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsListenerCallStrategy_CheckFilterNoise_Returns_NoErrors() throws SemanticsException {
+    void ListenerCallStrategy_CheckFilterNoise_Returns_NoErrors() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsListenerCallStrategy_CheckFilterNoise_Returns_WrongTypeError() throws SemanticsException {
+    void ListenerCallStrategy_CheckFilterNoise_Returns_WrongTypeError() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsListenerCallStrategy_CheckFilterNoise_Returns_NotDeclaredError() throws SemanticsException {
+    void ListenerCallStrategy_CheckFilterNoise_Returns_NotDeclaredError() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsListenerCallStrategy_CheckFilterNoise_Returns_PinUnavailableError() throws SemanticsException {
+    void ListenerCallStrategy_CheckFilterNoise_Returns_PinUnavailableError() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsListenerCallStrategy_CheckCreateEvent_Returns_NoErrors() throws SemanticsException {
+    void ListenerCallStrategy_CheckCreateEvent_Returns_NoErrors() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsListenerCallStrategy_CheckCreateEvent_Returns_WrongTypeError() throws SemanticsException {
+    void ListenerCallStrategy_CheckCreateEvent_Returns_WrongTypeError() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsListenerCallStrategy_Returns_IllegalFuncCallError() throws SemanticsException {
+    void ListenerCallStrategy_Returns_IllegalFuncCallError() throws SemanticsException {
         assert(false);
     }
     //endregion
 
     //region SemanticsListenerStrategy tests
     @Test
-    void SemanticsListenerStrategy_Returns_NoErrors() throws SemanticsException {
+    void ListenerStrategy_Returns_NoErrors() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsListenerStrategy_Returns_WrongTypeError() throws SemanticsException {
+    void ListenerStrategy_Returns_WrongTypeError() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsListenerStrategy_Returns_NotDeclaredError() throws SemanticsException {
+    void ListenerStrategy_Returns_NotDeclaredError() throws SemanticsException {
         assert(false);
     }
     //endregion
 
     //region SemanticsMasterInitiateCallStrategy tests
     @Test
-    void SemanticsMasterInitiateCallStrategy_Returns_NoErrors() throws SemanticsException {
+    void MasterInitiateCallStrategy_Returns_NoErrors() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsMasterInitiateCallStrategy_Returns_PinAlreadyUsedError() throws SemanticsException {
+    void MasterInitiateCallStrategy_Returns_PinAlreadyUsedError() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsMasterInitiateCallStrategy_Returns_MasterPinPWMError() throws SemanticsException {
+    void MasterInitiateCallStrategy_Returns_MasterPinPWMError() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsMasterInitiateCallStrategy_Returns_MasterPinNotInputError() throws SemanticsException {
+    void MasterInitiateCallStrategy_Returns_MasterPinNotInputError() throws SemanticsException {
         assert(false);
     }
     //endregion
 
     //region SemanticsMasterStrategy tests
     @Test
-    void SemanticsMasterStrategy_Returns_NoErrors() throws SemanticsException {
+    void MasterStrategy_Returns_NoErrors() throws SemanticsException {
         assert(false);
     }
     //endregion
 
     //region SemanticsPinDeclarationStrategy tests
     @Test
-    void SemanticsPinDeclarationStrategy_Returns_NoErrors() throws SemanticsException {
+    void PinDeclarationStrategy_Returns_NoErrors() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsPinDeclarationStrategy_Returns_IllegalDeclError() throws SemanticsException {
+    void PinDeclarationStrategy_Returns_IllegalDeclError() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsPinDeclarationStrategy_Returns_AlreadyDeclaredError() throws SemanticsException {
+    void PinDeclarationStrategy_Returns_AlreadyDeclaredError() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsPinDeclarationStrategy_Returns_GlobalPinError() throws SemanticsException {
+    void PinDeclarationStrategy_Returns_GlobalPinError() throws SemanticsException {
         assert(false);
     }
     //endregion
 
     //region SemanticsProgStrategy tests
     @Test
-    void SemanticsProgStrategy_Returns_NoErrors() throws SemanticsException {
+    void ProgStrategy_Returns_NoErrors() throws SemanticsException {
         assert(false);
     }
     //endregion
 
     //region SemanticsSlaveInitiateCallStrategy tests
     @Test
-    void SemanticsSlaveInitiateCallStrategy_Returns_NoErrors() throws SemanticsException {
+    void SlaveInitiateCallStrategy_Returns_NoErrors() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsSlaveInitiateCallStrategy_Returns_PinAlreadyUsedError() throws SemanticsException {
+    void SlaveInitiateCallStrategy_Returns_PinAlreadyUsedError() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsSlaveInitiateCallStrategy_Returns_SlavePinNotOutputError() throws SemanticsException {
+    void SlaveInitiateCallStrategy_Returns_SlavePinNotOutputError() throws SemanticsException {
         assert(false);
     }
     //endregion
 
     //region SemanticsSlaveStrategy tests
     @Test
-    void SemanticsSlaveStrategy_Returns_NoErrors() throws SemanticsException {
+    void SlaveStrategy_Returns_NoErrors() throws SemanticsException {
         assert(false);
     }
 
     @Test
-    void SemanticsSlaveStrategy_Returns_AlreadyDeclaredError() throws SemanticsException {
+    void SlaveStrategy_Returns_AlreadyDeclaredError() throws SemanticsException {
         assert(false);
     }
     //endregion
