@@ -12,6 +12,7 @@ public class SemanticsSlaveInitiateCallStrategy extends SemanticsCheckerStrategy
 
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {
+        // The pin is the third parameter, which is the fourth child node
         String pinNumber = node.FirstChild.Next.Next.Next.Value;
 
         if (node.FirstChild.Next.Next.Type == Node.NodeType.Output) {

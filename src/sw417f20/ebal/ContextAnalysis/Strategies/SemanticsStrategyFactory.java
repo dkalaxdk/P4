@@ -5,6 +5,15 @@ import sw417f20.ebal.ContextAnalysis.Symbol;
 
 import java.util.ArrayList;
 
+/**
+ * Factory that creates, saves, and returns instances of SemanticsCheckerStrategy.
+ * If there is no saved instance of the requested Strategy, a new instance is created
+ * and saved to a field.
+ * All subsequent request then returns the instance saved in the field.
+ *
+ * They are saved so that the same instance is always returned rather than creating
+ * another for each call.
+ */
 public class SemanticsStrategyFactory {
 
     public ISymbolTable SymbolTable;
@@ -42,6 +51,13 @@ public class SemanticsStrategyFactory {
     private SemanticsFloatLiteralStrategy floatLiteralStrategy;
     private SemanticsBoolLiteralStrategy boolLiteralStrategy;
 
+    /**
+     *
+     * @param symbolTable Contains symbols and scopes. Is shared between all strategies.
+     * @param usedPinNumbers Pin numbers which are already in use.
+     * @param localEvents
+     * @param broadcastEvents
+     */
     public SemanticsStrategyFactory(ISymbolTable symbolTable, ArrayList<String> usedPinNumbers,
                                     ArrayList<Symbol> localEvents, ArrayList<Symbol> broadcastEvents){
         SymbolTable = symbolTable;

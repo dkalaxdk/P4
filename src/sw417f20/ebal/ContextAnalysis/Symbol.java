@@ -54,7 +54,6 @@ public class Symbol {
 
     @Override
     public String toString(){
-
         return Name + ", " + DataType + ", " + (ReferenceNode == null ? "false" : "true") + ", " + ValueType + ", " + HasBeenInstantiated;
     }
 }

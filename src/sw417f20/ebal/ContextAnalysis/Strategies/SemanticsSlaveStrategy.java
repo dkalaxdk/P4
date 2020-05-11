@@ -8,21 +8,25 @@ public class SemanticsSlaveStrategy extends SemanticsCheckerStrategy {
 
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {
+        // Add slave to symbol table and open new scope
         if (!SymbolTable.DeclaredLocally(node.FirstChild.Value)) {
             SymbolTable.EnterSymbol(node.FirstChild.Value, Symbol.SymbolType.SLAVE);
 
             SymbolTable.OpenScope();
 
+            // Check semantics for variables global to the slave
             Node child = node.FirstChild.Next;
             while (!child.IsEmpty()){
                 child.CheckSemantics();
                 child = child.Next;
             }
 
+            // Check semantics for Initiate
             child = child.Next;
             child.CheckSemantics();
             child = child.Next;
 
+            // Check semantics for EventHandlers
             while (!child.IsEmpty()) {
                 child.CheckSemantics();
                 child = child.Next;

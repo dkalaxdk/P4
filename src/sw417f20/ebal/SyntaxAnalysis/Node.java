@@ -250,7 +250,7 @@ public class Node {
 
     /**
      * Just makes checks for empty nodes shorter.
-     * @return True of the node if of type Empty
+     * @return True if the node is of type Empty
      */
     public boolean IsEmpty() {
         return this.Type == Node.NodeType.Empty;

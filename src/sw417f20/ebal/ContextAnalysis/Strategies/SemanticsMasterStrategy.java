@@ -14,16 +14,19 @@ public class SemanticsMasterStrategy extends SemanticsCheckerStrategy{
     public void CheckSemantics(Node node) throws SemanticsException {
         SymbolTable.OpenScope();
 
+        // Check semantics for variables global to the master
         Node child = node.FirstChild;
         while (!child.IsEmpty()){
             child.CheckSemantics();
             child = child.Next;
         }
 
+        // Check semantics for Initiate
         child = child.Next;
         child.CheckSemantics();
         child = child.Next;
 
+        // Check semantics for listeners
         while (!child.IsEmpty()){
             child.CheckSemantics();
             child = child.Next;

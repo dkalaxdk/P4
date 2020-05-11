@@ -11,7 +11,7 @@ public class SemanticsFloatLiteralStrategy extends SemanticsCheckerStrategy{
         node.DataType = Symbol.SymbolType.FLOAT;
         if (!node.FirstChild.IsEmpty()){
             if (node.FirstChild.Type != Node.NodeType.PrefixMinus){
-                MakeError(node, "Only minus prefix applicable to float data type.");
+                MakeError(node, "Only minus prefix (-) applicable to float data type.");
             }
         }
     }

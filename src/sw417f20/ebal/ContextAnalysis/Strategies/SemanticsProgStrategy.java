@@ -13,7 +13,7 @@ public class SemanticsProgStrategy extends SemanticsCheckerStrategy{
 
             child = child.Next;
             while (!child.IsEmpty()){
-                child. CheckSemantics();
+                child.CheckSemantics();
                 child = child.Next;
             }
 
