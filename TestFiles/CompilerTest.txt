@@ -13,16 +13,9 @@ BEGIN MASTER
         int filteredInput = filterNoise(button1, debounce);
 
         if (filteredInput == HIGH) {
-            event button1Pressed = createEvent(32000);
+            event button1Pressed = createEvent(true);
             broadcast(button1Pressed);
         }
-        int a = 1;
-        float b = 2.3;
-        bool f = true;
-
-        bool q = f;
-
-
     }
 
     Listener (button2) {
@@ -54,7 +47,7 @@ BEGIN SLAVE : Slave1
     }
 
     EventHandler (button1Pressed) {
-        if (getValue(button1Pressed) == 32000) {
+        if (getValue(button1Pressed)) {
             if (getValue(out) == HIGH) {
                 write(out, LOW);
             }
