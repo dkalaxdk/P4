@@ -947,7 +947,17 @@ public class SemanticsTester {
     //region SemanticsInitiateStrategy tests
     @Test
     void InitiateStrategy_Returns_NoErrors() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.MakeNode(Node.NodeType.Initiate));
+        testNode.addStrategy(new SemanticsInitiateStrategy());
+        Node blockNode = Node.MakeNode(Node.NodeType.Block);
+        testNode.addChild(blockNode);
+
+        //Act
+        testNode.node.CheckSemantics();
+
+        //Assert
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
     //endregion
 
