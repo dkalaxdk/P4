@@ -10,7 +10,7 @@ public class SemanticsFloatLiteralStrategy extends SemanticsCheckerStrategy{
     public void CheckSemantics(Node node) throws SemanticsException {
         node.DataType = Symbol.SymbolType.FLOAT;
         // If literal has a prefix, check that it is prefixMinus
-        if (!node.FirstChild.IsEmpty()){
+        if (!node.FirstChild.isEmpty()){
             if (node.FirstChild.Type != Node.NodeType.PrefixMinus){
                 MakeError(node, "Only minus prefix (-) applicable to float data type.");
             }

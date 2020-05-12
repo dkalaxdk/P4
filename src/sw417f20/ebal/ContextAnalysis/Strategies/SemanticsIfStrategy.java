@@ -9,14 +9,14 @@ public class SemanticsIfStrategy extends SemanticsCheckerStrategy{
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {
         // Check semantics for the expression containing the conditions
-        node.FirstChild.CheckSemantics();
+        node.FirstChild.checkSemantics();
         if(node.FirstChild.DataType == Symbol.SymbolType.BOOL){
             // Check semantics for the block of the if statement
-            node.FirstChild.Next.CheckSemantics();
+            node.FirstChild.Next.checkSemantics();
             Node elseStmt = node.FirstChild.Next.Next;
-            if (!elseStmt.IsEmpty()){
+            if (!elseStmt.isEmpty()){
                 // Check semantics for the else statement
-                elseStmt.CheckSemantics();
+                elseStmt.checkSemantics();
             }
         }
         else{

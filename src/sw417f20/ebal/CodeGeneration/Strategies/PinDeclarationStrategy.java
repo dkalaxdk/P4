@@ -1,7 +1,6 @@
 package sw417f20.ebal.CodeGeneration.Strategies;
 
 import sw417f20.ebal.CodeGeneration.Utility.ArduinoBoard;
-import sw417f20.ebal.CodeGeneration.Utility.ArduinoSystem;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class PinDeclarationStrategy extends CodeGenerationStrategy {
@@ -39,9 +38,9 @@ public class PinDeclarationStrategy extends CodeGenerationStrategy {
         board.PinInstantiations
                 .append("\t")
                 .append(pinName).append(".createPin(")
-                .append(pinType.GenerateCode()).append(", ")
-                .append(ioType.GenerateCode()).append(", ")
-                .append(pinNumber.GenerateCode())
+                .append(pinType.generateCode()).append(", ")
+                .append(ioType.generateCode()).append(", ")
+                .append(pinNumber.generateCode())
                 .append(");\n");
 
         // Add the pin to the loop so it's value is constantly updated

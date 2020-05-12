@@ -16,14 +16,14 @@ public class Tokenizer {
 
         token.content += reader.readChar();
 
-        IsSingleCharacter(token);
+        assignSpecialCharacterType(token);
         if (token.type == Token.Type.NOTATOKEN) {
             token.content = reader.findNumber();
-            findNumberTokenType(token);
+            assignNumberTokenType(token);
         }
         if (token.type == Token.Type.NOTATOKEN) {
             token.content = reader.findWord();
-            findKeyword(token);
+            assignKeywordType(token);
         }
 
         if (token.type == Token.Type.NOTATOKEN && token.content.length() >= 1) {
@@ -32,7 +32,7 @@ public class Tokenizer {
         return token;
     }
 
-    public void findKeyword(Token token) {
+    public void assignKeywordType(Token token) {
         switch (token.content) {
             case "MASTER":
                 token.type = Token.Type.MASTER;
@@ -134,11 +134,11 @@ public class Tokenizer {
         }
     }
 
-    public void IsSingleCharacter(Token token) throws IOException {
+    public void assignSpecialCharacterType(Token token) throws IOException {
         if(token.content.length() > 1) {
             return;
         }
-        switch (token.content.charAt(0)) {
+        switch (token.content.charAt(0)) {  //todo Fjern ikke brugte cases
             case '+':
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.OP_PLUS_EQUALS;
@@ -247,7 +247,7 @@ public class Tokenizer {
         }
     }
 
-    public void findNumberTokenType(Token token) {
+    public void assignNumberTokenType(Token token) {
         if (token.content.matches("[0-9]+")) {
             token.type = Token.Type.LIT_Int;
         } else if (token.content.matches("[0-9]+\\.[0-9]*")) {

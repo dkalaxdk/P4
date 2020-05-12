@@ -6,27 +6,27 @@ import sw417f20.ebal.Printers.ASTPrinter;
 import java.io.IOException;
 
 public abstract class RecursiveDescent {
-    private Scanner PScanner;
+    private Scanner scanner;
     private String currentFile;
 
     public RecursiveDescent(Scanner scanner, String file) {
-        PScanner = scanner;
+        this.scanner = scanner;
         currentFile = file;
     }
 
 
-    public Node Parse(boolean debug) throws SyntaxException {
-        if (PScanner == null) {
+    public Node parse(boolean debug) throws SyntaxException {
+        if (scanner == null) {
             return null;
         }
 
         // Parse the input file
         System.out.println("Parsing: " + currentFile);
         Node root = Start();
-        Expect(Token.Type.EOF);
+        expect(Token.Type.EOF);
 
         if (debug) {
-            PrintTree(root);
+            printTree(root);
         }
 
         System.out.println("======== Parse successful ========");
@@ -37,19 +37,19 @@ public abstract class RecursiveDescent {
 
     protected abstract Node Start() throws SyntaxException;
 
-    protected Token Peek() {
-        return PScanner.Peek();
+    protected Token peek() {
+        return scanner.peek();
     }
 
-    protected Token Expect(Token.Type t) throws SyntaxException {
-        Token token = Peek();
+    protected Token expect(Token.Type t) throws SyntaxException {
+        Token token = peek();
 
         if (token.type != t) {
-            MakeError("Expected [" + t + "]");
+            makeError("Expected [" + t + "]");
         }
 
         try {
-            PScanner.Advance();
+            scanner.advance();
         }
         catch (IOException e) {
             System.err.println(e);
@@ -58,18 +58,18 @@ public abstract class RecursiveDescent {
         return token;
     }
 
-    protected void MakeError(String message) throws SyntaxException {
+    protected void makeError(String message) throws SyntaxException {
         throw new SyntaxException(message +
-                            " on line: " + PScanner.nextToken.lineNumber +
-                            " : " + PScanner.nextToken.offSet + ". Got [" + PScanner.nextToken.type + "] with content \"" + PScanner.nextToken.content + "\" "); /*+
-                            "(Current is [" + PScanner.currentToken.type + "] with content \"" + PScanner.currentToken.content + "\" ) \n");*/
+                            " on line: " + scanner.nextToken.lineNumber +
+                            " : " + scanner.nextToken.offSet +
+                            ". Got [" + scanner.nextToken.type + "] with content \"" + scanner.nextToken.content + "\" ");
     }
 
     protected int getLineNumber() {
-        return PScanner.reader.currentLine;
+        return scanner.reader.currentLine;
     }
 
-    private void PrintTree(Node tree) {
+    private void printTree(Node tree) {
         ASTPrinter ASTPrinter = new ASTPrinter();
         ASTPrinter.Visit(tree);
     }

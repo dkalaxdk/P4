@@ -1,6 +1,5 @@
 package sw417f20.ebal.CodeGeneration.Strategies;
 
-import sw417f20.ebal.CodeGeneration.Utility.ArduinoSystem;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class WriteStrategy extends CodeGenerationStrategy {
@@ -8,7 +7,7 @@ public class WriteStrategy extends CodeGenerationStrategy {
     public String GenerateCode(Node node) {
 
         String pinName = node.Next.Value;
-        String value = node.Next.Next.GenerateCode();
+        String value = node.Next.Next.generateCode();
 
         return addIndent(arduinoSystem.Indent) + pinName + ".write(" + value + ");\n";
     }

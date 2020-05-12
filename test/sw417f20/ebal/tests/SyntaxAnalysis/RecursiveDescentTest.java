@@ -3,7 +3,6 @@ package sw417f20.ebal.tests.SyntaxAnalysis;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import sw417f20.ebal.Exceptions.SyntaxException;
 import sw417f20.ebal.SyntaxAnalysis.*;
 
@@ -26,7 +25,7 @@ class RecursiveDescentTest {
 
         try {
             // Act
-            Node ast = parser.Parse(false);
+            Node ast = parser.parse(false);
 
             // Assert
             assertNull(ast);

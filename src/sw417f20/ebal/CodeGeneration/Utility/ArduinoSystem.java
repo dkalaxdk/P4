@@ -28,7 +28,7 @@ public class ArduinoSystem {
      * Generate code for the system
      */
     public void Generate() {
-        root.GenerateCode();
+        root.generateCode();
     }
 
     /**
@@ -55,7 +55,7 @@ public class ArduinoSystem {
         Node slaves = root.FirstChild.Next;
         int counter = 0;
 
-        while (!slaves.IsEmpty()) {
+        while (!slaves.isEmpty()) {
             SlaveList.add(new Slave(slaves.FirstChild.Value, counter++));
             slaves = slaves.Next;
         }
@@ -68,7 +68,7 @@ public class ArduinoSystem {
         int eventCounter = 0;
         int slaveCounter = 0;
 
-        while (!slaves.IsEmpty()) {
+        while (!slaves.isEmpty()) {
 
             Node eventHandlers = slaves.FirstChild;
 
@@ -80,7 +80,7 @@ public class ArduinoSystem {
             // Skip past Initiate
             eventHandlers = eventHandlers.Next;
 
-            while (!eventHandlers.IsEmpty()) {
+            while (!eventHandlers.isEmpty()) {
                 String eventName = eventHandlers.FirstChild.Value;
                 Event n = EventMap.get(eventName);
 

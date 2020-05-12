@@ -27,7 +27,7 @@ public class SemanticsEventHandlerCallStrategy extends SemanticsCheckerStrategy{
         if (pinParameter != null) {
             // Check semantics for pin and integer parameter
             if (pinParameter.DataType == Symbol.SymbolType.PIN) {
-                intParameter.CheckSemantics();
+                intParameter.checkSemantics();
                 if (intParameter.DataType == Symbol.SymbolType.INT) {
                     node.DataType = Symbol.SymbolType.VOID;
                 }

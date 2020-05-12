@@ -13,8 +13,8 @@ public class SemanticsBoolDeclarationStrategy extends SemanticsCheckerStrategy{
         // Check if identifier has already been declared
         if (!SymbolTable.DeclaredLocally(node.FirstChild.Value)){
             Node expression = node.FirstChild.Next;
-            if (!expression.IsEmpty()) {
-                expression.CheckSemantics();
+            if (!expression.isEmpty()) {
+                expression.checkSemantics();
                 hasBeenInstantiated = true;
                 if (expression.DataType != Symbol.SymbolType.BOOL){
                     MakeError(node, "Expression", ErrorType.WrongType);

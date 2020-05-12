@@ -14,8 +14,8 @@ public class SemanticsFloatDeclarationStrategy extends SemanticsCheckerStrategy{
         if (!SymbolTable.DeclaredLocally(node.FirstChild.Value)){
             Node expression = node.FirstChild.Next;
             // Check semantics for the expression
-            if (!expression.IsEmpty()) {
-                expression.CheckSemantics();
+            if (!expression.isEmpty()) {
+                expression.checkSemantics();
                 hasBeenInstantiated = true;
                 // Check that expression has correct type
                 if (expression.DataType != Symbol.SymbolType.FLOAT && expression.DataType != Symbol.SymbolType.INT){

@@ -1,6 +1,5 @@
 package sw417f20.ebal.CodeGeneration.Strategies;
 
-import sw417f20.ebal.CodeGeneration.Utility.ArduinoSystem;
 import sw417f20.ebal.CodeGeneration.Utility.Event;
 import sw417f20.ebal.CodeGeneration.Utility.Slave;
 import sw417f20.ebal.SyntaxAnalysis.Node;
@@ -22,7 +21,7 @@ public class EventHandlerStrategy extends CodeGenerationStrategy {
         String eventHandlerName = eventName + "EventHandler" + slave.EventHandlerCount++;
 
         // Generate code for the EventHandler's block
-        String block = node.FirstChild.Next.GenerateCode();
+        String block = node.FirstChild.Next.generateCode();
 
         // Add the EventHandler to the slave's list of EventHandlers with the correct signature
         slave.EventHandlers

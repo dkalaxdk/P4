@@ -18,8 +18,8 @@ public class SemanticsExpressionStrategy extends SemanticsCheckerStrategy{
         SecondOperand = node.FirstChild.Next.Next;
 
         // Check semantics for operands
-        FirstOperand.CheckSemantics();
-        SecondOperand.CheckSemantics();
+        FirstOperand.checkSemantics();
+        SecondOperand.checkSemantics();
 
         if (FirstOperand.DataType != Symbol.SymbolType.PIN &&
             FirstOperand.DataType != Symbol.SymbolType.EVENT &&

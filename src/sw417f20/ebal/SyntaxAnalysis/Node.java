@@ -1,6 +1,5 @@
 package sw417f20.ebal.SyntaxAnalysis;
 
-import sw417f20.ebal.CodeGeneration.Utility.ArduinoSystem;
 import sw417f20.ebal.ContextAnalysis.Strategies.SemanticsCheckerStrategy;
 import sw417f20.ebal.ContextAnalysis.Symbol;
 
@@ -31,7 +30,6 @@ public class Node {
     // Reference to this node's parent.
     public Node Parent;
 
-    // TODO: Make private?
     public SemanticsCheckerStrategy SemanticsCheckerStrategy;
     public CodeGenerationStrategy CodeGenerationStrategy;
 
@@ -57,7 +55,7 @@ public class Node {
         this.LineNumber = lineNumber;
     }
 
-    public static Node MakeNode(Token token, int lineNumber) {
+    public static Node makeNode(Token token, int lineNumber) {
 
         switch (token.type) {
             case IDENTIFIER:
@@ -77,15 +75,15 @@ public class Node {
         }
     }
 
-    public static Node MakeNode(NodeType nodeType) {
+    public static Node makeNode(NodeType nodeType) {
         return new Node(nodeType);
     }
 
-    public static Node MakeNode(NodeType nodeType, int lineNumber) {
+    public static Node makeNode(NodeType nodeType, int lineNumber) {
         return new Node(nodeType, lineNumber);
     }
 
-    public static Node MakeNode(NodeType nodeType, Token token) {
+    public static Node makeNode(NodeType nodeType, Token token) {
         return new Node(nodeType, token);
     }
 
@@ -102,7 +100,7 @@ public class Node {
      * this node's first child.
      * @param child The node that is added to this node's list of children
      */
-    public void AddChild(Node child) {
+    public void addChild(Node child) {
 
         // If the input child is null, do nothing
         if (child == null) {
@@ -112,7 +110,7 @@ public class Node {
         // If this node already has a child,
         // make the input child a sibling of the first child
         if (this.FirstChild != null) {
-            this.FirstChild.MakeSiblings(child);
+            this.FirstChild.makeSiblings(child);
         }
         // Otherwise, it is the first child of this node
         else {
@@ -146,7 +144,7 @@ public class Node {
      * and making the sibling of the input node, this node's siblings
      * @param otherNode The node that is to be made siblings with this node
      */
-    public void MakeSiblings(Node otherNode) {
+    public void makeSiblings(Node otherNode) {
 
         // If the input node is null, do nothing
         if (otherNode == null) {
@@ -159,7 +157,7 @@ public class Node {
         }
 
         // Get a reference to this node's list of siblings
-        Node mySiblings = this;
+        Node mySiblings = this; //todo Maybe firstsibling?
 
         // Get to the end of this node's list of siblings
         while (mySiblings.Next != null) {
@@ -252,14 +250,14 @@ public class Node {
      * Just makes checks for empty nodes shorter.
      * @return True if the node is of type Empty
      */
-    public boolean IsEmpty() {
+    public boolean isEmpty() {
         return this.Type == Node.NodeType.Empty;
     }
 
     // Calls the provided semantics checker strategy.
     // Is the common interface for semantics checking.
-    public void CheckSemantics() throws SemanticsException {
-        if(SemanticsCheckerStrategy != null) {
+    public void checkSemantics() throws SemanticsException {
+        if (SemanticsCheckerStrategy != null) {
             SemanticsCheckerStrategy.CheckSemantics(this);
         } else {
             throw new NullPointerException("Semantics strategy not defined");
@@ -268,8 +266,8 @@ public class Node {
 
     // Calls the provided codeGen strategy, and returns the result.
     // Is the common interface for code generation.
-    public String GenerateCode() {
-        if(CodeGenerationStrategy != null) {
+    public String generateCode() {
+        if (CodeGenerationStrategy != null) {
             return CodeGenerationStrategy.GenerateCode(this);
         }
         else {

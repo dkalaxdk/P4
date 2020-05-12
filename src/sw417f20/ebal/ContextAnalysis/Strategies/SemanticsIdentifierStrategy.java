@@ -15,7 +15,7 @@ public class SemanticsIdentifierStrategy extends SemanticsCheckerStrategy{
             if (identifier.HasBeenInstantiated){
                 node.DataType = identifier.DataType;
                 // Check for prefix
-                if (!node.FirstChild.IsEmpty()){
+                if (!node.FirstChild.isEmpty()){
                     // Check that prefix is correct for the type of the identifier
                     if (node.FirstChild.Type == Node.NodeType.PrefixMinus && node.DataType == Symbol.SymbolType.BOOL){
                         MakeError(node, "Minus prefix (-) not applicable to boolean data type.");

@@ -161,7 +161,7 @@ public class CodeGenerationStrategyAssigner extends Visitor {
 
         child = child.Next;
 
-        while (child != null && !child.IsEmpty()) {
+        while (child != null && !child.isEmpty()) {
             AssignStrategySlave(child);
             child = child.Next;
         }
@@ -176,7 +176,7 @@ public class CodeGenerationStrategyAssigner extends Visitor {
 
         child = child.Next;
 
-        while (child != null && !child.IsEmpty()) {
+        while (child != null && !child.isEmpty()) {
             AssignStrategyListener(child);
             child = child.Next;
         }
@@ -199,7 +199,7 @@ public class CodeGenerationStrategyAssigner extends Visitor {
 
         child = child.Next;
 
-        while (child != null && !child.IsEmpty()) {
+        while (child != null && !child.isEmpty()) {
             AssignStrategyEventHandler(child);
             child = child.Next;
         }
@@ -226,7 +226,7 @@ public class CodeGenerationStrategyAssigner extends Visitor {
 
         Node child = node.FirstChild;
 
-        while (child != null && !child.IsEmpty()) {
+        while (child != null && !child.isEmpty()) {
             switch (child.Type){
                 case BoolDeclaration:
                 case IntDeclaration:
@@ -271,7 +271,7 @@ public class CodeGenerationStrategyAssigner extends Visitor {
 
         AssignStrategy(node.FirstChild, strategies.GetIdentifierStrategy());
 
-        if (node.FirstChild.Next != null && !node.FirstChild.Next.IsEmpty()) {
+        if (node.FirstChild.Next != null && !node.FirstChild.Next.isEmpty()) {
             AssignStrategyExpression(node.FirstChild.Next);
         }
     }

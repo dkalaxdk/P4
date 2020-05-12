@@ -33,7 +33,7 @@ class ScannerTest {
         Mockito.when(mockReader.read()).thenReturn((int) 'M', (int) 'A', (int) 'S', (int) 'T', (int) 'E', (int) 'R', (int) ' ');
         Reader reader = new Reader(mockReader);
         Scanner scanner = new Scanner(reader);
-        Token actual = scanner.Peek();
+        Token actual = scanner.peek();
 
         assertEquals(expected, actual);
     }
@@ -47,9 +47,9 @@ class ScannerTest {
                 , (int) 'n', (int) 't', (int) ' ');
         Reader reader = new Reader(mockReader);
         Scanner scanner = new Scanner(reader);
-        Token first = scanner.Peek();
-        scanner.Advance();
-        Token last = scanner.Peek();
+        Token first = scanner.peek();
+        scanner.advance();
+        Token last = scanner.peek();
 
         assertNotEquals(first, last);
     }

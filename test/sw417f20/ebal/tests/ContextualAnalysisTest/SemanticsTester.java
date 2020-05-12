@@ -10,7 +10,6 @@ import sw417f20.ebal.ContextAnalysis.Symbol;
 import sw417f20.ebal.Exceptions.SemanticsException;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class SemanticsTester {
@@ -60,7 +59,7 @@ public class SemanticsTester {
     }
 
     private TestNode setupAssignmentNodeWithoutSymbols(Symbol.SymbolType expressionType, Symbol.SymbolType identifierType) {
-        Node AssignmentNode = Node.MakeNode(Node.NodeType.Assignment);
+        Node AssignmentNode = Node.makeNode(Node.NodeType.Assignment);
 
         SemanticsAssignmentStrategy assignmentStrategy = new SemanticsAssignmentStrategy();
 
@@ -75,7 +74,7 @@ public class SemanticsTester {
     }
 
     private TestNode setupBoolDeclNodeWithoutSymbols(Symbol.SymbolType expressionType, Symbol.SymbolType identifierType) {
-        Node DeclarationNode = Node.MakeNode(Node.NodeType.BoolDeclaration);
+        Node DeclarationNode = Node.makeNode(Node.NodeType.BoolDeclaration);
 
         SemanticsBoolDeclarationStrategy boolDeclarationStrategy = new SemanticsBoolDeclarationStrategy();
         TestNode testNode = setupNode(DeclarationNode, boolDeclarationStrategy);
@@ -92,7 +91,7 @@ public class SemanticsTester {
     }
 
     private TestNode setupBoolLiteralNode(Node prefixNode) {
-        Node BoolNode = Node.MakeNode(Node.NodeType.BoolDeclaration);
+        Node BoolNode = Node.makeNode(Node.NodeType.BoolDeclaration);
         SemanticsBoolLiteralStrategy boolLiteralStrategy = new SemanticsBoolLiteralStrategy();
 
         TestNode testNode = setupNode(BoolNode, boolLiteralStrategy);
@@ -102,7 +101,7 @@ public class SemanticsTester {
     }
 
     private TestNode setupEventDeclNode() {
-        Node DeclarationNode = Node.MakeNode(Node.NodeType.EventDeclaration);
+        Node DeclarationNode = Node.makeNode(Node.NodeType.EventDeclaration);
         SemanticsEventDeclarationStrategy eventDeclarationStrategy = new SemanticsEventDeclarationStrategy();
         eventDeclarationStrategy.LocalEvents = new ArrayList<Symbol>();
 
@@ -124,7 +123,7 @@ public class SemanticsTester {
     }
 
     private Node createNode(Node.NodeType nodeType, Symbol.SymbolType dataType) {
-        Node node = Node.MakeNode(nodeType);
+        Node node = Node.makeNode(nodeType);
         node.DataType = dataType;
         return node;
     }
@@ -139,7 +138,7 @@ public class SemanticsTester {
     void AssignmentStrategy_TypeInt_Returns_NoErrorsThrown() throws SemanticsException {
         TestNode AssignmentNode = setupAssignmentNodeWithSymbols(Symbol.SymbolType.INT, Symbol.SymbolType.INT);
 
-        AssignmentNode.node.CheckSemantics();
+        AssignmentNode.node.checkSemantics();
 
         Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
@@ -148,7 +147,7 @@ public class SemanticsTester {
     void AssignmentStrategy_TypeFloat_Returns_NoErrorsThrown() throws SemanticsException {
         TestNode AssignmentNode = setupAssignmentNodeWithSymbols(Symbol.SymbolType.FLOAT, Symbol.SymbolType.FLOAT);
 
-        AssignmentNode.node.CheckSemantics();
+        AssignmentNode.node.checkSemantics();
 
         Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
@@ -157,7 +156,7 @@ public class SemanticsTester {
     void AssignmentStrategy_TypeBool_Returns_NoErrorsThrown() throws SemanticsException {
         TestNode AssignmentNode = setupAssignmentNodeWithSymbols(Symbol.SymbolType.BOOL, Symbol.SymbolType.BOOL);
 
-        AssignmentNode.node.CheckSemantics();
+        AssignmentNode.node.checkSemantics();
 
         Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
@@ -169,7 +168,7 @@ public class SemanticsTester {
 
         TestNode AssignmentNode = setupAssignmentNodeWithSymbols(Symbol.SymbolType.INT, Symbol.SymbolType.BOOL);
 
-        Exception exception = Assertions.assertThrows(SemanticsException.class, AssignmentNode.node::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, AssignmentNode.node::checkSemantics);
 
         Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
@@ -182,7 +181,7 @@ public class SemanticsTester {
         TestNode AssignmentNode = setupAssignmentNodeWithoutSymbols(Symbol.SymbolType.INT, Symbol.SymbolType.INT);
 
         //In this test, the symbol has not been added to the symbol table, and therefor it should fail.
-        Exception exception = Assertions.assertThrows(SemanticsException.class, AssignmentNode.node::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, AssignmentNode.node::checkSemantics);
 
         Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
@@ -193,7 +192,7 @@ public class SemanticsTester {
     void BoolDeclarationStrategy_Correct_Returns_NoErrors() throws SemanticsException {
         TestNode DeclarationNode = setupBoolDeclNodeWithoutSymbols(Symbol.SymbolType.BOOL, Symbol.SymbolType.BOOL);
 
-        DeclarationNode.node.CheckSemantics();
+        DeclarationNode.node.checkSemantics();
 
         Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
@@ -208,7 +207,7 @@ public class SemanticsTester {
         // Add identifier (which is the first child) to symbolTable
         DeclarationNode.addSymbol(DeclarationNode.node.FirstChild);
 
-        Exception exception = Assertions.assertThrows(SemanticsException.class, DeclarationNode.node::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, DeclarationNode.node::checkSemantics);
 
         Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
@@ -220,7 +219,7 @@ public class SemanticsTester {
 
         TestNode DeclarationNode = setupBoolDeclNodeWithoutSymbols(Symbol.SymbolType.INT, Symbol.SymbolType.BOOL);
 
-        Exception exception = Assertions.assertThrows(SemanticsException.class, DeclarationNode.node::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, DeclarationNode.node::checkSemantics);
         Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
     //endregion
@@ -233,7 +232,7 @@ public class SemanticsTester {
 
         TestNode BoolNode = setupBoolLiteralNode(PrefixNode);
 
-        BoolNode.node.CheckSemantics();
+        BoolNode.node.checkSemantics();
         Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
 
@@ -244,7 +243,7 @@ public class SemanticsTester {
 
         TestNode BoolNode = setupBoolLiteralNode(PrefixNode);
 
-        BoolNode.node.CheckSemantics();
+        BoolNode.node.checkSemantics();
         Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
 
@@ -258,7 +257,7 @@ public class SemanticsTester {
 
         TestNode BoolNode = setupBoolLiteralNode(PrefixNode);
 
-        Exception exception = Assertions.assertThrows(SemanticsException.class, BoolNode.node::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, BoolNode.node::checkSemantics);
         Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
     //endregion
@@ -268,10 +267,10 @@ public class SemanticsTester {
     void EventDeclaration_Correct_Returns_NoErrors() throws SemanticsException {
         TestNode DeclarationNode = setupEventDeclNode();
 
-        Node ExpressionNode = Node.MakeNode(Node.NodeType.Call);
-        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
-        Node CreateEventNode = Node.MakeNode(Node.NodeType.CreateEvent);
-        Node ExpressionChild = Node.MakeNode(Node.NodeType.Expression);
+        Node ExpressionNode = Node.makeNode(Node.NodeType.Call);
+        Node IdentifierNode = Node.makeNode(Node.NodeType.Identifier);
+        Node CreateEventNode = Node.makeNode(Node.NodeType.CreateEvent);
+        Node ExpressionChild = Node.makeNode(Node.NodeType.Expression);
 
         ExpressionNode.FirstChild = CreateEventNode;
         ExpressionNode.FirstChild.Next = ExpressionChild;
@@ -280,18 +279,18 @@ public class SemanticsTester {
         DeclarationNode.addChild(IdentifierNode);
         DeclarationNode.addChild(ExpressionNode);
 
-        DeclarationNode.node.CheckSemantics();
+        DeclarationNode.node.checkSemantics();
 
         Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
 
     @Test
     void EventDeclaration_InCorrect_Returns_AlreadyDeclared() {
-        Node DeclarationNode = Node.MakeNode(Node.NodeType.EventDeclaration);
-        Node ExpressionNode = Node.MakeNode(Node.NodeType.Call);
-        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
-        Node CreateEventNode = Node.MakeNode(Node.NodeType.CreateEvent);
-        Node ExpressionChild = Node.MakeNode(Node.NodeType.Expression);
+        Node DeclarationNode = Node.makeNode(Node.NodeType.EventDeclaration);
+        Node ExpressionNode = Node.makeNode(Node.NodeType.Call);
+        Node IdentifierNode = Node.makeNode(Node.NodeType.Identifier);
+        Node CreateEventNode = Node.makeNode(Node.NodeType.CreateEvent);
+        Node ExpressionChild = Node.makeNode(Node.NodeType.Expression);
 
         //The string expected as return from the error
         String errorString = "already been declared";
@@ -315,7 +314,7 @@ public class SemanticsTester {
 
         DeclarationNode.SemanticsCheckerStrategy = eventDeclarationStrategy;
 
-        Exception exception = Assertions.assertThrows(SemanticsException.class, DeclarationNode::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, DeclarationNode::checkSemantics);
         Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
 
@@ -326,10 +325,10 @@ public class SemanticsTester {
 
         TestNode DeclarationNode = setupEventDeclNode();
 
-        Node ExpressionNode = Node.MakeNode(Node.NodeType.Identifier);
-        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
-        Node CreateEventNode = Node.MakeNode(Node.NodeType.CreateEvent);
-        Node ExpressionChild = Node.MakeNode(Node.NodeType.Expression);
+        Node ExpressionNode = Node.makeNode(Node.NodeType.Identifier);
+        Node IdentifierNode = Node.makeNode(Node.NodeType.Identifier);
+        Node CreateEventNode = Node.makeNode(Node.NodeType.CreateEvent);
+        Node ExpressionChild = Node.makeNode(Node.NodeType.Expression);
 
         ExpressionNode.FirstChild = CreateEventNode;
         ExpressionNode.FirstChild.Next = ExpressionChild;
@@ -338,7 +337,7 @@ public class SemanticsTester {
         DeclarationNode.addChild(IdentifierNode);
         DeclarationNode.addChild(ExpressionNode);
 
-        Exception exception = Assertions.assertThrows(SemanticsException.class, DeclarationNode.node::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, DeclarationNode.node::checkSemantics);
         Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
     //endregion
@@ -347,16 +346,16 @@ public class SemanticsTester {
     @Test
     void EventHandlerBlockStrategy_Returns_No_Errors() throws SemanticsException {
         // TODO: Refactor by creating setupEventHandler
-        Node EventHandlerNode = Node.MakeNode(Node.NodeType.EventHandler);
+        Node EventHandlerNode = Node.makeNode(Node.NodeType.EventHandler);
         SemanticsEventHandlerBlockStrategy eventDeclarationStrategy = new SemanticsEventHandlerBlockStrategy();
 
         TestNode testNode = setupNode(EventHandlerNode, eventDeclarationStrategy);
 
-        Node BlockNode = Node.MakeNode(Node.NodeType.Block);
+        Node BlockNode = Node.makeNode(Node.NodeType.Block);
         testNode.addChild(BlockNode);
         BlockNode.SemanticsCheckerStrategy = new FakeStrategy();
 
-        EventHandlerNode.CheckSemantics();
+        EventHandlerNode.checkSemantics();
 
         Assertions.assertDoesNotThrow(SemanticsTester::new);
 
@@ -364,8 +363,8 @@ public class SemanticsTester {
 
     @Test
     void EventHandlerBlockStrategy_Returns_WrongDeclarations_PinDecl() {
-        Node EventHandlerNode = Node.MakeNode(Node.NodeType.EventHandler);
-        Node BlockNode = Node.MakeNode(Node.NodeType.PinDeclaration);
+        Node EventHandlerNode = Node.makeNode(Node.NodeType.EventHandler);
+        Node BlockNode = Node.makeNode(Node.NodeType.PinDeclaration);
 
         //The string expected as return from the error
         String errorString = "No pin or event";
@@ -381,14 +380,14 @@ public class SemanticsTester {
         EventHandlerNode.SemanticsCheckerStrategy = eventDeclarationStrategy;
 
 
-        Exception exception = Assertions.assertThrows(SemanticsException.class, EventHandlerNode::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, EventHandlerNode::checkSemantics);
         Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
 
     @Test
     void EventHandlerBlockStrategy_Returns_WrongDeclarations_EventDecl() {
-        Node EventHandlerNode = Node.MakeNode(Node.NodeType.EventHandler);
-        Node BlockNode = Node.MakeNode(Node.NodeType.EventDeclaration);
+        Node EventHandlerNode = Node.makeNode(Node.NodeType.EventHandler);
+        Node BlockNode = Node.makeNode(Node.NodeType.EventDeclaration);
 
         //The string expected as return from the error
         String errorString = "No pin or event";
@@ -402,7 +401,7 @@ public class SemanticsTester {
 
         EventHandlerNode.SemanticsCheckerStrategy = eventDeclarationStrategy;
 
-        Exception exception = Assertions.assertThrows(SemanticsException.class, EventHandlerNode::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, EventHandlerNode::checkSemantics);
         Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
     //endregion
@@ -410,9 +409,9 @@ public class SemanticsTester {
     //region EventHandlerCallStrategy tests
     @Test
     void EventHandlerCallStrategy_Returns_NoErrors() {
-        Node EventHandlerNode = Node.MakeNode(Node.NodeType.EventHandler);
-        Node WriteNode = Node.MakeNode(Node.NodeType.Write);
-        Node PinParameters = Node.MakeNode(Node.NodeType.Expression);
+        Node EventHandlerNode = Node.makeNode(Node.NodeType.EventHandler);
+        Node WriteNode = Node.makeNode(Node.NodeType.Write);
+        Node PinParameters = Node.makeNode(Node.NodeType.Expression);
 
         //The string expected as return from the error
         String errorString = "No pin or event";
@@ -426,7 +425,7 @@ public class SemanticsTester {
 
         EventHandlerNode.SemanticsCheckerStrategy = eventDeclarationStrategy;
 
-        Exception exception = Assertions.assertThrows(SemanticsException.class, EventHandlerNode::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, EventHandlerNode::checkSemantics);
         Assertions.assertTrue(exception.getMessage().contains(errorString));
 
     }
@@ -435,9 +434,9 @@ public class SemanticsTester {
     //region FloatDeclarationStrategy tests
     @Test
     void FloatDeclarationStrategy_Returns_NoErrors() throws SemanticsException {
-        Node FloatDeclaration = Node.MakeNode(Node.NodeType.FloatDeclaration);
-        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
-        Node FloatNode = Node.MakeNode(Node.NodeType.FloatLiteral);
+        Node FloatDeclaration = Node.makeNode(Node.NodeType.FloatDeclaration);
+        Node IdentifierNode = Node.makeNode(Node.NodeType.Identifier);
+        Node FloatNode = Node.makeNode(Node.NodeType.FloatLiteral);
 
 
         IdentifierNode.SemanticsCheckerStrategy = new FakeStrategy();
@@ -454,16 +453,16 @@ public class SemanticsTester {
 
         FloatDeclaration.SemanticsCheckerStrategy = floatDeclarationStrategy;
 
-        FloatDeclaration.CheckSemantics();
+        FloatDeclaration.checkSemantics();
 
         Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
 
     @Test
     void FloatDeclarationStrategy_Returns_WrongType() {
-        Node FloatDeclaration = Node.MakeNode(Node.NodeType.FloatDeclaration);
-        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
-        Node FloatNode = Node.MakeNode(Node.NodeType.FloatLiteral);
+        Node FloatDeclaration = Node.makeNode(Node.NodeType.FloatDeclaration);
+        Node IdentifierNode = Node.makeNode(Node.NodeType.Identifier);
+        Node FloatNode = Node.makeNode(Node.NodeType.FloatLiteral);
 
         // The string expected as return from the error
         String errorString = "wrong type";
@@ -482,15 +481,15 @@ public class SemanticsTester {
 
         FloatDeclaration.SemanticsCheckerStrategy = floatDeclarationStrategy;
 
-        Exception exception = Assertions.assertThrows(SemanticsException.class, FloatDeclaration::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, FloatDeclaration::checkSemantics);
         Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
 
     @Test
     void FloatDeclarationStrategy_Returns_Already_Declared() {
-        Node FloatDeclaration = Node.MakeNode(Node.NodeType.FloatDeclaration);
-        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
-        Node FloatNode = Node.MakeNode(Node.NodeType.FloatLiteral);
+        Node FloatDeclaration = Node.makeNode(Node.NodeType.FloatDeclaration);
+        Node IdentifierNode = Node.makeNode(Node.NodeType.Identifier);
+        Node FloatNode = Node.makeNode(Node.NodeType.FloatLiteral);
 
         // The string expected as return from the error
         String errorString = "already been declared";
@@ -512,7 +511,7 @@ public class SemanticsTester {
 
         floatDeclarationStrategy.SymbolTable.EnterSymbol(FloatDeclaration.FirstChild.Value, FloatDeclaration.FirstChild.DataType);
 
-        Exception exception = Assertions.assertThrows(SemanticsException.class, FloatDeclaration::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, FloatDeclaration::checkSemantics);
         Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
     //endregion
@@ -520,8 +519,8 @@ public class SemanticsTester {
     //region FloatLiteralStrategy tests
     @Test
     void FloatLiteralStrategy_No_Prefix_Returns_No_Errors() throws SemanticsException {
-        Node FloatNode = Node.MakeNode(Node.NodeType.FloatLiteral);
-        Node PrefixNode = Node.MakeNode(Node.NodeType.Block);
+        Node FloatNode = Node.makeNode(Node.NodeType.FloatLiteral);
+        Node PrefixNode = Node.makeNode(Node.NodeType.Block);
 
         PrefixNode.SemanticsCheckerStrategy = new FakeStrategy();
 
@@ -539,7 +538,7 @@ public class SemanticsTester {
         floatLiteralStrategy.SymbolTable.EnterSymbol(FloatNode.FirstChild.Value, FloatNode.FirstChild.DataType);
 
 
-        FloatNode.CheckSemantics();
+        FloatNode.checkSemantics();
 
         Assertions.assertDoesNotThrow(SemanticsTester::new);
 
@@ -547,8 +546,8 @@ public class SemanticsTester {
 
     @Test
     void FloatLiteralStrategy_Correct_Prefix_Returns_No_Errors() throws SemanticsException {
-        Node FloatNode = Node.MakeNode(Node.NodeType.FloatLiteral);
-        Node PrefixNode = Node.MakeNode(Node.NodeType.Block);
+        Node FloatNode = Node.makeNode(Node.NodeType.FloatLiteral);
+        Node PrefixNode = Node.makeNode(Node.NodeType.Block);
 
         PrefixNode.SemanticsCheckerStrategy = new FakeStrategy();
 
@@ -566,7 +565,7 @@ public class SemanticsTester {
         floatLiteralStrategy.SymbolTable.EnterSymbol(FloatNode.FirstChild.Value, FloatNode.FirstChild.DataType);
 
 
-        FloatNode.CheckSemantics();
+        FloatNode.checkSemantics();
 
         Assertions.assertDoesNotThrow(SemanticsTester::new);
 
@@ -574,8 +573,8 @@ public class SemanticsTester {
 
     @Test
     void FloatLiteralStrategy_Wrong_Prefix_Returns_Wrong_Prefix() {
-        Node FloatNode = Node.MakeNode(Node.NodeType.FloatLiteral);
-        Node PrefixNode = Node.MakeNode(Node.NodeType.Block);
+        Node FloatNode = Node.makeNode(Node.NodeType.FloatLiteral);
+        Node PrefixNode = Node.makeNode(Node.NodeType.Block);
 
         // The string expected as return from the error
         String errorString = "Only minus prefix";
@@ -596,7 +595,7 @@ public class SemanticsTester {
         floatLiteralStrategy.SymbolTable.EnterSymbol(FloatNode.FirstChild.Value, FloatNode.FirstChild.DataType);
 
 
-        Exception exception = Assertions.assertThrows(SemanticsException.class, FloatNode::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, FloatNode::checkSemantics);
         Assertions.assertTrue(exception.getMessage().contains(errorString));
 
     }
@@ -605,9 +604,9 @@ public class SemanticsTester {
     //region IdentifierStrategy tests
     @Test
     void IdentifierStrategy_No_Prefix_Returns_No_Errors() throws SemanticsException {
-        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
+        Node IdentifierNode = Node.makeNode(Node.NodeType.Identifier);
         IdentifierNode.Value = "Test";
-        Node Prefix = Node.MakeNode(Node.NodeType.Empty);
+        Node Prefix = Node.makeNode(Node.NodeType.Empty);
 
         Prefix.SemanticsCheckerStrategy = new FakeStrategy();
 
@@ -623,7 +622,7 @@ public class SemanticsTester {
         identifierStrategy.SymbolTable.EnterSymbol(IdentifierNode.Value, IdentifierNode.DataType,true);
 
 
-        IdentifierNode.CheckSemantics();
+        IdentifierNode.checkSemantics();
 
         Assertions.assertDoesNotThrow(SemanticsTester::new);
 
@@ -631,10 +630,10 @@ public class SemanticsTester {
 
     @Test
     void IdentifierStrategy_PrefixMinus_IntType_Returns_No_Errors() throws SemanticsException {
-        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
+        Node IdentifierNode = Node.makeNode(Node.NodeType.Identifier);
         IdentifierNode.Value = "Test";
         IdentifierNode.DataType = Symbol.SymbolType.INT;
-        Node PrefixNode = Node.MakeNode(Node.NodeType.PrefixMinus);
+        Node PrefixNode = Node.makeNode(Node.NodeType.PrefixMinus);
 
         PrefixNode.SemanticsCheckerStrategy = new FakeStrategy();
 
@@ -650,7 +649,7 @@ public class SemanticsTester {
         identifierStrategy.SymbolTable.EnterSymbol(IdentifierNode.Value, IdentifierNode.DataType,true);
 
 
-        IdentifierNode.CheckSemantics();
+        IdentifierNode.checkSemantics();
 
         Assertions.assertDoesNotThrow(SemanticsTester::new);
 
@@ -658,10 +657,10 @@ public class SemanticsTester {
 
     @Test
     void IdentifierStrategy_PrefixNot_BoolType_Returns_No_Errors() throws SemanticsException {
-        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
+        Node IdentifierNode = Node.makeNode(Node.NodeType.Identifier);
         IdentifierNode.Value = "Test";
         IdentifierNode.DataType = Symbol.SymbolType.BOOL;
-        Node PrefixNode = Node.MakeNode(Node.NodeType.PrefixNot);
+        Node PrefixNode = Node.makeNode(Node.NodeType.PrefixNot);
 
         PrefixNode.SemanticsCheckerStrategy = new FakeStrategy();
 
@@ -677,7 +676,7 @@ public class SemanticsTester {
         identifierStrategy.SymbolTable.EnterSymbol(IdentifierNode.Value, IdentifierNode.DataType,true);
 
 
-        IdentifierNode.CheckSemantics();
+        IdentifierNode.checkSemantics();
 
         Assertions.assertDoesNotThrow(SemanticsTester::new);
 
@@ -685,10 +684,10 @@ public class SemanticsTester {
 
     @Test
     void IdentifierStrategy_PrefixNot_IntType_Returns_Not_Only_Applicable_For_Boolean() {
-        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
+        Node IdentifierNode = Node.makeNode(Node.NodeType.Identifier);
         IdentifierNode.Value = "Test";
         IdentifierNode.DataType = Symbol.SymbolType.INT;
-        Node PrefixNode = Node.MakeNode(Node.NodeType.PrefixNot);
+        Node PrefixNode = Node.makeNode(Node.NodeType.PrefixNot);
 
         // The string expected as return from the error
         String errorString = "only applicable to boolean";
@@ -706,17 +705,17 @@ public class SemanticsTester {
 
         identifierStrategy.SymbolTable.EnterSymbol(IdentifierNode.Value, IdentifierNode.DataType,true);
 
-        Exception exception = Assertions.assertThrows(SemanticsException.class, IdentifierNode::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, IdentifierNode::checkSemantics);
         Assertions.assertTrue(exception.getMessage().contains(errorString));
 
     }
 
     @Test
     void IdentifierStrategy_PrefixMinus_BoolType_Returns_Minus_Not_Applicable_For_Boolean() {
-        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
+        Node IdentifierNode = Node.makeNode(Node.NodeType.Identifier);
         IdentifierNode.Value = "Test";
         IdentifierNode.DataType = Symbol.SymbolType.BOOL;
-        Node PrefixNode = Node.MakeNode(Node.NodeType.PrefixMinus);
+        Node PrefixNode = Node.makeNode(Node.NodeType.PrefixMinus);
 
         // The string expected as return from the error
         String errorString = " not applicable to boolean";
@@ -734,17 +733,17 @@ public class SemanticsTester {
 
         identifierStrategy.SymbolTable.EnterSymbol(IdentifierNode.Value, IdentifierNode.DataType,true);
 
-        Exception exception = Assertions.assertThrows(SemanticsException.class, IdentifierNode::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, IdentifierNode::checkSemantics);
         Assertions.assertTrue(exception.getMessage().contains(errorString));
 
     }
 
     @Test
     void IdentifierStrategy_No_Prefix_BoolType_Returns_Not_Declared() {
-        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
+        Node IdentifierNode = Node.makeNode(Node.NodeType.Identifier);
         IdentifierNode.Value = "Test";
         IdentifierNode.DataType = Symbol.SymbolType.BOOL;
-        Node PrefixNode = Node.MakeNode(Node.NodeType.Empty);
+        Node PrefixNode = Node.makeNode(Node.NodeType.Empty);
 
         // The string expected as return from the error
         String errorString = " not been declared";
@@ -760,17 +759,17 @@ public class SemanticsTester {
         IdentifierNode.SemanticsCheckerStrategy = identifierStrategy;
 
 
-        Exception exception = Assertions.assertThrows(SemanticsException.class, IdentifierNode::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, IdentifierNode::checkSemantics);
         Assertions.assertTrue(exception.getMessage().contains(errorString));
 
     }
 
     @Test
     void IdentifierStrategy_No_Prefix_BoolType_Returns_Not_Instantiated() {
-        Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
+        Node IdentifierNode = Node.makeNode(Node.NodeType.Identifier);
         IdentifierNode.Value = "Test";
         IdentifierNode.DataType = Symbol.SymbolType.BOOL;
-        Node PrefixNode = Node.MakeNode(Node.NodeType.Empty);
+        Node PrefixNode = Node.makeNode(Node.NodeType.Empty);
 
         // The string expected as return from the error
         String errorString = "must be instantiated";
@@ -788,7 +787,7 @@ public class SemanticsTester {
         identifierStrategy.SymbolTable.EnterSymbol(IdentifierNode.Value, IdentifierNode.DataType,false);
 
 
-        Exception exception = Assertions.assertThrows(SemanticsException.class, IdentifierNode::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, IdentifierNode::checkSemantics);
         Assertions.assertTrue(exception.getMessage().contains(errorString));
 
     }
@@ -797,11 +796,11 @@ public class SemanticsTester {
     //region IfStrategy tests
     @Test
     void IfStrategy_If_Statement_With_Block_Returns_No_Errors() throws SemanticsException {
-        Node IfNode = Node.MakeNode(Node.NodeType.If);
-        Node BoolExpression = Node.MakeNode(Node.NodeType.Expression);
+        Node IfNode = Node.makeNode(Node.NodeType.If);
+        Node BoolExpression = Node.makeNode(Node.NodeType.Expression);
         BoolExpression.DataType = Symbol.SymbolType.BOOL;
-        Node BoolNode = Node.MakeNode(Node.NodeType.BoolLiteral);
-        Node BlockNode = Node.MakeNode(Node.NodeType.Block);
+        Node BoolNode = Node.makeNode(Node.NodeType.BoolLiteral);
+        Node BlockNode = Node.makeNode(Node.NodeType.Block);
 
         BoolExpression.SemanticsCheckerStrategy = new FakeStrategy();
         BoolNode.SemanticsCheckerStrategy = new FakeStrategy();
@@ -821,7 +820,7 @@ public class SemanticsTester {
         ifStrategy.SymbolTable.EnterSymbol(IfNode.Value, IfNode.DataType);
 
 
-        IfNode.CheckSemantics();
+        IfNode.checkSemantics();
 
         Assertions.assertDoesNotThrow(SemanticsTester::new);
 
@@ -829,11 +828,11 @@ public class SemanticsTester {
 
     @Test
     void IfStrategy_No_Boolean_Returns_Boolean_Error() {
-        Node IfNode = Node.MakeNode(Node.NodeType.If);
-        Node BoolExpression = Node.MakeNode(Node.NodeType.Expression);
+        Node IfNode = Node.makeNode(Node.NodeType.If);
+        Node BoolExpression = Node.makeNode(Node.NodeType.Expression);
         BoolExpression.DataType = Symbol.SymbolType.INT;
-        Node BoolNode = Node.MakeNode(Node.NodeType.BoolLiteral);
-        Node BlockNode = Node.MakeNode(Node.NodeType.Block);
+        Node BoolNode = Node.makeNode(Node.NodeType.BoolLiteral);
+        Node BlockNode = Node.makeNode(Node.NodeType.Block);
 
         // The string expected as return from the error
         String errorString = "If statement";
@@ -855,24 +854,24 @@ public class SemanticsTester {
 
         ifStrategy.SymbolTable.EnterSymbol(IfNode.Value, IfNode.DataType);
 
-        Exception exception = Assertions.assertThrows(SemanticsException.class, IfNode::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, IfNode::checkSemantics);
         Assertions.assertTrue(exception.getMessage().contains(errorString));
 
     }
 
     @Test
     void IfStrategy_Nested_If_Returns_No_Errors() throws SemanticsException {
-        Node IfNode = Node.MakeNode(Node.NodeType.If);
-        Node ExpressionNode = Node.MakeNode(Node.NodeType.Expression);
+        Node IfNode = Node.makeNode(Node.NodeType.If);
+        Node ExpressionNode = Node.makeNode(Node.NodeType.Expression);
         ExpressionNode.DataType = Symbol.SymbolType.BOOL;
-        Node BlockNode = Node.MakeNode(Node.NodeType.Block);
+        Node BlockNode = Node.makeNode(Node.NodeType.Block);
         //Node BoolNode = Node.MakeNode(Node.NodeType.BoolLiteral);
 
-        Node NestedIfNode = Node.MakeNode(Node.NodeType.If);
-        Node NestedExpressionNode = Node.MakeNode(Node.NodeType.Expression);
+        Node NestedIfNode = Node.makeNode(Node.NodeType.If);
+        Node NestedExpressionNode = Node.makeNode(Node.NodeType.Expression);
         NestedExpressionNode.DataType = Symbol.SymbolType.BOOL;
-        Node NestedBlockNode = Node.MakeNode(Node.NodeType.Block);
-        Node NestedEmptyNode = Node.MakeNode(Node.NodeType.Empty);
+        Node NestedBlockNode = Node.makeNode(Node.NodeType.Block);
+        Node NestedEmptyNode = Node.makeNode(Node.NodeType.Empty);
 
         ExpressionNode.SemanticsCheckerStrategy = new FakeStrategy();
         BlockNode.SemanticsCheckerStrategy = new FakeStrategy();
@@ -898,7 +897,7 @@ public class SemanticsTester {
 
         ifStrategy.SymbolTable.EnterSymbol(IfNode.Value, IfNode.DataType);
 
-        IfNode.CheckSemantics();
+        IfNode.checkSemantics();
 
         Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
@@ -908,16 +907,16 @@ public class SemanticsTester {
     @Test
     void InitiateBlockStrategy_Returns_NoErrors() throws SemanticsException {
         //Arrange
-        TestNode testNode = new TestNode(Node.MakeNode(Node.NodeType.Block));
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Block));
         SemanticsInitiateBlockStrategy strategy = new SemanticsInitiateBlockStrategy();
         strategy.UsedPinNumbers = new ArrayList<>();
         testNode.addStrategy(strategy);
-        Node pinDeclNode = Node.MakeNode(Node.NodeType.PinDeclaration);
-        pinDeclNode.Next = Node.MakeNode(Node.NodeType.Empty);
+        Node pinDeclNode = Node.makeNode(Node.NodeType.PinDeclaration);
+        pinDeclNode.Next = Node.makeNode(Node.NodeType.Empty);
         testNode.addChild(pinDeclNode);
 
         //Act
-        testNode.node.CheckSemantics();
+        testNode.node.checkSemantics();
 
         //Assert
         Assertions.assertDoesNotThrow(SemanticsTester::new);
@@ -929,16 +928,16 @@ public class SemanticsTester {
         String errorMessage = "Only pin declarations allowed in Initiate";
 
         //Arrange
-        TestNode testNode = new TestNode(Node.MakeNode(Node.NodeType.Block));
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Block));
         SemanticsInitiateBlockStrategy strategy = new SemanticsInitiateBlockStrategy();
         strategy.UsedPinNumbers = new ArrayList<>();
         testNode.addStrategy(strategy);
-        Node notPinDeclNode = Node.MakeNode(Node.NodeType.BoolDeclaration);
-        notPinDeclNode.Next = Node.MakeNode(Node.NodeType.Empty);
+        Node notPinDeclNode = Node.makeNode(Node.NodeType.BoolDeclaration);
+        notPinDeclNode.Next = Node.makeNode(Node.NodeType.Empty);
         testNode.addChild(notPinDeclNode);
 
         //Act
-        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
 
         //Assert
         Assertions.assertTrue(exception.getMessage().contains(errorMessage));
@@ -949,13 +948,13 @@ public class SemanticsTester {
     @Test
     void InitiateStrategy_Returns_NoErrors() throws SemanticsException {
         //Arrange
-        TestNode testNode = new TestNode(Node.MakeNode(Node.NodeType.Initiate));
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Initiate));
         testNode.addStrategy(new SemanticsInitiateStrategy());
-        Node blockNode = Node.MakeNode(Node.NodeType.Block);
+        Node blockNode = Node.makeNode(Node.NodeType.Block);
         testNode.addChild(blockNode);
 
         //Act
-        testNode.node.CheckSemantics();
+        testNode.node.checkSemantics();
 
         //Assert
         Assertions.assertDoesNotThrow(SemanticsTester::new);
@@ -966,16 +965,16 @@ public class SemanticsTester {
     @Test
     void IntDeclarationStrategy_Returns_NoErrors() throws SemanticsException {
         //Arrange
-        TestNode testNode = new TestNode(Node.MakeNode(Node.NodeType.IntDeclaration));
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.IntDeclaration));
         testNode.addStrategy(new SemanticsIntDeclarationStrategy());
-        Node identifierNode = Node.MakeNode(Node.NodeType.Identifier);
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
         testNode.addChild(identifierNode);
-        Node expressionNode = Node.MakeNode(Node.NodeType.Expression);
+        Node expressionNode = Node.makeNode(Node.NodeType.Expression);
         expressionNode.DataType = Symbol.SymbolType.INT;    //Could also be a float
         testNode.addChild(expressionNode);
 
         //Act
-        testNode.node.CheckSemantics();
+        testNode.node.checkSemantics();
 
         //Assert
         Assertions.assertDoesNotThrow(SemanticsTester::new);
@@ -986,16 +985,16 @@ public class SemanticsTester {
         String errorMessage = ": wrong type"; //todo lav fields til at repræsentere standard error messages
 
         //Arrange
-        TestNode testNode = new TestNode(Node.MakeNode(Node.NodeType.IntDeclaration));
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.IntDeclaration));
         testNode.addStrategy(new SemanticsIntDeclarationStrategy());
-        Node identifierNode = Node.MakeNode(Node.NodeType.Identifier);
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
         testNode.addChild(identifierNode);
-        Node badExpressionNode = Node.MakeNode(Node.NodeType.Expression);
+        Node badExpressionNode = Node.makeNode(Node.NodeType.Expression);
         badExpressionNode.DataType = Symbol.SymbolType.BOOL;
         testNode.addChild(badExpressionNode);
 
         //Act
-        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::CheckSemantics);
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
 
         //Assert
         Assertions.assertTrue(exception.getMessage().contains(errorMessage));
@@ -1181,13 +1180,13 @@ public class SemanticsTester {
     //region SemanticsSlaveInitiateCallStrategy tests
 
     private TestNode setupSlaveInitiateCall(SemanticsSlaveInitiateCallStrategy strategy){
-        Node CallNode = Node.MakeNode(Node.NodeType.Call);
+        Node CallNode = Node.makeNode(Node.NodeType.Call);
 
         TestNode testNode = setupNode(CallNode, strategy);
 
-        Node emptyChild1 = Node.MakeNode(Node.NodeType.Empty);
+        Node emptyChild1 = Node.makeNode(Node.NodeType.Empty);
         testNode.addChild(emptyChild1);
-        Node emptyChild2 = Node.MakeNode(Node.NodeType.Empty);
+        Node emptyChild2 = Node.makeNode(Node.NodeType.Empty);
         testNode.addChild(emptyChild2);
 
         return testNode;
@@ -1202,14 +1201,14 @@ public class SemanticsTester {
         TestNode CallNode = setupSlaveInitiateCall(strategy);
 
         // Add the IO parameter
-        Node IOParam = Node.MakeNode(Node.NodeType.Output);
+        Node IOParam = Node.makeNode(Node.NodeType.Output);
         CallNode.addChild(IOParam);
         // Add the pin parameter
-        Node pinParam = Node.MakeNode(Node.NodeType.Identifier);
+        Node pinParam = Node.makeNode(Node.NodeType.Identifier);
         pinParam.Value = "testPin";
         CallNode.addChild(pinParam);
 
-        Assertions.assertDoesNotThrow(CallNode.node::CheckSemantics);
+        Assertions.assertDoesNotThrow(CallNode.node::checkSemantics);
     }
 
     @Test
@@ -1226,17 +1225,17 @@ public class SemanticsTester {
         TestNode CallNode = setupSlaveInitiateCall(strategy);
 
         // Add the IO parameter
-        Node IOParam = Node.MakeNode(Node.NodeType.Output);
+        Node IOParam = Node.makeNode(Node.NodeType.Output);
         CallNode.addChild(IOParam);
         // Add the pin parameter
-        Node pinParam = Node.MakeNode(Node.NodeType.Identifier);
+        Node pinParam = Node.makeNode(Node.NodeType.Identifier);
         pinParam.Value = pinValue;
         CallNode.addChild(pinParam);
 
 
         Exception exception = Assertions.assertThrows(
                 SemanticsException.class,
-                CallNode.node::CheckSemantics
+                CallNode.node::checkSemantics
         );
 
         Assertions.assertTrue(exception.getMessage().contains(errorString));
@@ -1250,16 +1249,16 @@ public class SemanticsTester {
         TestNode CallNode = setupSlaveInitiateCall(strategy);
 
         // Add the IO parameter
-        Node IOParam = Node.MakeNode(Node.NodeType.Input);
+        Node IOParam = Node.makeNode(Node.NodeType.Input);
         CallNode.addChild(IOParam);
         // Add the pin parameter
-        Node pinParam = Node.MakeNode(Node.NodeType.Identifier);
+        Node pinParam = Node.makeNode(Node.NodeType.Identifier);
         pinParam.Value = "TestPin";
         CallNode.addChild(pinParam);
 
         Exception exception = Assertions.assertThrows(
                 SemanticsException.class,
-                CallNode.node::CheckSemantics
+                CallNode.node::checkSemantics
         );
 
         Assertions.assertTrue(exception.getMessage().contains(errorString));
@@ -1269,7 +1268,7 @@ public class SemanticsTester {
     //region SemanticsSlaveStrategy tests
     @Test
     void SlaveStrategy_Returns_NoErrors() throws SemanticsException {
-        Node SlaveNode = Node.MakeNode(Node.NodeType.Slave);
+        Node SlaveNode = Node.makeNode(Node.NodeType.Slave);
         SemanticsSlaveStrategy strategy = new SemanticsSlaveStrategy();
 
         TestNode testNode = setupNode(SlaveNode, strategy);
@@ -1279,21 +1278,21 @@ public class SemanticsTester {
         testNode.addChild(firstChildIdentifier);
 
         // Add empty children, to simulate global decls, initiate, and eventHandlers
-        Node emptyChild1 = Node.MakeNode(Node.NodeType.Empty);
+        Node emptyChild1 = Node.makeNode(Node.NodeType.Empty);
         testNode.addChild(emptyChild1);
-        Node emptyChild2 = Node.MakeNode(Node.NodeType.Empty);
+        Node emptyChild2 = Node.makeNode(Node.NodeType.Empty);
         testNode.addChild(emptyChild2);
-        Node emptyChild3 = Node.MakeNode(Node.NodeType.Empty);
+        Node emptyChild3 = Node.makeNode(Node.NodeType.Empty);
         testNode.addChild(emptyChild3);
 
-        Assertions.assertDoesNotThrow(testNode.node::CheckSemantics);
+        Assertions.assertDoesNotThrow(testNode.node::checkSemantics);
     }
 
     @Test
     void SlaveStrategy_Returns_AlreadyDeclaredError() throws SemanticsException {
         // The string expected as return from the error
         String errorString = "already been declared";
-        Node SlaveNode = Node.MakeNode(Node.NodeType.Slave);
+        Node SlaveNode = Node.makeNode(Node.NodeType.Slave);
         SemanticsSlaveStrategy strategy = new SemanticsSlaveStrategy();
 
         TestNode testNode = setupNode(SlaveNode, strategy);
@@ -1307,7 +1306,7 @@ public class SemanticsTester {
 
         Exception exception = Assertions.assertThrows(
                     SemanticsException.class,
-                    testNode.node::CheckSemantics
+                    testNode.node::checkSemantics
                 );
 
         Assertions.assertTrue(exception.getMessage().contains(errorString));

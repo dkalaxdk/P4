@@ -20,7 +20,7 @@ public class SemanticsEventDeclarationStrategy extends SemanticsCheckerStrategy{
             if (!InLocalEvents(node.FirstChild.Value)) {
                 Node expression = node.FirstChild.Next;
                 if (expression.Type == Node.NodeType.Call && expression.FirstChild.Type == Node.NodeType.CreateEvent) {
-                    expression.CheckSemantics();
+                    expression.checkSemantics();
                     // Enter the event into the symbol table, and the list of local events
                     SymbolTable.EnterSymbol(node.FirstChild.Value, Symbol.SymbolType.EVENT, expression.FirstChild.Next.DataType);
                     LocalEvents.add(SymbolTable.RetrieveSymbol(node.FirstChild.Value));

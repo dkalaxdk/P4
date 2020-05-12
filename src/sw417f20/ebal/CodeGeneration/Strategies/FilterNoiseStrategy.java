@@ -1,6 +1,5 @@
 package sw417f20.ebal.CodeGeneration.Strategies;
 
-import sw417f20.ebal.CodeGeneration.Utility.ArduinoSystem;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class FilterNoiseStrategy extends CodeGenerationStrategy {
@@ -8,7 +7,7 @@ public class FilterNoiseStrategy extends CodeGenerationStrategy {
     public String GenerateCode(Node node) {
 
         String pinName = node.Next.Value;
-        String filterType = node.Next.Next.GenerateCode();
+        String filterType = node.Next.Next.generateCode();
 
         return pinName + ".filterNoise(" + filterType + ")";
     }

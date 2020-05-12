@@ -1,6 +1,5 @@
 package sw417f20.ebal.CodeGeneration.Strategies;
 
-import sw417f20.ebal.CodeGeneration.Utility.ArduinoSystem;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class ListenerStrategy extends CodeGenerationStrategy {
@@ -14,7 +13,7 @@ public class ListenerStrategy extends CodeGenerationStrategy {
         String listenerName = pinName + "Listener" + arduinoSystem.Master.ListenerCount++;
 
         // Generate code for the Listener's block
-        String block = node.FirstChild.Next.GenerateCode();
+        String block = node.FirstChild.Next.generateCode();
 
         // Add the Listener to the system's master with the correct signature
         arduinoSystem.Master.Listeners

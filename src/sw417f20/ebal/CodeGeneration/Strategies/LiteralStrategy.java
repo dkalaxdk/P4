@@ -1,6 +1,5 @@
 package sw417f20.ebal.CodeGeneration.Strategies;
 
-import sw417f20.ebal.CodeGeneration.Utility.ArduinoSystem;
 import sw417f20.ebal.ContextAnalysis.Symbol;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
@@ -8,7 +7,7 @@ public class LiteralStrategy extends CodeGenerationStrategy {
     @Override
     public String GenerateCode(Node node) {
 
-        String prefix = node.FirstChild.GenerateCode();
+        String prefix = node.FirstChild.generateCode();
 
         // Check for division or modulo by zero;
         if (node.FirstSibling != null) {

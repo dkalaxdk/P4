@@ -1,6 +1,5 @@
 package sw417f20.ebal.CodeGeneration.Strategies;
 
-import sw417f20.ebal.CodeGeneration.Utility.ArduinoSystem;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class IfStrategy extends CodeGenerationStrategy {
@@ -8,8 +7,8 @@ public class IfStrategy extends CodeGenerationStrategy {
     public String GenerateCode(Node node) {
 
         // Get the expression from the if statement and the block
-        String expression = node.FirstChild.GenerateCode();
-        String block = node.FirstChild.Next.GenerateCode();
+        String expression = node.FirstChild.generateCode();
+        String block = node.FirstChild.Next.generateCode();
 
         // Get the else block
         Node elseBlock = node.FirstChild.Next.Next;
@@ -27,8 +26,8 @@ public class IfStrategy extends CodeGenerationStrategy {
         ifStmt.append(block);
 
         // If there is an else block, generate code for it (this method again)
-        if (elseBlock != null && !elseBlock.IsEmpty()) {
-            afterIf = addIndent(arduinoSystem.Indent) + "else " + elseBlock.GenerateCode();
+        if (elseBlock != null && !elseBlock.isEmpty()) {
+            afterIf = addIndent(arduinoSystem.Indent) + "else " + elseBlock.generateCode();
         }
 
         // Add the else block or just the empty string to the if statement

@@ -15,9 +15,9 @@ public class SemanticsInitiateBlockStrategy extends SemanticsCheckerStrategy{
     public void CheckSemantics(Node node) throws SemanticsException {
         // Check semantics for pin declarations
         Node child = node.FirstChild;
-        while (!child.IsEmpty()) {
+        while (!child.isEmpty()) {
             if (child.Type == Node.NodeType.PinDeclaration) {
-                child.CheckSemantics();
+                child.checkSemantics();
             }
             else {
                 MakeError(child, "Only pin declarations allowed in Initiate");

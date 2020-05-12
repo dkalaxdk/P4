@@ -44,13 +44,13 @@ public class Main {
             Scanner scanner = new Scanner(reader);
 
             Parser parser = new Parser(scanner, fileInput);
-            AST = parser.Parse(debug);
+            AST = parser.parse(debug);
 
             // Semantics
             SemanticsStrategyAssigner visitor = new SemanticsStrategyAssigner();
             ISymbolTable symbolTable = visitor.Run(AST);
 
-            AST.CheckSemantics();
+            AST.checkSemantics();
 
             if (debug) {
                 HashSymbolTablePrinter printer = new HashSymbolTablePrinter();
@@ -112,7 +112,7 @@ public class Main {
             Parser parser = new Parser(scanner, fileInput);
 
             long start = System.currentTimeMillis();
-            parser.Parse(debug);
+            parser.parse(debug);
             System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms \n");
 
             filePath = new File("").getAbsolutePath();
@@ -127,7 +127,7 @@ public class Main {
             parser = new Parser(scanner, fileInput);
 
             start = System.currentTimeMillis();
-            parser.Parse(debug);
+            parser.parse(debug);
             System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms \n");
 
 
@@ -142,7 +142,7 @@ public class Main {
             parser = new Parser(scanner, fileInput);
 
             start = System.currentTimeMillis();
-            parser.Parse(debug);
+            parser.parse(debug);
             System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms \n");
 
 
@@ -179,7 +179,7 @@ public class Main {
         int tokenCount = 0;
 
         while (scanner.currentToken.type != Token.Type.EOF) {
-            scanner.Advance();
+            scanner.advance();
 
             if (scanner.currentToken.type != Token.Type.NOTATOKEN && scanner.currentToken.type != Token.Type.ERROR) {
                 System.out.println("Token found: " + scanner.currentToken.type + " on line: " + scanner.currentToken.lineNumber + " : " + scanner.currentToken.offSet + " with content: " + scanner.currentToken.content);
@@ -215,7 +215,7 @@ public class Main {
             Parser parser = new Parser(scanner, fileInput);
 
             long start = System.currentTimeMillis();
-            root = parser.Parse(false);
+            root = parser.parse(false);
             System.out.println("Runtime: " + (System.currentTimeMillis() - start) + " ms \n");
         }
         catch (SyntaxException e) {
@@ -226,7 +226,7 @@ public class Main {
         symbolTable = visitor.Run(root);
         try {
             if (root != null) {
-                root.CheckSemantics();
+                root.checkSemantics();
             }
 //            HashSymbolTablePrinter printer = new HashSymbolTablePrinter();
 //            printer.PrintTable(symbolTable);

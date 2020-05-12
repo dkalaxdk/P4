@@ -11,7 +11,7 @@ public class SemanticsAssignmentStrategy extends SemanticsCheckerStrategy {
         Symbol identifier = SymbolTable.RetrieveSymbol(node.FirstChild.Value);
         Node expression = node.FirstChild.Next;
         if(identifier != null) {
-            expression.CheckSemantics();
+            expression.checkSemantics();
             if ((identifier.DataType == Symbol.SymbolType.BOOL && expression.DataType != Symbol.SymbolType.BOOL) ||
                 (expression.DataType == Symbol.SymbolType.BOOL && identifier.DataType != Symbol.SymbolType.BOOL)) {
 

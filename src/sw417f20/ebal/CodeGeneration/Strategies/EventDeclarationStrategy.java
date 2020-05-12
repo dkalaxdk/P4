@@ -1,6 +1,5 @@
 package sw417f20.ebal.CodeGeneration.Strategies;
 
-import sw417f20.ebal.CodeGeneration.Utility.ArduinoSystem;
 import sw417f20.ebal.CodeGeneration.Utility.Event;
 import sw417f20.ebal.CodeGeneration.Utility.Master;
 import sw417f20.ebal.CodeGeneration.Utility.Slave;
@@ -54,7 +53,7 @@ public class EventDeclarationStrategy extends CodeGenerationStrategy {
         }
 
         // Get the expression that is the input of createEvent
-        String expression = node.FirstChild.Next.FirstChild.Next.GenerateCode();
+        String expression = node.FirstChild.Next.FirstChild.Next.generateCode();
 
         return addIndent(arduinoSystem.Indent) + eventName + ".createEvent(" + expression + ");\n";
     }
