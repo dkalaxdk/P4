@@ -964,12 +964,40 @@ public class SemanticsTester {
     //region SemanticsIntDeclarationStrategy tests
     @Test
     void IntDeclarationStrategy_Returns_NoErrors() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.MakeNode(Node.NodeType.IntDeclaration));
+        testNode.addStrategy(new SemanticsIntDeclarationStrategy());
+        Node identifierNode = Node.MakeNode(Node.NodeType.Identifier);
+        testNode.addChild(identifierNode);
+        Node expressionNode = Node.MakeNode(Node.NodeType.Expression);
+        expressionNode.DataType = Symbol.SymbolType.INT;    //Could also be a float
+        testNode.addChild(expressionNode);
+
+        //Act
+        testNode.node.CheckSemantics();
+
+        //Assert
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
 
     @Test
     void IntDeclarationStrategy_Returns_WrongTypeError() throws SemanticsException {
-        assert(false);
+        String errorMessage = ": wrong type"; //todo lav fields til at repræsentere standard error messages
+
+        //Arrange
+        TestNode testNode = new TestNode(Node.MakeNode(Node.NodeType.IntDeclaration));
+        testNode.addStrategy(new SemanticsIntDeclarationStrategy());
+        Node identifierNode = Node.MakeNode(Node.NodeType.Identifier);
+        testNode.addChild(identifierNode);
+        Node badExpressionNode = Node.MakeNode(Node.NodeType.Expression);
+        badExpressionNode.DataType = Symbol.SymbolType.BOOL;
+        testNode.addChild(badExpressionNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::CheckSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains(errorMessage));
     }
 
     @Test
