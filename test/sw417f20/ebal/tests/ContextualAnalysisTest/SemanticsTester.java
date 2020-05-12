@@ -10,6 +10,7 @@ import sw417f20.ebal.ContextAnalysis.Symbol;
 import sw417f20.ebal.Exceptions.SemanticsException;
 import sw417f20.ebal.SyntaxAnalysis.Node;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class SemanticsTester {
@@ -1097,31 +1098,138 @@ public class SemanticsTester {
     //endregion
 
     //region SemanticsSlaveInitiateCallStrategy tests
+
+    private TestNode setupSlaveInitiateCall(SemanticsSlaveInitiateCallStrategy strategy){
+        Node CallNode = Node.MakeNode(Node.NodeType.Call);
+
+        TestNode testNode = setupNode(CallNode, strategy);
+
+        Node emptyChild1 = Node.MakeNode(Node.NodeType.Empty);
+        testNode.addChild(emptyChild1);
+        Node emptyChild2 = Node.MakeNode(Node.NodeType.Empty);
+        testNode.addChild(emptyChild2);
+
+        return testNode;
+    }
     @Test
     void SlaveInitiateCallStrategy_Returns_NoErrors() throws SemanticsException {
-        assert(false);
+        SemanticsSlaveInitiateCallStrategy strategy = new SemanticsSlaveInitiateCallStrategy();
+        // Add pin values to list of used pins
+        ArrayList<String> usedPins = new ArrayList<String>();
+        strategy.UsedPinNumbers = usedPins;
+
+        TestNode CallNode = setupSlaveInitiateCall(strategy);
+
+        // Add the IO parameter
+        Node IOParam = Node.MakeNode(Node.NodeType.Output);
+        CallNode.addChild(IOParam);
+        // Add the pin parameter
+        Node pinParam = Node.MakeNode(Node.NodeType.Identifier);
+        pinParam.Value = "testPin";
+        CallNode.addChild(pinParam);
+
+        Assertions.assertDoesNotThrow(CallNode.node::CheckSemantics);
     }
 
     @Test
     void SlaveInitiateCallStrategy_Returns_PinAlreadyUsedError() throws SemanticsException {
-        assert(false);
+        // The string expected as return from the error
+        String errorString = "Pin number already used";
+        String pinValue = "TestPin";
+        SemanticsSlaveInitiateCallStrategy strategy = new SemanticsSlaveInitiateCallStrategy();
+        // Add pin values to list of used pins
+        ArrayList<String> usedPins = new ArrayList<String>();
+        usedPins.add(pinValue);
+        strategy.UsedPinNumbers = usedPins;
+
+        TestNode CallNode = setupSlaveInitiateCall(strategy);
+
+        // Add the IO parameter
+        Node IOParam = Node.MakeNode(Node.NodeType.Output);
+        CallNode.addChild(IOParam);
+        // Add the pin parameter
+        Node pinParam = Node.MakeNode(Node.NodeType.Identifier);
+        pinParam.Value = pinValue;
+        CallNode.addChild(pinParam);
+
+
+        Exception exception = Assertions.assertThrows(
+                SemanticsException.class,
+                CallNode.node::CheckSemantics
+        );
+
+        Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
 
     @Test
     void SlaveInitiateCallStrategy_Returns_SlavePinNotOutputError() throws SemanticsException {
-        assert(false);
+        // The string expected as return from the error
+        String errorString = "Pin must be output in slave";
+        SemanticsSlaveInitiateCallStrategy strategy = new SemanticsSlaveInitiateCallStrategy();
+        TestNode CallNode = setupSlaveInitiateCall(strategy);
+
+        // Add the IO parameter
+        Node IOParam = Node.MakeNode(Node.NodeType.Input);
+        CallNode.addChild(IOParam);
+        // Add the pin parameter
+        Node pinParam = Node.MakeNode(Node.NodeType.Identifier);
+        pinParam.Value = "TestPin";
+        CallNode.addChild(pinParam);
+
+        Exception exception = Assertions.assertThrows(
+                SemanticsException.class,
+                CallNode.node::CheckSemantics
+        );
+
+        Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
     //endregion
 
     //region SemanticsSlaveStrategy tests
     @Test
     void SlaveStrategy_Returns_NoErrors() throws SemanticsException {
-        assert(false);
+        Node SlaveNode = Node.MakeNode(Node.NodeType.Slave);
+        SemanticsSlaveStrategy strategy = new SemanticsSlaveStrategy();
+
+        TestNode testNode = setupNode(SlaveNode, strategy);
+
+        // Create and add first child node for the slave
+        Node firstChildIdentifier = createNode(Node.NodeType.Identifier, Symbol.SymbolType.SLAVE, "TestVar");
+        testNode.addChild(firstChildIdentifier);
+
+        // Add empty children, to simulate global decls, initiate, and eventHandlers
+        Node emptyChild1 = Node.MakeNode(Node.NodeType.Empty);
+        testNode.addChild(emptyChild1);
+        Node emptyChild2 = Node.MakeNode(Node.NodeType.Empty);
+        testNode.addChild(emptyChild2);
+        Node emptyChild3 = Node.MakeNode(Node.NodeType.Empty);
+        testNode.addChild(emptyChild3);
+
+        Assertions.assertDoesNotThrow(testNode.node::CheckSemantics);
     }
 
     @Test
     void SlaveStrategy_Returns_AlreadyDeclaredError() throws SemanticsException {
-        assert(false);
+        // The string expected as return from the error
+        String errorString = "already been declared";
+        Node SlaveNode = Node.MakeNode(Node.NodeType.Slave);
+        SemanticsSlaveStrategy strategy = new SemanticsSlaveStrategy();
+
+        TestNode testNode = setupNode(SlaveNode, strategy);
+
+        // Create first child node for the slave
+        Node firstChildIdentifier = createNode(Node.NodeType.Identifier, Symbol.SymbolType.SLAVE, "TestVar");
+        // Enter the node into symbol table
+        testNode.node.SemanticsCheckerStrategy.SymbolTable.EnterSymbol(firstChildIdentifier.Value, firstChildIdentifier.DataType);
+
+        testNode.addChild(firstChildIdentifier);
+
+        Exception exception = Assertions.assertThrows(
+                    SemanticsException.class,
+                    testNode.node::CheckSemantics
+                );
+
+        Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
     //endregion
 
