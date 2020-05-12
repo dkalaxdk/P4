@@ -22,7 +22,7 @@ public class SemanticsStrategyAssigner {
     private String AvailablePinOrEvent;
     private boolean IsGlobalDeclaration;
 
-    public SemanticsStrategyAssigner(){
+    public SemanticsStrategyAssigner() {
         SymbolTable = new HashSymbolTable();
         UsedPinNumbers = new ArrayList<>();
         LocalEvents = new ArrayList<>();
@@ -242,8 +242,6 @@ public class SemanticsStrategyAssigner {
             }
         }
     }
-
-    //TODO: kommentarer hertil, skift evt til summaries
 
     // Assigns a strategy to the Call node, depending on its context in the AST.
     // Takes a Call node, which has a function node (with the called function)

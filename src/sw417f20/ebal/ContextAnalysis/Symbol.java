@@ -48,7 +48,7 @@ public class Symbol {
     public Symbol(String name, SymbolType type, SymbolType valueType){
         Name = name;
         DataType = type;
-        ValueType =valueType;
+        ValueType = valueType;
         HasBeenInstantiated = true;
     }
 

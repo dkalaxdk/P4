@@ -29,7 +29,7 @@ public class Main {
 
     public static void RealMain(String[] args) {
         boolean debug = true;
-        Node AST = null;
+        Node AST;
 
         try {
             long start = System.currentTimeMillis();
@@ -47,8 +47,8 @@ public class Main {
             AST = parser.parse(debug);
 
             // Semantics
-            SemanticsStrategyAssigner visitor = new SemanticsStrategyAssigner();
-            ISymbolTable symbolTable = visitor.Run(AST);
+            SemanticsStrategyAssigner semanticsStrategyAssigner = new SemanticsStrategyAssigner();
+            ISymbolTable symbolTable = semanticsStrategyAssigner.Run(AST);
 
             AST.checkSemantics();
 

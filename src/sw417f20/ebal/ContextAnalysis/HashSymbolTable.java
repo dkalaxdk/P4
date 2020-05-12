@@ -21,6 +21,8 @@ public class HashSymbolTable implements ISymbolTable {
         Hashtable = new HashMap<>();
     }
 
+    //todo Maybe remove GlobalScope. from calls?
+
     // Opens a new scope in the symbol table by adding a new symbol table
     // and setting the current scope to the new table
     @Override
@@ -88,7 +90,7 @@ public class HashSymbolTable implements ISymbolTable {
         else{
             HashSymbolTable temp = GlobalScope.CurrentScope.Parent;
             while(temp != null){
-                if (temp.Hashtable.containsKey((name))){
+                if (temp.Hashtable.containsKey(name)){
                     return temp.Hashtable.get(name);
                 }
                 temp = temp.Parent;
