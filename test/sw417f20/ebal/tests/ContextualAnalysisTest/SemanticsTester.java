@@ -263,6 +263,7 @@ public class SemanticsTester {
     }
     //endregion
 
+    //region EventDeclarationStrategy tests
     @Test
     void EventDeclaration_Correct_Returns_NoErrors() throws SemanticsException {
         TestNode DeclarationNode = setupEventDeclNode();
@@ -340,7 +341,9 @@ public class SemanticsTester {
         Exception exception = Assertions.assertThrows(SemanticsException.class, DeclarationNode.node::CheckSemantics);
         Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
+    //endregion
 
+    //region EventHandlerBlockStrategy tests
     @Test
     void EventHandlerBlockStrategy_Returns_No_Errors() throws SemanticsException {
         // TODO: Refactor by creating setupEventHandler
@@ -402,7 +405,9 @@ public class SemanticsTester {
         Exception exception = Assertions.assertThrows(SemanticsException.class, EventHandlerNode::CheckSemantics);
         Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
+    //endregion
 
+    //region EventHandlerCallStrategy tests
     @Test
     void EventHandlerCallStrategy_Returns_NoErrors() {
         Node EventHandlerNode = Node.MakeNode(Node.NodeType.EventHandler);
@@ -425,7 +430,9 @@ public class SemanticsTester {
         Assertions.assertTrue(exception.getMessage().contains(errorString));
 
     }
+    //endregion
 
+    //region FloatDeclarationStrategy tests
     @Test
     void FloatDeclarationStrategy_Returns_NoErrors() throws SemanticsException {
         Node FloatDeclaration = Node.MakeNode(Node.NodeType.FloatDeclaration);
@@ -508,7 +515,9 @@ public class SemanticsTester {
         Exception exception = Assertions.assertThrows(SemanticsException.class, FloatDeclaration::CheckSemantics);
         Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
+    //endregion
 
+    //region FloatLiteralStrategy tests
     @Test
     void FloatLiteralStrategy_No_Prefix_Returns_No_Errors() throws SemanticsException {
         Node FloatNode = Node.MakeNode(Node.NodeType.FloatLiteral);
@@ -591,7 +600,9 @@ public class SemanticsTester {
         Assertions.assertTrue(exception.getMessage().contains(errorString));
 
     }
+    //endregion
 
+    //region IdentifierStrategy tests
     @Test
     void IdentifierStrategy_No_Prefix_Returns_No_Errors() throws SemanticsException {
         Node IdentifierNode = Node.MakeNode(Node.NodeType.Identifier);
@@ -781,7 +792,9 @@ public class SemanticsTester {
         Assertions.assertTrue(exception.getMessage().contains(errorString));
 
     }
+    //endregion
 
+    //region IfStrategy tests
     @Test
     void IfStrategy_If_Statement_With_Block_Returns_No_Errors() throws SemanticsException {
         Node IfNode = Node.MakeNode(Node.NodeType.If);
@@ -889,35 +902,103 @@ public class SemanticsTester {
 
         Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
+    //endregion
 
     //region SemanticsInitiateBlockStrategy tests
     @Test
     void InitiateBlockStrategy_Returns_NoErrors() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.MakeNode(Node.NodeType.Block));
+        SemanticsInitiateBlockStrategy strategy = new SemanticsInitiateBlockStrategy();
+        strategy.UsedPinNumbers = new ArrayList<>();
+        testNode.addStrategy(strategy);
+        Node pinDeclNode = Node.MakeNode(Node.NodeType.PinDeclaration);
+        pinDeclNode.Next = Node.MakeNode(Node.NodeType.Empty);
+        testNode.addChild(pinDeclNode);
+
+        //Act
+        testNode.node.CheckSemantics();
+
+        //Assert
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
 
     @Test
     void InitiateBlockStrategy_Returns_NotPinDeclError() throws SemanticsException {
-        assert(false);
+        //Error being checked for
+        String errorMessage = "Only pin declarations allowed in Initiate";
+
+        //Arrange
+        TestNode testNode = new TestNode(Node.MakeNode(Node.NodeType.Block));
+        SemanticsInitiateBlockStrategy strategy = new SemanticsInitiateBlockStrategy();
+        strategy.UsedPinNumbers = new ArrayList<>();
+        testNode.addStrategy(strategy);
+        Node notPinDeclNode = Node.MakeNode(Node.NodeType.BoolDeclaration);
+        notPinDeclNode.Next = Node.MakeNode(Node.NodeType.Empty);
+        testNode.addChild(notPinDeclNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::CheckSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains(errorMessage));
     }
     //endregion
 
     //region SemanticsInitiateStrategy tests
     @Test
     void InitiateStrategy_Returns_NoErrors() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.MakeNode(Node.NodeType.Initiate));
+        testNode.addStrategy(new SemanticsInitiateStrategy());
+        Node blockNode = Node.MakeNode(Node.NodeType.Block);
+        testNode.addChild(blockNode);
+
+        //Act
+        testNode.node.CheckSemantics();
+
+        //Assert
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
     //endregion
 
     //region SemanticsIntDeclarationStrategy tests
     @Test
     void IntDeclarationStrategy_Returns_NoErrors() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.MakeNode(Node.NodeType.IntDeclaration));
+        testNode.addStrategy(new SemanticsIntDeclarationStrategy());
+        Node identifierNode = Node.MakeNode(Node.NodeType.Identifier);
+        testNode.addChild(identifierNode);
+        Node expressionNode = Node.MakeNode(Node.NodeType.Expression);
+        expressionNode.DataType = Symbol.SymbolType.INT;    //Could also be a float
+        testNode.addChild(expressionNode);
+
+        //Act
+        testNode.node.CheckSemantics();
+
+        //Assert
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
 
     @Test
     void IntDeclarationStrategy_Returns_WrongTypeError() throws SemanticsException {
-        assert(false);
+        String errorMessage = ": wrong type"; //todo lav fields til at repræsentere standard error messages
+
+        //Arrange
+        TestNode testNode = new TestNode(Node.MakeNode(Node.NodeType.IntDeclaration));
+        testNode.addStrategy(new SemanticsIntDeclarationStrategy());
+        Node identifierNode = Node.MakeNode(Node.NodeType.Identifier);
+        testNode.addChild(identifierNode);
+        Node badExpressionNode = Node.MakeNode(Node.NodeType.Expression);
+        badExpressionNode.DataType = Symbol.SymbolType.BOOL;
+        testNode.addChild(badExpressionNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::CheckSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains(errorMessage));
     }
 
     @Test
