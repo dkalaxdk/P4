@@ -906,12 +906,41 @@ public class SemanticsTester {
     //region SemanticsInitiateBlockStrategy tests
     @Test
     void InitiateBlockStrategy_Returns_NoErrors() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.MakeNode(Node.NodeType.Block));
+        SemanticsInitiateBlockStrategy strategy = new SemanticsInitiateBlockStrategy();
+        strategy.UsedPinNumbers = new ArrayList<>();
+        testNode.addStrategy(strategy);
+        Node pinDeclNode = Node.MakeNode(Node.NodeType.PinDeclaration);
+        pinDeclNode.Next = Node.MakeNode(Node.NodeType.Empty);
+        testNode.addChild(pinDeclNode);
+
+        //Act
+        testNode.node.CheckSemantics();
+
+        //Assert
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
 
     @Test
     void InitiateBlockStrategy_Returns_NotPinDeclError() throws SemanticsException {
-        assert(false);
+        //Error being checked for
+        String errorMessage = "Only pin declarations allowed in Initiate";
+
+        //Arrange
+        TestNode testNode = new TestNode(Node.MakeNode(Node.NodeType.Block));
+        SemanticsInitiateBlockStrategy strategy = new SemanticsInitiateBlockStrategy();
+        strategy.UsedPinNumbers = new ArrayList<>();
+        testNode.addStrategy(strategy);
+        Node notPinDeclNode = Node.MakeNode(Node.NodeType.BoolDeclaration);
+        notPinDeclNode.Next = Node.MakeNode(Node.NodeType.Empty);
+        testNode.addChild(notPinDeclNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::CheckSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains(errorMessage));
     }
     //endregion
 
