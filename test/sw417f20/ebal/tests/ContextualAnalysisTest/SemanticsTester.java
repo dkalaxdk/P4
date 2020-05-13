@@ -1,5 +1,6 @@
 package sw417f20.ebal.tests.ContextualAnalysisTest;
 
+import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -1517,29 +1518,122 @@ public class SemanticsTester {
     //region SemanticsMasterInitiateCallStrategy tests
     @Test
     void MasterInitiateCallStrategy_Returns_NoErrors() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsMasterInitiateCallStrategy strategy = new SemanticsMasterInitiateCallStrategy();
+        strategy.UsedPinNumbers = new ArrayList<>();
+        testNode.addStrategy(strategy);
+        Node createPinNode = Node.makeNode(Node.NodeType.CreatePin);
+        Node pinTypeNode = Node.makeNode(Node.NodeType.Digital);
+        Node ioTypeNode = Node.makeNode(Node.NodeType.Input);
+        Node pinNumberNode = Node.makeNode(Node.NodeType.IntLiteral);
+        pinNumberNode.Value = "0";
+        ioTypeNode.Next = pinNumberNode;
+        pinTypeNode.Next = ioTypeNode;
+        createPinNode.Next = pinTypeNode;
+        testNode.addChild(createPinNode);
+
+        //Act
+        testNode.node.checkSemantics();
+
+        //Assert
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
+
     }
 
     @Test
     void MasterInitiateCallStrategy_Returns_PinAlreadyUsedError() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsMasterInitiateCallStrategy strategy = new SemanticsMasterInitiateCallStrategy();
+        strategy.UsedPinNumbers = new ArrayList<>();
+        String pinNumber = "0";
+        strategy.UsedPinNumbers.add(pinNumber);
+        testNode.addStrategy(strategy);
+        Node createPinNode = Node.makeNode(Node.NodeType.CreatePin);
+        Node pinTypeNode = Node.makeNode(Node.NodeType.Digital);
+        Node ioTypeNode = Node.makeNode(Node.NodeType.Input);
+        Node pinNumberNode = Node.makeNode(Node.NodeType.IntLiteral);
+        pinNumberNode.Value = pinNumber;
+        ioTypeNode.Next = pinNumberNode;
+        pinTypeNode.Next = ioTypeNode;
+        createPinNode.Next = pinTypeNode;
+        testNode.addChild(createPinNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains("Pin number already used"));
     }
 
     @Test
     void MasterInitiateCallStrategy_Returns_MasterPinPWMError() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsMasterInitiateCallStrategy strategy = new SemanticsMasterInitiateCallStrategy();
+        strategy.UsedPinNumbers = new ArrayList<>();
+        testNode.addStrategy(strategy);
+        Node createPinNode = Node.makeNode(Node.NodeType.CreatePin);
+        Node pinTypeNode = Node.makeNode(Node.NodeType.PWM);    //PWM type is bad here
+        Node ioTypeNode = Node.makeNode(Node.NodeType.Input);
+        Node pinNumberNode = Node.makeNode(Node.NodeType.IntLiteral);
+        pinNumberNode.Value = "0";
+        ioTypeNode.Next = pinNumberNode;
+        pinTypeNode.Next = ioTypeNode;
+        createPinNode.Next = pinTypeNode;
+        testNode.addChild(createPinNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains("Pin cannot be PWM in master"));
     }
 
     @Test
     void MasterInitiateCallStrategy_Returns_MasterPinNotInputError() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsMasterInitiateCallStrategy strategy = new SemanticsMasterInitiateCallStrategy();
+        strategy.UsedPinNumbers = new ArrayList<>();
+        testNode.addStrategy(strategy);
+        Node createPinNode = Node.makeNode(Node.NodeType.CreatePin);
+        Node pinTypeNode = Node.makeNode(Node.NodeType.Digital);
+        Node ioTypeNode = Node.makeNode(Node.NodeType.Output);  //Output type is bad here
+        Node pinNumberNode = Node.makeNode(Node.NodeType.IntLiteral);
+        pinNumberNode.Value = "0";
+        ioTypeNode.Next = pinNumberNode;
+        pinTypeNode.Next = ioTypeNode;
+        createPinNode.Next = pinTypeNode;
+        testNode.addChild(createPinNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains("Pin must be input in master"));
     }
     //endregion
 
     //region SemanticsMasterStrategy tests
     @Test
     void MasterStrategy_Returns_NoErrors() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Master));
+        SemanticsMasterStrategy strategy = new SemanticsMasterStrategy();
+        strategy.BroadcastEvents = new ArrayList<>();
+        testNode.addStrategy(strategy);
+        testNode.addChild(Node.makeNode(Node.NodeType.PinDeclaration));
+        testNode.addChild(Node.makeNode(Node.NodeType.Empty));  //todo Why..?
+        testNode.addChild(Node.makeNode(Node.NodeType.Initiate));
+        testNode.addChild(Node.makeNode(Node.NodeType.Empty));
+
+        //Act
+        testNode.node.checkSemantics();
+
+        //Assert
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
     //endregion
 
