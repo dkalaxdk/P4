@@ -1,6 +1,5 @@
 package sw417f20.ebal.tests.ContextualAnalysisTest;
 
-import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -430,23 +429,106 @@ public class SemanticsTester {
 
     //region EventHandlerCallStrategy tests
     @Test
-    void EventHandlerCallStrategy_CheckWrite_Returns_NoErrors() {
-        assert(false);
+    void EventHandlerCallStrategy_CheckWrite_Returns_NoErrors() throws SemanticsException {
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsEventHandlerCallStrategy strategy = new SemanticsEventHandlerCallStrategy();
+        testNode.addStrategy(strategy);
+
+        Node writeNode = Node.makeNode(Node.NodeType.Write);
+        Node pinIdentifierNode = Node.makeNode(Node.NodeType.Identifier);
+        pinIdentifierNode.DataType = Symbol.SymbolType.PIN;
+        testNode.addSymbol(pinIdentifierNode);
+        Node intLiteralNode = Node.makeNode(Node.NodeType.IntLiteral);
+        intLiteralNode.DataType = Symbol.SymbolType.INT;
+
+        testNode.addChild(writeNode);
+        testNode.addChild(pinIdentifierNode);
+        testNode.addChild(intLiteralNode);
+
+        //Act
+        testNode.node.checkSemantics();
+
+        //Assert
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
 
     @Test
-    void EventHandlerCallStrategy_CheckWrite_Returns_SecondParameterWrongTypeError() {
-        assert(false);
+    void EventHandlerCallStrategy_CheckWrite_Returns_SecondParameterWrongTypeError() throws SemanticsException{
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsEventHandlerCallStrategy strategy = new SemanticsEventHandlerCallStrategy();
+        testNode.addStrategy(strategy);
+
+        Node writeNode = Node.makeNode(Node.NodeType.Write);
+        Node pinIdentifierNode = Node.makeNode(Node.NodeType.Identifier);
+        pinIdentifierNode.DataType = Symbol.SymbolType.PIN;
+        testNode.addSymbol(pinIdentifierNode);
+        Node intLiteralNode = Node.makeNode(Node.NodeType.IntLiteral);
+        intLiteralNode.DataType = Symbol.SymbolType.BOOL;   //Bad type
+
+        testNode.addChild(writeNode);
+        testNode.addChild(pinIdentifierNode);
+        testNode.addChild(intLiteralNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(
+                exception.getMessage().contains("Second parameter") &&
+                exception.getMessage().contains(defaultErrorMessage(ErrorType.WrongType))
+        );
     }
 
     @Test
     void EventHandlerCallStrategy_CheckWrite_Returns_WrongTypeError() {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsEventHandlerCallStrategy strategy = new SemanticsEventHandlerCallStrategy();
+        testNode.addStrategy(strategy);
+
+        Node writeNode = Node.makeNode(Node.NodeType.Write);
+        Node pinIdentifierNode = Node.makeNode(Node.NodeType.Identifier);
+        pinIdentifierNode.DataType = Symbol.SymbolType.EVENT;   //Bad type
+        testNode.addSymbol(pinIdentifierNode);
+        Node intLiteralNode = Node.makeNode(Node.NodeType.IntLiteral);
+        intLiteralNode.DataType = Symbol.SymbolType.INT;
+
+        testNode.addChild(writeNode);
+        testNode.addChild(pinIdentifierNode);
+        testNode.addChild(intLiteralNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains(defaultErrorMessage(ErrorType.WrongType)));
     }
 
     @Test
-    void EventHandlerCallStrategy_CheckWrite_Returns_NotDeclError() {
-        assert(false);
+    void EventHandlerCallStrategy_CheckWrite_Returns_NotDeclaredError() {
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsEventHandlerCallStrategy strategy = new SemanticsEventHandlerCallStrategy();
+        testNode.addStrategy(strategy);
+
+        Node writeNode = Node.makeNode(Node.NodeType.Write);
+        Node pinIdentifierNode = Node.makeNode(Node.NodeType.Identifier);
+        pinIdentifierNode.DataType = Symbol.SymbolType.PIN;
+        //testNode.addSymbol(pinIdentifierNode);
+        Node intLiteralNode = Node.makeNode(Node.NodeType.IntLiteral);
+        intLiteralNode.DataType = Symbol.SymbolType.INT;
+
+        testNode.addChild(writeNode);
+        testNode.addChild(pinIdentifierNode);
+        testNode.addChild(intLiteralNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains(defaultErrorMessage(ErrorType.NotDeclared)));
     }
 
     @Test
