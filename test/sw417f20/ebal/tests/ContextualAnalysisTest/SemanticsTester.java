@@ -1458,17 +1458,59 @@ public class SemanticsTester {
     //region SemanticsListenerStrategy tests
     @Test
     void ListenerStrategy_Returns_NoErrors() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Listener));
+        testNode.addStrategy(new SemanticsListenerStrategy());
+        Node identifierNode = Node.makeNode((Node.NodeType.Identifier));
+        identifierNode.Value = "pinName";
+        identifierNode.DataType = Symbol.SymbolType.PIN;
+        testNode.addChild(identifierNode);
+        testNode.addSymbol(identifierNode);
+        testNode.addChild(Node.makeNode(Node.NodeType.Block));
+
+        //Act
+        testNode.node.checkSemantics();
+
+        //Assert
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
 
     @Test
     void ListenerStrategy_Returns_WrongTypeError() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Listener));
+        testNode.addStrategy(new SemanticsListenerStrategy());
+        Node identifierNode = Node.makeNode((Node.NodeType.Identifier));
+        identifierNode.Value = "pinName";
+        identifierNode.DataType = Symbol.SymbolType.BOOL;   //Bad type
+        testNode.addChild(identifierNode);
+        testNode.addSymbol(identifierNode);
+        testNode.addChild(Node.makeNode(Node.NodeType.Block));
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains(defaultErrorMessage(ErrorType.WrongType)));
     }
 
     @Test
     void ListenerStrategy_Returns_NotDeclaredError() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Listener));
+        testNode.addStrategy(new SemanticsListenerStrategy());
+        Node identifierNode = Node.makeNode((Node.NodeType.Identifier));
+        identifierNode.Value = "pinName";
+        identifierNode.DataType = Symbol.SymbolType.PIN;
+        testNode.addChild(identifierNode);
+        //testNode.addSymbol(identifierNode);
+        testNode.addChild(Node.makeNode(Node.NodeType.Block));
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains(defaultErrorMessage(ErrorType.NotDeclared)));
     }
     //endregion
 
@@ -1549,8 +1591,7 @@ public class SemanticsTester {
     void SlaveInitiateCallStrategy_Returns_NoErrors() throws SemanticsException {
         SemanticsSlaveInitiateCallStrategy strategy = new SemanticsSlaveInitiateCallStrategy();
         // Add pin values to list of used pins
-        ArrayList<String> usedPins = new ArrayList<>();
-        strategy.UsedPinNumbers = usedPins;
+        strategy.UsedPinNumbers = new ArrayList<>();
 
         TestNode CallNode = setupSlaveInitiateCall(strategy);
 
