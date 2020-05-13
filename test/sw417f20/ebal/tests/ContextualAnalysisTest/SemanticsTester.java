@@ -12,6 +12,8 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 
 import java.util.ArrayList;
 
+import static sw417f20.ebal.ContextAnalysis.Strategies.SemanticsCheckerStrategy.ErrorType;
+
 public class SemanticsTester {
     SemanticsStrategyAssigner strategyAssigner;
 
@@ -31,6 +33,10 @@ public class SemanticsTester {
             node.SemanticsCheckerStrategy.SymbolTable.EnterSymbol(symbol.Value, symbol.DataType);
         }
 
+        public void addSymbolWithRefNode(Node symbol, Node referenceNode) {
+            node.SemanticsCheckerStrategy.SymbolTable.EnterSymbol(symbol.Value, symbol.DataType, referenceNode);
+        }
+
         // Simplified addChild method
         public void addChild(Node child) {
             // Adds a fake strategy to all children
@@ -47,6 +53,21 @@ public class SemanticsTester {
                 currentChild.Next = child;
             }
         }
+    }
+
+    private String defaultErrorMessage(ErrorType errorType) {
+        switch (errorType) {
+            case AlreadyDeclared:
+                return " has already been declared.";
+            case NotDeclared:
+                return " has not been declared.";
+            case WrongType:
+                return ": wrong type";
+            case Default:
+                return ": error";
+        }
+
+        return "Error does not exist";
     }
 
     private TestNode setupAssignmentNodeWithSymbols(Symbol.SymbolType expressionType, Symbol.SymbolType identifierType) {
@@ -408,26 +429,131 @@ public class SemanticsTester {
 
     //region EventHandlerCallStrategy tests
     @Test
-    void EventHandlerCallStrategy_Returns_NoErrors() {
-        Node EventHandlerNode = Node.makeNode(Node.NodeType.EventHandler);
-        Node WriteNode = Node.makeNode(Node.NodeType.Write);
-        Node PinParameters = Node.makeNode(Node.NodeType.Expression);
+    void EventHandlerCallStrategy_CheckWrite_Returns_NoErrors() throws SemanticsException {
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsEventHandlerCallStrategy strategy = new SemanticsEventHandlerCallStrategy();
+        testNode.addStrategy(strategy);
 
-        //The string expected as return from the error
-        String errorString = "No pin or event";
+        Node writeNode = Node.makeNode(Node.NodeType.Write);
+        Node pinIdentifierNode = Node.makeNode(Node.NodeType.Identifier);
+        pinIdentifierNode.DataType = Symbol.SymbolType.PIN;
+        testNode.addSymbol(pinIdentifierNode);
+        Node intLiteralNode = Node.makeNode(Node.NodeType.IntLiteral);
+        intLiteralNode.DataType = Symbol.SymbolType.INT;
 
-        WriteNode.SemanticsCheckerStrategy = new FakeStrategy();
+        testNode.addChild(writeNode);
+        testNode.addChild(pinIdentifierNode);
+        testNode.addChild(intLiteralNode);
 
-        SemanticsEventHandlerBlockStrategy eventDeclarationStrategy = new SemanticsEventHandlerBlockStrategy();
-        eventDeclarationStrategy.SymbolTable = new HashSymbolTable();
+        //Act
+        testNode.node.checkSemantics();
 
-        EventHandlerNode.FirstChild = WriteNode;
+        //Assert
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
+    }
 
-        EventHandlerNode.SemanticsCheckerStrategy = eventDeclarationStrategy;
+    @Test
+    void EventHandlerCallStrategy_CheckWrite_Returns_SecondParameterWrongTypeError() throws SemanticsException{
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsEventHandlerCallStrategy strategy = new SemanticsEventHandlerCallStrategy();
+        testNode.addStrategy(strategy);
 
-        Exception exception = Assertions.assertThrows(SemanticsException.class, EventHandlerNode::checkSemantics);
-        Assertions.assertTrue(exception.getMessage().contains(errorString));
+        Node writeNode = Node.makeNode(Node.NodeType.Write);
+        Node pinIdentifierNode = Node.makeNode(Node.NodeType.Identifier);
+        pinIdentifierNode.DataType = Symbol.SymbolType.PIN;
+        testNode.addSymbol(pinIdentifierNode);
+        Node intLiteralNode = Node.makeNode(Node.NodeType.IntLiteral);
+        intLiteralNode.DataType = Symbol.SymbolType.BOOL;   //Bad type
 
+        testNode.addChild(writeNode);
+        testNode.addChild(pinIdentifierNode);
+        testNode.addChild(intLiteralNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(
+                exception.getMessage().contains("Second parameter") &&
+                exception.getMessage().contains(defaultErrorMessage(ErrorType.WrongType))
+        );
+    }
+
+    @Test
+    void EventHandlerCallStrategy_CheckWrite_Returns_WrongTypeError() {
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsEventHandlerCallStrategy strategy = new SemanticsEventHandlerCallStrategy();
+        testNode.addStrategy(strategy);
+
+        Node writeNode = Node.makeNode(Node.NodeType.Write);
+        Node pinIdentifierNode = Node.makeNode(Node.NodeType.Identifier);
+        pinIdentifierNode.DataType = Symbol.SymbolType.EVENT;   //Bad type
+        testNode.addSymbol(pinIdentifierNode);
+        Node intLiteralNode = Node.makeNode(Node.NodeType.IntLiteral);
+        intLiteralNode.DataType = Symbol.SymbolType.INT;
+
+        testNode.addChild(writeNode);
+        testNode.addChild(pinIdentifierNode);
+        testNode.addChild(intLiteralNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains(defaultErrorMessage(ErrorType.WrongType)));
+    }
+
+    @Test
+    void EventHandlerCallStrategy_CheckWrite_Returns_NotDeclaredError() {
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsEventHandlerCallStrategy strategy = new SemanticsEventHandlerCallStrategy();
+        testNode.addStrategy(strategy);
+
+        Node writeNode = Node.makeNode(Node.NodeType.Write);
+        Node pinIdentifierNode = Node.makeNode(Node.NodeType.Identifier);
+        pinIdentifierNode.DataType = Symbol.SymbolType.PIN;
+        //testNode.addSymbol(pinIdentifierNode);
+        Node intLiteralNode = Node.makeNode(Node.NodeType.IntLiteral);
+        intLiteralNode.DataType = Symbol.SymbolType.INT;
+
+        testNode.addChild(writeNode);
+        testNode.addChild(pinIdentifierNode);
+        testNode.addChild(intLiteralNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains(defaultErrorMessage(ErrorType.NotDeclared)));
+    }
+
+    @Test
+    void EventHandlerCallStrategy_CheckGetValue_Returns_NoErrors() {
+        assert(false);
+    }
+
+    @Test
+    void EventHandlerCallStrategy_CheckGetValue_Returns_WrongTypeError() {
+        assert(false);
+    }
+
+    @Test
+    void EventHandlerCallStrategy_CheckGetValue_Returns_EventUnavailableError() {
+        assert(false);
+    }
+
+    @Test
+    void EventHandlerCallStrategy_CheckGetValue_Returns_NotDeclaredError() {
+        assert(false);
+    }
+
+    @Test
+    void EventHandlerCallStrategy_Returns_IllegalFuncError() {
+        assert(false);
     }
     //endregion
 
@@ -982,8 +1108,6 @@ public class SemanticsTester {
 
     @Test
     void IntDeclarationStrategy_Returns_WrongTypeError() throws SemanticsException {
-        String errorMessage = ": wrong type"; //todo lav fields til at repræsentere standard error messages
-
         //Arrange
         TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.IntDeclaration));
         testNode.addStrategy(new SemanticsIntDeclarationStrategy());
@@ -997,183 +1121,725 @@ public class SemanticsTester {
         Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
 
         //Assert
-        Assertions.assertTrue(exception.getMessage().contains(errorMessage));
+        Assertions.assertTrue(exception.getMessage().contains(defaultErrorMessage(ErrorType.WrongType)));
     }
 
     @Test
     void IntDeclarationStrategy_Returns_AlreadyDeclaredError() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.IntDeclaration));
+        testNode.addStrategy(new SemanticsIntDeclarationStrategy());
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
+        testNode.addChild(identifierNode);
+        Node expressionNode = Node.makeNode(Node.NodeType.Expression);
+        expressionNode.DataType = Symbol.SymbolType.INT;    //Could also be a float
+        testNode.addChild(expressionNode);
+        testNode.addSymbol(expressionNode);
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains(defaultErrorMessage(ErrorType.AlreadyDeclared)));
     }
     //endregion
 
     //region SemanticsIntLiteralStrategy tests
     @Test
     void IntLiteralStrategy_Returns_NoErrors() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.IntLiteral));
+        testNode.addStrategy(new SemanticsIntLiteralStrategy());
+        Node emptyNode = Node.makeNode(Node.NodeType.Empty);
+        testNode.addChild(emptyNode);
+
+        //Act
+        testNode.node.checkSemantics();
+
+        //Assert
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
 
     @Test
     void IntLiteralStrategy_Returns_NotMinusPrefixError() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.IntLiteral));
+        testNode.addStrategy(new SemanticsIntLiteralStrategy());
+        Node badPrefixNode = Node.makeNode(Node.NodeType.PrefixNot);
+        testNode.addChild(badPrefixNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        String errorMessage = "Only minus prefix (-) applicable to int data type.";
+        Assertions.assertTrue(exception.getMessage().contains(errorMessage));
     }
     //endregion
 
     //region SemanticsListenerBlockStrategy tests
     @Test
     void ListenerBlockStrategy_Returns_NoErrors() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Block));
+        testNode.addStrategy(new SemanticsListenerBlockStrategy());
+        testNode.addChild(Node.makeNode(Node.NodeType.IntDeclaration));
+        testNode.addChild(Node.makeNode(Node.NodeType.Empty));
+
+        //Act
+        testNode.node.checkSemantics();
+
+        //Assert
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
 
     @Test
     void ListenerBlockStrategy_Returns_IsPinDeclError() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Block));
+        testNode.addStrategy(new SemanticsListenerBlockStrategy());
+        testNode.addChild(Node.makeNode(Node.NodeType.PinDeclaration));
+        testNode.addChild(Node.makeNode(Node.NodeType.Empty));
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        String errorString = "No pin declarations allowed in Listener";
+        Assertions.assertTrue(exception.getMessage().contains(errorString));
     }
     //endregion
 
     //region SemanticsListenerCallStrategy tests
     @Test
     void ListenerCallStrategy_CheckBroadcast_Returns_NoErrors() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsListenerCallStrategy strategy = new SemanticsListenerCallStrategy();
+        strategy.BroadcastEvents = new ArrayList<>();
+        testNode.addStrategy(strategy);
+        testNode.addChild(Node.makeNode(Node.NodeType.Broadcast));
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
+        identifierNode.Value = "eventName";
+        identifierNode.DataType = Symbol.SymbolType.EVENT;
+        testNode.addSymbol(identifierNode);
+        testNode.addChild(identifierNode);
+
+        //Act
+        testNode.node.checkSemantics();
+
+        //Assert
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
 
     @Test
     void ListenerCallStrategy_CheckBroadcast_Returns_WrongTypeError() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsListenerCallStrategy strategy = new SemanticsListenerCallStrategy();
+        strategy.BroadcastEvents = new ArrayList<>();
+        testNode.addStrategy(strategy);
+        testNode.addChild(Node.makeNode(Node.NodeType.Broadcast));
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
+        identifierNode.Value = "eventName";
+        identifierNode.DataType = Symbol.SymbolType.PIN;    //Bad type
+        testNode.addSymbol(identifierNode);
+        testNode.addChild(identifierNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains(defaultErrorMessage(ErrorType.WrongType)));
     }
 
     @Test
     void ListenerCallStrategy_CheckBroadcast_Returns_NotDeclaredError() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsListenerCallStrategy strategy = new SemanticsListenerCallStrategy();
+        strategy.BroadcastEvents = new ArrayList<>();
+        testNode.addStrategy(strategy);
+        testNode.addChild(Node.makeNode(Node.NodeType.Broadcast));
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
+        identifierNode.Value = "eventName";
+        identifierNode.DataType = Symbol.SymbolType.EVENT;
+        //testNode.addSymbol(identifierNode);
+        testNode.addChild(identifierNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains(defaultErrorMessage(ErrorType.NotDeclared)));
     }
 
     @Test
-    void ListenerCallStrategy_CheckGetValue_Returns_NoErrors() throws SemanticsException {
-        assert(false);
+    void ListenerCallStrategy_CheckGetValue_Pin_Returns_NoErrors() throws SemanticsException {
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsListenerCallStrategy strategy = new SemanticsListenerCallStrategy();
+        String pinName = "pinName";
+        strategy.AvailablePinOrEvent = pinName;
+        testNode.addStrategy(strategy);
+        testNode.addChild(Node.makeNode(Node.NodeType.GetValue));
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
+        identifierNode.DataType = Symbol.SymbolType.PIN;
+        identifierNode.Value = pinName;
+        testNode.addSymbol(identifierNode);
+        testNode.addChild(identifierNode);
+
+        //Act
+        testNode.node.checkSemantics();
+
+        //Assert
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
+    }
+
+    @Test
+    void ListenerCallStrategy_CheckGetValue_Event_Returns_NoErrors() throws SemanticsException {
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsListenerCallStrategy strategy = new SemanticsListenerCallStrategy();
+        String eventName = "eventName";
+        strategy.AvailablePinOrEvent = eventName;
+        testNode.addStrategy(strategy);
+        testNode.addChild(Node.makeNode(Node.NodeType.GetValue));
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
+        identifierNode.DataType = Symbol.SymbolType.EVENT;
+        identifierNode.Value = eventName;
+        testNode.addSymbol(identifierNode);
+        testNode.addChild(identifierNode);
+
+        //Act
+        testNode.node.checkSemantics();
+
+        //Assert
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
 
     @Test
     void ListenerCallStrategy_CheckGetValue_Returns_WrongTypeError() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsListenerCallStrategy strategy = new SemanticsListenerCallStrategy();
+        String pinName = "pinName";
+        strategy.AvailablePinOrEvent = pinName;
+        testNode.addStrategy(strategy);
+        testNode.addChild(Node.makeNode(Node.NodeType.GetValue));
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
+        identifierNode.DataType = Symbol.SymbolType.BOOL;   //Bad type
+        identifierNode.Value = pinName;
+        testNode.addSymbol(identifierNode);
+        testNode.addChild(identifierNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains(defaultErrorMessage(ErrorType.WrongType)));
     }
 
     @Test
     void ListenerCallStrategy_CheckGetValue_Returns_PinUnavailableError() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsListenerCallStrategy strategy = new SemanticsListenerCallStrategy();
+        String pinName = "pinName";
+        //strategy.AvailablePinOrEvent = pinName;
+        testNode.addStrategy(strategy);
+        testNode.addChild(Node.makeNode(Node.NodeType.GetValue));
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
+        identifierNode.DataType = Symbol.SymbolType.PIN;
+        identifierNode.Value = pinName;
+        testNode.addSymbol(identifierNode);
+        testNode.addChild(identifierNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains("Pin unavailable to Listener"));
     }
 
     @Test
     void ListenerCallStrategy_CheckGetValue_Returns_NotDeclaredError() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsListenerCallStrategy strategy = new SemanticsListenerCallStrategy();
+        String pinName = "pinName";
+        strategy.AvailablePinOrEvent = pinName;
+        testNode.addStrategy(strategy);
+        testNode.addChild(Node.makeNode(Node.NodeType.GetValue));
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
+        identifierNode.DataType = Symbol.SymbolType.PIN;
+        identifierNode.Value = pinName;
+        //testNode.addSymbol(identifierNode);
+        testNode.addChild(identifierNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        System.out.println(exception.getMessage() + " " + ErrorType.NotDeclared.ordinal());
+        Assertions.assertTrue(exception.getMessage().contains(defaultErrorMessage(ErrorType.NotDeclared)));
     }
 
     @Test
     void ListenerCallStrategy_CheckFilterNoise_Returns_NoErrors() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsListenerCallStrategy strategy = new SemanticsListenerCallStrategy();
+        String pinName = "pinName";
+        strategy.AvailablePinOrEvent = pinName;
+        testNode.addStrategy(strategy);
+        testNode.addChild(Node.makeNode(Node.NodeType.FilterNoise));
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
+        identifierNode.DataType = Symbol.SymbolType.PIN;
+        identifierNode.Value = pinName;
+        testNode.addSymbolWithRefNode(identifierNode, Node.makeNode(Node.NodeType.Digital));
+        testNode.addChild(identifierNode);
+        testNode.addChild(Node.makeNode(Node.NodeType.Debounce));
+
+        //Act
+        testNode.node.checkSemantics();
+
+        //Assert
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
+    }
+
+    @Test
+    void ListenerCallStrategy_CheckFilterNoise_CheckPinAndFilterCombination_Returns_DigitalPinRangeError() {
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsListenerCallStrategy strategy = new SemanticsListenerCallStrategy();
+        String pinName = "pinName";
+        strategy.AvailablePinOrEvent = pinName;
+        testNode.addStrategy(strategy);
+        testNode.addChild(Node.makeNode(Node.NodeType.FilterNoise));
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
+        identifierNode.DataType = Symbol.SymbolType.PIN;
+        identifierNode.Value = pinName;
+        testNode.addSymbolWithRefNode(identifierNode, Node.makeNode(Node.NodeType.Digital));
+        testNode.addChild(identifierNode);
+        testNode.addChild(Node.makeNode(Node.NodeType.Range));
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains("Noise from digital pin cannot be filtered as ranged"));
+    }
+
+    @Test
+    void ListenerCallStrategy_CheckFilterNoise_CheckPinAndFilterCombination_Returns_AnalogPinNotRangeError() {
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsListenerCallStrategy strategy = new SemanticsListenerCallStrategy();
+        String pinName = "pinName";
+        strategy.AvailablePinOrEvent = pinName;
+        testNode.addStrategy(strategy);
+        testNode.addChild(Node.makeNode(Node.NodeType.FilterNoise));
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
+        identifierNode.DataType = Symbol.SymbolType.PIN;
+        identifierNode.Value = pinName;
+        testNode.addSymbolWithRefNode(identifierNode, Node.makeNode(Node.NodeType.Analog));
+        testNode.addChild(identifierNode);
+        testNode.addChild(Node.makeNode(Node.NodeType.Debounce));
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains("Noise from analog pin can only be filtered as ranged"));
     }
 
     @Test
     void ListenerCallStrategy_CheckFilterNoise_Returns_WrongTypeError() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsListenerCallStrategy strategy = new SemanticsListenerCallStrategy();
+        String pinName = "pinName";
+        strategy.AvailablePinOrEvent = pinName;
+        testNode.addStrategy(strategy);
+        testNode.addChild(Node.makeNode(Node.NodeType.FilterNoise));
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
+        identifierNode.DataType = Symbol.SymbolType.BOOL;   //Bad type
+        identifierNode.Value = pinName;
+        testNode.addSymbolWithRefNode(identifierNode, Node.makeNode(Node.NodeType.Digital));
+        testNode.addChild(identifierNode);
+        testNode.addChild(Node.makeNode(Node.NodeType.Debounce));
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains(defaultErrorMessage(ErrorType.WrongType)));
     }
 
     @Test
     void ListenerCallStrategy_CheckFilterNoise_Returns_NotDeclaredError() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsListenerCallStrategy strategy = new SemanticsListenerCallStrategy();
+        String pinName = "pinName";
+        strategy.AvailablePinOrEvent = pinName;
+        testNode.addStrategy(strategy);
+        testNode.addChild(Node.makeNode(Node.NodeType.FilterNoise));
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
+        identifierNode.DataType = Symbol.SymbolType.PIN;   //Bad type
+        identifierNode.Value = pinName;
+        //testNode.addSymbolWithRefNode(identifierNode, Node.makeNode(Node.NodeType.Digital));
+        testNode.addChild(identifierNode);
+        testNode.addChild(Node.makeNode(Node.NodeType.Debounce));
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains(defaultErrorMessage(ErrorType.NotDeclared)));
     }
 
     @Test
     void ListenerCallStrategy_CheckFilterNoise_Returns_PinUnavailableError() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsListenerCallStrategy strategy = new SemanticsListenerCallStrategy();
+        String pinName = "pinName";
+        //strategy.AvailablePinOrEvent = pinName;
+        testNode.addStrategy(strategy);
+        testNode.addChild(Node.makeNode(Node.NodeType.FilterNoise));
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
+        identifierNode.DataType = Symbol.SymbolType.PIN;
+        identifierNode.Value = pinName;
+        testNode.addSymbolWithRefNode(identifierNode, Node.makeNode(Node.NodeType.Digital));
+        testNode.addChild(identifierNode);
+        testNode.addChild(Node.makeNode(Node.NodeType.Debounce));
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains("Pin unavailable to Listener"));
     }
 
     @Test
     void ListenerCallStrategy_CheckCreateEvent_Returns_NoErrors() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        testNode.addStrategy(new SemanticsListenerCallStrategy());
+        testNode.addChild(Node.makeNode(Node.NodeType.CreateEvent));
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
+        identifierNode.DataType = Symbol.SymbolType.INT;
+        testNode.addChild(identifierNode);
+
+        //Act
+        testNode.node.checkSemantics();
+
+        //Assert
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
 
     @Test
     void ListenerCallStrategy_CheckCreateEvent_Returns_WrongTypeError() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        testNode.addStrategy(new SemanticsListenerCallStrategy());
+        testNode.addChild(Node.makeNode(Node.NodeType.CreateEvent));
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
+        identifierNode.DataType = Symbol.SymbolType.VOID;   //Bad type
+        testNode.addChild(identifierNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains(defaultErrorMessage(ErrorType.WrongType)));
     }
 
     @Test
     void ListenerCallStrategy_Returns_IllegalFuncCallError() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        testNode.addStrategy(new SemanticsListenerCallStrategy());
+        testNode.addChild(Node.makeNode(Node.NodeType.Write));
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains("Illegal function call in Listener"));
     }
     //endregion
 
     //region SemanticsListenerStrategy tests
     @Test
     void ListenerStrategy_Returns_NoErrors() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Listener));
+        testNode.addStrategy(new SemanticsListenerStrategy());
+        Node identifierNode = Node.makeNode((Node.NodeType.Identifier));
+        identifierNode.Value = "pinName";
+        identifierNode.DataType = Symbol.SymbolType.PIN;
+        testNode.addChild(identifierNode);
+        testNode.addSymbol(identifierNode);
+        testNode.addChild(Node.makeNode(Node.NodeType.Block));
+
+        //Act
+        testNode.node.checkSemantics();
+
+        //Assert
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
 
     @Test
     void ListenerStrategy_Returns_WrongTypeError() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Listener));
+        testNode.addStrategy(new SemanticsListenerStrategy());
+        Node identifierNode = Node.makeNode((Node.NodeType.Identifier));
+        identifierNode.Value = "pinName";
+        identifierNode.DataType = Symbol.SymbolType.BOOL;   //Bad type
+        testNode.addChild(identifierNode);
+        testNode.addSymbol(identifierNode);
+        testNode.addChild(Node.makeNode(Node.NodeType.Block));
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains(defaultErrorMessage(ErrorType.WrongType)));
     }
 
     @Test
     void ListenerStrategy_Returns_NotDeclaredError() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Listener));
+        testNode.addStrategy(new SemanticsListenerStrategy());
+        Node identifierNode = Node.makeNode((Node.NodeType.Identifier));
+        identifierNode.Value = "pinName";
+        identifierNode.DataType = Symbol.SymbolType.PIN;
+        testNode.addChild(identifierNode);
+        //testNode.addSymbol(identifierNode);
+        testNode.addChild(Node.makeNode(Node.NodeType.Block));
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains(defaultErrorMessage(ErrorType.NotDeclared)));
     }
     //endregion
 
     //region SemanticsMasterInitiateCallStrategy tests
     @Test
     void MasterInitiateCallStrategy_Returns_NoErrors() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsMasterInitiateCallStrategy strategy = new SemanticsMasterInitiateCallStrategy();
+        strategy.UsedPinNumbers = new ArrayList<>();
+        testNode.addStrategy(strategy);
+        Node createPinNode = Node.makeNode(Node.NodeType.CreatePin);
+        Node pinTypeNode = Node.makeNode(Node.NodeType.Digital);
+        Node ioTypeNode = Node.makeNode(Node.NodeType.Input);
+        Node pinNumberNode = Node.makeNode(Node.NodeType.IntLiteral);
+        pinNumberNode.Value = "0";
+        ioTypeNode.Next = pinNumberNode;
+        pinTypeNode.Next = ioTypeNode;
+        createPinNode.Next = pinTypeNode;
+        testNode.addChild(createPinNode);
+
+        //Act
+        testNode.node.checkSemantics();
+
+        //Assert
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
+
     }
 
     @Test
     void MasterInitiateCallStrategy_Returns_PinAlreadyUsedError() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsMasterInitiateCallStrategy strategy = new SemanticsMasterInitiateCallStrategy();
+        strategy.UsedPinNumbers = new ArrayList<>();
+        String pinNumber = "0";
+        strategy.UsedPinNumbers.add(pinNumber);
+        testNode.addStrategy(strategy);
+        Node createPinNode = Node.makeNode(Node.NodeType.CreatePin);
+        Node pinTypeNode = Node.makeNode(Node.NodeType.Digital);
+        Node ioTypeNode = Node.makeNode(Node.NodeType.Input);
+        Node pinNumberNode = Node.makeNode(Node.NodeType.IntLiteral);
+        pinNumberNode.Value = pinNumber;
+        ioTypeNode.Next = pinNumberNode;
+        pinTypeNode.Next = ioTypeNode;
+        createPinNode.Next = pinTypeNode;
+        testNode.addChild(createPinNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains("Pin number already used"));
     }
 
     @Test
     void MasterInitiateCallStrategy_Returns_MasterPinPWMError() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsMasterInitiateCallStrategy strategy = new SemanticsMasterInitiateCallStrategy();
+        strategy.UsedPinNumbers = new ArrayList<>();
+        testNode.addStrategy(strategy);
+        Node createPinNode = Node.makeNode(Node.NodeType.CreatePin);
+        Node pinTypeNode = Node.makeNode(Node.NodeType.PWM);    //PWM type is bad here
+        Node ioTypeNode = Node.makeNode(Node.NodeType.Input);
+        Node pinNumberNode = Node.makeNode(Node.NodeType.IntLiteral);
+        pinNumberNode.Value = "0";
+        ioTypeNode.Next = pinNumberNode;
+        pinTypeNode.Next = ioTypeNode;
+        createPinNode.Next = pinTypeNode;
+        testNode.addChild(createPinNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains("Pin cannot be PWM in master"));
     }
 
     @Test
     void MasterInitiateCallStrategy_Returns_MasterPinNotInputError() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsMasterInitiateCallStrategy strategy = new SemanticsMasterInitiateCallStrategy();
+        strategy.UsedPinNumbers = new ArrayList<>();
+        testNode.addStrategy(strategy);
+        Node createPinNode = Node.makeNode(Node.NodeType.CreatePin);
+        Node pinTypeNode = Node.makeNode(Node.NodeType.Digital);
+        Node ioTypeNode = Node.makeNode(Node.NodeType.Output);  //Output type is bad here
+        Node pinNumberNode = Node.makeNode(Node.NodeType.IntLiteral);
+        pinNumberNode.Value = "0";
+        ioTypeNode.Next = pinNumberNode;
+        pinTypeNode.Next = ioTypeNode;
+        createPinNode.Next = pinTypeNode;
+        testNode.addChild(createPinNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains("Pin must be input in master"));
     }
     //endregion
 
     //region SemanticsMasterStrategy tests
     @Test
     void MasterStrategy_Returns_NoErrors() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Master));
+        SemanticsMasterStrategy strategy = new SemanticsMasterStrategy();
+        strategy.BroadcastEvents = new ArrayList<>();
+        testNode.addStrategy(strategy);
+        testNode.addChild(Node.makeNode(Node.NodeType.PinDeclaration));
+        testNode.addChild(Node.makeNode(Node.NodeType.Empty));  //todo Why..?
+        testNode.addChild(Node.makeNode(Node.NodeType.Initiate));
+        testNode.addChild(Node.makeNode(Node.NodeType.Empty));
+
+        //Act
+        testNode.node.checkSemantics();
+
+        //Assert
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
     //endregion
 
     //region SemanticsPinDeclarationStrategy tests
     @Test
     void PinDeclarationStrategy_Returns_NoErrors() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.PinDeclaration));
+        SemanticsPinDeclarationStrategy strategy = new SemanticsPinDeclarationStrategy();
+        testNode.addStrategy(strategy);
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
+        Node callNode = Node.makeNode(Node.NodeType.Call);
+        callNode.FirstChild = Node.makeNode(Node.NodeType.CreatePin);
+
+        testNode.addChild(identifierNode);
+        testNode.addChild(callNode);
+
+        //Act
+        testNode.node.checkSemantics();
+
+        //Assert
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
 
     @Test
     void PinDeclarationStrategy_Returns_IllegalDeclError() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.PinDeclaration));
+        SemanticsPinDeclarationStrategy strategy = new SemanticsPinDeclarationStrategy();
+        testNode.addStrategy(strategy);
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
+        Node callNode = Node.makeNode(Node.NodeType.Call);
+        callNode.FirstChild = Node.makeNode(Node.NodeType.CreateEvent);
+
+        testNode.addChild(identifierNode);
+        testNode.addChild(callNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains("Illegal declaration of pin."));
     }
 
     @Test
     void PinDeclarationStrategy_Returns_AlreadyDeclaredError() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.PinDeclaration));
+        SemanticsPinDeclarationStrategy strategy = new SemanticsPinDeclarationStrategy();
+        testNode.addStrategy(strategy);
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
+        String pinName = "pinName";
+        testNode.addSymbol(identifierNode);
+        Node callNode = Node.makeNode(Node.NodeType.Call);
+        callNode.FirstChild = Node.makeNode(Node.NodeType.CreatePin);
+
+        testNode.addChild(identifierNode);
+        testNode.addChild(callNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains(defaultErrorMessage(ErrorType.AlreadyDeclared)));
     }
 
+    /*  todo Maybe make this test? Not sure how to be honest, since the inGlobalScope bool is outside of its scope
     @Test
     void PinDeclarationStrategy_Returns_GlobalPinError() throws SemanticsException {
-        assert(false);
+
     }
+    */
+
     //endregion
 
     //region SemanticsProgStrategy tests
     @Test
     void ProgStrategy_Returns_NoErrors() throws SemanticsException {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Prog));
+        SemanticsProgStrategy strategy = new SemanticsProgStrategy();
+        testNode.addStrategy(strategy);
+        testNode.addChild(Node.makeNode(Node.NodeType.Master));
+        testNode.addChild(Node.makeNode(Node.NodeType.Slave));
+        testNode.addChild(Node.makeNode(Node.NodeType.Empty));
+
+        //Act
+        testNode.node.checkSemantics();
+
+        //Assert
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
     //endregion
 
@@ -1191,12 +1857,12 @@ public class SemanticsTester {
 
         return testNode;
     }
+
     @Test
     void SlaveInitiateCallStrategy_Returns_NoErrors() throws SemanticsException {
         SemanticsSlaveInitiateCallStrategy strategy = new SemanticsSlaveInitiateCallStrategy();
         // Add pin values to list of used pins
-        ArrayList<String> usedPins = new ArrayList<String>();
-        strategy.UsedPinNumbers = usedPins;
+        strategy.UsedPinNumbers = new ArrayList<>();
 
         TestNode CallNode = setupSlaveInitiateCall(strategy);
 
