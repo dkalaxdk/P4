@@ -18,7 +18,7 @@ public class IfStrategy extends CodeGenerationStrategy {
 
         // Add the appropriate amount of indentation if it is the first "if" in a chain of if-elseif
         if (node.Parent.Type != Node.NodeType.If) {
-            ifStmt.append(addIndent(arduinoSystem.Indent));
+            ifStmt.append(AddIndent(arduinoSystem.Indent));
         }
 
         // Add the if expression and the block to the if statement
@@ -27,7 +27,7 @@ public class IfStrategy extends CodeGenerationStrategy {
 
         // If there is an else block, generate code for it (this method again)
         if (elseBlock != null && !elseBlock.IsEmpty()) {
-            afterIf = addIndent(arduinoSystem.Indent) + "else " + elseBlock.GenerateCode();
+            afterIf = AddIndent(arduinoSystem.Indent) + "else " + elseBlock.GenerateCode();
         }
 
         // Add the else block or just the empty string to the if statement

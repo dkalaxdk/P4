@@ -6,7 +6,7 @@ public abstract class CodeGenerationStrategy {
 
     protected ArduinoSystem arduinoSystem;
 
-    public void setArduinoSystem(ArduinoSystem system) {
+    public void SetArduinoSystem(ArduinoSystem system) {
         this.arduinoSystem = system;
     }
 
@@ -49,7 +49,7 @@ public abstract class CodeGenerationStrategy {
      * @param indent How much to indent
      * @return The indentation
      */
-    protected String addIndent(int indent) {
+    protected String AddIndent(int indent) {
         StringBuilder tabs = new StringBuilder();
 
         for (int i = 0; i < indent; i++) {

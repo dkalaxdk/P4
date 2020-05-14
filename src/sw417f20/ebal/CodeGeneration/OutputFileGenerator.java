@@ -2,8 +2,6 @@ package sw417f20.ebal.CodeGeneration;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
 
 public class OutputFileGenerator {
@@ -15,7 +13,7 @@ public class OutputFileGenerator {
      * @throws IOException if an error occurred during IO
      */
     public OutputFileGenerator(HashMap<String, String> files, String sourceFile) throws IOException {
-        String filePath = getFilePath() + sourceFile + "/";
+        String filePath = GetFilePath() + sourceFile + "/";
 
         File directory = new File(filePath);
 
@@ -53,7 +51,7 @@ public class OutputFileGenerator {
      * Returns the path of the folder where generated files are placed
      * @return String containing the resulting path
      */
-    private String getFilePath() {
+    private String GetFilePath() {
         return new File("").getAbsolutePath() + "/EBALArduino/";
     }
 }

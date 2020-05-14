@@ -136,7 +136,7 @@ public class CodeGenerationStrategyAssigner extends Visitor {
         }
 
         node.ArduinoID = arduinoID;
-        node.CodeGenerationStrategy.setArduinoSystem(this.arduinoSystem);
+        node.CodeGenerationStrategy.SetArduinoSystem(this.arduinoSystem);
 
         VisitChildren(node);
     }

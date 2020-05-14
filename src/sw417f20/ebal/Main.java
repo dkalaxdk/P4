@@ -44,7 +44,7 @@ public class Main {
             Scanner scanner = new Scanner(reader);
 
             Parser parser = new Parser(scanner, fileInput);
-            AST = parser.parse(debug);
+            AST = parser.Parse(debug);
 
             // Semantics
             SemanticsStrategyAssigner semanticsStrategyAssigner = new SemanticsStrategyAssigner();
@@ -112,7 +112,7 @@ public class Main {
             Parser parser = new Parser(scanner, fileInput);
 
             long start = System.currentTimeMillis();
-            parser.parse(debug);
+            parser.Parse(debug);
             System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms \n");
 
             filePath = new File("").getAbsolutePath();
@@ -127,7 +127,7 @@ public class Main {
             parser = new Parser(scanner, fileInput);
 
             start = System.currentTimeMillis();
-            parser.parse(debug);
+            parser.Parse(debug);
             System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms \n");
 
 
@@ -142,7 +142,7 @@ public class Main {
             parser = new Parser(scanner, fileInput);
 
             start = System.currentTimeMillis();
-            parser.parse(debug);
+            parser.Parse(debug);
             System.out.println("Runtime: " + (System.currentTimeMillis()-start) + " ms \n");
 
 
@@ -179,13 +179,13 @@ public class Main {
         int tokenCount = 0;
 
         while (scanner.currentToken.type != Token.Type.EOF) {
-            scanner.advance();
+            scanner.Advance();
 
             if (scanner.currentToken.type != Token.Type.NOTATOKEN && scanner.currentToken.type != Token.Type.ERROR) {
-                System.out.println("Token found: " + scanner.currentToken.type + " on line: " + scanner.currentToken.lineNumber + " : " + scanner.currentToken.offSet + " with content: " + scanner.currentToken.content);
+                System.out.println("Token found: " + scanner.currentToken.type + " on line: " + scanner.currentToken.LineNumber + " : " + scanner.currentToken.OffSet + " with content: " + scanner.currentToken.Content);
                 tokenCount++;
             } else if (scanner.currentToken.type == Token.Type.ERROR){
-                System.out.println("Unable to find token matching: " + scanner.currentToken.type + " on line: " + scanner.currentToken.lineNumber + " : " + scanner.currentToken.offSet + " with content: " + scanner.currentToken.content);
+                System.out.println("Unable to find token matching: " + scanner.currentToken.type + " on line: " + scanner.currentToken.LineNumber + " : " + scanner.currentToken.OffSet + " with content: " + scanner.currentToken.Content);
             }
 
 
@@ -215,7 +215,7 @@ public class Main {
             Parser parser = new Parser(scanner, fileInput);
 
             long start = System.currentTimeMillis();
-            root = parser.parse(false);
+            root = parser.Parse(false);
             System.out.println("Runtime: " + (System.currentTimeMillis() - start) + " ms \n");
         }
         catch (SyntaxException e) {

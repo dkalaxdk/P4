@@ -45,21 +45,21 @@ public class EventDeclarationStrategy extends CodeGenerationStrategy {
         event.SetType(eventType);
 
         // Add the event to the master
-        addEventToMaster(arduinoSystem.Master, event);
+        AddEventToMaster(arduinoSystem.Master, event);
 
         // Add the event to the slaves that handle it
         for (int i : event.AssociatedSlaves) {
-            addEventToSlave(arduinoSystem.SlaveList.get(i), event);
+            AddEventToSlave(arduinoSystem.SlaveList.get(i), event);
         }
 
         // Get the expression that is the input of createEvent
         String expression = node.FirstChild.Next.FirstChild.Next.GenerateCode();
 
-        return addIndent(arduinoSystem.Indent) + eventName + ".createEvent(" + expression + ");\n";
+        return AddIndent(arduinoSystem.Indent) + eventName + ".createEvent(" + expression + ");\n";
     }
 
     // Adds the input event to the master
-    private void addEventToMaster(Master master, Event event) {
+    private void AddEventToMaster(Master master, Event event) {
 
         // Add the event to the master's event declarations
         master.EventDeclarations
@@ -88,7 +88,7 @@ public class EventDeclarationStrategy extends CodeGenerationStrategy {
     }
 
     // Adds the input event to the slave
-    private void addEventToSlave(Slave slave, Event event) {
+    private void AddEventToSlave(Slave slave, Event event) {
 
         // Add the event to the slave's event declarations
         slave.EventDeclarations

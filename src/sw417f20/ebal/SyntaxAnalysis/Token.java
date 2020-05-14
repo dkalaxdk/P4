@@ -47,14 +47,14 @@ public class Token {
         EOF
 
     }
-    public Type type;
-    public String content;
-    public int lineNumber;
-    public int offSet;
+    public Type type;   //Refactoring will cause many many many problems, don't do it
+    public String Content;
+    public int LineNumber;
+    public int OffSet;
 
     public Token(Type inputType,String inputContent) {
         type = inputType;
-        content = inputContent;
+        Content = inputContent;
     }
 
     @Override
@@ -71,7 +71,7 @@ public class Token {
         if(((Token) obj).type != this.type) {
             return false;
         }
-        return ((Token) obj).content.equals(this.content);
+        return ((Token) obj).Content.equals(this.Content);
     }
 
 }

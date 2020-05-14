@@ -40,7 +40,7 @@ public class Node {
 
     private Node(NodeType type, Token token) {
         this.Type = type;
-        this.Value = token.content;
+        this.Value = token.Content;
     }
 
     private Node(NodeType type, int lineNumber) {
@@ -51,7 +51,7 @@ public class Node {
 
     private Node(NodeType type, Token token, int lineNumber) {
         this.Type = type;
-        this.Value = token.content;
+        this.Value = token.Content;
         this.LineNumber = lineNumber;
     }
 

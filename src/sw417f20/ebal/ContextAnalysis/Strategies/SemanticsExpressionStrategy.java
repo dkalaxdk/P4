@@ -10,7 +10,6 @@ public class SemanticsExpressionStrategy extends SemanticsCheckerStrategy{
     Node Operator;
     Node SecondOperand;
 
-
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {
         FirstOperand = node.FirstChild;

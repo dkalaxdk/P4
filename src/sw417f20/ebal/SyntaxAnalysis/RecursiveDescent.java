@@ -15,7 +15,7 @@ public abstract class RecursiveDescent {
     }
 
 
-    public Node parse(boolean debug) throws SyntaxException {
+    public Node Parse(boolean debug) throws SyntaxException {
         if (scanner == null) {
             return null;
         }
@@ -23,10 +23,10 @@ public abstract class RecursiveDescent {
         // Parse the input file
         System.out.println("Parsing: " + currentFile);
         Node root = Start();
-        expect(Token.Type.EOF);
+        Expect(Token.Type.EOF);
 
         if (debug) {
-            printTree(root);
+            PrintTree(root);
         }
 
         System.out.println("======== Parse successful ========");
@@ -37,19 +37,19 @@ public abstract class RecursiveDescent {
 
     protected abstract Node Start() throws SyntaxException;
 
-    protected Token peek() {
-        return scanner.peek();
+    protected Token Peek() {
+        return scanner.Peek();
     }
 
-    protected Token expect(Token.Type t) throws SyntaxException {
-        Token token = peek();
+    protected Token Expect(Token.Type t) throws SyntaxException {
+        Token token = Peek();
 
         if (token.type != t) {
-            makeError("Expected [" + t + "]");
+            MakeError("Expected [" + t + "]");
         }
 
         try {
-            scanner.advance();
+            scanner.Advance();
         }
         catch (IOException e) {
             System.err.println(e);
@@ -58,18 +58,18 @@ public abstract class RecursiveDescent {
         return token;
     }
 
-    protected void makeError(String message) throws SyntaxException {
+    protected void MakeError(String message) throws SyntaxException {
         throw new SyntaxException(message +
-                            " on line: " + scanner.nextToken.lineNumber +
-                            " : " + scanner.nextToken.offSet +
-                            ". Got [" + scanner.nextToken.type + "] with content \"" + scanner.nextToken.content + "\" ");
+                            " on line: " + scanner.nextToken.LineNumber +
+                            " : " + scanner.nextToken.OffSet +
+                            ". Got [" + scanner.nextToken.type + "] with content \"" + scanner.nextToken.Content + "\" ");
     }
 
-    protected int getLineNumber() {
+    protected int GetLineNumber() {
         return scanner.reader.currentLine;
     }
 
-    private void printTree(Node tree) {
+    private void PrintTree(Node tree) {
         ASTPrinter ASTPrinter = new ASTPrinter();
         ASTPrinter.Visit(tree);
     }

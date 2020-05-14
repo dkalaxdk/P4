@@ -9,31 +9,31 @@ public class Tokenizer {
         this.reader = reader;
     }
 
-    public Token getToken() throws IOException {
+    public Token GetToken() throws IOException {
         Token token = new Token(Token.Type.NOTATOKEN, "");
-        token.lineNumber = reader.currentLine;
-        token.offSet = reader.currentOffset;
+        token.LineNumber = reader.currentLine;
+        token.OffSet = reader.currentOffset;
 
-        token.content += reader.ReadChar();
+        token.Content += reader.ReadChar();
 
-        assignSpecialCharacterType(token);
+        AssignSpecialCharacterType(token);
         if (token.type == Token.Type.NOTATOKEN) {
-            token.content = reader.FindNumber();
-            assignNumberTokenType(token);
+            token.Content = reader.FindNumber();
+            AssignNumberTokenType(token);
         }
         if (token.type == Token.Type.NOTATOKEN) {
-            token.content = reader.FindWord();
-            assignKeywordType(token);
+            token.Content = reader.FindWord();
+            AssignKeywordType(token);
         }
 
-        if (token.type == Token.Type.NOTATOKEN && token.content.length() >= 1) {
+        if (token.type == Token.Type.NOTATOKEN && token.Content.length() >= 1) {
             token.type = Token.Type.IDENTIFIER;
         }
         return token;
     }
 
-    public void assignKeywordType(Token token) {
-        switch (token.content) {
+    public void AssignKeywordType(Token token) {
+        switch (token.Content) {
             case "MASTER":
                 token.type = Token.Type.MASTER;
                 break;
@@ -121,7 +121,7 @@ public class Tokenizer {
             case "HIGH":
             case "LOW":
                 token.type = Token.Type.LIT_Int;
-                token.content = token.content.equals("HIGH") ? "1" : "0";
+                token.Content = token.Content.equals("HIGH") ? "1" : "0";
                 break;
             case "TRUE":
             case "true":
@@ -134,11 +134,11 @@ public class Tokenizer {
         }
     }
 
-    public void assignSpecialCharacterType(Token token) throws IOException {
-        if(token.content.length() > 1) {
+    public void AssignSpecialCharacterType(Token token) throws IOException {
+        if(token.Content.length() > 1) {
             return;
         }
-        switch (token.content.charAt(0)) {  //todo Fjern ikke brugte cases
+        switch (token.Content.charAt(0)) {  //todo Fjern ikke brugte cases
             case '+':
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.OP_PLUS_EQUALS;
@@ -146,20 +146,20 @@ public class Tokenizer {
                 break;
             case '-':
                 if (reader.nextChar == '=') {
-                    token.content += reader.ReadChar();
+                    token.Content += reader.ReadChar();
                     token.type = Token.Type.OP_MINUS_EQUALS;
                 } else token.type = Token.Type.OP_MINUS;
                 break;
             case '*':
                 if (reader.nextChar == '=') {
-                    token.content += reader.ReadChar();
+                    token.Content += reader.ReadChar();
                     token.type = Token.Type.OP_TIMES_EQUALS;
                 } else token.type = Token.Type.OP_TIMES;
                 break;
             case '/':   // Has some special cases when followed by other symbols
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.OP_DIVIDE_EQUALS;
-                    token.content += reader.ReadChar();
+                    token.Content += reader.ReadChar();
                 } else if (reader.nextChar == '*') {
                     reader.ReadToEndOfComment();
                 } else if (reader.nextChar == '/') {
@@ -170,7 +170,7 @@ public class Tokenizer {
             case '=':
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.LOP_EQUALS;
-                    token.content += reader.ReadChar();
+                    token.Content += reader.ReadChar();
                 } else token.type = Token.Type.ASSIGN;
                 break;
 
@@ -181,7 +181,7 @@ public class Tokenizer {
             case '!':
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.LOP_NOTEQUAL;
-                    token.content += reader.ReadChar();
+                    token.Content += reader.ReadChar();
                 } else token.type = Token.Type.OP_NOT;
                 break;
 
@@ -217,27 +217,27 @@ public class Tokenizer {
             case '>':
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.LOP_GREATEROREQUAL;
-                    token.content += reader.ReadChar();
+                    token.Content += reader.ReadChar();
                 } else token.type = Token.Type.LOP_GREATERTHAN;
                 break;
             case '<':
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.LOP_LESSOREQUAL;
-                    token.content += reader.ReadChar();
+                    token.Content += reader.ReadChar();
                 } else token.type = Token.Type.LOP_LESSTHAN;
                 break;
 
             case '&':
                 if (reader.nextChar == '&') {
                     token.type = Token.Type.LOP_AND;
-                    token.content += reader.ReadChar();
+                    token.Content += reader.ReadChar();
                 }
                 break;
 
             case '|':
                 if (reader.nextChar == '|') {
                     token.type = Token.Type.LOP_OR;
-                    token.content += reader.ReadChar();
+                    token.Content += reader.ReadChar();
                 }
                 break;
 
@@ -247,12 +247,12 @@ public class Tokenizer {
         }
     }
 
-    public void assignNumberTokenType(Token token) {
-        if (token.content.matches("[0-9]+")) {
+    public void AssignNumberTokenType(Token token) {
+        if (token.Content.matches("[0-9]+")) {
             token.type = Token.Type.LIT_Int;
-        } else if (token.content.matches("[0-9]+\\.[0-9]*")) {
+        } else if (token.Content.matches("[0-9]+\\.[0-9]*")) {
             token.type = Token.Type.LIT_Float;
-        } else if (token.content.matches("[0-9A-Za-z.]+")) {
+        } else if (token.Content.matches("[0-9A-Za-z.]+")) {
             token.type = Token.Type.ERROR;
         }
     }

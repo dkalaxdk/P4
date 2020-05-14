@@ -9,6 +9,6 @@ public class AssignmentStrategy extends CodeGenerationStrategy {
         String identifier = node.FirstChild.Value;
         String expression = node.FirstChild.Next.GenerateCode();
 
-        return addIndent(arduinoSystem.Indent) + identifier + " = " + expression + ";\n";
+        return AddIndent(arduinoSystem.Indent) + identifier + " = " + expression + ";\n";
     }
 }

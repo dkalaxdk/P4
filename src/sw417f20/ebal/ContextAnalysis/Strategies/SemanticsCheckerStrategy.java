@@ -8,7 +8,7 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 public abstract class SemanticsCheckerStrategy {
 
     public ISymbolTable SymbolTable;
-    public enum ErrorType{ NotDeclared, AlreadyDeclared, WrongType, Default}
+    public enum ErrorType{ NotDeclared, AlreadyDeclared, WrongType, Default }
     public String AvailablePinOrEvent;
 
     /**

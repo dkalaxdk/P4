@@ -22,7 +22,7 @@ class ReaderTest {
     }
 
     @Test
-    void readChar_ReadsChar_ReturnsCorrectChar() throws IOException {
+    void ReadChar_ReadsChar_ReturnsCorrectChar() throws IOException {
         char expected = 'a';
         // Mock the inputStream
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
@@ -35,7 +35,7 @@ class ReaderTest {
     }
 
     @Test
-    void readChar_ReadsChar_ReturnsCorrectNextChar() throws IOException {
+    void ReadChar_ReadsChar_ReturnsCorrectNextChar() throws IOException {
         char expected = 'b';
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
         // Mock two consecutive calls to the method with different return values.
@@ -49,7 +49,7 @@ class ReaderTest {
     }
 
     @Test
-    void readChar_ReadsChar_IncrementsCurrentOffset() throws IOException {
+    void ReadChar_ReadsChar_IncrementsCurrentOffset() throws IOException {
         int expected = 1;
         // Mock the inputStream
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
@@ -63,7 +63,7 @@ class ReaderTest {
     }
 
     @Test
-    void readChar_ReadsNewLine_IncrementsCurrentLine() throws IOException {
+    void ReadChar_ReadsNewLine_IncrementsCurrentLine() throws IOException {
         int expected = 2;
         // Mock the inputStream
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
@@ -77,7 +77,7 @@ class ReaderTest {
     }
 
     @Test
-    void readChar_ReadsNewLine_ResetsCurrentOffset() throws IOException {
+    void ReadChar_ReadsNewLine_ResetsCurrentOffset() throws IOException {
         int expected = 0;
         // Mock the inputStream
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
@@ -92,7 +92,7 @@ class ReaderTest {
     }
 
     @Test
-    void findWord_ReadsWord_ReturnsCorrectWord() throws IOException {
+    void FindWord_ReadsWord_ReturnsCorrectWord() throws IOException {
         String expected = "word";
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
         // Mock to return the characters of a word followed by whitespace
@@ -106,7 +106,7 @@ class ReaderTest {
     }
 
     @Test
-    void findWord_ReadsWord_IgnoresTrailingWhitespace() throws IOException {
+    void FindWord_ReadsWord_IgnoresTrailingWhitespace() throws IOException {
         String expected = "word";
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
         // Mock to return the characters of a word followed by whitespace
@@ -120,7 +120,7 @@ class ReaderTest {
     }
 
     @Test
-    void findWord_ReadsWord_ReturnsWordBeforeWhitespace() throws IOException {
+    void FindWord_ReadsWord_ReturnsWordBeforeWhitespace() throws IOException {
         String expected = "word";
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
         // Mock to return the characters of a word followed by whitespace
@@ -136,7 +136,7 @@ class ReaderTest {
     }
 
     @Test
-    void findWord_ReadsWord_ReturnsWordBeforeParen() throws IOException {
+    void FindWord_ReadsWord_ReturnsWordBeforeParen() throws IOException {
         String expected = "word";
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
         // Mock to return the characters of a word followed by whitespace
@@ -150,7 +150,7 @@ class ReaderTest {
     }
 
     @Test
-    void findWord_ReadsWord_AccecptsWordWithUnderscoreInBeginning() throws IOException {
+    void FindWord_ReadsWord_AccecptsWordWithUnderscoreInBeginning() throws IOException {
         String expected = "_word";
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
         // Mock to return the characters of a word followed by whitespace
@@ -164,7 +164,7 @@ class ReaderTest {
     }
 
     @Test
-    void findWord_ReadsWord_AccecptsWordWithUnderscoreInMiddle() throws IOException {
+    void FindWord_ReadsWord_AccecptsWordWithUnderscoreInMiddle() throws IOException {
         String expected = "wo_rd";
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
         // Mock to return the characters of a word followed by whitespace
@@ -178,7 +178,7 @@ class ReaderTest {
     }
 
     @Test
-    void findWord_ReadsWord_AccecptsWordWithUnderscoreATEnd() throws IOException {
+    void FindWord_ReadsWord_AccecptsWordWithUnderscoreATEnd() throws IOException {
         String expected = "word_";
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
         // Mock to return the characters of a word followed by whitespace
@@ -192,7 +192,7 @@ class ReaderTest {
     }
 
     @Test
-    void findNumber_ReadsNumber_AcceptsNumberOne() throws IOException {
+    void FindNumber_ReadsNumber_AcceptsNumberOne() throws IOException {
         String expected = "1";
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
         Mockito.when(mockReader.read()).thenReturn((int) '1', (int) '\t');
@@ -206,7 +206,7 @@ class ReaderTest {
 
 
     @Test
-    void findNumber_ReadsNumber_DecimalNumber() throws IOException {
+    void FindNumber_ReadsNumber_DecimalNumber() throws IOException {
         String expected = "1.2";
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
         Mockito.when(mockReader.read()).thenReturn((int) '1', (int) '.', (int) '2', (int) '\t');
@@ -220,7 +220,7 @@ class ReaderTest {
 
     //jeg er ikke helt sikker på om den her test skal virke.
     @Test
-    void findNumber_ReadsNumber_NumberThatStartsWithDot() throws IOException {
+    void FindNumber_ReadsNumber_NumberThatStartsWithDot() throws IOException {
         String expected = ".2";
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
         Mockito.when(mockReader.read()).thenReturn((int) '.', (int) '2', (int) '\t');
@@ -234,7 +234,7 @@ class ReaderTest {
     }
 
     @Test
-    void findNumber_ReadsNumber_NumberThatHasACharacter() throws IOException {
+    void FindNumber_ReadsNumber_NumberThatHasACharacter() throws IOException {
         String expected = "1a";
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
         Mockito.when(mockReader.read()).thenReturn((int) '1', (int) 'a', (int) '\t');

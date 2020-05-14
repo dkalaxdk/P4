@@ -22,6 +22,6 @@ public class BoolDeclarationStrategy extends CodeGenerationStrategy {
 
         decl.append(";\n");
 
-        return addIndent(arduinoSystem.Indent) + decl.toString();
+        return AddIndent(arduinoSystem.Indent) + decl.toString();
     }
 }
