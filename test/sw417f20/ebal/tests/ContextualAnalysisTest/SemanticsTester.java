@@ -532,28 +532,119 @@ public class SemanticsTester {
     }
 
     @Test
-    void EventHandlerCallStrategy_CheckGetValue_Returns_NoErrors() {
-        assert(false);
+    void EventHandlerCallStrategy_CheckGetValue_Returns_NoErrors() throws SemanticsException {
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsEventHandlerCallStrategy strategy = new SemanticsEventHandlerCallStrategy();
+        String identifier = "eventName";
+        strategy.AvailablePinOrEvent = identifier;
+        testNode.addStrategy(strategy);
+
+        Node getValueNode = Node.makeNode(Node.NodeType.GetValue);
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
+        identifierNode.DataType = Symbol.SymbolType.EVENT;
+        identifierNode.Value = identifier;
+        testNode.addSymbol(identifierNode);
+
+        testNode.addChild(getValueNode);
+        testNode.addChild(identifierNode);
+
+        //Act
+        testNode.node.checkSemantics();
+
+        //Assert
+        Assertions.assertDoesNotThrow(SemanticsTester::new);
     }
 
     @Test
     void EventHandlerCallStrategy_CheckGetValue_Returns_WrongTypeError() {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsEventHandlerCallStrategy strategy = new SemanticsEventHandlerCallStrategy();
+        String identifier = "eventName";
+        strategy.AvailablePinOrEvent = identifier;
+        testNode.addStrategy(strategy);
+
+        Node getValueNode = Node.makeNode(Node.NodeType.GetValue);
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
+        identifierNode.DataType = Symbol.SymbolType.VOID;   //Bad type
+        identifierNode.Value = identifier;
+        testNode.addSymbol(identifierNode);
+
+        testNode.addChild(getValueNode);
+        testNode.addChild(identifierNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains(defaultErrorMessage(ErrorType.WrongType)));
     }
 
     @Test
     void EventHandlerCallStrategy_CheckGetValue_Returns_EventUnavailableError() {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsEventHandlerCallStrategy strategy = new SemanticsEventHandlerCallStrategy();
+        String identifier = "eventName";
+        //strategy.AvailablePinOrEvent = identifier;
+        testNode.addStrategy(strategy);
+
+        Node getValueNode = Node.makeNode(Node.NodeType.GetValue);
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
+        identifierNode.DataType = Symbol.SymbolType.EVENT;
+        identifierNode.Value = identifier;
+        testNode.addSymbol(identifierNode);
+
+        testNode.addChild(getValueNode);
+        testNode.addChild(identifierNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains("Event unavailable to EventHandler"));
     }
 
     @Test
     void EventHandlerCallStrategy_CheckGetValue_Returns_NotDeclaredError() {
-        assert(false);
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsEventHandlerCallStrategy strategy = new SemanticsEventHandlerCallStrategy();
+        String identifier = "eventName";
+        strategy.AvailablePinOrEvent = identifier;
+        testNode.addStrategy(strategy);
+
+        Node getValueNode = Node.makeNode(Node.NodeType.GetValue);
+        Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
+        identifierNode.DataType = Symbol.SymbolType.EVENT;
+        identifierNode.Value = identifier;
+        //testNode.addSymbol(identifierNode);
+
+        testNode.addChild(getValueNode);
+        testNode.addChild(identifierNode);
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains(defaultErrorMessage(ErrorType.NotDeclared)));
     }
 
     @Test
-    void EventHandlerCallStrategy_Returns_IllegalFuncError() {
-        assert(false);
+    void EventHandlerCallStrategy_Returns_IllegalFuncError() throws SemanticsException {
+        //Arrange
+        TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
+        SemanticsEventHandlerCallStrategy strategy = new SemanticsEventHandlerCallStrategy();
+        testNode.addStrategy(strategy);
+
+        testNode.addChild(Node.makeNode(Node.NodeType.Broadcast));  //Bad function
+
+        //Act
+        Exception exception = Assertions.assertThrows(SemanticsException.class, testNode.node::checkSemantics);
+
+        //Assert
+        Assertions.assertTrue(exception.getMessage().contains("Illegal function call in EventHandler"));
     }
     //endregion
 
