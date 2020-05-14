@@ -320,7 +320,7 @@ public class SemanticsTester {
 
         SemanticsEventDeclarationStrategy eventDeclarationStrategy = new SemanticsEventDeclarationStrategy();
         eventDeclarationStrategy.SymbolTable = new HashSymbolTable();
-        eventDeclarationStrategy.LocalEvents = new ArrayList<Symbol>();
+        eventDeclarationStrategy.LocalEvents = new ArrayList<>();
 
         IdentifierNode.Value = "TestVar";
 
@@ -454,7 +454,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void EventHandlerCallStrategy_CheckWrite_Returns_SecondParameterWrongTypeError() throws SemanticsException{
+    void EventHandlerCallStrategy_CheckWrite_Returns_SecondParameterWrongTypeError() {
         //Arrange
         TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
         SemanticsEventHandlerCallStrategy strategy = new SemanticsEventHandlerCallStrategy();
@@ -632,7 +632,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void EventHandlerCallStrategy_Returns_IllegalFuncError() throws SemanticsException {
+    void EventHandlerCallStrategy_Returns_IllegalFuncError() {
         //Arrange
         TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
         SemanticsEventHandlerCallStrategy strategy = new SemanticsEventHandlerCallStrategy();
@@ -1140,7 +1140,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void InitiateBlockStrategy_Returns_NotPinDeclError() throws SemanticsException {
+    void InitiateBlockStrategy_Returns_NotPinDeclError() {
         //Error being checked for
         String errorMessage = "Only pin declarations allowed in Initiate";
 
@@ -1198,7 +1198,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void IntDeclarationStrategy_Returns_WrongTypeError() throws SemanticsException {
+    void IntDeclarationStrategy_Returns_WrongTypeError() {
         //Arrange
         TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.IntDeclaration));
         testNode.addStrategy(new SemanticsIntDeclarationStrategy());
@@ -1216,7 +1216,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void IntDeclarationStrategy_Returns_AlreadyDeclaredError() throws SemanticsException {
+    void IntDeclarationStrategy_Returns_AlreadyDeclaredError() {
         //Arrange
         TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.IntDeclaration));
         testNode.addStrategy(new SemanticsIntDeclarationStrategy());
@@ -1251,7 +1251,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void IntLiteralStrategy_Returns_NotMinusPrefixError() throws SemanticsException {
+    void IntLiteralStrategy_Returns_NotMinusPrefixError() {
         //Arrange
         TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.IntLiteral));
         testNode.addStrategy(new SemanticsIntLiteralStrategy());
@@ -1284,7 +1284,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void ListenerBlockStrategy_Returns_IsPinDeclError() throws SemanticsException {
+    void ListenerBlockStrategy_Returns_IsPinDeclError() {
         //Arrange
         TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Block));
         testNode.addStrategy(new SemanticsListenerBlockStrategy());
@@ -1323,7 +1323,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void ListenerCallStrategy_CheckBroadcast_Returns_WrongTypeError() throws SemanticsException {
+    void ListenerCallStrategy_CheckBroadcast_Returns_WrongTypeError() {
         //Arrange
         TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
         SemanticsListenerCallStrategy strategy = new SemanticsListenerCallStrategy();
@@ -1344,7 +1344,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void ListenerCallStrategy_CheckBroadcast_Returns_NotDeclaredError() throws SemanticsException {
+    void ListenerCallStrategy_CheckBroadcast_Returns_NotDeclaredError() {
         //Arrange
         TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
         SemanticsListenerCallStrategy strategy = new SemanticsListenerCallStrategy();
@@ -1409,7 +1409,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void ListenerCallStrategy_CheckGetValue_Returns_WrongTypeError() throws SemanticsException {
+    void ListenerCallStrategy_CheckGetValue_Returns_WrongTypeError() {
         //Arrange
         TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
         SemanticsListenerCallStrategy strategy = new SemanticsListenerCallStrategy();
@@ -1431,7 +1431,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void ListenerCallStrategy_CheckGetValue_Returns_PinUnavailableError() throws SemanticsException {
+    void ListenerCallStrategy_CheckGetValue_Returns_PinUnavailableError() {
         //Arrange
         TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
         SemanticsListenerCallStrategy strategy = new SemanticsListenerCallStrategy();
@@ -1453,7 +1453,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void ListenerCallStrategy_CheckGetValue_Returns_NotDeclaredError() throws SemanticsException {
+    void ListenerCallStrategy_CheckGetValue_Returns_NotDeclaredError() {
         //Arrange
         TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
         SemanticsListenerCallStrategy strategy = new SemanticsListenerCallStrategy();
@@ -1545,7 +1545,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void ListenerCallStrategy_CheckFilterNoise_Returns_WrongTypeError() throws SemanticsException {
+    void ListenerCallStrategy_CheckFilterNoise_Returns_WrongTypeError() {
         //Arrange
         TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
         SemanticsListenerCallStrategy strategy = new SemanticsListenerCallStrategy();
@@ -1568,7 +1568,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void ListenerCallStrategy_CheckFilterNoise_Returns_NotDeclaredError() throws SemanticsException {
+    void ListenerCallStrategy_CheckFilterNoise_Returns_NotDeclaredError() {
         //Arrange
         TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
         SemanticsListenerCallStrategy strategy = new SemanticsListenerCallStrategy();
@@ -1591,7 +1591,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void ListenerCallStrategy_CheckFilterNoise_Returns_PinUnavailableError() throws SemanticsException {
+    void ListenerCallStrategy_CheckFilterNoise_Returns_PinUnavailableError() {
         //Arrange
         TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
         SemanticsListenerCallStrategy strategy = new SemanticsListenerCallStrategy();
@@ -1631,7 +1631,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void ListenerCallStrategy_CheckCreateEvent_Returns_WrongTypeError() throws SemanticsException {
+    void ListenerCallStrategy_CheckCreateEvent_Returns_WrongTypeError() {
         //Arrange
         TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
         testNode.addStrategy(new SemanticsListenerCallStrategy());
@@ -1648,7 +1648,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void ListenerCallStrategy_Returns_IllegalFuncCallError() throws SemanticsException {
+    void ListenerCallStrategy_Returns_IllegalFuncCallError() {
         //Arrange
         TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
         testNode.addStrategy(new SemanticsListenerCallStrategy());
@@ -1683,7 +1683,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void ListenerStrategy_Returns_WrongTypeError() throws SemanticsException {
+    void ListenerStrategy_Returns_WrongTypeError() {
         //Arrange
         TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Listener));
         testNode.addStrategy(new SemanticsListenerStrategy());
@@ -1702,7 +1702,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void ListenerStrategy_Returns_NotDeclaredError() throws SemanticsException {
+    void ListenerStrategy_Returns_NotDeclaredError() {
         //Arrange
         TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Listener));
         testNode.addStrategy(new SemanticsListenerStrategy());
@@ -1748,7 +1748,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void MasterInitiateCallStrategy_Returns_PinAlreadyUsedError() throws SemanticsException {
+    void MasterInitiateCallStrategy_Returns_PinAlreadyUsedError() {
         //Arrange
         TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
         SemanticsMasterInitiateCallStrategy strategy = new SemanticsMasterInitiateCallStrategy();
@@ -1774,7 +1774,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void MasterInitiateCallStrategy_Returns_MasterPinPWMError() throws SemanticsException {
+    void MasterInitiateCallStrategy_Returns_MasterPinPWMError() {
         //Arrange
         TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
         SemanticsMasterInitiateCallStrategy strategy = new SemanticsMasterInitiateCallStrategy();
@@ -1798,7 +1798,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void MasterInitiateCallStrategy_Returns_MasterPinNotInputError() throws SemanticsException {
+    void MasterInitiateCallStrategy_Returns_MasterPinNotInputError() {
         //Arrange
         TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.Call));
         SemanticsMasterInitiateCallStrategy strategy = new SemanticsMasterInitiateCallStrategy();
@@ -1865,7 +1865,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void PinDeclarationStrategy_Returns_IllegalDeclError() throws SemanticsException {
+    void PinDeclarationStrategy_Returns_IllegalDeclError() {
         //Arrange
         TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.PinDeclaration));
         SemanticsPinDeclarationStrategy strategy = new SemanticsPinDeclarationStrategy();
@@ -1885,13 +1885,12 @@ public class SemanticsTester {
     }
 
     @Test
-    void PinDeclarationStrategy_Returns_AlreadyDeclaredError() throws SemanticsException {
+    void PinDeclarationStrategy_Returns_AlreadyDeclaredError() {
         //Arrange
         TestNode testNode = new TestNode(Node.makeNode(Node.NodeType.PinDeclaration));
         SemanticsPinDeclarationStrategy strategy = new SemanticsPinDeclarationStrategy();
         testNode.addStrategy(strategy);
         Node identifierNode = Node.makeNode(Node.NodeType.Identifier);
-        String pinName = "pinName";
         testNode.addSymbol(identifierNode);
         Node callNode = Node.makeNode(Node.NodeType.Call);
         callNode.FirstChild = Node.makeNode(Node.NodeType.CreatePin);
@@ -1950,7 +1949,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void SlaveInitiateCallStrategy_Returns_NoErrors() throws SemanticsException {
+    void SlaveInitiateCallStrategy_Returns_NoErrors() {
         SemanticsSlaveInitiateCallStrategy strategy = new SemanticsSlaveInitiateCallStrategy();
         // Add pin values to list of used pins
         strategy.UsedPinNumbers = new ArrayList<>();
@@ -1969,13 +1968,13 @@ public class SemanticsTester {
     }
 
     @Test
-    void SlaveInitiateCallStrategy_Returns_PinAlreadyUsedError() throws SemanticsException {
+    void SlaveInitiateCallStrategy_Returns_PinAlreadyUsedError() {
         // The string expected as return from the error
         String errorString = "Pin number already used";
         String pinValue = "TestPin";
         SemanticsSlaveInitiateCallStrategy strategy = new SemanticsSlaveInitiateCallStrategy();
         // Add pin values to list of used pins
-        ArrayList<String> usedPins = new ArrayList<String>();
+        ArrayList<String> usedPins = new ArrayList<>();
         usedPins.add(pinValue);
         strategy.UsedPinNumbers = usedPins;
 
@@ -1999,7 +1998,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void SlaveInitiateCallStrategy_Returns_SlavePinNotOutputError() throws SemanticsException {
+    void SlaveInitiateCallStrategy_Returns_SlavePinNotOutputError() {
         // The string expected as return from the error
         String errorString = "Pin must be output in slave";
         SemanticsSlaveInitiateCallStrategy strategy = new SemanticsSlaveInitiateCallStrategy();
@@ -2024,7 +2023,7 @@ public class SemanticsTester {
 
     //region SemanticsSlaveStrategy tests
     @Test
-    void SlaveStrategy_Returns_NoErrors() throws SemanticsException {
+    void SlaveStrategy_Returns_NoErrors() {
         Node SlaveNode = Node.makeNode(Node.NodeType.Slave);
         SemanticsSlaveStrategy strategy = new SemanticsSlaveStrategy();
 
@@ -2046,7 +2045,7 @@ public class SemanticsTester {
     }
 
     @Test
-    void SlaveStrategy_Returns_AlreadyDeclaredError() throws SemanticsException {
+    void SlaveStrategy_Returns_AlreadyDeclaredError() {
         // The string expected as return from the error
         String errorString = "already been declared";
         Node SlaveNode = Node.makeNode(Node.NodeType.Slave);
