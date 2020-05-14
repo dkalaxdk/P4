@@ -47,7 +47,7 @@ public class PinDeclarationStrategy extends CodeGenerationStrategy {
         board.Loop
                 .append("\t")
                 .append(pinName)
-                .append(".readPin();\n");
+                .append(".read();\n");
 
         return "";
     }

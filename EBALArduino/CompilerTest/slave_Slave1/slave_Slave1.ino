@@ -54,5 +54,5 @@ void receiveEvent(int howMany) {
 }
 
 void loop() {
-	out.readPin();
+	out.read();
 }

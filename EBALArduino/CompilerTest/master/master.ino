@@ -55,9 +55,9 @@ void potenListener2() {
 
 
 void loop() {
-	button1.readPin();
-	button2.readPin();
-	poten.readPin();
+	button1.read();
+	button2.read();
+	poten.read();
 	button1Listener0();
 	button2Listener1();
 	potenListener2();
