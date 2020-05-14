@@ -38,9 +38,9 @@ public class PinDeclarationStrategy extends CodeGenerationStrategy {
         board.PinInstantiations
                 .append("\t")
                 .append(pinName).append(".createPin(")
-                .append(pinType.generateCode()).append(", ")
-                .append(ioType.generateCode()).append(", ")
-                .append(pinNumber.generateCode())
+                .append(pinType.GenerateCode()).append(", ")
+                .append(ioType.GenerateCode()).append(", ")
+                .append(pinNumber.GenerateCode())
                 .append(");\n");
 
         // Add the pin to the loop so it's value is constantly updated

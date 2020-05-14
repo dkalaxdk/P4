@@ -21,7 +21,7 @@ public class EventHandlerStrategy extends CodeGenerationStrategy {
         String eventHandlerName = eventName + "EventHandler" + slave.EventHandlerCount++;
 
         // Generate code for the EventHandler's block
-        String block = node.FirstChild.Next.generateCode();
+        String block = node.FirstChild.Next.GenerateCode();
 
         // Add the EventHandler to the slave's list of EventHandlers with the correct signature
         slave.EventHandlers

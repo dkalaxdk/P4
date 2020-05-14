@@ -56,7 +56,7 @@ public class SemanticsStrategyAssigner {
         inSlave = true;
         child = child.Next;
         // Iterates through linked list of siblings
-        while (!child.isEmpty()){
+        while (!child.IsEmpty()){
             AssignStrategySlave(child);
             child = child.Next;
         }
@@ -70,7 +70,7 @@ public class SemanticsStrategyAssigner {
         Node child = node.FirstChild;
         IsGlobalDeclaration = true;
         // Assign strategies to declarations in global scope of the master
-        while (!child.isEmpty()){
+        while (!child.IsEmpty()){
             AssignStrategyDeclaration(child);
             child = child.Next;
         }
@@ -82,7 +82,7 @@ public class SemanticsStrategyAssigner {
         child = child.Next;
 
         // Assign strategies to Listeners
-        while (!child.isEmpty()){
+        while (!child.IsEmpty()){
             AssignStrategyListener(child);
             child = child.Next;
         }
@@ -96,7 +96,7 @@ public class SemanticsStrategyAssigner {
         Node child = node.FirstChild.Next;
         IsGlobalDeclaration = true;
         // Assign strategies to declarations in global scope of the slave
-        while (!child.isEmpty()){
+        while (!child.IsEmpty()){
             AssignStrategyDeclaration(child);
             child = child.Next;
         }
@@ -108,7 +108,7 @@ public class SemanticsStrategyAssigner {
         child = child.Next;
 
         // Assign strategies to EventHandlers
-        while (!child.isEmpty()) {
+        while (!child.IsEmpty()) {
             AssignStrategyEventHandler(child);
             child = child.Next;
         }
@@ -163,7 +163,7 @@ public class SemanticsStrategyAssigner {
 
         // Calls AssignStrategy methods on node's children depending on their node type.
         Node child = node.FirstChild;
-        while (!child.isEmpty()){
+        while (!child.IsEmpty()){
             switch (child.Type){
                 case BoolDeclaration:
                 case IntDeclaration:
@@ -209,7 +209,7 @@ public class SemanticsStrategyAssigner {
         }
 
         // Assigns a strategy to the expression child of the declaration if it has one.
-        if (!node.FirstChild.Next.isEmpty()){
+        if (!node.FirstChild.Next.IsEmpty()){
             AssignStrategyExpression(node.FirstChild.Next);
         }
     }
@@ -233,7 +233,7 @@ public class SemanticsStrategyAssigner {
         AssignStrategyBlock(node.FirstChild.Next);
 
         Node elseStmt = node.FirstChild.Next.Next;
-        if (!elseStmt.isEmpty()){
+        if (!elseStmt.IsEmpty()){
             if(elseStmt.Type == Node.NodeType.Block){
                 AssignStrategyBlock(elseStmt);
             }

@@ -29,15 +29,15 @@ public abstract class CodeGenerationStrategy {
     public String GenerateCodeForLinkedList(Node headNode) {
         StringBuilder content = new StringBuilder();
 
-        if (headNode.isEmpty()) {
+        if (headNode.IsEmpty()) {
             return "";
         }
 
         Node node = headNode;
 
         //TODO: Tree traversal should maybe be handled by a separate class
-        while(node != null && !node.isEmpty()) {
-            content.append(node.generateCode());
+        while(node != null && !node.IsEmpty()) {
+            content.append(node.GenerateCode());
             node = node.Next;
         }
         return content.toString();

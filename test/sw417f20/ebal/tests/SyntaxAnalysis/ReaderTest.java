@@ -29,7 +29,7 @@ class ReaderTest {
         Mockito.when(mockReader.read()).thenReturn((int) expected);
         Reader reader = new Reader(mockReader);
 
-        char actual = reader.readChar();
+        char actual = reader.ReadChar();
 
         assertEquals(expected, actual);
     }
@@ -42,7 +42,7 @@ class ReaderTest {
         Mockito.when(mockReader.read()).thenReturn((int) 'a', (int) 'b');
         Reader reader = new Reader(mockReader);
 
-        reader.readChar();
+        reader.ReadChar();
         char actual = reader.nextChar;
 
         assertEquals(expected, actual);
@@ -56,7 +56,7 @@ class ReaderTest {
         Mockito.when(mockReader.read()).thenReturn((int) 'a');
         Reader reader = new Reader(mockReader);
 
-        reader.readChar();
+        reader.ReadChar();
         int actual = reader.currentOffset;
 
         assertEquals(expected, actual);
@@ -70,7 +70,7 @@ class ReaderTest {
         Mockito.when(mockReader.read()).thenReturn((int) '\n');
         Reader reader = new Reader(mockReader);
 
-        reader.readChar();
+        reader.ReadChar();
         int actual = reader.currentLine;
 
         assertEquals(expected, actual);
@@ -85,7 +85,7 @@ class ReaderTest {
         Reader reader = new Reader(mockReader);
         reader.currentOffset = 5;
 
-        reader.readChar();
+        reader.ReadChar();
         int actual = reader.currentOffset;
 
         assertEquals(expected, actual);
@@ -99,8 +99,8 @@ class ReaderTest {
         Mockito.when(mockReader.read()).thenReturn((int) 'w', (int) 'o', (int) 'r', (int) 'd', (int) '\t');
         Reader reader = new Reader(mockReader);
 
-        reader.readChar();
-        String actual = reader.findWord();
+        reader.ReadChar();
+        String actual = reader.FindWord();
 
         assertEquals(expected, actual);
     }
@@ -113,8 +113,8 @@ class ReaderTest {
         Mockito.when(mockReader.read()).thenReturn((int) 'w', (int) 'o', (int) 'r', (int) 'd', (int) '\t', (int) '\n');
         Reader reader = new Reader(mockReader);
 
-        reader.readChar();
-        String actual = reader.findWord();
+        reader.ReadChar();
+        String actual = reader.FindWord();
 
         assertEquals(expected, actual);
     }
@@ -129,8 +129,8 @@ class ReaderTest {
                 (int) 'n', (int) 'e', (int) 'w');
         Reader reader = new Reader(mockReader);
 
-        reader.readChar();
-        String actual = reader.findWord();
+        reader.ReadChar();
+        String actual = reader.FindWord();
 
         assertEquals(expected, actual);
     }
@@ -143,8 +143,8 @@ class ReaderTest {
         Mockito.when(mockReader.read()).thenReturn((int) 'w', (int) 'o', (int) 'r', (int) 'd', (int) '(', (int) '\t');
         Reader reader = new Reader(mockReader);
 
-        reader.readChar();
-        String actual = reader.findWord();
+        reader.ReadChar();
+        String actual = reader.FindWord();
 
         assertEquals(expected, actual);
     }
@@ -157,8 +157,8 @@ class ReaderTest {
         Mockito.when(mockReader.read()).thenReturn((int) '_', (int) 'w', (int) 'o', (int) 'r', (int) 'd', (int) '\t');
         Reader reader = new Reader(mockReader);
 
-        reader.readChar();
-        String actual = reader.findWord();
+        reader.ReadChar();
+        String actual = reader.FindWord();
 
         assertEquals(expected, actual);
     }
@@ -171,8 +171,8 @@ class ReaderTest {
         Mockito.when(mockReader.read()).thenReturn((int) 'w', (int) 'o', (int) '_', (int) 'r', (int) 'd', (int) '\t');
         Reader reader = new Reader(mockReader);
 
-        reader.readChar();
-        String actual = reader.findWord();
+        reader.ReadChar();
+        String actual = reader.FindWord();
 
         assertEquals(expected, actual);
     }
@@ -185,8 +185,8 @@ class ReaderTest {
         Mockito.when(mockReader.read()).thenReturn((int) 'w', (int) 'o', (int) 'r', (int) 'd', (int) '_', (int) '\t');
         Reader reader = new Reader(mockReader);
 
-        reader.readChar();
-        String actual = reader.findWord();
+        reader.ReadChar();
+        String actual = reader.FindWord();
 
         assertEquals(expected, actual);
     }
@@ -198,8 +198,8 @@ class ReaderTest {
         Mockito.when(mockReader.read()).thenReturn((int) '1', (int) '\t');
         Reader reader = new Reader(mockReader);
 
-        reader.readChar();
-        String actual = reader.findNumber();
+        reader.ReadChar();
+        String actual = reader.FindNumber();
 
         assertEquals(expected, actual);
     }
@@ -212,8 +212,8 @@ class ReaderTest {
         Mockito.when(mockReader.read()).thenReturn((int) '1', (int) '.', (int) '2', (int) '\t');
         Reader reader = new Reader(mockReader);
 
-        reader.readChar();
-        String actual = reader.findNumber();
+        reader.ReadChar();
+        String actual = reader.FindNumber();
 
         assertEquals(expected, actual);
     }
@@ -226,9 +226,9 @@ class ReaderTest {
         Mockito.when(mockReader.read()).thenReturn((int) '.', (int) '2', (int) '\t');
         Reader reader = new Reader(mockReader);
 
-        String actual = String.valueOf(reader.readChar());
-        reader.readChar();
-        actual += reader.findNumber();
+        String actual = String.valueOf(reader.ReadChar());
+        reader.ReadChar();
+        actual += reader.FindNumber();
 
         assertEquals(expected, actual);
     }
@@ -240,8 +240,8 @@ class ReaderTest {
         Mockito.when(mockReader.read()).thenReturn((int) '1', (int) 'a', (int) '\t');
         Reader reader = new Reader(mockReader);
 
-        reader.readChar();
-        String actual = reader.findNumber();
+        reader.ReadChar();
+        String actual = reader.FindNumber();
 
         assertEquals(expected, actual);
     }

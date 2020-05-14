@@ -23,16 +23,16 @@ class NodeTest {
 
     @BeforeEach
     void setUp() {
-        ParentNode1 = Node.makeNode(Node.NodeType.Master);
-        ParentNode2 = Node.makeNode(Node.NodeType.Slave);
+        ParentNode1 = Node.MakeNode(Node.NodeType.Master);
+        ParentNode2 = Node.MakeNode(Node.NodeType.Slave);
 
-        Child1 = Node.makeNode(Node.NodeType.Listener);
-        Child2 = Node.makeNode(Node.NodeType.EventHandler);
+        Child1 = Node.MakeNode(Node.NodeType.Listener);
+        Child2 = Node.MakeNode(Node.NodeType.EventHandler);
 
-        Sibling1_1 = Node.makeNode(Node.NodeType.IntDeclaration);
-        Sibling1_2 = Node.makeNode(Node.NodeType.IntDeclaration);
-        Sibling2_1 = Node.makeNode(Node.NodeType.Assignment);
-        Sibling2_2 = Node.makeNode(Node.NodeType.Assignment);
+        Sibling1_1 = Node.MakeNode(Node.NodeType.IntDeclaration);
+        Sibling1_2 = Node.MakeNode(Node.NodeType.IntDeclaration);
+        Sibling2_1 = Node.MakeNode(Node.NodeType.Assignment);
+        Sibling2_2 = Node.MakeNode(Node.NodeType.Assignment);
 
         ParentNode1.FirstChild = Child1;
         Child1.Parent = ParentNode1;
@@ -63,7 +63,7 @@ class NodeTest {
     @Test
     void toString_ValueIsEmpty_ReturnsTypeName() {
         // Arrange
-        Node node = Node.makeNode(Node.NodeType.Empty);
+        Node node = Node.MakeNode(Node.NodeType.Empty);
 
         // Act
         String expected = Node.NodeType.Empty.toString();
@@ -77,7 +77,7 @@ class NodeTest {
     void toString_ValueIsNotEmpty_ReturnsTypeNameAndValue() {
         // Arrange
         String testString = "TestValue";
-        Node node = Node.makeNode(Node.NodeType.Empty, new Token(Token.Type.ERROR, testString));
+        Node node = Node.MakeNode(Node.NodeType.Empty, new Token(Token.Type.ERROR, testString));
 
         // Act
         String expected = Node.NodeType.Empty.toString() + " : " + testString;
@@ -90,10 +90,10 @@ class NodeTest {
     @Test
     void AddChild_InputIsNull_InputNotAdded() {
         // Arrange
-        Node node = Node.makeNode(Node.NodeType.Empty);
+        Node node = Node.MakeNode(Node.NodeType.Empty);
 
         // Act
-        node.addChild(null);
+        node.AddChild(null);
 
         // Assert
         assertNull(node.FirstChild);
@@ -102,11 +102,11 @@ class NodeTest {
     @Test
     void AddChild_FirstChildIsNull_FirstChildSetToInput() {
         // Arrange
-        Node parent = Node.makeNode(Node.NodeType.Empty);
-        Node child = Node.makeNode(Node.NodeType.Master);
+        Node parent = Node.MakeNode(Node.NodeType.Empty);
+        Node child = Node.MakeNode(Node.NodeType.Master);
 
         // Act
-        parent.addChild(child);
+        parent.AddChild(child);
 
         // Assert
         assertSame(parent.FirstChild, child);
@@ -115,11 +115,11 @@ class NodeTest {
     @Test
     void AddChild_FirstChildIsNull_InputParentUpdated() {
         // Arrange
-        Node parent = Node.makeNode(Node.NodeType.Empty);
-        Node child = Node.makeNode(Node.NodeType.Master);
+        Node parent = Node.MakeNode(Node.NodeType.Empty);
+        Node child = Node.MakeNode(Node.NodeType.Master);
 
         // Act
-        parent.addChild(child);
+        parent.AddChild(child);
 
         // Assert
         assertSame(child.Parent, parent);
@@ -128,14 +128,14 @@ class NodeTest {
     @Test
     void AddChild_FirstChildIsNull_InputNodeIsNotFirstSibling_InputFirstSiblingUpdatedParent() {
         // Arrange
-        Node parent = Node.makeNode(Node.NodeType.Empty);
-        Node child1 = Node.makeNode(Node.NodeType.Master);
-        Node child2 = Node.makeNode(Node.NodeType.Slave);
+        Node parent = Node.MakeNode(Node.NodeType.Empty);
+        Node child1 = Node.MakeNode(Node.NodeType.Master);
+        Node child2 = Node.MakeNode(Node.NodeType.Slave);
 
-        child1.makeSiblings(child2);
+        child1.MakeSiblings(child2);
 
         // Act
-        parent.addChild(child2);
+        parent.AddChild(child2);
 
         // Assert
         assertSame(parent.FirstChild.Parent, parent);
@@ -144,15 +144,15 @@ class NodeTest {
     @Test
     void AddChild_FirstChildIsNull_InputNodeIsNotFirstSibling_ParentUpdatedFirstChild() {
         // Arrange
-        Node parent = Node.makeNode(Node.NodeType.Empty);
-        Node child1 = Node.makeNode(Node.NodeType.Master);
-        Node child2 = Node.makeNode(Node.NodeType.Slave);
+        Node parent = Node.MakeNode(Node.NodeType.Empty);
+        Node child1 = Node.MakeNode(Node.NodeType.Master);
+        Node child2 = Node.MakeNode(Node.NodeType.Slave);
 
         child1.Next = child2;
         child2.FirstSibling = child1;
 
         // Act
-        parent.addChild(child2);
+        parent.AddChild(child2);
 
         // Assert
         assertSame(parent.FirstChild, child1);
@@ -161,19 +161,19 @@ class NodeTest {
     @Test
     void AddChild_FirstChildIsNull_InputNodeIsNotFirstSibling_InputSiblingsUpdatedParent() {
         // Arrange
-        Node parent = Node.makeNode(Node.NodeType.Empty);
-        Node child1 = Node.makeNode(Node.NodeType.Master);
-        Node child2 = Node.makeNode(Node.NodeType.Slave);
-        Node child3 = Node.makeNode(Node.NodeType.Listener);
+        Node parent = Node.MakeNode(Node.NodeType.Empty);
+        Node child1 = Node.MakeNode(Node.NodeType.Master);
+        Node child2 = Node.MakeNode(Node.NodeType.Slave);
+        Node child3 = Node.MakeNode(Node.NodeType.Listener);
 
-        child1.makeSiblings(child2);
-        child1.makeSiblings(child3);
+        child1.MakeSiblings(child2);
+        child1.MakeSiblings(child3);
 
         child2.FirstSibling = child1;
         child3.FirstSibling = child1;
 
         // Act
-        parent.addChild(child2);
+        parent.AddChild(child2);
 
         // Assert
         assertTrue(parent.FirstChild.Next.Parent == parent && parent.FirstChild.Next.Next.Parent == parent);
@@ -182,14 +182,14 @@ class NodeTest {
     @Test
     void AddChild_FirstChildIsNull_InputNodeIsFirstSibling_InputSiblingsUpdatedParent() {
         // Arrange
-        Node parent = Node.makeNode(Node.NodeType.Empty);
-        Node child1 = Node.makeNode(Node.NodeType.Master);
-        Node child2 = Node.makeNode(Node.NodeType.Slave);
+        Node parent = Node.MakeNode(Node.NodeType.Empty);
+        Node child1 = Node.MakeNode(Node.NodeType.Master);
+        Node child2 = Node.MakeNode(Node.NodeType.Slave);
 
-        child1.makeSiblings(child2);
+        child1.MakeSiblings(child2);
 
         // Act
-        parent.addChild(child1);
+        parent.AddChild(child1);
 
         // Assert
         assertSame(parent.FirstChild.Next, child2);
@@ -198,14 +198,14 @@ class NodeTest {
     @Test
     void AddChild_FirstChildIsNotNull_InputAddedToChainEnd() {
         // Arrange
-        Node parent = Node.makeNode(Node.NodeType.Empty);
-        Node child1 = Node.makeNode(Node.NodeType.Master);
-        Node child2 = Node.makeNode(Node.NodeType.Slave);
+        Node parent = Node.MakeNode(Node.NodeType.Empty);
+        Node child1 = Node.MakeNode(Node.NodeType.Master);
+        Node child2 = Node.MakeNode(Node.NodeType.Slave);
 
         parent.FirstChild = child1;
 
         // Act
-        parent.addChild(child2);
+        parent.AddChild(child2);
 
         // Assert
         assertSame(parent.FirstChild.Next, child2);
@@ -217,10 +217,10 @@ class NodeTest {
     @Test
     void MakeSiblings_InputIsNull_InputNotAdded() {
         // Arrange
-        Node node1 = Node.makeNode(Node.NodeType.Empty);
+        Node node1 = Node.MakeNode(Node.NodeType.Empty);
 
         // Act
-        node1.makeSiblings(null);
+        node1.MakeSiblings(null);
 
         // Assert
         assertNull(node1.Next);
@@ -231,7 +231,7 @@ class NodeTest {
         // Arrange
 
         // Act
-        Child1.makeSiblings(Child2);
+        Child1.MakeSiblings(Child2);
 
         // Assert
         assertNull(ParentNode2.FirstChild);
@@ -247,7 +247,7 @@ class NodeTest {
         // Arrange
 
         // Act
-        Child1.makeSiblings(Child2);
+        Child1.MakeSiblings(Child2);
 
         // Assert
         assertTrue(IsLastSiblingNextSetToOther(Child2));
@@ -260,7 +260,7 @@ class NodeTest {
         // Arrange
 
         // Act
-        Child1.makeSiblings(Child2);
+        Child1.MakeSiblings(Child2);
 
         // Assert
         assertTrue(IsOtherParentSetToThisNodeParent(Child2));
@@ -273,7 +273,7 @@ class NodeTest {
         // Arrange
 
         // Act
-        Child1.makeSiblings(Child2);
+        Child1.MakeSiblings(Child2);
 
         // Assert
         assertTrue(IsOtherFirstSiblingSetToThisNode(Child2));
@@ -286,7 +286,7 @@ class NodeTest {
         // Arrange
 
         // Act
-        Child1.makeSiblings(Child2);
+        Child1.MakeSiblings(Child2);
 
         // Assert
         assertTrue(IsOtherSiblingParentSetToThisNodeParent());
@@ -298,7 +298,7 @@ class NodeTest {
         // Arrange
 
         // Act
-        Child1.makeSiblings(Child2);
+        Child1.MakeSiblings(Child2);
 
         // Assert
         assertTrue(IsOtherSiblingFirstSiblingSetToThisNode());
@@ -314,7 +314,7 @@ class NodeTest {
         // Arrange
 
         // Act
-        Child1.makeSiblings(Sibling2_1);
+        Child1.MakeSiblings(Sibling2_1);
 
         // Assert
         assertTrue(IsLastSiblingNextSetToOtherFirstSibling());
@@ -326,7 +326,7 @@ class NodeTest {
         // Arrange
 
         // Act
-        Child1.makeSiblings(Sibling2_1);
+        Child1.MakeSiblings(Sibling2_1);
 
         // Assert
         assertTrue(IsOtherParentSetToThisNodeParent(Sibling2_1));
@@ -338,7 +338,7 @@ class NodeTest {
         // Arrange
 
         // Act
-        Child1.makeSiblings(Sibling2_1);
+        Child1.MakeSiblings(Sibling2_1);
 
         // Assert
         assertTrue(IsOtherFirstSiblingSetToThisNode(Sibling2_1));
@@ -350,7 +350,7 @@ class NodeTest {
         // Arrange
 
         // Act
-        Child1.makeSiblings(Sibling2_1);
+        Child1.MakeSiblings(Sibling2_1);
 
         // Assert
         assertTrue(IsOtherSiblingParentSetToThisNodeParent());
@@ -362,7 +362,7 @@ class NodeTest {
         // Arrange
 
         // Act
-        Child1.makeSiblings(Sibling2_1);
+        Child1.MakeSiblings(Sibling2_1);
 
         // Assert
         assertTrue(IsOtherSiblingFirstSiblingSetToThisNode());
@@ -382,7 +382,7 @@ class NodeTest {
         // Arrange
 
         // Act
-        Sibling1_1.makeSiblings(Child2);
+        Sibling1_1.MakeSiblings(Child2);
 
         // Assert
         assertTrue(IsLastSiblingNextSetToOther(Child2));
@@ -394,7 +394,7 @@ class NodeTest {
         // Arrange
 
         // Act
-        Sibling1_1.makeSiblings(Child2);
+        Sibling1_1.MakeSiblings(Child2);
 
         // Assert
         assertTrue(IsOtherParentSetToThisNodeParent(Child2));
@@ -406,7 +406,7 @@ class NodeTest {
         // Arrange
 
         // Act
-        Sibling1_1.makeSiblings(Child2);
+        Sibling1_1.MakeSiblings(Child2);
 
         // Assert
         assertTrue(IsOtherFirstSiblingSetToThisNodeFirstSibling(Child2));
@@ -418,7 +418,7 @@ class NodeTest {
         // Arrange
 
         // Act
-        Sibling1_1.makeSiblings(Child2);
+        Sibling1_1.MakeSiblings(Child2);
 
         // Assert
         assertTrue(IsOtherSiblingParentSetToThisNodeParent());
@@ -430,7 +430,7 @@ class NodeTest {
         // Arrange
 
         // Act
-        Sibling1_1.makeSiblings(Child2);
+        Sibling1_1.MakeSiblings(Child2);
 
         // Assert
         assertTrue(IsOtherSiblingFirstSiblingSetToThisNodeSibling(Child2));
@@ -446,7 +446,7 @@ class NodeTest {
         // Arrange
 
         // Act
-        Sibling1_1.makeSiblings(Sibling2_1);
+        Sibling1_1.MakeSiblings(Sibling2_1);
 
         // Assert
         assertTrue(IsLastSiblingNextSetToOther(Child2));
@@ -459,7 +459,7 @@ class NodeTest {
         // Arrange
 
         // Act
-        Sibling1_1.makeSiblings(Sibling2_1);
+        Sibling1_1.MakeSiblings(Sibling2_1);
 
         // Assert
         assertTrue(IsOtherParentSetToThisNodeParent(Sibling2_1));
@@ -471,7 +471,7 @@ class NodeTest {
         // Arrange
 
         // Act
-        Sibling1_1.makeSiblings(Sibling2_1);
+        Sibling1_1.MakeSiblings(Sibling2_1);
 
         // Assert
         assertTrue(IsOtherFirstSiblingSetToThisNodeFirstSibling(Sibling2_1));
@@ -484,7 +484,7 @@ class NodeTest {
         // Arrange
 
         // Act
-        Sibling1_1.makeSiblings(Sibling2_1);
+        Sibling1_1.MakeSiblings(Sibling2_1);
 
         // Assert
         assertTrue(IsOtherSiblingParentSetToThisNodeParent());
@@ -496,7 +496,7 @@ class NodeTest {
         // Arrange
 
         // Act
-        Sibling1_1.makeSiblings(Sibling2_1);
+        Sibling1_1.MakeSiblings(Sibling2_1);
 
         // Assert
         assertTrue(IsOtherSiblingFirstSiblingSetToThisNodeSibling(Sibling2_1));

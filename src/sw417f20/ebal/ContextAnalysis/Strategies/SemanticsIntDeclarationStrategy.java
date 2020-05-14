@@ -13,9 +13,9 @@ public class SemanticsIntDeclarationStrategy extends  SemanticsCheckerStrategy{
         // Check that identifier has not already been declared
         if (!SymbolTable.DeclaredLocally(node.FirstChild.Value)){
             Node expression = node.FirstChild.Next;
-            if (!expression.isEmpty()) {
+            if (!expression.IsEmpty()) {
                 // Check semantics for the expression
-                expression.checkSemantics();
+                expression.CheckSemantics();
                 hasBeenInstantiated = true;
                 // Expression must evaluate to either int or float
                 if (expression.DataType != Symbol.SymbolType.INT && expression.DataType != Symbol.SymbolType.FLOAT){

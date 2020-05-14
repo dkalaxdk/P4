@@ -15,9 +15,9 @@ public class IntDeclarationStrategy extends CodeGenerationStrategy {
         Node nextChild = node.FirstChild.Next;
 
         // Initialization if there is an expression as the next node.
-        if(!nextChild.isEmpty()) {
+        if(!nextChild.IsEmpty()) {
             decl.append(" = ");
-            decl.append(nextChild.generateCode());
+            decl.append(nextChild.GenerateCode());
         }
 
         decl.append(";\n");

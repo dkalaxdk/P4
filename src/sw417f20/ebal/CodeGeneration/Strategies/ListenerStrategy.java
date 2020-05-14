@@ -13,7 +13,7 @@ public class ListenerStrategy extends CodeGenerationStrategy {
         String listenerName = pinName + "Listener" + arduinoSystem.Master.ListenerCount++;
 
         // Generate code for the Listener's block
-        String block = node.FirstChild.Next.generateCode();
+        String block = node.FirstChild.Next.GenerateCode();
 
         // Add the Listener to the system's master with the correct signature
         arduinoSystem.Master.Listeners

@@ -10,7 +10,7 @@ public class SemanticsIntLiteralStrategy extends SemanticsCheckerStrategy{
     public void CheckSemantics(Node node) throws SemanticsException {
         node.DataType = Symbol.SymbolType.INT;
         // Check if the literal has a prefix
-        if (!node.FirstChild.isEmpty()){
+        if (!node.FirstChild.IsEmpty()){
             // Check that prefix is legal
             if (node.FirstChild.Type != Node.NodeType.PrefixMinus){
                 MakeError(node, "Only minus prefix (-) applicable to int data type.");

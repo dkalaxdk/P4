@@ -16,19 +16,19 @@ public class SemanticsSlaveStrategy extends SemanticsCheckerStrategy {
 
             // Check semantics for variables global to the slave
             Node child = node.FirstChild.Next;
-            while (!child.isEmpty()){
-                child.checkSemantics();
+            while (!child.IsEmpty()){
+                child.CheckSemantics();
                 child = child.Next;
             }
 
             // Check semantics for Initiate
             child = child.Next;
-            child.checkSemantics();
+            child.CheckSemantics();
             child = child.Next;
 
             // Check semantics for EventHandlers
-            while (!child.isEmpty()) {
-                child.checkSemantics();
+            while (!child.IsEmpty()) {
+                child.CheckSemantics();
                 child = child.Next;
             }
 

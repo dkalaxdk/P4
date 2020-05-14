@@ -11,11 +11,11 @@ public class Parser extends RecursiveDescent {
     // Start 	-> 	Master Slave Slaves.
     @Override
     public Node Start() throws SyntaxException {
-        Node Prog = Node.makeNode(Node.NodeType.Prog);
+        Node Prog = Node.MakeNode(Node.NodeType.Prog);
 
-        Prog.addChild(Master());
-        Prog.addChild(Slave());
-        Prog.addChild(Slaves());
+        Prog.AddChild(Master());
+        Prog.AddChild(Slave());
+        Prog.AddChild(Slaves());
 
         return Prog;
     }
@@ -24,14 +24,14 @@ public class Parser extends RecursiveDescent {
     public Node Master() throws SyntaxException {
 
         if (peek().type == Token.Type.BEGIN) {
-            Node Master = Node.makeNode(Node.NodeType.Master);
+            Node Master = Node.MakeNode(Node.NodeType.Master);
 
             expect(Token.Type.BEGIN);
             expect(Token.Type.MASTER);
 
-            Master.addChild(Dcls());    //Global variables enabled by this statement
-            Master.addChild(Initiate());
-            Master.addChild(Listeners());
+            Master.AddChild(Dcls());    //Global variables enabled by this statement
+            Master.AddChild(Initiate());
+            Master.AddChild(Listeners());
 
             expect(Token.Type.END);
             expect(Token.Type.MASTER);
@@ -40,7 +40,7 @@ public class Parser extends RecursiveDescent {
         }
         else {
             makeError("Expected BEGIN");
-            return Node.makeNode(Node.NodeType.Error);
+            return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
@@ -52,16 +52,16 @@ public class Parser extends RecursiveDescent {
             Node slave = Slave();
             Node otherSlaves = Slaves();
 
-            slave.makeSiblings(otherSlaves);
+            slave.MakeSiblings(otherSlaves);
 
             return slave;
         }
         else if (peek().type == Token.Type.EOF) {
-            return Node.makeNode(Node.NodeType.Empty);
+            return Node.MakeNode(Node.NodeType.Empty);
         }
         else {
             makeError("Expected BEGIN or EOF");
-            return Node.makeNode(Node.NodeType.Error);
+            return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
@@ -69,16 +69,16 @@ public class Parser extends RecursiveDescent {
     public Node Slave() throws SyntaxException {
 
         if (peek().type == Token.Type.BEGIN) {
-            Node Slave = Node.makeNode(Node.NodeType.Slave);
+            Node Slave = Node.MakeNode(Node.NodeType.Slave);
 
             expect(Token.Type.BEGIN);
             expect(Token.Type.SLAVE);
             expect(Token.Type.COLON);
 
-            Slave.addChild(getLeaf(Token.Type.IDENTIFIER));
-            Slave.addChild(Dcls());
-            Slave.addChild(Initiate());
-            Slave.addChild(EventHandlers());
+            Slave.AddChild(GetLeaf(Token.Type.IDENTIFIER));
+            Slave.AddChild(Dcls());
+            Slave.AddChild(Initiate());
+            Slave.AddChild(EventHandlers());
 
             expect(Token.Type.END);
             expect(Token.Type.SLAVE);
@@ -87,7 +87,7 @@ public class Parser extends RecursiveDescent {
         }
         else {
             makeError("Expected BEGIN");
-            return Node.makeNode(Node.NodeType.Error);
+            return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
@@ -96,16 +96,16 @@ public class Parser extends RecursiveDescent {
 
         if (peek().type == Token.Type.INITIATE) {
 
-            Node Initiate = Node.makeNode(Node.NodeType.Initiate);
+            Node Initiate = Node.MakeNode(Node.NodeType.Initiate);
 
             expect(Token.Type.INITIATE);
-            Initiate.addChild(Block());
+            Initiate.AddChild(Block());
 
             return Initiate;
         }
         else {
             makeError("Expected Initiate");
-            return Node.makeNode(Node.NodeType.Error);
+            return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
@@ -119,20 +119,20 @@ public class Parser extends RecursiveDescent {
             Node listener = Listener();
             Node otherListeners = Listeners();
 
-            listener.makeSiblings(otherListeners);
+            listener.MakeSiblings(otherListeners);
 
             return listener;
         }
         else if (peek().type == Token.Type.END) {
-            return Node.makeNode(Node.NodeType.Empty);
+            return Node.MakeNode(Node.NodeType.Empty);
         }
         else if (peek().type == Token.Type.EVENTHANDLER) {
             makeError("EventHandlers can only be declared in slaves");
-            return Node.makeNode(Node.NodeType.Error);
+            return Node.MakeNode(Node.NodeType.Error);
         }
         else {
             makeError("Expected Listener or end of master");
-            return Node.makeNode(Node.NodeType.Error);
+            return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
@@ -140,19 +140,19 @@ public class Parser extends RecursiveDescent {
     public Node Listener() throws SyntaxException {
 
         if (peek().type == Token.Type.LISTENER) {
-            Node Listener = Node.makeNode(Node.NodeType.Listener, getLineNumber());
+            Node Listener = Node.MakeNode(Node.NodeType.Listener, getLineNumber());
 
             expect(Token.Type.LISTENER);
             expect(Token.Type.LPAREN);
-            Listener.addChild(getLeaf(Token.Type.IDENTIFIER));
+            Listener.AddChild(GetLeaf(Token.Type.IDENTIFIER));
             expect(Token.Type.RPAREN);
-            Listener.addChild(Block());
+            Listener.AddChild(Block());
 
             return Listener;
         }
         else {
             makeError("Expected Listener");
-            return Node.makeNode(Node.NodeType.Error);
+            return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
@@ -164,20 +164,20 @@ public class Parser extends RecursiveDescent {
             Node eventHandler = EventHandler();
             Node otherEventHandlers = EventHandlers();
 
-            eventHandler.makeSiblings(otherEventHandlers);
+            eventHandler.MakeSiblings(otherEventHandlers);
 
             return eventHandler;
         }
         else if (peek().type == Token.Type.END) {
-            return Node.makeNode(Node.NodeType.Empty);
+            return Node.MakeNode(Node.NodeType.Empty);
         }
         else if (peek().type == Token.Type.LISTENER) {
             makeError("Listeners can only be declared in master");
-            return Node.makeNode(Node.NodeType.Error);
+            return Node.MakeNode(Node.NodeType.Error);
         }
         else {
             makeError("Expected EventHandler or end of slave");
-            return Node.makeNode(Node.NodeType.Error);
+            return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
@@ -185,19 +185,19 @@ public class Parser extends RecursiveDescent {
     public Node EventHandler() throws SyntaxException {
 
         if (peek().type == Token.Type.EVENTHANDLER) {
-            Node EventHandler = Node.makeNode(Node.NodeType.EventHandler, getLineNumber());
+            Node EventHandler = Node.MakeNode(Node.NodeType.EventHandler, getLineNumber());
 
             expect(Token.Type.EVENTHANDLER);
             expect(Token.Type.LPAREN);
-            EventHandler.addChild(getLeaf(Token.Type.IDENTIFIER));
+            EventHandler.AddChild(GetLeaf(Token.Type.IDENTIFIER));
             expect(Token.Type.RPAREN);
-            EventHandler.addChild(Block());
+            EventHandler.AddChild(Block());
 
             return EventHandler;
         }
         else {
             makeError("Expected EventHandler");
-            return Node.makeNode(Node.NodeType.Error);
+            return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
@@ -205,17 +205,17 @@ public class Parser extends RecursiveDescent {
     public Node Block() throws SyntaxException {
 
         if (peek().type == Token.Type.LBRACKET) {
-            Node Block = Node.makeNode(Node.NodeType.Block, getLineNumber());
+            Node Block = Node.MakeNode(Node.NodeType.Block, getLineNumber());
 
             expect(Token.Type.LBRACKET);
-            Block.addChild(Stmts());
+            Block.AddChild(Stmts());
             expect(Token.Type.RBRACKET);
 
             return Block;
         }
         else {
             makeError("Expected {");
-            return Node.makeNode(Node.NodeType.Error);
+            return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
@@ -225,22 +225,22 @@ public class Parser extends RecursiveDescent {
 
         if (peek().type == Token.Type.IDENTIFIER ||
             peek().type == Token.Type.IF ||
-            checkForType() ||
+            CheckForType() ||
             CheckForCall()) {
 
             Node statement = Stmt();
             Node otherStatements = Stmts();
 
-            statement.makeSiblings(otherStatements);
+            statement.MakeSiblings(otherStatements);
 
             return statement;
         }
         else if (peek().type == Token.Type.RBRACKET) {
-            return Node.makeNode(Node.NodeType.Empty);
+            return Node.MakeNode(Node.NodeType.Empty);
         }
         else {
             makeError("Expected statement");
-            return Node.makeNode(Node.NodeType.Error);
+            return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
@@ -261,7 +261,7 @@ public class Parser extends RecursiveDescent {
             expect(Token.Type.SEMI);
             return assignment;
         }
-        else if (checkForType()) {
+        else if (CheckForType()) {
             Node declaration = Dcl();
             expect(Token.Type.SEMI);
             return declaration;
@@ -271,7 +271,7 @@ public class Parser extends RecursiveDescent {
         }
         else {
             makeError("Expected a call, an assignment, a declaration, or an if statement");
-            return Node.makeNode(Node.NodeType.Error);
+            return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
@@ -279,38 +279,38 @@ public class Parser extends RecursiveDescent {
     public Node Assignment() throws SyntaxException {
 
         if (peek().type == Token.Type.IDENTIFIER) {
-            Node Assignment = Node.makeNode(Node.NodeType.Assignment, getLineNumber());
+            Node Assignment = Node.MakeNode(Node.NodeType.Assignment, getLineNumber());
 
-            Assignment.addChild(getLeaf(Token.Type.IDENTIFIER));
+            Assignment.AddChild(GetLeaf(Token.Type.IDENTIFIER));
             expect(Token.Type.ASSIGN);
-            Assignment.addChild(Expr());
+            Assignment.AddChild(Expr());
 
             return Assignment;
         }
         else {
             makeError("Expected assignment");
-            return Node.makeNode(Node.NodeType.Error);
+            return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
     // Dcls -> Dcl semi Dcls
     //      |  .
     public Node Dcls() throws SyntaxException {
-        if (checkForType()) {
+        if (CheckForType()) {
             Node declaration = Dcl();
             expect(Token.Type.SEMI);
             Node otherDeclarations = Dcls();
 
-            declaration.makeSiblings(otherDeclarations);
+            declaration.MakeSiblings(otherDeclarations);
 
             return declaration;
         }
         else if (peek().type == Token.Type.INITIATE) {
-            return Node.makeNode(Node.NodeType.Empty);
+            return Node.MakeNode(Node.NodeType.Empty);
         }
         else {
             makeError("Expected declaration or end of declarations");
-            return Node.makeNode(Node.NodeType.Error);
+            return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
@@ -323,32 +323,32 @@ public class Parser extends RecursiveDescent {
 
         switch (peek().type) {
             case FLOAT:
-                return generateDcl(Node.NodeType.FloatDeclaration, Token.Type.FLOAT);
+                return GenerateDcl(Node.NodeType.FloatDeclaration, Token.Type.FLOAT);
 
             case INT:
-                return generateDcl(Node.NodeType.IntDeclaration, Token.Type.INT);
+                return GenerateDcl(Node.NodeType.IntDeclaration, Token.Type.INT);
 
             case BOOL:
-                return generateDcl(Node.NodeType.BoolDeclaration, Token.Type.BOOL);
+                return GenerateDcl(Node.NodeType.BoolDeclaration, Token.Type.BOOL);
 
             case EVENT:
-                return generateDcl(Node.NodeType.EventDeclaration, Token.Type.EVENT);
+                return GenerateDcl(Node.NodeType.EventDeclaration, Token.Type.EVENT);
 
             case PIN:
-                return generateDcl(Node.NodeType.PinDeclaration, Token.Type.PIN);
+                return GenerateDcl(Node.NodeType.PinDeclaration, Token.Type.PIN);
 
             default:
                 makeError("Expected declaration");
-                return Node.makeNode(Node.NodeType.Error);
+                return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
-    private Node generateDcl(Node.NodeType nodeType, Token.Type tokenType) throws SyntaxException {
-        Node Dcl = Node.makeNode(nodeType, getLineNumber());
+    private Node GenerateDcl(Node.NodeType nodeType, Token.Type tokenType) throws SyntaxException {
+        Node Dcl = Node.MakeNode(nodeType, getLineNumber());
 
         expect(tokenType);
-        Dcl.addChild(getLeaf(Token.Type.IDENTIFIER));
-        Dcl.addChild(DclAssign());
+        Dcl.AddChild(GetLeaf(Token.Type.IDENTIFIER));
+        Dcl.AddChild(DclAssign());
 
         return Dcl;
     }
@@ -361,11 +361,11 @@ public class Parser extends RecursiveDescent {
             return Expr();
         }
         else if (peek().type == Token.Type.SEMI) {
-            return Node.makeNode(Node.NodeType.Empty);
+            return Node.MakeNode(Node.NodeType.Empty);
         }
         else {
             makeError("Expected assignment or end of statement");
-            return Node.makeNode(Node.NodeType.Error);
+            return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
@@ -375,7 +375,7 @@ public class Parser extends RecursiveDescent {
     //	         | 	not identifier AfterExpr
     //	         | 	FunctionCall AfterExpr.
     public Node Expr() throws SyntaxException {
-        Node Expr = Node.makeNode(Node.NodeType.Expression, getLineNumber());
+        Node Expr = Node.MakeNode(Node.NodeType.Expression, getLineNumber());
 
         if (peek().type == Token.Type.IDENTIFIER || CheckForLiteral()) {
             Node value = Value();
@@ -385,8 +385,8 @@ public class Parser extends RecursiveDescent {
                 return value;
             }
 
-            Expr.addChild(value);
-            Expr.addChild(afterExpr);
+            Expr.AddChild(value);
+            Expr.AddChild(afterExpr);
         }
         else if (peek().type == Token.Type.LPAREN) {
             expect(Token.Type.LPAREN);
@@ -398,17 +398,17 @@ public class Parser extends RecursiveDescent {
                 return expr;
             }
 
-            Expr.addChild(expr);
-            Expr.addChild(afterExpr);
+            Expr.AddChild(expr);
+            Expr.AddChild(afterExpr);
         }
         else if (peek().type == Token.Type.OP_MINUS) {
             expect(Token.Type.OP_MINUS);
 
-            Node prefix = Node.makeNode(Node.NodeType.PrefixMinus);
+            Node prefix = Node.MakeNode(Node.NodeType.PrefixMinus);
             Node value = Value();
 
             value.FirstChild = null;
-            value.addChild(prefix);
+            value.AddChild(prefix);
 
             Node afterExpr = AfterExpr();
 
@@ -416,16 +416,16 @@ public class Parser extends RecursiveDescent {
                 return value;
             }
 
-            Expr.addChild(value);
-            Expr.addChild(afterExpr);
+            Expr.AddChild(value);
+            Expr.AddChild(afterExpr);
         }
         else if (peek().type == Token.Type.OP_NOT) {
             expect(Token.Type.OP_NOT);
-            Node prefix = Node.makeNode(Node.NodeType.PrefixNot);
-            Node identifier = getLeaf(Token.Type.IDENTIFIER);
+            Node prefix = Node.MakeNode(Node.NodeType.PrefixNot);
+            Node identifier = GetLeaf(Token.Type.IDENTIFIER);
 
             identifier.FirstChild = null;
-            identifier.addChild(prefix);
+            identifier.AddChild(prefix);
 
             Node afterExpr = AfterExpr();
 
@@ -433,8 +433,8 @@ public class Parser extends RecursiveDescent {
                 return identifier;
             }
 
-            Expr.addChild(identifier);
-            Expr.addChild(afterExpr);
+            Expr.AddChild(identifier);
+            Expr.AddChild(afterExpr);
         }
         else if (CheckForFunctionCall()) {
             Node call = FunctionCall();
@@ -444,12 +444,12 @@ public class Parser extends RecursiveDescent {
                 return call;
             }
 
-            Expr.addChild(call);
-            Expr.addChild(afterExpr);
+            Expr.AddChild(call);
+            Expr.AddChild(afterExpr);
         }
         else {
             makeError("Expected expression");
-            return Node.makeNode(Node.NodeType.Error);
+            return Node.MakeNode(Node.NodeType.Error);
         }
 
         return Expr;
@@ -467,11 +467,11 @@ public class Parser extends RecursiveDescent {
             case LIT_Int:
             case LIT_Float:
             case LIT_Bool:
-                return getLeaf(type);
+                return GetLeaf(type);
 
             default:
                 makeError("Expected literal int, float, or bool or an identifier");
-                return Node.makeNode(Node.NodeType.Error);
+                return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
@@ -484,7 +484,7 @@ public class Parser extends RecursiveDescent {
             Node operator = Operator();
             Node expr = Expr();
 
-            operator.makeSiblings(expr);
+            operator.MakeSiblings(expr);
 
             return operator;
         }
@@ -493,16 +493,16 @@ public class Parser extends RecursiveDescent {
             Node operator = LogicOperator();
             Node expr = Expr();
 
-            operator.makeSiblings(expr);
+            operator.MakeSiblings(expr);
 
             return operator;
         }
         else if (peek().type == Token.Type.SEMI || peek().type == Token.Type.RPAREN) {
-            return Node.makeNode(Node.NodeType.Empty);
+            return Node.MakeNode(Node.NodeType.Empty);
         }
         else {
             makeError("Expected operator or end of statement");
-            return Node.makeNode(Node.NodeType.Error);
+            return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
@@ -518,36 +518,36 @@ public class Parser extends RecursiveDescent {
         }
         else {
             makeError("Expected call");
-            return Node.makeNode(Node.NodeType.Error);
+            return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
     // ProcedureCall	->	broadcast lparen identifier rparen
     //	                 |	write lparen identifier comma Expr rparen.
     public Node ProcedureCall() throws SyntaxException {
-        Node ProcedureCall = Node.makeNode(Node.NodeType.Call, getLineNumber());
+        Node ProcedureCall = Node.MakeNode(Node.NodeType.Call, getLineNumber());
 
         if (peek().type == Token.Type.BROADCAST) {
             expect(Token.Type.BROADCAST);
-            ProcedureCall.addChild(Node.makeNode(Node.NodeType.Broadcast));
+            ProcedureCall.AddChild(Node.MakeNode(Node.NodeType.Broadcast));
 
             expect(Token.Type.LPAREN);
-            ProcedureCall.addChild(getLeaf(Token.Type.IDENTIFIER));
+            ProcedureCall.AddChild(GetLeaf(Token.Type.IDENTIFIER));
             expect(Token.Type.RPAREN);
         }
         else if (peek().type == Token.Type.WRITE) {
             expect(Token.Type.WRITE);
-            ProcedureCall.addChild(Node.makeNode(Node.NodeType.Write));
+            ProcedureCall.AddChild(Node.MakeNode(Node.NodeType.Write));
 
             expect(Token.Type.LPAREN);
-            ProcedureCall.addChild(getLeaf(Token.Type.IDENTIFIER));
+            ProcedureCall.AddChild(GetLeaf(Token.Type.IDENTIFIER));
             expect(Token.Type.COMMA);
-            ProcedureCall.addChild(Expr());
+            ProcedureCall.AddChild(Expr());
             expect(Token.Type.RPAREN);
         }
         else {
             makeError("Expected write or broadcast");
-            return Node.makeNode(Node.NodeType.Error);
+            return Node.MakeNode(Node.NodeType.Error);
         }
 
         return ProcedureCall;
@@ -558,50 +558,50 @@ public class Parser extends RecursiveDescent {
     //	             |  createEvent lparen Expr rparen
     //	             |  createPin lparen PinType comma IOType comma intLiteral rparen.
     public Node FunctionCall() throws SyntaxException {
-        Node FunctionCall = Node.makeNode(Node.NodeType.Call, getLineNumber());
+        Node FunctionCall = Node.MakeNode(Node.NodeType.Call, getLineNumber());
 
         if (peek().type == Token.Type.FILTERNOISE) {
             expect(Token.Type.FILTERNOISE);
-            FunctionCall.addChild(Node.makeNode(Node.NodeType.FilterNoise));
+            FunctionCall.AddChild(Node.MakeNode(Node.NodeType.FilterNoise));
 
             expect(Token.Type.LPAREN);
-            FunctionCall.addChild(getLeaf(Token.Type.IDENTIFIER));
+            FunctionCall.AddChild(GetLeaf(Token.Type.IDENTIFIER));
             expect(Token.Type.COMMA);
-            FunctionCall.addChild(FilterType());
+            FunctionCall.AddChild(FilterType());
             expect(Token.Type.RPAREN);
         }
         else if (peek().type == Token.Type.GETVALUE) {
             expect(Token.Type.GETVALUE);
-            FunctionCall.addChild(Node.makeNode(Node.NodeType.GetValue));
+            FunctionCall.AddChild(Node.MakeNode(Node.NodeType.GetValue));
 
             expect(Token.Type.LPAREN);
-            FunctionCall.addChild(getLeaf(Token.Type.IDENTIFIER));
+            FunctionCall.AddChild(GetLeaf(Token.Type.IDENTIFIER));
             expect(Token.Type.RPAREN);
         }
         else if (peek().type == Token.Type.CREATEEVENT) {
             expect(Token.Type.CREATEEVENT);
-            FunctionCall.addChild(Node.makeNode(Node.NodeType.CreateEvent));
+            FunctionCall.AddChild(Node.MakeNode(Node.NodeType.CreateEvent));
 
             expect(Token.Type.LPAREN);
-            FunctionCall.addChild(Expr());
+            FunctionCall.AddChild(Expr());
             expect(Token.Type.RPAREN);
         }
         else if (peek().type == Token.Type.CREATEPIN) {
             expect(Token.Type.CREATEPIN);
-            FunctionCall.addChild(Node.makeNode(Node.NodeType.CreatePin));
+            FunctionCall.AddChild(Node.MakeNode(Node.NodeType.CreatePin));
 
             expect(Token.Type.LPAREN);
-            FunctionCall.addChild(PinType());
+            FunctionCall.AddChild(PinType());
             expect(Token.Type.COMMA);
-            FunctionCall.addChild(IOType());
+            FunctionCall.AddChild(IOType());
             expect(Token.Type.COMMA);
 
             // Support for analog pins (A0 - A15);
             if (peek().type == Token.Type.LIT_Int) {
-                FunctionCall.addChild(getLeaf(Token.Type.LIT_Int));
+                FunctionCall.AddChild(GetLeaf(Token.Type.LIT_Int));
             }
             else if (peek().type == Token.Type.IDENTIFIER) {
-                FunctionCall.addChild(getLeaf(Token.Type.IDENTIFIER));
+                FunctionCall.AddChild(GetLeaf(Token.Type.IDENTIFIER));
             }
             else {
                 makeError("Expected analog or digital pin number");
@@ -611,7 +611,7 @@ public class Parser extends RecursiveDescent {
         }
         else {
             makeError("Expected filterNoise, getValue, createEvent, or createPin");
-            return Node.makeNode(Node.NodeType.Error);
+            return Node.MakeNode(Node.NodeType.Error);
         }
 
         return FunctionCall;
@@ -621,20 +621,20 @@ public class Parser extends RecursiveDescent {
     public Node IfStmt() throws SyntaxException {
 
         if (peek().type == Token.Type.IF) {
-            Node IfStmt = Node.makeNode(Node.NodeType.If, getLineNumber());
+            Node IfStmt = Node.MakeNode(Node.NodeType.If, getLineNumber());
 
             expect(Token.Type.IF);
             expect(Token.Type.LPAREN);
-            IfStmt.addChild(Expr());
+            IfStmt.AddChild(Expr());
             expect(Token.Type.RPAREN);
-            IfStmt.addChild(Block());
-            IfStmt.addChild(IfEnd());
+            IfStmt.AddChild(Block());
+            IfStmt.AddChild(IfEnd());
 
             return IfStmt;
         }
         else {
             makeError("Expected if");
-            return Node.makeNode(Node.NodeType.Error);
+            return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
@@ -649,13 +649,13 @@ public class Parser extends RecursiveDescent {
         else if (peek().type == Token.Type.RBRACKET ||
                  peek().type == Token.Type.IDENTIFIER ||
                  peek().type == Token.Type.IF ||
-                 checkForType() ||
+                 CheckForType() ||
                  CheckForCall()) {
-            return Node.makeNode(Node.NodeType.Empty);
+            return Node.MakeNode(Node.NodeType.Empty);
         }
         else {
             makeError("Expected else or end of if statement");
-            return Node.makeNode(Node.NodeType.Error);
+            return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
@@ -671,7 +671,7 @@ public class Parser extends RecursiveDescent {
         }
         else {
             makeError("Expected if statement or a block");
-            return Node.makeNode(Node.NodeType.Error);
+            return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
@@ -683,19 +683,19 @@ public class Parser extends RecursiveDescent {
         switch (peek().type) {
             case DEBOUNCE:
                 expect(Token.Type.DEBOUNCE);
-                return Node.makeNode(Node.NodeType.Debounce);
+                return Node.MakeNode(Node.NodeType.Debounce);
 
             case CONSTANT:
                 expect(Token.Type.CONSTANT);
-                return Node.makeNode(Node.NodeType.Constant);
+                return Node.MakeNode(Node.NodeType.Constant);
 
             case RANGE:
                 expect(Token.Type.RANGE);
-                return Node.makeNode(Node.NodeType.Range);
+                return Node.MakeNode(Node.NodeType.Range);
 
             default:
                 makeError("Expected debounce, constant, or range");
-                return Node.makeNode(Node.NodeType.Error);
+                return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
@@ -707,19 +707,19 @@ public class Parser extends RecursiveDescent {
         switch (peek().type) {
             case DIGITAL:
                 expect(Token.Type.DIGITAL);
-                return Node.makeNode(Node.NodeType.Digital);
+                return Node.MakeNode(Node.NodeType.Digital);
 
             case ANALOG:
                 expect(Token.Type.ANALOG);
-                return Node.makeNode(Node.NodeType.Analog);
+                return Node.MakeNode(Node.NodeType.Analog);
 
             case PWM:
                 expect(Token.Type.PWM);
-                return Node.makeNode(Node.NodeType.PWM);
+                return Node.MakeNode(Node.NodeType.PWM);
 
             default:
                 makeError("Expected digital, analog, or pwm");
-                return Node.makeNode(Node.NodeType.Error);
+                return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
@@ -730,15 +730,15 @@ public class Parser extends RecursiveDescent {
         switch (peek().type) {
             case INPUT:
                 expect(Token.Type.INPUT);
-                return Node.makeNode(Node.NodeType.Input);
+                return Node.MakeNode(Node.NodeType.Input);
 
             case OUTPUT:
                 expect(Token.Type.OUTPUT);
-                return Node.makeNode(Node.NodeType.Output);
+                return Node.MakeNode(Node.NodeType.Output);
 
             default:
                 makeError("Expected input or output");
-                return Node.makeNode(Node.NodeType.Error);
+                return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
@@ -752,27 +752,27 @@ public class Parser extends RecursiveDescent {
         switch (peek().type) {
             case OP_PLUS:
                 expect(Token.Type.OP_PLUS);
-                return Node.makeNode(Node.NodeType.Plus);
+                return Node.MakeNode(Node.NodeType.Plus);
 
             case OP_MINUS:
                 expect(Token.Type.OP_MINUS);
-                return Node.makeNode(Node.NodeType.Minus);
+                return Node.MakeNode(Node.NodeType.Minus);
 
             case OP_TIMES:
                 expect(Token.Type.OP_TIMES);
-                return Node.makeNode(Node.NodeType.Times);
+                return Node.MakeNode(Node.NodeType.Times);
 
             case OP_DIVIDE:
                 expect(Token.Type.OP_DIVIDE);
-                return Node.makeNode(Node.NodeType.Divide);
+                return Node.MakeNode(Node.NodeType.Divide);
 
             case OP_MODULO:
                 expect(Token.Type.OP_MODULO);
-                return Node.makeNode(Node.NodeType.Modulo);
+                return Node.MakeNode(Node.NodeType.Modulo);
 
             default:
                 makeError("Expected +, -, *, /, or %");
-                return Node.makeNode(Node.NodeType.Error);
+                return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
@@ -789,58 +789,58 @@ public class Parser extends RecursiveDescent {
         switch (peek().type) {
             case LOP_LESSTHAN:
                 expect(Token.Type.LOP_LESSTHAN);
-                return Node.makeNode(Node.NodeType.LessThan);
+                return Node.MakeNode(Node.NodeType.LessThan);
 
             case LOP_GREATERTHAN:
                 expect(Token.Type.LOP_GREATERTHAN);
-                return Node.makeNode(Node.NodeType.GreaterThan);
+                return Node.MakeNode(Node.NodeType.GreaterThan);
 
             case LOP_NOTEQUAL:
                 expect(Token.Type.LOP_NOTEQUAL);
-                return Node.makeNode(Node.NodeType.NotEqual);
+                return Node.MakeNode(Node.NodeType.NotEqual);
 
             case LOP_GREATEROREQUAL:
                 expect(Token.Type.LOP_GREATEROREQUAL);
-                return Node.makeNode(Node.NodeType.GreaterOrEqual);
+                return Node.MakeNode(Node.NodeType.GreaterOrEqual);
 
             case LOP_LESSOREQUAL:
                 expect(Token.Type.LOP_LESSOREQUAL);
-                return Node.makeNode(Node.NodeType.LessOrEqual);
+                return Node.MakeNode(Node.NodeType.LessOrEqual);
 
             case LOP_EQUALS:
                 expect(Token.Type.LOP_EQUALS);
-                return Node.makeNode(Node.NodeType.Equals);
+                return Node.MakeNode(Node.NodeType.Equals);
 
             case LOP_AND:
                 expect(Token.Type.LOP_AND);
-                return Node.makeNode(Node.NodeType.And);
+                return Node.MakeNode(Node.NodeType.And);
 
             case LOP_OR:
                 expect(Token.Type.LOP_OR);
-                return Node.makeNode(Node.NodeType.Or);
+                return Node.MakeNode(Node.NodeType.Or);
 
             default:
                 makeError("Expected <, >, !=, >=, <=, ==, ||, or &&");
-                return Node.makeNode(Node.NodeType.Error);
+                return Node.MakeNode(Node.NodeType.Error);
         }
     }
 
-    private Node getLeaf(Token.Type type) throws SyntaxException {
+    private Node GetLeaf(Token.Type type) throws SyntaxException {
         int line = getLineNumber();
-        Node node = Node.makeNode(expect(type), line);
+        Node node = Node.MakeNode(expect(type), line);
 
-        addEmpty(node);
+        AddEmpty(node);
 
         return node;
     }
 
-    private void addEmpty(Node node) {
+    private void AddEmpty(Node node) {
         if (node.FirstChild == null) {
-            node.addChild(Node.makeNode(Node.NodeType.Empty));
+            node.AddChild(Node.MakeNode(Node.NodeType.Empty));
         }
     }
 
-    private boolean checkForType() {
+    private boolean CheckForType() {
 
         switch (peek().type) {
             case FLOAT: case INT: case BOOL:

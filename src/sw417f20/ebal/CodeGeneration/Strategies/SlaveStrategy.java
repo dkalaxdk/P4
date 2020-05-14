@@ -12,13 +12,13 @@ public class SlaveStrategy extends CodeGenerationStrategy {
         Slave slave = arduinoSystem.SlaveList.get(node.ArduinoID);
 
         while (child.Type != Node.NodeType.Initiate) {
-            String declaration = child.generateCode();
+            String declaration = child.GenerateCode();
             slave.VariableDeclarations.append(declaration);
             child = child.Next;
         }
 
         Node initiate = child;
-        initiate.generateCode();
+        initiate.GenerateCode();
 
         Node eventHandlers = child.Next;
         GenerateCodeForLinkedList(eventHandlers);

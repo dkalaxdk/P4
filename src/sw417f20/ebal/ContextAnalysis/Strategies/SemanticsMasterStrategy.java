@@ -18,19 +18,19 @@ public class SemanticsMasterStrategy extends SemanticsCheckerStrategy{
 
         // Check semantics for variables global to the master
         Node child = node.FirstChild;
-        while (!child.isEmpty()){
-            child.checkSemantics();
+        while (!child.IsEmpty()){
+            child.CheckSemantics();
             child = child.Next;
         }
 
         // Check semantics for Initiate
         child = child.Next;
-        child.checkSemantics();
+        child.CheckSemantics();
         child = child.Next;
 
         // Check semantics for listeners
-        while (!child.isEmpty()){
-            child.checkSemantics();
+        while (!child.IsEmpty()){
+            child.CheckSemantics();
             child = child.Next;
         }
 

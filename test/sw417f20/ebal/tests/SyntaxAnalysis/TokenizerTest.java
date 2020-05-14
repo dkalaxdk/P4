@@ -541,7 +541,7 @@ class TokenizerTest {
         Token actual = new Token(Token.Type.NOTATOKEN, "/");
         tokenizer.assignSpecialCharacterType(actual);
 
-        Mockito.verify(mockReader).readToEndOfComment();
+        Mockito.verify(mockReader).ReadToEndOfComment();
     }
     @Test
     void isSingleCharacter_TokenContentMatchesDivideDivide_CallsReadChar() throws IOException {
@@ -550,7 +550,7 @@ class TokenizerTest {
         tokenizer.assignSpecialCharacterType(actual);
 
 
-        Mockito.verify(mockReader).readToEndOfLine();
+        Mockito.verify(mockReader).ReadToEndOfLine();
     }
     @Test
     void isSingleCharacter_TokenContentMatchesEquals_ReturnsTokenWithTypeASSIGN() throws IOException {

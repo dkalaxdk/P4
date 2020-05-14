@@ -13,7 +13,7 @@ public class SemanticsEventHandlerStrategy extends SemanticsCheckerStrategy{
         if (symbol != null){
             if (symbol.DataType == Symbol.SymbolType.EVENT){
                 // Check semantics for the block of the EventHandler
-                node.FirstChild.Next.checkSemantics();
+                node.FirstChild.Next.CheckSemantics();
             }
             else {
                 MakeError(node, symbol.Name, ErrorType.WrongType);

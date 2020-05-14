@@ -14,15 +14,15 @@ public class Tokenizer {
         token.lineNumber = reader.currentLine;
         token.offSet = reader.currentOffset;
 
-        token.content += reader.readChar();
+        token.content += reader.ReadChar();
 
         assignSpecialCharacterType(token);
         if (token.type == Token.Type.NOTATOKEN) {
-            token.content = reader.findNumber();
+            token.content = reader.FindNumber();
             assignNumberTokenType(token);
         }
         if (token.type == Token.Type.NOTATOKEN) {
-            token.content = reader.findWord();
+            token.content = reader.FindWord();
             assignKeywordType(token);
         }
 
@@ -146,31 +146,31 @@ public class Tokenizer {
                 break;
             case '-':
                 if (reader.nextChar == '=') {
-                    token.content += reader.readChar();
+                    token.content += reader.ReadChar();
                     token.type = Token.Type.OP_MINUS_EQUALS;
                 } else token.type = Token.Type.OP_MINUS;
                 break;
             case '*':
                 if (reader.nextChar == '=') {
-                    token.content += reader.readChar();
+                    token.content += reader.ReadChar();
                     token.type = Token.Type.OP_TIMES_EQUALS;
                 } else token.type = Token.Type.OP_TIMES;
                 break;
             case '/':   // Has some special cases when followed by other symbols
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.OP_DIVIDE_EQUALS;
-                    token.content += reader.readChar();
+                    token.content += reader.ReadChar();
                 } else if (reader.nextChar == '*') {
-                    reader.readToEndOfComment();
+                    reader.ReadToEndOfComment();
                 } else if (reader.nextChar == '/') {
-                    reader.readToEndOfLine();
+                    reader.ReadToEndOfLine();
                 } else token.type = Token.Type.OP_DIVIDE;
                 break;
 
             case '=':
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.LOP_EQUALS;
-                    token.content += reader.readChar();
+                    token.content += reader.ReadChar();
                 } else token.type = Token.Type.ASSIGN;
                 break;
 
@@ -181,7 +181,7 @@ public class Tokenizer {
             case '!':
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.LOP_NOTEQUAL;
-                    token.content += reader.readChar();
+                    token.content += reader.ReadChar();
                 } else token.type = Token.Type.OP_NOT;
                 break;
 
@@ -217,27 +217,27 @@ public class Tokenizer {
             case '>':
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.LOP_GREATEROREQUAL;
-                    token.content += reader.readChar();
+                    token.content += reader.ReadChar();
                 } else token.type = Token.Type.LOP_GREATERTHAN;
                 break;
             case '<':
                 if (reader.nextChar == '=') {
                     token.type = Token.Type.LOP_LESSOREQUAL;
-                    token.content += reader.readChar();
+                    token.content += reader.ReadChar();
                 } else token.type = Token.Type.LOP_LESSTHAN;
                 break;
 
             case '&':
                 if (reader.nextChar == '&') {
                     token.type = Token.Type.LOP_AND;
-                    token.content += reader.readChar();
+                    token.content += reader.ReadChar();
                 }
                 break;
 
             case '|':
                 if (reader.nextChar == '|') {
                     token.type = Token.Type.LOP_OR;
-                    token.content += reader.readChar();
+                    token.content += reader.ReadChar();
                 }
                 break;
 

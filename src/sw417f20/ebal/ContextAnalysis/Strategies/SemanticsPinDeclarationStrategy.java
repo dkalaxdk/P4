@@ -20,7 +20,7 @@ public class SemanticsPinDeclarationStrategy extends SemanticsCheckerStrategy{
                 // The expression must be a call to CreatePin
                 if (expression.Type == Node.NodeType.Call && expression.FirstChild.Type == Node.NodeType.CreatePin) {
                     // Check the semantics for the expression
-                    expression.checkSemantics();
+                    expression.CheckSemantics();
                     // Enter the pin in the symbol table
                     SymbolTable.EnterSymbol(node.FirstChild.Value, Symbol.SymbolType.PIN, node.FirstChild.Next);
                 }

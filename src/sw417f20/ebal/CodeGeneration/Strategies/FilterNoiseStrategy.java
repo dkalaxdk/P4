@@ -7,7 +7,7 @@ public class FilterNoiseStrategy extends CodeGenerationStrategy {
     public String GenerateCode(Node node) {
 
         String pinName = node.Next.Value;
-        String filterType = node.Next.Next.generateCode();
+        String filterType = node.Next.Next.GenerateCode();
 
         return pinName + ".filterNoise(" + filterType + ")";
     }

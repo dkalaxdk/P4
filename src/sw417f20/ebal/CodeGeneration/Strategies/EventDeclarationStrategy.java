@@ -53,7 +53,7 @@ public class EventDeclarationStrategy extends CodeGenerationStrategy {
         }
 
         // Get the expression that is the input of createEvent
-        String expression = node.FirstChild.Next.FirstChild.Next.generateCode();
+        String expression = node.FirstChild.Next.FirstChild.Next.GenerateCode();
 
         return addIndent(arduinoSystem.Indent) + eventName + ".createEvent(" + expression + ");\n";
     }

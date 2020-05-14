@@ -50,7 +50,7 @@ public class Main {
             SemanticsStrategyAssigner semanticsStrategyAssigner = new SemanticsStrategyAssigner();
             ISymbolTable symbolTable = semanticsStrategyAssigner.Run(AST);
 
-            AST.checkSemantics();
+            AST.CheckSemantics();
 
             if (debug) {
                 HashSymbolTablePrinter printer = new HashSymbolTablePrinter();
@@ -68,7 +68,7 @@ public class Main {
             system.Generate();
             HashMap<String, String> files = system.Print();
 
-            String sourceFile = getFileName(args[0]);
+            String sourceFile = GetFileName(args[0]);
 
             OutputFileGenerator generator = new OutputFileGenerator(files, sourceFile);
 
@@ -81,7 +81,7 @@ public class Main {
         }
     }
 
-    private static String getFileName(String string) {
+    private static String GetFileName(String string) {
         String[] n = string.split("/");
 
         String sourceFile;
@@ -226,7 +226,7 @@ public class Main {
         symbolTable = visitor.Run(root);
         try {
             if (root != null) {
-                root.checkSemantics();
+                root.CheckSemantics();
             }
 //            HashSymbolTablePrinter printer = new HashSymbolTablePrinter();
 //            printer.PrintTable(symbolTable);

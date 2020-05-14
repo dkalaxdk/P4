@@ -10,12 +10,12 @@ public class SemanticsProgStrategy extends SemanticsCheckerStrategy{
         public void CheckSemantics(Node node) throws SemanticsException {
             Node child = node.FirstChild;
             // Check semantics for master
-            child.checkSemantics();
+            child.CheckSemantics();
 
             // Check semantics for slaves
             child = child.Next;
-            while (!child.isEmpty()){
-                child.checkSemantics();
+            while (!child.IsEmpty()){
+                child.CheckSemantics();
                 child = child.Next;
             }
 
