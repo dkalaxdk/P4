@@ -11,7 +11,7 @@ The language designed in this semester is an event based Arduino language, calle
 The communication works by having one Master board, containing the input pins that needs to be monitored, and one or more slave boards, containing the output pins of the system.
 
 ## How to use:
-The project can be compiled using any java compiler. Within the EBALArduino folder there are some examples of the output code after the compiler have been run on the input files seen in TestFiles/CompilerTest.txt. <br>
+The project can be compiled using any java compiler. Code written in EBAL can be seen in TestFiles/CompilerTest.txt. <br>
 
 After compilation, the output code needs to be compiled using an Arduino IDE or compiler. The compiled code utilises a library which can be found in EBAL.Zip. <br>
 When installing the library to the Arduino IDE, follow this guide: [Arduino library installation](https://www.arduino.cc/en/guide/libraries).
