@@ -12,10 +12,8 @@ The communication works by having one Master board, containing the input pins th
 
 ## How to use:
 The project can be compiled using any java compiler. Within the EBALArduino folder there are some examples of the output code after the compiler have been run on the input files seen in **DO SAVE THESE SOMEWHERE OR REFERENCE THEM**. <br>
-Example code written in EBAL can be seen in EBAL.Zip
 
-
-After compilation, the output code needs to be compiled using an Arduino IDE or compiler. The compiled code utilises a library which can be found in [Reference to Arduino library](https://www.youtube.com/watch?v=dQw4w9WgXcQ). <br>
+After compilation, the output code needs to be compiled using an Arduino IDE or compiler. The compiled code utilises a library which can be found in EBAL.Zip. <br>
 When installing the library to the Arduino IDE, follow this guide: [Arduino library installation](https://www.arduino.cc/en/guide/libraries).
 When this is done the output code from the compiler can be run as any other Arduino code.
 
