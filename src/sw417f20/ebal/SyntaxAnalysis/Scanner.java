@@ -14,12 +14,12 @@ public class Scanner {
 
         this.reader = reader;
         tokenizer = new Tokenizer(reader);
-        init();
+        Init();
     }
 
-    public void init() {
+    public void Init() {
         try {
-            nextToken = tokenizer.getToken();
+            nextToken = tokenizer.GetToken();
         }
         catch (IOException e) {
             System.err.println(e);
@@ -27,18 +27,18 @@ public class Scanner {
     }
 
     //Only for public use
-    public Token peek() {
+    public Token Peek() {
         return nextToken;
     }
 
     //Only for public use
-    public void advance() throws IOException {
+    public void Advance() throws IOException {
         // Check whether the switch may find another case, ie isDigit, isText or the likes.
         // Depending on the cases, it should be redirected to something in the likes of "Find keyword" or "Find literal"
         Token temp = nextToken;
 
         do {
-            nextToken = tokenizer.getToken();
+            nextToken = tokenizer.GetToken();
         }
         while (nextToken.type == Token.Type.NOTATOKEN);
 

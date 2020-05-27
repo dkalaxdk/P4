@@ -8,6 +8,6 @@ public class CallStrategy extends CodeGenerationStrategy {
 
         // Call only visits the first child which is a function.
         // The different functions each visits their own parameters.
-        return node.FirstChild.generateCode();
+        return node.FirstChild.GenerateCode();
     }
 }

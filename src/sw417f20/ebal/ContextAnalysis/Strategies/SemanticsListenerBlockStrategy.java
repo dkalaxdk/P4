@@ -10,10 +10,10 @@ public class SemanticsListenerBlockStrategy extends SemanticsCheckerStrategy{
         SymbolTable.OpenScope();
         // Check semantics for the statements in the block
         Node child = node.FirstChild;
-        while (!child.isEmpty()){
+        while (!child.IsEmpty()){
             // Check statements are not PinDeclarations
             if (child.Type != Node.NodeType.PinDeclaration){
-                child.checkSemantics();
+                child.CheckSemantics();
             }
             else {
                 MakeError(child, "No pin declarations allowed in Listener");

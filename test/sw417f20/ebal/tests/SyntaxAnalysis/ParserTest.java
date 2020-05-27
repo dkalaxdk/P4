@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ParserTest {
 
 
-    Parser createParser(String program) {
+    Parser CreateParser(String program) {
         StringReader stringReader = new StringReader(program);
         BufferedReader bufferedReader = new BufferedReader(stringReader);
         Reader reader = new Reader(bufferedReader);
@@ -25,7 +25,7 @@ class ParserTest {
     void Start_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -44,7 +44,7 @@ class ParserTest {
     void Start_OnlyBeginEnd_ThrowSyntaxException() {
         // Arrange
         String program = "BEGIN END";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -63,7 +63,7 @@ class ParserTest {
     void Start_NoMaster_ThrowSyntaxException() {
         // Arrange
         String program = "BEGIN SLAVE Initiate { } END SLAVE";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -82,7 +82,7 @@ class ParserTest {
     void Start_NoSlaves_ThrowSyntaxException() {
         // Arrange
         String program = "BEGIN MASTER Initiate { } END MASTER";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -102,7 +102,7 @@ class ParserTest {
         // Arrange
         String program = "BEGIN MASTER Initiate { } END MASTER " +
                          "BEGIN SLAVE : n Initiate { } END SLAVE";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -123,7 +123,7 @@ class ParserTest {
         // Arrange
         String program = "BEGIN MASTER Initiate { } END MASTER " +
                 "BEGIN SLAVE : n Initiate { } END SLAVE";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -145,7 +145,7 @@ class ParserTest {
         String program = "BEGIN MASTER Initiate { } END MASTER " +
                 "BEGIN SLAVE : a Initiate { } END SLAVE " +
                 "BEGIN SLAVE : b Initiate { } END SLAVE ";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -167,7 +167,7 @@ class ParserTest {
     void Master_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -186,7 +186,7 @@ class ParserTest {
     void Master_OnlyBeginEnd_ThrowSyntaxException() {
         // Arrange
         String program = "BEGIN END";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -205,7 +205,7 @@ class ParserTest {
     void Master_NoBegin_ThrowSyntaxException() {
         // Arrange
         String program = "MASTER Initiate { } END MASTER";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -224,7 +224,7 @@ class ParserTest {
     void Master_NoEnd_ThrowSyntaxException() {
         // Arrange
         String program = "BEGIN MASTER Initiate { } MASTER";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -243,7 +243,7 @@ class ParserTest {
     void Master_NoFirstMaster_ThrowSyntaxException() {
         // Arrange
         String program = "BEGIN Initiate { } END MASTER";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -262,7 +262,7 @@ class ParserTest {
     void Master_NoLastMaster_ThrowSyntaxException() {
         // Arrange
         String program = "BEGIN MASTER Initiate { } END";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -281,7 +281,7 @@ class ParserTest {
     void Master_NoInitiate_ThrowSyntaxException() {
         // Arrange
         String program = "BEGIN MASTER END MASTER";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -300,7 +300,7 @@ class ParserTest {
     void Master_MinimumProgram_ReturnMasterNode() {
         // Arrange
         String program = "BEGIN MASTER Initiate { } END MASTER";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -320,7 +320,7 @@ class ParserTest {
     void Master_MinimumProgram_ReturnedNodeFirstChildIsEmpty() {
         // Arrange
         String program = "BEGIN MASTER Initiate { } Listener(id) { } END MASTER";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -340,7 +340,7 @@ class ParserTest {
     void Master_MinimumProgram_ReturnedNodeSecondChildIsInitiate() {
         // Arrange
         String program = "BEGIN MASTER Initiate { } Listener(id) { } END MASTER";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -360,7 +360,7 @@ class ParserTest {
     void Master_MinimalProgram_ReturnedNodeThirdChildIsListener() {
         // Arrange
         String program = "BEGIN MASTER Initiate { } Listener(id) { } END MASTER";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -382,7 +382,7 @@ class ParserTest {
     void Slaves_NoProgram_ReturnEmptyNode() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -402,7 +402,7 @@ class ParserTest {
     void Slaves_OneSlave_ReturnSlaveNode() {
         // Arrange
         String program = "BEGIN SLAVE : n Initiate { } END SLAVE";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -422,7 +422,7 @@ class ParserTest {
     void Slaves_TwoSlaves_ReturnSlaveNode() {
         // Arrange
         String program = "BEGIN SLAVE : a Initiate { } END SLAVE " + "BEGIN SLAVE : b Initiate { } END SLAVE";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -442,7 +442,7 @@ class ParserTest {
     void Slaves_TwoSlaves_ReturnedNodeNextSiblingIsSlave() {
         // Arrange
         String program = "BEGIN SLAVE : a Initiate { } END SLAVE BEGIN SLAVE : a Initiate { } END SLAVE";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -464,7 +464,7 @@ class ParserTest {
     void Slave_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -483,7 +483,7 @@ class ParserTest {
     void Slave_OnlyBeginEnd_ThrowSyntaxException() {
         // Arrange
         String program = "BEGIN END";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -502,7 +502,7 @@ class ParserTest {
     void Slave_NoBegin_ThrowSyntaxException() {
         // Arrange
         String program = "SLAVE Initiate { } END SLAVE";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -521,7 +521,7 @@ class ParserTest {
     void Slave_NoEnd_ThrowSyntaxException() {
         // Arrange
         String program = "BEGIN SLAVE Initiate { } SLAVE";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -540,7 +540,7 @@ class ParserTest {
     void Slave_NoFirstSlave_ThrowSyntaxException() {
         // Arrange
         String program = "BEGIN Initiate { } END SLAVE";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -559,7 +559,7 @@ class ParserTest {
     void Slave_NoLastSlave_ThrowSyntaxException() {
         // Arrange
         String program = "BEGIN SLAVE Initiate { } END";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -578,7 +578,7 @@ class ParserTest {
     void Slave_NoInitiate_ThrowSyntaxException() {
         // Arrange
         String program = "BEGIN SLAVE END SLAVE";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -597,7 +597,7 @@ class ParserTest {
     void Slave_MinimumProgram_ReturnSlaveNode() {
         // Arrange
         String program = "BEGIN SLAVE : n Initiate { } END SLAVE";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -617,7 +617,7 @@ class ParserTest {
     void Slave_MinimalProgram_ReturnedNodeFirstChildIsIdentifier() {
         // Arrange
         String program = "BEGIN SLAVE : n Initiate { } EventHandler(id) { } END SLAVE";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -637,7 +637,7 @@ class ParserTest {
     void Slave_MinimalProgram_ReturnedNodeSecondChildIsEmpty() {
         // Arrange
         String program = "BEGIN SLAVE : n Initiate { } EventHandler(id) { } END SLAVE";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -657,7 +657,7 @@ class ParserTest {
     void Slave_MinimalProgram_ReturnedNodeThirdChildIsInitiate() {
         // Arrange
         String program = "BEGIN SLAVE : n Initiate { } EventHandler(id) { } END SLAVE";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -677,7 +677,7 @@ class ParserTest {
     void Slave_MinimalProgram_ReturnedNodeFourthChildIsEventHandler() {
         // Arrange
         String program = "BEGIN SLAVE : n Initiate { } EventHandler(id) { } END SLAVE";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -699,7 +699,7 @@ class ParserTest {
     void Initiate_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -718,7 +718,7 @@ class ParserTest {
     void Initiate_NoInitiate_ThrowSyntaxException() {
         // Arrange
         String program = "{ }";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -737,7 +737,7 @@ class ParserTest {
     void Initiate_NoLeftBracket_ThrowSyntaxException() {
         // Arrange
         String program = "Initiate }";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -756,7 +756,7 @@ class ParserTest {
     void Initiate_NoRightBracket_ThrowSyntaxException() {
         // Arrange
         String program = "Initiate {";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -775,7 +775,7 @@ class ParserTest {
     void Initiate_NoBlock_ThrowSyntaxException() {
         // Arrange
         String program = "Initiate";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -794,7 +794,7 @@ class ParserTest {
     void Initiate_MinimumProgram_ReturnInitiateNode() {
         // Arrange
         String program = "Initiate { }";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -817,7 +817,7 @@ class ParserTest {
                 "pin a = createPin(digital, input, 1); " +
                 "pin b = createPin(digital, input, 2); " +
                 "}";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -837,7 +837,7 @@ class ParserTest {
     void PinType_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -856,7 +856,7 @@ class ParserTest {
     void PinType_TypeIsInt_ThrowSyntaxException() {
         // Arrange
         String program = "int";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -875,7 +875,7 @@ class ParserTest {
     void PinType_TypeIsDigital_ReturnDigitalNode() {
         // Arrange
         String program = "digital";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -895,7 +895,7 @@ class ParserTest {
     void PinType_TypeIsAnalog_ReturnAnalogNode() {
         // Arrange
         String program = "analog";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -915,7 +915,7 @@ class ParserTest {
     void PinType_TypeIsPWM_ReturnPWMNode() {
         // Arrange
         String program = "pwm";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -937,7 +937,7 @@ class ParserTest {
     void IOType_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -956,7 +956,7 @@ class ParserTest {
     void IOType_TypeIsFloat_ThrowSyntaxException() {
         // Arrange
         String program = "float";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -975,7 +975,7 @@ class ParserTest {
     void IOType_TypeIsInput_ReturnInputNode() {
         // Arrange
         String program = "input";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -995,7 +995,7 @@ class ParserTest {
     void IOType_TypeIsOutput_ReturnOutputNode() {
         // Arrange
         String program = "output";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1017,7 +1017,7 @@ class ParserTest {
     void Listeners_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -1036,7 +1036,7 @@ class ParserTest {
     void Listeners_MinimumProgram_ReturnEmptyNode() {
         // Arrange
         String program = "END";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1056,7 +1056,7 @@ class ParserTest {
     void Listeners_OneListener_ReturnListenerNode() {
         // Arrange
         String program = "Listener (id) { } END";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1078,7 +1078,7 @@ class ParserTest {
         String program = "Listener (id) { } " +
                          "Listener (id) { } " +
                          "END";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1100,7 +1100,7 @@ class ParserTest {
         String program = "Listener (id) { } " +
                          "Listener (id) { } " +
                          "END";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1122,7 +1122,7 @@ class ParserTest {
     void Listener_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -1141,7 +1141,7 @@ class ParserTest {
     void Listener_NoListener_ThrowSyntaxException() {
         // Arrange
         String program = "(id) { }";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -1160,7 +1160,7 @@ class ParserTest {
     void Listener_NoLParen_ThrowSyntaxException() {
         // Arrange
         String program = "Listener id) { }";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -1179,7 +1179,7 @@ class ParserTest {
     void Listener_NoIdentifier_ThrowSyntaxException() {
         // Arrange
         String program = "Listener () { }";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -1198,7 +1198,7 @@ class ParserTest {
     void Listener_NoRParen_ThrowSyntaxException() {
         // Arrange
         String program = "Listener (id { }";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -1217,7 +1217,7 @@ class ParserTest {
     void Listener_NoLBracket_ThrowSyntaxException() {
         // Arrange
         String program = "Listener (id) }";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -1236,7 +1236,7 @@ class ParserTest {
     void Listener_NoRBracket_ThrowSyntaxException() {
         // Arrange
         String program = "Listener (id) {";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -1255,7 +1255,7 @@ class ParserTest {
     void Listener_MinimumProgram_ReturnListenerNode() {
         // Arrange
         String program = "Listener (id) { }";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1275,7 +1275,7 @@ class ParserTest {
     void Listener_MinimumProgram_ReturnedNodeFirstChildIsIdentifier() {
         // Arrange
         String program = "Listener (id) { }";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1295,7 +1295,7 @@ class ParserTest {
     void Listener_MinimumProgram_ReturnedNodeFirstChildIdentifierHasName() {
         // Arrange
         String program = "Listener (id) { }";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1315,7 +1315,7 @@ class ParserTest {
     void Listener_MinimumProgram_ReturnedNodeSecondChildIsBlock() {
         // Arrange
         String program = "Listener (id) { int a = 4; }";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1337,7 +1337,7 @@ class ParserTest {
     void EventHandlers_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -1356,7 +1356,7 @@ class ParserTest {
     void EventHandlers_MinimumProgram_ReturnEmptyNode() {
         // Arrange
         String program = "END";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1377,7 +1377,7 @@ class ParserTest {
         // Arrange
         String program = "EventHandler (id) { }" +
                          "END";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1399,7 +1399,7 @@ class ParserTest {
         String program = "EventHandler (id) { }" +
                          "EventHandler (id) { }" +
                          "END";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1421,7 +1421,7 @@ class ParserTest {
         String program = "EventHandler (id) { }" +
                          "EventHandler (id) { }" +
                          "END";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1443,7 +1443,7 @@ class ParserTest {
     void EventHandler_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -1462,7 +1462,7 @@ class ParserTest {
     void EventHandler_NoEventHandler_ThrowSyntaxException() {
         // Arrange
         String program = "(id) { }";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -1481,7 +1481,7 @@ class ParserTest {
     void EventHandler_NoLParen_ThrowSyntaxException() {
         // Arrange
         String program = "EventHandler id) { }";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -1500,7 +1500,7 @@ class ParserTest {
     void EventHandler_NoIdentifier_ThrowSyntaxException() {
         // Arrange
         String program = "EventHandler () { }";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -1519,7 +1519,7 @@ class ParserTest {
     void EventHandler_NoRParen_ThrowSyntaxException() {
         // Arrange
         String program = "EventHandler (id { }";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -1538,7 +1538,7 @@ class ParserTest {
     void EventHandler_NoLBracket_ThrowSyntaxException() {
         // Arrange
         String program = "EventHandler (id) }";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -1557,7 +1557,7 @@ class ParserTest {
     void EventHandler_NoRBracket_ThrowSyntaxException() {
         // Arrange
         String program = "EventHandler (id) {";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -1576,7 +1576,7 @@ class ParserTest {
     void EventHandler_MinimumProgram_ReturnEventHandlerNode() {
         // Arrange
         String program = "EventHandler (id) { };";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1596,7 +1596,7 @@ class ParserTest {
     void EventHandler_MinimumProgram_ReturnedNodeFirstChildIsIdentifier() {
         // Arrange
         String program = "EventHandler (id) { };";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1616,7 +1616,7 @@ class ParserTest {
     void EventHandler_MinimumProgram_ReturnedNodeFirstChildIdentifierHasName() {
         // Arrange
         String program = "EventHandler (id) { };";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1636,7 +1636,7 @@ class ParserTest {
     void EventHandler_MinimumProgram_ReturnedNodeSecondChildIsBlock() {
         // Arrange
         String program = "EventHandler (id) { };";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1658,7 +1658,7 @@ class ParserTest {
     void Block_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -1677,7 +1677,7 @@ class ParserTest {
     void Block_NoLBracket_ThrowSyntaxException() {
         // Arrange
         String program = "}";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -1696,7 +1696,7 @@ class ParserTest {
     void Block_NoRBracket_ThrowSyntaxException() {
         // Arrange
         String program = "{";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -1715,7 +1715,7 @@ class ParserTest {
     void Block_MinimumProgram_ReturnBlockNode() {
         // Arrange
         String program = "{ }";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1735,7 +1735,7 @@ class ParserTest {
     void Block_MinimumProgram_ReturnedNodeFirstChildIsEmptyNode() {
         // Arrange
         String program = "{ }";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1755,7 +1755,7 @@ class ParserTest {
     void Block_MinimalProgram_ContainsIntDeclaration_ReturnedNodeFirstChildIsIntDeclarationNode() {
         // Arrange
         String program = "{ int a = 6; }";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1775,7 +1775,7 @@ class ParserTest {
     void Block_MinimalProgram_ContainsTwoIntDeclarations_ReturnedNodeSecondChildIsIntDeclarationNode() {
         // Arrange
         String program = "{ int a = 6; int b = 3; }";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1797,7 +1797,7 @@ class ParserTest {
     void Stmts_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -1816,7 +1816,7 @@ class ParserTest {
     void Stmts_MinimumProgram_ReturnEmptyNode() {
         // Arrange
         String program = "}";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1837,7 +1837,7 @@ class ParserTest {
         // Arrange
         String program = "int a = 2;" +
                 "}";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1859,7 +1859,7 @@ class ParserTest {
         String program = "int a = 2;" +
                 "int b = 3;" +
                 "}";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1881,7 +1881,7 @@ class ParserTest {
         String program = "int a = 2;" +
                 "int b = 3;" +
                 "}";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1903,7 +1903,7 @@ class ParserTest {
     void Stmt_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -1922,7 +1922,7 @@ class ParserTest {
     void Stmt_Call_BroadcastReturnCallNode() {
         // Arrange
         String program = "broadcast ( b )";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1942,7 +1942,7 @@ class ParserTest {
     void Stmt_Assignment_ReturnAssignmentNode() {
         // Arrange
         String program = "a = 3;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1962,7 +1962,7 @@ class ParserTest {
     void Stmt_Dcl_DeclarationIsInt_ReturnIntDeclaration() {
         // Arrange
         String program = "int a;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -1983,7 +1983,7 @@ class ParserTest {
         // Arrange
         String program = "if ( b ) { } " +
                 "}";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2005,7 +2005,7 @@ class ParserTest {
     void Assignment_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -2024,7 +2024,7 @@ class ParserTest {
     void Assignment_NoIdentifier_ThrowSyntaxException() {
         // Arrange
         String program = "= 3;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -2043,7 +2043,7 @@ class ParserTest {
     void Assignment_NoAssign_ThrowSyntaxException() {
         // Arrange
         String program = "a 3;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -2062,7 +2062,7 @@ class ParserTest {
     void Assignment_NoExpression_ThrowSyntaxException() {
         // Arrange
         String program = "a =;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -2081,7 +2081,7 @@ class ParserTest {
     void Assignment_NoSemi_ThrowSyntaxException() {
         // Arrange
         String program = "a = 3";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -2100,7 +2100,7 @@ class ParserTest {
     void Assignment_MinimumProgram_ReturnAssigmentNode() {
         // Arrange
         String program = "a = 3;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2120,7 +2120,7 @@ class ParserTest {
     void Assignment_MinimumProgram_ReturnedNodeFirstChildIsIdentifier() {
         // Arrange
         String program = "a = 3;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2140,7 +2140,7 @@ class ParserTest {
     void Assignment_MinimumProgram_ExpressionIsIntLiteral_ReturnedNodeSecondChildIsIntLiteral() {
         // Arrange
         String program = "a = 3;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2160,7 +2160,7 @@ class ParserTest {
     void Assignment_MinimumProgram_ExpressionIsComposite_ReturnedNodeSecondChildIsExpression() {
         // Arrange
         String program = "a = 3 + 3;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2182,7 +2182,7 @@ class ParserTest {
     void Dcl_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -2201,7 +2201,7 @@ class ParserTest {
     void Dcl_NoType_ThrowSyntaxException() {
         // Arrange
         String program = "a;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -2220,7 +2220,7 @@ class ParserTest {
     void Dcl_NoIdentifier_ThrowSyntaxException() {
         // Arrange
         String program = "int ;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -2239,7 +2239,7 @@ class ParserTest {
     void Dcl_NoSemi_ThrowSyntaxException() {
         // Arrange
         String program = "int a";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -2258,7 +2258,7 @@ class ParserTest {
     void Dcl_MinimumProgram_TypeIsInt_ReturnIntDeclarationNode() {
         // Arrange
         String program = "int a;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2278,7 +2278,7 @@ class ParserTest {
     void Dcl_MinimumProgram_TypeIsFloat_ReturnFloatDeclarationNode() {
         // Arrange
         String program = "float a;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2298,7 +2298,7 @@ class ParserTest {
     void Dcl_MinimumProgram_TypeIsBool_ReturnBoolDeclarationNode() {
         // Arrange
         String program = "bool a;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2318,7 +2318,7 @@ class ParserTest {
     void Dcl_MinimumProgram_TypeIsEvent_ReturnEventDeclarationNode() {
         // Arrange
         String program = "event a;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2338,7 +2338,7 @@ class ParserTest {
     void Dcl_MinimumProgram_ReturnedNodeFirstChildIsIdentifier() {
         // Arrange
         String program = "int a;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2358,7 +2358,7 @@ class ParserTest {
     void Dcl_MinimalProgramWithAssigment_ExpressionIsIntLiteral_ReturnedNodeSecondChildIsIntLiteral() {
         // Arrange
         String program = "int a = 3;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2378,7 +2378,7 @@ class ParserTest {
     void Dcl_MinimalProgramWithAssigment_ExpressionIsComposite_ReturnedNodeSecondChildIsExpression() {
         // Arrange
         String program = "int a = 3 + 3;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2400,7 +2400,7 @@ class ParserTest {
     void DclAssign_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -2419,7 +2419,7 @@ class ParserTest {
     void DclAssign_NoAssign_ThrowSyntaxException() {
         // Arrange
         String program = "3;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -2438,7 +2438,7 @@ class ParserTest {
     void DclAssign_NoExpression_ThrowSyntaxException() {
         // Arrange
         String program = "= ;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -2457,7 +2457,7 @@ class ParserTest {
     void DclAssign_NoSemi_ThrowSyntaxException() {
         // Arrange
         String program = "= 3";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -2476,7 +2476,7 @@ class ParserTest {
     void DclAssign_MinimumProgram_NoExpression_ReturnEmptyNode() {
         // Arrange
         String program = ";";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2496,7 +2496,7 @@ class ParserTest {
     void DclAssign_MinimumProgram_ExpressionIsIntLiteral_ReturnIntLiteralNode() {
         // Arrange
         String program = "= 2;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2516,7 +2516,7 @@ class ParserTest {
     void DclAssign_MinimumProgram_ExpressionIsComposite_ReturnExpressionNode() {
         // Arrange
         String program = "= 2 + 2;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2538,7 +2538,7 @@ class ParserTest {
     void Expr_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -2557,7 +2557,7 @@ class ParserTest {
     void Expr_Value_Identifier_ReturnIdentifierNode() {
         // Arrange
         String program = "a;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2577,7 +2577,7 @@ class ParserTest {
     void Expr_Value_Literal_Int_ReturnLiteralNode() {
         // Arrange
         String program = "2;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2597,7 +2597,7 @@ class ParserTest {
     void Expr_Parenthesised_Identifier_ReturnIdentifierNode() {
         // Arrange
         String program = "(a);";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2617,7 +2617,7 @@ class ParserTest {
     void Expr_Parenthesised_Literal_Int_ReturnLiteralNode() {
         // Arrange
         String program = "(1);";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2637,7 +2637,7 @@ class ParserTest {
     void Expr_Parenthesised_Composite_ReturnExpressionNode() {
         // Arrange
         String program = "(1 + 1);";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2657,7 +2657,7 @@ class ParserTest {
     void Expr_Composite_ReturnExpressionNode() {
         // Arrange
         String program = "1 + 1;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2677,7 +2677,7 @@ class ParserTest {
     void Expr_Composite_IdentifierPlusIdentifier_ReturnedNodeFirstChildIsIdentifier() {
         // Arrange
         String program = "a + b;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2697,7 +2697,7 @@ class ParserTest {
     void Expr_Composite_IdentifierPlusIdentifier_ReturnedNodeSecondChildIsPlusOperator() {
         // Arrange
         String program = "a + b;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2717,7 +2717,7 @@ class ParserTest {
     void Expr_Composite_IdentifierPlusIdentifier_ReturnedNodeThirdChildIsIdentifier() {
         // Arrange
         String program = "a + b;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2737,7 +2737,7 @@ class ParserTest {
     void Expr_Composite_IdentifierPlusIdentifierPlusIdentifier_ReturnedNodeThirdChildIsExpression() {
         // Arrange
         String program = "a + b + c;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2757,7 +2757,7 @@ class ParserTest {
     void Expr_Prefix_Minus_Identifier_ReturnedNodeFirstChildIsPrefixMinus() {
         // Arrange
         String program = "-a;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2777,7 +2777,7 @@ class ParserTest {
     void Expr_Prefix_Minus_Literal_ReturnedNodeFirstChildIsPrefixMinus() {
         // Arrange
         String program = "-1;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2797,7 +2797,7 @@ class ParserTest {
     void Expr_Prefix_Minus_InsideParenthesis_ReturnedNodeFirstChildIsPrefixMinus() {
         // Arrange
         String program = "(-1);";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2817,7 +2817,7 @@ class ParserTest {
     void Expr_Prefix_Minus_OutsideParenthesis_ThrowSyntaxException() {
         // Arrange
         String program = "-(1);";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -2836,7 +2836,7 @@ class ParserTest {
     void Expr_Prefix_Not_Identifier_ReturnedNodeFirstChildIsPrefixNot() {
         // Arrange
         String program = "!a;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2856,7 +2856,7 @@ class ParserTest {
     void Expr_Prefix_Not_Literal_ThrowSyntaxException() {
         // Arrange
         String program = "!1;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -2875,7 +2875,7 @@ class ParserTest {
     void Expr_ReturnsCall_ReturnCallNode() {
         // Arrange
         String program = "getValue(a);";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2895,7 +2895,7 @@ class ParserTest {
     void Expr_VoidCall_ThrowSyntaxException() {
         // Arrange
         String program = "broadcast(a);";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -2916,7 +2916,7 @@ class ParserTest {
     void Value_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -2935,7 +2935,7 @@ class ParserTest {
     void Value_ValueIsIntLiteral_ReturnIntLiteralNode() {
         // Arrange
         String program = "2";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2955,7 +2955,7 @@ class ParserTest {
     void Value_ValueIsFloatLiteral_ReturnFloatLiteralNode() {
         // Arrange
         String program = "1.2";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2975,7 +2975,7 @@ class ParserTest {
     void Value_ValueIsBoolLiteral_ReturnBoolLiteralNode() {
         // Arrange
         String program = "true";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -2995,7 +2995,7 @@ class ParserTest {
     void Value_ValueIsIdentifier_ReturnIdentifierNode() {
         // Arrange
         String program = "test";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3017,7 +3017,7 @@ class ParserTest {
     void AfterExpr_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -3036,7 +3036,7 @@ class ParserTest {
     void AfterExpr_NoOperator_ThrowSyntaxException() {
         // Arrange
         String program = "4;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -3055,7 +3055,7 @@ class ParserTest {
     void AfterExpr_NoExpression_ThrowSyntaxException() {
         // Arrange
         String program = "+ ;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -3074,7 +3074,7 @@ class ParserTest {
     void AfterExpr_NoSemi_ThrowSyntaxException() {
         // Arrange
         String program = "+ 4";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -3093,7 +3093,7 @@ class ParserTest {
     void AfterExpr_MinimumProgram_NoExpression_ReturnEmptyNode() {
         // Arrange
         String program = ";";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3113,7 +3113,7 @@ class ParserTest {
     void AfterExpr_MinimumProgram_OperatorIsPlus_ReturnPlusNode() {
         // Arrange
         String program = "+ 4;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3133,7 +3133,7 @@ class ParserTest {
     void AfterExpr_MinimumProgram_ExpressionIsIntLiteral_ReturnedNodeNextIsIntLiteral() {
         // Arrange
         String program = "+ 4;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3153,7 +3153,7 @@ class ParserTest {
     void AfterExpr_MinimumProgram_ExpressionIsComposite_ReturnedNodeNextIsExpression() {
         // Arrange
         String program = "+ 4 + 6;";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3175,7 +3175,7 @@ class ParserTest {
     void Call_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -3194,7 +3194,7 @@ class ParserTest {
     void Call_VoidCall_CallIsBroadcast_ReturnCallNode() {
         // Arrange
         String program = "broadcast ( b )";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3214,7 +3214,7 @@ class ParserTest {
     void Call_VoidCall_CallIsBroadcast_ReturnedNodeFirstChildIsBroadcast() {
         // Arrange
         String program = "broadcast ( b )";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3234,7 +3234,7 @@ class ParserTest {
     void Call_VoidCall_CallIsWrite_ReturnCallNode() {
         // Arrange
         String program = "write(a, 1)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3254,7 +3254,7 @@ class ParserTest {
     void Call_VoidCall_CallIsWrite_ReturnedNodeFirstChildIsWrite() {
         // Arrange
         String program = "write(a, 1)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3274,7 +3274,7 @@ class ParserTest {
     void Call_ReturnsCall_CallIsFilterNoise_ReturnCallNode() {
         // Arrange
         String program = "filterNoise(a, debounce)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3294,7 +3294,7 @@ class ParserTest {
     void Call_ReturnsCall_CallIsFilterNoise_ReturnedNodeFirstChildIsFilterNoise() {
         // Arrange
         String program = "filterNoise(a, debounce)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3314,7 +3314,7 @@ class ParserTest {
     void Call_ReturnsCall_CallIsGetValue_ReturnCallNode() {
         // Arrange
         String program = "getValue(a)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3334,7 +3334,7 @@ class ParserTest {
     void Call_ReturnsCall_CallIsGetValue_ReturnedNodeFirstChildIsGetValue() {
         // Arrange
         String program = "getValue(a)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3354,7 +3354,7 @@ class ParserTest {
     void Call_ReturnsCall_CallIsCreateEvent_ReturnCallNode() {
         // Arrange
         String program = "createEvent(a)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3374,7 +3374,7 @@ class ParserTest {
     void Call_ReturnsCall_CallIsCreateEvent_ReturnedNodeFirstChildIsCreateEvent() {
         // Arrange
         String program = "createEvent(a)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3396,7 +3396,7 @@ class ParserTest {
     void VoidCall_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -3416,7 +3416,7 @@ class ParserTest {
     void VoidCall_Broadcast_NoBroadcast_ThrowSyntaxException() {
         // Arrange
         String program = "( b )";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -3435,7 +3435,7 @@ class ParserTest {
     void VoidCall_Broadcast_NoLParen_ThrowSyntaxException() {
         // Arrange
         String program = "broadcast  b )";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -3454,7 +3454,7 @@ class ParserTest {
     void VoidCall_Broadcast_NoIdentifier_ThrowSyntaxException() {
         // Arrange
         String program = "broadcast (  )";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -3473,7 +3473,7 @@ class ParserTest {
     void VoidCall_Broadcast_NoRParen_ThrowSyntaxException() {
         // Arrange
         String program = "broadcast ( b ";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -3492,7 +3492,7 @@ class ParserTest {
     void VoidCall_Broadcast_MinimumProgram_ReturnCallNode() {
         // Arrange
         String program = "broadcast ( b )";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3512,7 +3512,7 @@ class ParserTest {
     void VoidCall_Broadcast_MinimumProgram_ReturnedNodeFirstChildIsBroadcast() {
         // Arrange
         String program = "broadcast ( b )";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3532,7 +3532,7 @@ class ParserTest {
     void VoidCall_Broadcast_MinimumProgram_ReturnedNodeSecondChildIsIdentifier() {
         // Arrange
         String program = "broadcast ( b )";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3553,7 +3553,7 @@ class ParserTest {
     void VoidCall_Write_NoWrite_ThrowSyntaxException() {
         // Arrange
         String program = " (a, 1)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -3572,7 +3572,7 @@ class ParserTest {
     void VoidCall_Write_NoLParen_ThrowSyntaxException() {
         // Arrange
         String program = "write a, 1)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -3591,7 +3591,7 @@ class ParserTest {
     void VoidCall_Write_NoIdentifier_ThrowSyntaxException() {
         // Arrange
         String program = "write (, 1)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -3610,7 +3610,7 @@ class ParserTest {
     void VoidCall_Write_NoComma_ThrowSyntaxException() {
         // Arrange
         String program = "write (a 1)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -3629,7 +3629,7 @@ class ParserTest {
     void VoidCall_Write_NoExpression_ThrowSyntaxException() {
         // Arrange
         String program = "write (a, )";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -3648,7 +3648,7 @@ class ParserTest {
     void VoidCall_Write_NoRParen_ThrowSyntaxException() {
         // Arrange
         String program = "write (a, 1";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -3667,7 +3667,7 @@ class ParserTest {
     void VoidCall_Write_MinimumProgram_ReturnCallNode() {
         // Arrange
         String program = "write (a, 1)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3687,7 +3687,7 @@ class ParserTest {
     void VoidCall_Write_MinimumProgram_ReturnedNodeFirstChildIsWrite() {
         // Arrange
         String program = "write (a, 1)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3707,7 +3707,7 @@ class ParserTest {
     void VoidCall_Write_MinimumProgram_ReturnedNodeSecondChildIsIdentifier() {
         // Arrange
         String program = "write (a, 1)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3727,7 +3727,7 @@ class ParserTest {
     void VoidCall_Write_MinimumProgram_ExpressionIsIntLiteral_ReturnedNodeThirdChildIsIntLiteral() {
         // Arrange
         String program = "write (a, 1)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3747,7 +3747,7 @@ class ParserTest {
     void VoidCall_Write_MinimumProgram_ExpressionIsComposite_ReturnedNodeThirdChildIsExpression() {
         // Arrange
         String program = "write (a, 1 + 1)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3769,7 +3769,7 @@ class ParserTest {
     void ReturnsCall_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -3789,7 +3789,7 @@ class ParserTest {
     void ReturnsCall_FilterNoise_NoFilterNoise_ThrowSyntaxException() {
         // Arrange
         String program = "(a, debounce)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -3808,7 +3808,7 @@ class ParserTest {
     void ReturnsCall_FilterNoise_NoLParen_ThrowSyntaxException() {
         // Arrange
         String program = "filterNoise a, debounce)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -3827,7 +3827,7 @@ class ParserTest {
     void ReturnsCall_FilterNoise_NoIdentifier_ThrowSyntaxException() {
         // Arrange
         String program = "filterNoise( , debounce)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -3846,7 +3846,7 @@ class ParserTest {
     void ReturnsCall_FilterNoise_NoComma_ThrowSyntaxException() {
         // Arrange
         String program = "filterNoise(a debounce)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -3865,7 +3865,7 @@ class ParserTest {
     void ReturnsCall_FilterNoise_NoFilterType_ThrowSyntaxException() {
         // Arrange
         String program = "filterNoise(a, )";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -3884,7 +3884,7 @@ class ParserTest {
     void ReturnsCall_FilterNoise_NoRParen_ThrowSyntaxException() {
         // Arrange
         String program = "filterNoise(a, debounce";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -3903,7 +3903,7 @@ class ParserTest {
     void ReturnsCall_FilterNoise_MinimumProgram_ReturnCallNode() {
         // Arrange
         String program = "filterNoise(a, debounce)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3923,7 +3923,7 @@ class ParserTest {
     void ReturnsCall_FilterNoise_MinimumProgram_ReturnedNodeFirstChildIsFilterNoise() {
         // Arrange
         String program = "filterNoise(a, debounce)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3943,7 +3943,7 @@ class ParserTest {
     void ReturnsCall_FilterNoise_MinimumProgram_ReturnedNodeFirstSecondChildIsIdentifier() {
         // Arrange
         String program = "filterNoise(a, debounce)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3963,7 +3963,7 @@ class ParserTest {
     void ReturnsCall_FilterNoise_MinimumProgram_FilterTypeIsdebounce_ReturnedNodeFirstThirdChildIsdebounce() {
         // Arrange
         String program = "filterNoise(a, debounce)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -3984,7 +3984,7 @@ class ParserTest {
     void ReturnsCall_GetValue_NoGetValue_ThrowSyntaxException() {
         // Arrange
         String program = "(a)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -4003,7 +4003,7 @@ class ParserTest {
     void ReturnsCall_GetValue_NoLParen_ThrowSyntaxException() {
         // Arrange
         String program = "getValue a)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -4022,7 +4022,7 @@ class ParserTest {
     void ReturnsCall_GetValue_NoValue_ThrowSyntaxException() {
         // Arrange
         String program = "getValue( )";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -4041,7 +4041,7 @@ class ParserTest {
     void ReturnsCall_GetValue_NoRParen_ThrowSyntaxException() {
         // Arrange
         String program = "getValue(a";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -4060,7 +4060,7 @@ class ParserTest {
     void ReturnsCall_GetValue_MinimumProgram_ReturnCallNode() {
         // Arrange
         String program = "getValue(a)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4080,7 +4080,7 @@ class ParserTest {
     void ReturnsCall_GetValue_MinimumProgram_ReturnedNodeFirstChildIsGetValue() {
         // Arrange
         String program = "getValue(a)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4100,7 +4100,7 @@ class ParserTest {
     void ReturnsCall_GetValue_MinimumProgram_ReturnedNodeSecondChildIsIdentifier() {
         // Arrange
         String program = "getValue(a)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4121,7 +4121,7 @@ class ParserTest {
     void ReturnsCall_CreateEvent_NoCreateEvent_ThrowSyntaxException() {
         // Arrange
         String program = "(a)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -4140,7 +4140,7 @@ class ParserTest {
     void ReturnsCall_CreateEvent_NoLParen_ThrowSyntaxException() {
         // Arrange
         String program = "createEvent a)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -4159,7 +4159,7 @@ class ParserTest {
     void ReturnsCall_CreateEvent_NoValue_ThrowSyntaxException() {
         // Arrange
         String program = "createEvent( )";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -4178,7 +4178,7 @@ class ParserTest {
     void ReturnsCall_CreateEvent_NoRParen_ThrowSyntaxException() {
         // Arrange
         String program = "createEvent(a";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -4197,7 +4197,7 @@ class ParserTest {
     void ReturnsCall_CreateEvent_MinimumProgram_ReturnCallNode() {
         // Arrange
         String program = "createEvent(a)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4217,7 +4217,7 @@ class ParserTest {
     void ReturnsCall_CreateEvent_MinimumProgram_ReturnedNodeFirstChildIsCreateEvent() {
         // Arrange
         String program = "createEvent(a)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4237,7 +4237,7 @@ class ParserTest {
     void ReturnsCall_CreateEvent_MinimumProgram_ReturnedNodeSecondChildIsIdentifier() {
         // Arrange
         String program = "createEvent(a)";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4259,7 +4259,7 @@ class ParserTest {
     void IfStmt_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -4279,7 +4279,7 @@ class ParserTest {
         // Arrange
         String program = "( b ) { } " +
                 "}";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -4299,7 +4299,7 @@ class ParserTest {
         // Arrange
         String program = "if  b ) { } " +
                 "}";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -4319,7 +4319,7 @@ class ParserTest {
         // Arrange
         String program = "if ( ) { } " +
                 "}";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -4339,7 +4339,7 @@ class ParserTest {
         // Arrange
         String program = "if ( b  { } " +
                 "}";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -4359,7 +4359,7 @@ class ParserTest {
         // Arrange
         String program = "if ( b ) } " +
                 "}";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -4379,7 +4379,7 @@ class ParserTest {
         // Arrange
         String program = "if ( b ) {  " +
                 "}";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -4399,7 +4399,7 @@ class ParserTest {
         // Arrange
         String program = "if ( b ) { } " +
                 "}";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4420,7 +4420,7 @@ class ParserTest {
         // Arrange
         String program = "if ( b ) { } " +
                 "}";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4441,7 +4441,7 @@ class ParserTest {
         // Arrange
         String program = "if ( a == b ) { } " +
                 "}";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4462,7 +4462,7 @@ class ParserTest {
         // Arrange
         String program = "if ( b ) { } " +
                 "}";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4483,7 +4483,7 @@ class ParserTest {
         // Arrange
         String program = "if ( b ) { } " +
                 "}";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4504,7 +4504,7 @@ class ParserTest {
         // Arrange
         String program = "if ( b ) { } else { }" +
                 "}";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4525,7 +4525,7 @@ class ParserTest {
         // Arrange
         String program = "if ( b ) { } else if ( c ) { }" +
                 "}";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4547,7 +4547,7 @@ class ParserTest {
     void IfEnd_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -4566,7 +4566,7 @@ class ParserTest {
     void IfEnd_NoElse_ReturnEmptyNode() {
         // Arrange
         String program = "}";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4586,7 +4586,7 @@ class ParserTest {
     void IfEnd_Else_ReturnBlockNode() {
         // Arrange
         String program = "else { } }";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4606,7 +4606,7 @@ class ParserTest {
     void IfEnd_ElseIf_ReturnIfNode() {
         // Arrange
         String program = "else if ( b ) { } }";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4628,7 +4628,7 @@ class ParserTest {
     void AfterElse_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -4647,7 +4647,7 @@ class ParserTest {
     void AfterElse_Block_ReturnBlockNode() {
         // Arrange
         String program = "{ }";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4668,7 +4668,7 @@ class ParserTest {
         // Arrange
         String program = "if ( b ) { }" +
                 "}";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4690,7 +4690,7 @@ class ParserTest {
     void FilterType_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -4709,7 +4709,7 @@ class ParserTest {
     void FilterType_debounce_ReturndebounceNode() {
         // Arrange
         String program = "debounce";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4729,7 +4729,7 @@ class ParserTest {
     void FilterType_Constant_ReturnConstantNode() {
         // Arrange
         String program = "constant";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4749,7 +4749,7 @@ class ParserTest {
     void FilterType_Range_ReturnRangeNode() {
         // Arrange
         String program = "range";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4771,7 +4771,7 @@ class ParserTest {
     void Operator_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -4790,7 +4790,7 @@ class ParserTest {
     void Operator_Plus_ReturnPlusNode() {
         // Arrange
         String program = "+";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4810,7 +4810,7 @@ class ParserTest {
     void Operator_Minus_ReturnMinusNode() {
         // Arrange
         String program = "-";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4830,7 +4830,7 @@ class ParserTest {
     void Operator_Times_ReturnTimesNode() {
         // Arrange
         String program = "*";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4850,7 +4850,7 @@ class ParserTest {
     void Operator_Divide_ReturnDivideNode() {
         // Arrange
         String program = "/";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4870,7 +4870,7 @@ class ParserTest {
     void Operator_Modulo_ReturnModuloNode() {
         // Arrange
         String program = "%";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4892,7 +4892,7 @@ class ParserTest {
     void LogicOperator_NoProgram_ThrowSyntaxException() {
         // Arrange
         String program = "";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
 
         // Act
         try {
@@ -4911,7 +4911,7 @@ class ParserTest {
     void LogicOperator_LessThan_ReturnLessThanNode() {
         // Arrange
         String program = "<";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4931,7 +4931,7 @@ class ParserTest {
     void LogicOperator_GreaterThan_ReturnGreaterThanNode() {
         // Arrange
         String program = ">";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4951,7 +4951,7 @@ class ParserTest {
     void LogicOperator_NotEqual_ReturnNotEqualNode() {
         // Arrange
         String program = "!=";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4971,7 +4971,7 @@ class ParserTest {
     void LogicOperator_Equals_ReturnEqualsNode() {
         // Arrange
         String program = "==";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -4991,7 +4991,7 @@ class ParserTest {
     void LogicOperator_GreaterOrEqual_ReturnGreaterOrEqualNode() {
         // Arrange
         String program = ">=";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -5011,7 +5011,7 @@ class ParserTest {
     void LogicOperator_LessOrEqual_ReturnLessOrEqualNode() {
         // Arrange
         String program = "<=";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -5031,7 +5031,7 @@ class ParserTest {
     void LogicOperator_And_ReturnAndNode() {
         // Arrange
         String program = "&&";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act
@@ -5051,7 +5051,7 @@ class ParserTest {
     void LogicOperator_Or_ReturnOrNode() {
         // Arrange
         String program = "||";
-        Parser parser = createParser(program);
+        Parser parser = CreateParser(program);
         Node node;
 
         // Act

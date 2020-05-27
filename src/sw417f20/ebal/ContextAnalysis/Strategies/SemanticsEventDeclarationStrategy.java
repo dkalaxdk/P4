@@ -11,16 +11,16 @@ public class SemanticsEventDeclarationStrategy extends SemanticsCheckerStrategy{
     // Contains events in the local scope
     // is assigned when strategy is created
     public ArrayList<Symbol> LocalEvents;
-    boolean inGlobalScope;
+    boolean InGlobalScope;
 
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {
-        if (!inGlobalScope) {
+        if (!InGlobalScope) {
             // Check event identifier is not already in local scope
             if (!InLocalEvents(node.FirstChild.Value)) {
                 Node expression = node.FirstChild.Next;
                 if (expression.Type == Node.NodeType.Call && expression.FirstChild.Type == Node.NodeType.CreateEvent) {
-                    expression.checkSemantics();
+                    expression.CheckSemantics();
                     // Enter the event into the symbol table, and the list of local events
                     SymbolTable.EnterSymbol(node.FirstChild.Value, Symbol.SymbolType.EVENT, expression.FirstChild.Next.DataType);
                     LocalEvents.add(SymbolTable.RetrieveSymbol(node.FirstChild.Value));

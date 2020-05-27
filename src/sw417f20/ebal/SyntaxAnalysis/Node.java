@@ -40,7 +40,7 @@ public class Node {
 
     private Node(NodeType type, Token token) {
         this.Type = type;
-        this.Value = token.content;
+        this.Value = token.Content;
     }
 
     private Node(NodeType type, int lineNumber) {
@@ -51,11 +51,11 @@ public class Node {
 
     private Node(NodeType type, Token token, int lineNumber) {
         this.Type = type;
-        this.Value = token.content;
+        this.Value = token.Content;
         this.LineNumber = lineNumber;
     }
 
-    public static Node makeNode(Token token, int lineNumber) {
+    public static Node MakeNode(Token token, int lineNumber) {
 
         switch (token.type) {
             case IDENTIFIER:
@@ -75,15 +75,15 @@ public class Node {
         }
     }
 
-    public static Node makeNode(NodeType nodeType) {
+    public static Node MakeNode(NodeType nodeType) {
         return new Node(nodeType);
     }
 
-    public static Node makeNode(NodeType nodeType, int lineNumber) {
+    public static Node MakeNode(NodeType nodeType, int lineNumber) {
         return new Node(nodeType, lineNumber);
     }
 
-    public static Node makeNode(NodeType nodeType, Token token) {
+    public static Node MakeNode(NodeType nodeType, Token token) {
         return new Node(nodeType, token);
     }
 
@@ -100,7 +100,7 @@ public class Node {
      * this node's first child.
      * @param child The node that is added to this node's list of children
      */
-    public void addChild(Node child) {
+    public void AddChild(Node child) {
 
         // If the input child is null, do nothing
         if (child == null) {
@@ -110,7 +110,7 @@ public class Node {
         // If this node already has a child,
         // make the input child a sibling of the first child
         if (this.FirstChild != null) {
-            this.FirstChild.makeSiblings(child);
+            this.FirstChild.MakeSiblings(child);
         }
         // Otherwise, it is the first child of this node
         else {
@@ -144,7 +144,7 @@ public class Node {
      * and making the sibling of the input node, this node's siblings
      * @param otherNode The node that is to be made siblings with this node
      */
-    public void makeSiblings(Node otherNode) {
+    public void MakeSiblings(Node otherNode) {
 
         // If the input node is null, do nothing
         if (otherNode == null) {
@@ -250,13 +250,13 @@ public class Node {
      * Just makes checks for empty nodes shorter.
      * @return True if the node is of type Empty
      */
-    public boolean isEmpty() {
+    public boolean IsEmpty() {
         return this.Type == Node.NodeType.Empty;
     }
 
     // Calls the provided semantics checker strategy.
     // Is the common interface for semantics checking.
-    public void checkSemantics() throws SemanticsException {
+    public void CheckSemantics() throws SemanticsException {
         if (SemanticsCheckerStrategy != null) {
             SemanticsCheckerStrategy.CheckSemantics(this);
         } else {
@@ -266,7 +266,7 @@ public class Node {
 
     // Calls the provided codeGen strategy, and returns the result.
     // Is the common interface for code generation.
-    public String generateCode() {
+    public String GenerateCode() {
         if (CodeGenerationStrategy != null) {
             return CodeGenerationStrategy.GenerateCode(this);
         }

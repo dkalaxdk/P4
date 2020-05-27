@@ -7,7 +7,7 @@ public class LiteralStrategy extends CodeGenerationStrategy {
     @Override
     public String GenerateCode(Node node) {
 
-        String prefix = node.FirstChild.generateCode();
+        String prefix = node.FirstChild.GenerateCode();
 
         // Check for division or modulo by zero;
         if (node.FirstSibling != null) {

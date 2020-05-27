@@ -9,13 +9,13 @@ public class MasterStrategy extends CodeGenerationStrategy {
         Node child = node.FirstChild;
 
         while (child.Type != Node.NodeType.Initiate) {
-            String declaration = child.generateCode();
+            String declaration = child.GenerateCode();
             arduinoSystem.Master.VariableDeclarations.append(declaration);
             child = child.Next;
         }
 
         Node initiate = child;
-        initiate.generateCode();
+        initiate.GenerateCode();
 
         Node listeners = child.Next;
         GenerateCodeForLinkedList(listeners);

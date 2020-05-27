@@ -10,11 +10,11 @@ public class SemanticsEventHandlerBlockStrategy extends SemanticsCheckerStrategy
         SymbolTable.OpenScope();
         // Check semantics for the statements in the block
         Node child = node.FirstChild;
-        while (child != null && !child.isEmpty()) {
+        while (child != null && !child.IsEmpty()) {
 
             // Check for illegal declarations
             if (child.Type != Node.NodeType.PinDeclaration && child.Type != Node.NodeType.EventDeclaration){
-                child.checkSemantics();
+                child.CheckSemantics();
             }
             else {
                 MakeError(child, "No pin or event declarations allowed in EventHandler");

@@ -22,7 +22,7 @@ public class Reader {
 
     // Reads and returns the next char in the input
     // Keeps track of line and offset
-    public char readChar() throws IOException {
+    public char ReadChar() throws IOException {
         char c = (char) inputStream.read();
         currentOffset++;
         if (c == '\n') {
@@ -41,7 +41,7 @@ public class Reader {
         return currentChar;
     }
 
-    public String findWord() throws IOException {
+    public String FindWord() throws IOException {
         StringBuilder output = new StringBuilder();
         char currentChar = this.currentChar;
         while (whitespace.indexOf(currentChar) == -1) {
@@ -53,14 +53,14 @@ public class Reader {
 
 
             if (String.valueOf(nextChar).matches(("[A-Za-z_0-9]"))) {
-                currentChar = readChar();
+                currentChar = ReadChar();
             } else break;
         }
 
         return output.toString();
     }
 
-    public String findNumber() throws IOException {
+    public String FindNumber() throws IOException {
         StringBuilder output = new StringBuilder();
         while (whitespace.indexOf(currentChar) == -1) {
             // Adds the number, or a dot, if the output string does not contain a dot and the length of the string is longer than 1
@@ -81,23 +81,23 @@ public class Reader {
             } else break;
             // If the next char is not a white space, continue reading.
             if (String.valueOf(nextChar).matches("[0-9A-Za-z.]")) {
-                currentChar = readChar();
+                currentChar = ReadChar();
             } else break;
         }
         return output.toString();
     }
 
-    public void readToEndOfComment() throws IOException {
+    public void ReadToEndOfComment() throws IOException {
         while (!(currentChar == '*' && nextChar == '/')) {
-            readChar();
+            ReadChar();
         }
-        readChar();
+        ReadChar();
     }
 
-    public void readToEndOfLine() throws IOException {
+    public void ReadToEndOfLine() throws IOException {
         while (!(currentChar == '\n')) {
-            readChar();
+            ReadChar();
         }
-        readChar();
+        ReadChar();
     }
 }

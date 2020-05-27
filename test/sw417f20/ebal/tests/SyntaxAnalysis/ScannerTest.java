@@ -25,7 +25,7 @@ class ScannerTest {
     }
 
     @Test
-    void peek_ReadsToken_Finds_MASTER_Token() throws IOException {
+    void Peek_ReadsToken_Finds_MASTER_Token() throws IOException {
         Token expected = new Token(Token.Type.MASTER, "MASTER");
         // The buffered reader needed to be mocked as well, to ensure the reader did not get a nullStream.
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
@@ -33,13 +33,13 @@ class ScannerTest {
         Mockito.when(mockReader.read()).thenReturn((int) 'M', (int) 'A', (int) 'S', (int) 'T', (int) 'E', (int) 'R', (int) ' ');
         Reader reader = new Reader(mockReader);
         Scanner scanner = new Scanner(reader);
-        Token actual = scanner.peek();
+        Token actual = scanner.Peek();
 
         assertEquals(expected, actual);
     }
 
     @Test
-    void advance_findsNewToken_Returns_tokensNotEqual() throws IOException {
+    void Advance_findsNewToken_Returns_tokensNotEqual() throws IOException {
         // The buffered reader needed to be mocked as well, to ensure the reader did not get a nullStream.
         BufferedReader mockReader = Mockito.mock(BufferedReader.class);
 
@@ -47,9 +47,9 @@ class ScannerTest {
                 , (int) 'n', (int) 't', (int) ' ');
         Reader reader = new Reader(mockReader);
         Scanner scanner = new Scanner(reader);
-        Token first = scanner.peek();
-        scanner.advance();
-        Token last = scanner.peek();
+        Token first = scanner.Peek();
+        scanner.Advance();
+        Token last = scanner.Peek();
 
         assertNotEquals(first, last);
     }

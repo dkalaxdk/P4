@@ -136,7 +136,7 @@ public class CodeGenerationStrategyAssigner extends Visitor {
         }
 
         node.ArduinoID = arduinoID;
-        node.CodeGenerationStrategy.setArduinoSystem(this.arduinoSystem);
+        node.CodeGenerationStrategy.SetArduinoSystem(this.arduinoSystem);
 
         VisitChildren(node);
     }
@@ -161,7 +161,7 @@ public class CodeGenerationStrategyAssigner extends Visitor {
 
         child = child.Next;
 
-        while (child != null && !child.isEmpty()) {
+        while (child != null && !child.IsEmpty()) {
             AssignStrategySlave(child);
             child = child.Next;
         }
@@ -176,7 +176,7 @@ public class CodeGenerationStrategyAssigner extends Visitor {
 
         child = child.Next;
 
-        while (child != null && !child.isEmpty()) {
+        while (child != null && !child.IsEmpty()) {
             AssignStrategyListener(child);
             child = child.Next;
         }
@@ -199,7 +199,7 @@ public class CodeGenerationStrategyAssigner extends Visitor {
 
         child = child.Next;
 
-        while (child != null && !child.isEmpty()) {
+        while (child != null && !child.IsEmpty()) {
             AssignStrategyEventHandler(child);
             child = child.Next;
         }
@@ -226,7 +226,7 @@ public class CodeGenerationStrategyAssigner extends Visitor {
 
         Node child = node.FirstChild;
 
-        while (child != null && !child.isEmpty()) {
+        while (child != null && !child.IsEmpty()) {
             switch (child.Type){
                 case BoolDeclaration:
                 case IntDeclaration:
@@ -271,7 +271,7 @@ public class CodeGenerationStrategyAssigner extends Visitor {
 
         AssignStrategy(node.FirstChild, strategies.GetIdentifierStrategy());
 
-        if (node.FirstChild.Next != null && !node.FirstChild.Next.isEmpty()) {
+        if (node.FirstChild.Next != null && !node.FirstChild.Next.IsEmpty()) {
             AssignStrategyExpression(node.FirstChild.Next);
         }
     }

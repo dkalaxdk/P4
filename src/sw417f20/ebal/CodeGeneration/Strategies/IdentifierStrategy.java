@@ -6,7 +6,7 @@ public class IdentifierStrategy extends CodeGenerationStrategy {
     @Override
     public String GenerateCode(Node node) {
 
-        String prefix = node.FirstChild.generateCode();
+        String prefix = node.FirstChild.GenerateCode();
 
         return prefix + node.Value;
     }

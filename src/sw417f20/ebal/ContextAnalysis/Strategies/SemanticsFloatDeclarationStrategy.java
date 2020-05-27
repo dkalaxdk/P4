@@ -6,7 +6,7 @@ import sw417f20.ebal.SyntaxAnalysis.Node;
 
 public class SemanticsFloatDeclarationStrategy extends SemanticsCheckerStrategy{
 
-    boolean hasBeenInstantiated = false;
+    boolean HasBeenInstantiated = false;
 
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {
@@ -14,17 +14,17 @@ public class SemanticsFloatDeclarationStrategy extends SemanticsCheckerStrategy{
         if (!SymbolTable.DeclaredLocally(node.FirstChild.Value)){
             Node expression = node.FirstChild.Next;
             // Check semantics for the expression
-            if (!expression.isEmpty()) {
-                expression.checkSemantics();
-                hasBeenInstantiated = true;
+            if (!expression.IsEmpty()) {
+                expression.CheckSemantics();
+                HasBeenInstantiated = true;
                 // Check that expression has correct type
                 if (expression.DataType != Symbol.SymbolType.FLOAT && expression.DataType != Symbol.SymbolType.INT){
                     MakeError(node, "Expression", ErrorType.WrongType);
                 }
             }
             // Enter variable into symbol table
-            SymbolTable.EnterSymbol(node.FirstChild.Value, Symbol.SymbolType.FLOAT, hasBeenInstantiated);
-            hasBeenInstantiated = false;
+            SymbolTable.EnterSymbol(node.FirstChild.Value, Symbol.SymbolType.FLOAT, HasBeenInstantiated);
+            HasBeenInstantiated = false;
         }
         else {
             MakeError(node, node.FirstChild.Value, ErrorType.AlreadyDeclared);

@@ -10,7 +10,6 @@ public class SemanticsExpressionStrategy extends SemanticsCheckerStrategy{
     Node Operator;
     Node SecondOperand;
 
-
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {
         FirstOperand = node.FirstChild;
@@ -18,8 +17,8 @@ public class SemanticsExpressionStrategy extends SemanticsCheckerStrategy{
         SecondOperand = node.FirstChild.Next.Next;
 
         // Check semantics for operands
-        FirstOperand.checkSemantics();
-        SecondOperand.checkSemantics();
+        FirstOperand.CheckSemantics();
+        SecondOperand.CheckSemantics();
 
         if (FirstOperand.DataType != Symbol.SymbolType.PIN &&
             FirstOperand.DataType != Symbol.SymbolType.EVENT &&

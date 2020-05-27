@@ -129,7 +129,7 @@ public class SemanticsListenerCallStrategy extends SemanticsCheckerStrategy{
     private void CheckCreateEvent(Node node) throws SemanticsException {
         Node parameter = node.FirstChild.Next;
         // Check semantics for parameter
-        parameter.checkSemantics();
+        parameter.CheckSemantics();
         // Check that parameter has a legal type
         if (parameter.DataType == Symbol.SymbolType.INT ||
                 parameter.DataType == Symbol.SymbolType.FLOAT ||

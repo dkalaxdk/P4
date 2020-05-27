@@ -7,8 +7,8 @@ public class AssignmentStrategy extends CodeGenerationStrategy {
     public String GenerateCode(Node node) {
 
         String identifier = node.FirstChild.Value;
-        String expression = node.FirstChild.Next.generateCode();
+        String expression = node.FirstChild.Next.GenerateCode();
 
-        return addIndent(arduinoSystem.Indent) + identifier + " = " + expression + ";\n";
+        return AddIndent(arduinoSystem.Indent) + identifier + " = " + expression + ";\n";
     }
 }

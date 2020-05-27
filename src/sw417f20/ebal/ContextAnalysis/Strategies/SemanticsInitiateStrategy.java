@@ -8,6 +8,6 @@ public class SemanticsInitiateStrategy extends SemanticsCheckerStrategy{
     @Override
     public void CheckSemantics(Node node) throws SemanticsException {
         // Check semantics for the block of the listener
-        node.FirstChild.checkSemantics();
+        node.FirstChild.CheckSemantics();
     }
 }

@@ -196,7 +196,7 @@ public class SemanticsStrategyFactory {
     public SemanticsPinDeclarationStrategy getPinDeclarationStrategy(boolean isGlobalDeclaration){
         pinDeclarationStrategy = new SemanticsPinDeclarationStrategy();
         pinDeclarationStrategy.SymbolTable = SymbolTable;
-        pinDeclarationStrategy.inGlobalScope = isGlobalDeclaration;
+        pinDeclarationStrategy.InGlobalScope = isGlobalDeclaration;
         return pinDeclarationStrategy;
     }
 
@@ -227,7 +227,7 @@ public class SemanticsStrategyFactory {
     public SemanticsEventDeclarationStrategy getEventDeclarationStrategy(boolean isGlobalDeclaration){
         eventDeclarationStrategy = new SemanticsEventDeclarationStrategy();
         eventDeclarationStrategy.SymbolTable = SymbolTable;
-        eventDeclarationStrategy.inGlobalScope = isGlobalDeclaration;
+        eventDeclarationStrategy.InGlobalScope = isGlobalDeclaration;
         eventDeclarationStrategy.LocalEvents = LocalEvents;
         return eventDeclarationStrategy;
     }

@@ -13,7 +13,7 @@ public class SemanticsListenerStrategy extends SemanticsCheckerStrategy{
         if (symbol != null) {
             if (symbol.DataType == Symbol.SymbolType.PIN) {
                 // Check semantics for the Listener block
-                node.FirstChild.Next.checkSemantics();
+                node.FirstChild.Next.CheckSemantics();
             } else {
                 MakeError(node, symbol.Name, ErrorType.WrongType);
             }

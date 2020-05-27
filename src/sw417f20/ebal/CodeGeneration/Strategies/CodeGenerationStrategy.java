@@ -6,7 +6,7 @@ public abstract class CodeGenerationStrategy {
 
     protected ArduinoSystem arduinoSystem;
 
-    public void setArduinoSystem(ArduinoSystem system) {
+    public void SetArduinoSystem(ArduinoSystem system) {
         this.arduinoSystem = system;
     }
 
@@ -29,15 +29,15 @@ public abstract class CodeGenerationStrategy {
     public String GenerateCodeForLinkedList(Node headNode) {
         StringBuilder content = new StringBuilder();
 
-        if (headNode.isEmpty()) {
+        if (headNode.IsEmpty()) {
             return "";
         }
 
         Node node = headNode;
 
         //TODO: Tree traversal should maybe be handled by a separate class
-        while(node != null && !node.isEmpty()) {
-            content.append(node.generateCode());
+        while(node != null && !node.IsEmpty()) {
+            content.append(node.GenerateCode());
             node = node.Next;
         }
         return content.toString();
@@ -49,7 +49,7 @@ public abstract class CodeGenerationStrategy {
      * @param indent How much to indent
      * @return The indentation
      */
-    protected String addIndent(int indent) {
+    protected String AddIndent(int indent) {
         StringBuilder tabs = new StringBuilder();
 
         for (int i = 0; i < indent; i++) {
