@@ -68,7 +68,7 @@ public class Main {
             system.Generate();
             HashMap<String, String> files = system.Print();
 
-            String sourceFile = GetFileName(args[0]);
+            String sourceFileName = GetFileName(args[0]);
 
             OutputFileGenerator generator = new OutputFileGenerator(files, sourceFileName);
 
