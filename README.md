@@ -2,7 +2,7 @@
 
 ## Project description:
 
-This project is developed as a semester project on the fourth semester on AAU. The goal of the project was to create design a language, and implement a corresponding compiler for the language.
+This project is developed as a semester project on the fourth semester on AAU. The goal of the project was to design a language, and implement a corresponding compiler for the language.
 
 The result is a compiler, built around the principles of **Crafting a Compiler**, **ISBN-13:** 978-0136067054 and the courses of the semester.
 
@@ -26,4 +26,4 @@ These needs to be compiled in the Arduino IDE one by one, and then be put on the
 The compiler is implemented using a recursive descent parser, as the designed language is LL(1).
 
 EBAL were designed and implemented as a semester project, and is therefore not fully implemented. The language does not contain any iterative control structures, arrays or strings, nor does it contain a way for the slaves to communicate with the master board.
-**Evt skriv noget mere** 
+**Evt skriv noget mere**
