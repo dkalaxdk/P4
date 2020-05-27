@@ -14,12 +14,10 @@ public class OutputFileGenerator {
      * @param files HashMap of strings, each entry should be the name and content of a single file
      * @throws IOException if an error occurred during IO
      */
-    public OutputFileGenerator(HashMap<String, String> files, String sourceFile) throws IOException {
-        String filePath = getFilePath() + sourceFile + "/";
+    public OutputFileGenerator(HashMap<String, String> files, String sourceFileName) throws IOException {
+        String filePath = getFilePath() + sourceFileName + "/";
 
         File directory = new File(filePath);
-
-        // Try and make the necessary directories
         directory.mkdirs();
 
         for (String name : files.keySet()) {
@@ -27,13 +25,9 @@ public class OutputFileGenerator {
 
             String path = filePath + name + "/";
             File file = new File(path);
-
-            // Try and make the necessary directories
             file.mkdirs();
 
-            path += name;
-
-            GenerateFile(path, content);
+            GenerateFile(path + name, content);
         }
     }
 

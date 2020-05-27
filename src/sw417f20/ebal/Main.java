@@ -68,9 +68,9 @@ public class Main {
             system.Generate();
             HashMap<String, String> files = system.Print();
 
-            String sourceFile = getFileName(args[0]);
+            String sourceFileName = getFileName(args[0]);
 
-            OutputFileGenerator generator = new OutputFileGenerator(files, sourceFile);
+            OutputFileGenerator generator = new OutputFileGenerator(files, sourceFileName);
 
             System.out.println("\nRuntime: " + (System.currentTimeMillis()-start) + " ms \n");
         }

@@ -34,7 +34,6 @@ public class OutputFile {
 
         if(!filepath.contains(".ino")) {
             if(filepath.contains(".")) {
-                //TODO: Handle that filepath has a different file extension than ".ino"
                 String[] a = filepath.split("\\.");
 
                 filepath = a[a.length - 1];
