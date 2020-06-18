@@ -28,7 +28,7 @@ public class Main {
     }
 
     public static void RealMain(String[] args) {
-        boolean debug = true;
+        boolean debug = false;
         Node AST;
 
         try {
@@ -77,7 +77,7 @@ public class Main {
 
         catch (SyntaxException | SemanticsException | IOException e) {
             System.err.println(e.getMessage());
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 

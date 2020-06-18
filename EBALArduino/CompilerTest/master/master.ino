@@ -4,26 +4,26 @@
 
 ebalPin button1;
 ebalPin button2;
-ebalPin poten;
+ebalPin potentiometer;
 
 boolEvent button1Pressed;
 intEvent button2Pressed;
-intEvent potenTurned;
+intEvent potentiometerTurned;
 
 int a;
 
 void setup() {
 	button1.createPin(digital, input, 7);
 	button2.createPin(digital, input, 8);
-	poten.createPin(analog, input, A0);
+	potentiometer.createPin(analog, input, A0);
 
 	button1Pressed.setID(0);
 	button2Pressed.setID(1);
-	potenTurned.setID(2);
+	potentiometerTurned.setID(2);
 
 	button1Pressed.addSlave(0);
 	button2Pressed.addSlave(0);
-	potenTurned.addSlave(1);
+	potentiometerTurned.addSlave(1);
 
 	Wire.begin();
 	Serial.begin(9600);
@@ -45,11 +45,11 @@ void button2Listener1() {
 	}
 }
 
-void potenListener2() {
-	int filteredInput = poten.filterNoise(range);
+void potentiometerListener2() {
+	int filteredInput = potentiometer.filterNoise(range);
 	if ((filteredInput != -1)) {
-		potenTurned.createEvent(filteredInput);
-		potenTurned.broadcast();
+		potentiometerTurned.createEvent(filteredInput);
+		potentiometerTurned.broadcast();
 	}
 }
 
@@ -57,8 +57,8 @@ void potenListener2() {
 void loop() {
 	button1.read();
 	button2.read();
-	poten.read();
+	potentiometer.read();
 	button1Listener0();
 	button2Listener1();
-	potenListener2();
+	potentiometerListener2();
 }

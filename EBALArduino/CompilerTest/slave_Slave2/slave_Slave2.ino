@@ -4,30 +4,30 @@
 
 ebalPin out;
 
-intEvent potenTurned;
+intEvent potentiometerTurned;
 
 
 void setup() {
 	out.createPin(analog, output, LED_BUILTIN);
 
-	potenTurned.setID(2);
+	potentiometerTurned.setID(2);
 
 	Wire.begin(1);
 	Serial.begin(9600);
 	Wire.onReceive(receiveEvent);
 }
 
-void potenTurnedEventHandler0() {
-	out.write(potenTurned.getValue());
+void potentiometerTurnedEventHandler0() {
+	out.write(potentiometerTurned.getValue());
 }
 
 
 void receiveEvent(int howMany) {
 	char eventID = Wire.read();
 
-	if (eventID == potenTurned.getID()) {
-		potenTurned.createEvent();
-		potenTurnedEventHandler0();
+	if (eventID == potentiometerTurned.getID()) {
+		potentiometerTurned.createEvent();
+		potentiometerTurnedEventHandler0();
 	}
 }
 

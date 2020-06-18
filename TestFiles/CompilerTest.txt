@@ -6,7 +6,7 @@ BEGIN MASTER
         pin button1 = createPin(digital, input, 7);
         pin button2 = createPin(digital, input, 8);
 
-        pin poten = createPin(analog, input, A0);
+        pin potentiometer = createPin(analog, input, A0);
     }
 
     Listener (button1) {
@@ -27,12 +27,12 @@ BEGIN MASTER
         }
     }
 
-    Listener (poten) {
-        int filteredInput = filterNoise(poten, range);
+    Listener (potentiometer) {
+        int filteredInput = filterNoise(potentiometer, range);
 
         if (filteredInput != -1) {
-            event potenTurned = createEvent(filteredInput);
-            broadcast(potenTurned);
+            event potentiometerTurned = createEvent(filteredInput);
+            broadcast(potentiometerTurned);
         }
     }
 
@@ -74,8 +74,8 @@ BEGIN SLAVE: Slave2
         pin out = createPin(pwm, output, LED_BUILTIN);
     }
 
-    EventHandler (potenTurned) {
-        write(out, getValue(potenTurned));
+    EventHandler (potentiometerTurned) {
+        write(out, getValue(potentiometerTurned));
     }
 
 END SLAVE
