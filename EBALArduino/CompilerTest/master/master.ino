@@ -10,7 +10,6 @@ boolEvent button1Pressed;
 intEvent button2Pressed;
 intEvent potentiometerTurned;
 
-int a;
 
 void setup() {
 	button1.createPin(digital, input, 7);
